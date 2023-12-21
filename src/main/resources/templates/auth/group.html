@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="ko">
+
+<th:block layout:fragment="css">
+    <head>
+        <link rel="stylesheet" type="text/css" th:href="@{/static/css/auth/common.css}"/>
+        <title>그룹 권한 관리</title>
+    </head>
+</th:block>
+
+<th:block layout:fragment="content">
+    <div id="main_wrapper">
+        <h1>그룹 권한 관리</h1>
+    </div>
+    <div id="content_wrapper">
+        <div id="search_wrapper" class="bg-secondary p-lg-5">
+            <span th:text="조직"/>
+            <select id="searchDept" th:field="*{deptList}" th:onchange="'fnSelectDept(this)'">
+                <option th:text="선택" th:value="NONE" />
+                <option th:each="ele : ${deptList}" th:value="${ele.getCodeCd()}" th:text="${ele.getCodeNm()}" />
+            </select>
+        </div>
+
+        <div id="action_wrapper" class="m-lg-2">
+            <input type="button" value="엑셀 업로드(준비중)">
+            <input type="button" value="권한 저장" th:onclick="fnSaveAuthority()">
+        </div>
+
+        <div id="list_wrapper" class="p-sm-2">
+            <table class="table table-bordered text-center">
+                <thead>
+                <tr>
+                    <th class="text-center" scope="col">No</th>
+                    <th class="text-center" scope="col">카테고리명</th>
+                    <th class="text-center" scope="col">세부 메뉴</th>
+                    <th class="text-center" scope="col">메뉴 노출 여부</th>
+                    <th class="text-center" scope="col">권한 레벨</th>
+                </tr>
+                </thead>
+                <tbody id="authList">
+                <tr th:class="auth-row" th:if="${not #lists.isEmpty(list)}" th:each="row, stat : ${list}">
+                    <input type="hidden" name="_userId" th:value="${row.getRegId()}">
+                    <input type="hidden" name="_codeCd" th:value="${row.getCodeCd()}">
+                    <input type="hidden" name="_codeOrd" th:value="${row.getCodeOrd()}">
+                    <td th:text="${row.getRowNum()}"></td>
+                    <td th:value="${row.getParentCodeCd()}" th:text="${row.getParentCodeNm()}"></td>
+                    <td th:text="${row.getCodeNm()}"></td>
+                    <td>
+                        <input type="checkbox" th:id="|displayUseYn${stat.index+1}|" name="displayUseYn" th:data-code-cd="${row.codeCd}" th:value="${row.displayUseYn}">
+                        <label th:for="|displayUseYn${stat.index+1}|">노출</label>
+                    </td>
+                    <td>
+                        <input type="checkbox" th:id="|authR${stat.index+1}|" name="authR" th:data-code-cd="${row.codeCd}" th:value="${row.authR}">
+                        <label th:for="|authR${stat.index+1}|">조회</label>
+
+                        <input type="checkbox" th:id="|authC${stat.index+1}|" name="authC" th:data-code-cd="${row.codeCd}" th:value="${row.authC}">
+                        <label th:for="|authC${stat.index+1}|">저장</label>
+
+                        <input type="checkbox" th:id="|authU${stat.index+1}|" name="authU" th:data-code-cd="${row.codeCd}" th:value="${row.authU}">
+                        <label th:for="|authU${stat.index+1}|">수정</label>
+
+                        <input type="checkbox" th:id="|authD${stat.index+1}|" name="authD" th:data-code-cd="${row.codeCd}" th:value="${row.authD}">
+                        <label th:for="|authD${stat.index+1}|">삭제</label>
+
+                        <input type="checkbox" th:id="|authF${stat.index+1}|" name="authF" th:data-code-cd="${row.codeCd}" th:value="${row.authF}">
+                        <label th:for="|authF${stat.index+1}|">파일</label>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(list)}">
+                    <td class="no-row-found" colspan="5" th:text="|데이터가 없습니다.|"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        // 조직 선택
+        let fnSelectDept = () => {
+            let _deptCd = $('#searchDept option:selected').val();
+            $.ajax({
+                url: '/auth/api/auth-level',
+                type: 'get',
+                contentType: 'application/json; charset=UTF-8',
+                data: {deptCd: _deptCd}
+            })
+            .done(function(data) {
+                console.log(data);
+                let list = [];
+                list = data.list;
+                let _displayUseYnChk = $('input[name=displayUseYn]');
+                let _authRChk = $('input[name=authR]');
+                let _authCChk = $('input[name=authC]');
+                let _authUChk = $('input[name=authU]');
+                let _authDChk = $('input[name=authD]');
+                let _authFChk = $('input[name=authF]');
+
+                $.each(list, function(key, value) {
+                    console.log('key: ' + key + ' codeCd: ' + value.codeCd, ' userId: ' + value.userId);
+                    let _codeCd = value.codeCd;
+
+                    fnCheckboxCheckedHandler(_displayUseYnChk, _codeCd, value.displayUseYn);
+                    fnCheckboxCheckedHandler(_authRChk, _codeCd, value.authR, value.userId);
+                    fnCheckboxCheckedHandler(_authCChk, _codeCd, value.authC, value.userId);
+                    fnCheckboxCheckedHandler(_authUChk, _codeCd, value.authU, value.userId);
+                    fnCheckboxCheckedHandler(_authDChk, _codeCd, value.authD, value.userId);
+                    fnCheckboxCheckedHandler(_authFChk, _codeCd, value.authF, value.userId);
+
+                })
+            })
+            .fail(function(jqXHR) {
+                console.log(jqXHR);
+            });
+        }
+
+        // 체크박스 권한 별 선택 처리
+        let fnCheckboxCheckedHandler = (tgt, codeCd, isChecked, userId) => {
+            $.each(tgt, function(k, v) {
+                $(v).parent().parent().children('input[name=_userId]').val(userId);
+                console.log("userId >>> " + $(v).parent().parent().children('input[name=_userId]').val());
+                console.log($(v).data('codeCd'));
+                let _chkVal = $(v).data('codeCd');
+                if(codeCd === _chkVal) {
+                    if(isChecked === 'Y') {
+                        $(v).prop('checked', true);
+                    }else {
+                        $(v).prop('checked', false);
+                    }
+                }
+            })
+        }
+
+        // **********************************************************************************************************
+
+        // 권한 저장
+        let fnSaveAuthority = () => {
+            let _deptCd = $('#searchDept option:selected').val();
+            if(_deptCd === 'NONE') {
+                alert('조직을 선택 해주세요.');
+                return false;
+            }
+            const tgtList = [];
+            const authList = $('.auth-row');
+            const userList = [];
+
+            if($(this).attr('value') != undefined) {
+                userList.push($(this).attr('value'));
+            }
+            // userList.push("ijzone1");
+
+            Array.from(authList).forEach(auth => {
+                let data = {
+                      userId: $(auth).find('input[name=_userId]').val()
+                    , menuCd: $(auth).find('input[name=_codeCd]').val()
+                    , menuOrd: $(auth).find('input[name=_codeOrd]').val()
+                    , authC: $(auth).find('input[name=authC]').is(':checked') == true ? 'Y' : 'N'
+                    , authR: $(auth).find('input[name=authR]').is(':checked') == true ? 'Y' : 'N'
+                    , authU: $(auth).find('input[name=authU]').is(':checked') == true ? 'Y' : 'N'
+                    , authD: $(auth).find('input[name=authD]').is(':checked') == true ? 'Y' : 'N'
+                    , authF: $(auth).find('input[name=authF]').is(':checked') == true ? 'Y' : 'N'
+                    , displayUseYn: $(auth).find('input[name=displayUseYn]').is(':checked') == true ? 'Y' : 'N'
+                    // , userIdList: userList
+                }
+                tgtList.push(data);
+            })
+
+            $.ajax({
+                url: '/auth/group/api',
+                type: 'post',
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(tgtList)
+            })
+            .done(function (data) {
+                alert(data.message);
+            })
+            .fail(function (jqXHR) {
+                console.log(jqXHR);
+            });
+        }
+
+        // 체크박스 권한 레벨 handler
+        $('input[type=checkbox]').on('click', function () {
+            const _this = $(this);
+            let _authLevel = $(this).attr('name');
+            // $(this).siblings('input[name=authU]').is(':checked')
+            if (_authLevel === 'authR') {
+                if (!_this.siblings('input[name=authR]').is(':checked')) {
+                    _this.siblings('input[name=authC]').prop('checked', false);
+                    _this.siblings('input[name=authU]').prop('checked', false);
+                    _this.siblings('input[name=authD]').prop('checked', false);
+                }
+            }
+            if (_authLevel === 'authC') {
+                if (!_this.siblings('input[name=authC]').is(':checked')) {
+                    _this.siblings('input[name=authU]').prop('checked', false);
+                    _this.siblings('input[name=authD]').prop('checked', false);
+                }
+
+                if (!_this.siblings('input[name=authR]').is(':checked')) {
+                    _this.siblings('input[name=authR]').prop('checked', true);
+                }
+            }
+            if (_authLevel === 'authU') {
+                if (!_this.siblings('input[name=authU]').is(':checked')) {
+                    _this.siblings('input[name=authD]').prop('checked', false);
+                }
+
+                if (!_this.siblings('input[name=authR]').is(':checked') || !_this.siblings('input[name=authC]').is(':checked')) {
+                    _this.siblings('input[name=authR]').prop('checked', true);
+                    _this.siblings('input[name=authC]').prop('checked', true);
+                }
+            }
+            if (_authLevel === 'authD') {
+                if (!_this.siblings('input[name=authR]').is(':checked') || !_this.siblings('input[name=authC]').is(':checked') || !_this.siblings('input[name=authU]').is(':checked')) {
+                    _this.siblings('input[name=authR]').prop('checked', true);
+                    _this.siblings('input[name=authC]').prop('checked', true);
+                    _this.siblings('input[name=authU]').prop('checked', true);
+                }
+            }
+        })
+    </script>
+</th:block>
+</html>

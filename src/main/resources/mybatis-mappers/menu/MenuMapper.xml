@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.menu.MenuMapper">
+    <!-- 공통 [[ -->
+
+    <!-- column [[ -->
+
+    <sql id="menuColumn">
+            ${alias}MENU_SEQ, ${alias}P_MENU_SEQ
+            , ${alias}MENU_TYPE, ${alias}MENU_ID
+            , ${alias}MENU_DEPTH, ${alias}MENU_TITLE
+            , ${alias}MENU_URL, ${alias}MENU_ORD
+            , ${alias}DISPLAY_YN, ${alias}USE_YN
+    </sql>
+
+
+    <!-- column ]] -->
+
+    <!-- whereClause [[ -->
+    <sql id="whereClause">
+        <if test="menuTitle != null and menuTitle != '' ">
+            AND ${alias}MENU_TITLE = #{menuTitle}
+        </if>
+        <if test="menuId != null and menuId != '' ">
+            AND ${alias}MENU_ID = #{menuId}
+        </if>
+        <if test="menuUrl != null and menuUrl != '' ">
+            AND ${alias}MENU_URL = #{menuUrl}
+        </if>
+    </sql>
+
+    <sql id= "whereClausePSeq">
+        <choose>
+            <when test="pMenuSeq != null and  pMenuSeq != '' ">
+                ${alias}P_MENU_SEQ = #{pMenuSeq}
+            </when>
+            <otherwise> ${alias}P_MENU_SEQ IS NULL </otherwise>
+        </choose>
+    </sql>
+
+    <sql id = "whereClauseId">
+        AND ${alias}MENU_ID = #{menuId}
+    </sql>
+
+
+
+    <!-- whereClause ]] -->
+
+    <!-- orderClause [[ -->
+
+
+
+    <!-- orderClause ]] -->
+
+    <!-- 공통 ]] -->
+
+    <!-- 조회 [[ -->
+
+    <select id="getSmMenuList" resultType="MenuVO" parameterType="MenuSearchVO">
+        /* 소메뉴 조회 - MenuMapper.getSmMenuList */
+        WITH SRCH_MENU AS(
+            SELECT MN.MENU_SEQ
+            FROM MENU MN
+            <where>
+                <include refid="whereClauseId"><property name="alias" value="MN."/></include>
+            </where>
+        )
+        SELECT
+            <include refid="menuColumn"><property name="alias" value="MN."/></include>
+        FROM MENU MN
+        INNER JOIN SRCH_MENU SMN
+                ON MN.P_MENU_SEQ = SMN.MENU_SEQ
+                ORDER BY MENU_ORD ASC
+        </select>
+
+    <select id="getLgMenuList" resultType="MenuVO">
+        /* 대메뉴 조회 - MenuMapper.getLgMenuList */
+        SELECT
+            <include refid="menuColumn"><property name="alias" value="MN."/></include>
+        FROM MENU MN
+        WHERE
+            MN.P_MENU_SEQ IS NULL
+        ORDER BY MENU_ORD ASC
+    </select>
+
+    <select id="getOrdMax" resultType="Long" parameterType="Long">
+        /* 최대 메뉴 순서 조회 - MenuMapper.getOrdMax*/
+        SELECT MAX(MN.MENU_ORD) + 1 AS MO
+        FROM MENU MN
+        <where>
+            <include refid="whereClausePSeq"><property name="alias" value="MN."/></include>
+        </where>
+    </select>
+
+    <select id="rowByKey" resultType="Long" parameterType="String">
+        /* 메뉴 SEQ 값 조회 */
+        SELECT MN.MENU_SEQ
+        FROM MENU MN
+        <where>
+            <include refid="whereClauseId"><property name="alias" value="MN."/></include>
+        </where>
+    </select>
+
+    <select id = "rowBySearch" resultType="MenuVO" parameterType="MenuSearchVO">
+        /* 메뉴 단 건 조회 */
+        SELECT MN.MENU_SEQ
+            <include refid="menuColumn"><property name="alias" value="MN."/></include>
+            ,(SELECT TMN.MENU_TITLE FROM MENU TMN WHERE MN.P_MENU_SEQ = TMN.MENU_SEQ) AS P_TITLE
+        FROM MENU MN
+        <where>
+            <include refid="whereClause"><property name="alias" value="MN."/></include>
+        </where>
+    </select>
+    <!-- 조회 ]] -->
+
+
+    <!-- 저장/수정/삭제 [[ -->
+
+    <insert id="insert" useGeneratedKeys="true">
+        /* 메뉴 삽입 - MenuMapper.insertMenu*/
+            INSERT INTO MENU
+                (P_MENU_SEQ,
+                 MENU_TYPE,
+                 MENU_ID,
+                 MENU_DEPTH,
+                 MENU_TITLE,
+                 MENU_URL,
+                 MENU_ORD,
+                 DISPLAY_YN,
+                 USE_YN )
+            VALUES ( #{pMenuSeq},
+                     #{menuType},
+                     #{menuId},
+                     #{menuDepth},
+                     #{menuTitle},
+                     #{menuUrl},
+                     #{menuOrd},
+                     #{displayYn},
+                     #{useYn} )
+            <selectKey keyProperty="logId1" resultType="String">
+                SELECT LAST_INSERT_ID()
+            </selectKey>
+        </insert>
+
+    <update id="update">
+        /* 메뉴 업데이트 MenuMapper.update*/
+        UPDATE MENU MN
+        <set>
+            <if test="menuTitle != null and menuTitle != '' ">MN.MENU_TITLE = #{menuTitle},</if>
+            <if test="menuUrl != null and menuUrl != '' ">MN.MENU_URL = #{menuUrl},</if>
+            <if test="displayYn != null and displayYn != '' ">MN.DISPLAY_YN = #{displayYn}</if>
+        </set>
+        <where>
+            <include refid="whereClauseId"><property name="alias" value="MN."/></include>
+        </where>
+    </update>
+
+    <update id="updateOrd">
+        /* 메뉴 순서 업데이트 MenuMapper.updateOrd */
+        UPDATE MENU MN
+        <set>
+            <if test="menuOrd != null and menuOrd != '' "> MN.MENU_ORD = #{menuOrd} </if>
+        </set>
+        WHERE
+            <include refid="whereClausePSeq"><property name="alias" value="MN."/></include>
+            AND MN.MENU_ID = #{menuId}
+    </update>
+
+    <!-- 저장/수정/삭제 [[ -->
+
+
+<!--##### DEJAY_COMMON #####-->
+    <select id="findCommonMenuCodeList">
+        /* [공통 코드] 메뉴 1 depth 조회 MenuMapper.findCommonMenuCodeList */
+        SELECT CODE_CD, CODE_NM
+          FROM INFO_COMMON_CD
+         WHERE CONCAT(SUBSTRING(CODE_CD FROM 1 FOR 4), SUBSTRING(CODE_CD, 7)) = 'MENU00'
+    </select>
+
+    <select id="findMenuList">
+        /* [공통 코드] 메뉴 조회 MenuMapper.findMenuList */
+        WITH PARENT_CD AS (
+            SELECT CODE_SEQ, CODE_CD, CODE_NM FROM info_common_cd
+            WHERE SUBSTRING(CODE_CD FROM 1 FOR 4) = 'MENU' AND CODE_ORD = 0 AND USE_YN = 'Y' AND DEL_YN = 'N'
+        )
+                 SELECT ROW_NUMBER() OVER(ORDER BY CD.CODE_CD) AS ROW_NUM
+                      , CD.CODE_SEQ, PC.CODE_CD AS PARENT_CODE_CD, PC.CODE_NM AS PARENT_CODE_NM
+                      , CD.CODE_CD, CD.CODE_NM, CD.CODE_DESC, CD.CODE_ETC, CD.CODE_ORD, CD.USE_YN, CD.DEL_YN, CD.REG_DT, CD.REG_ID, CD.LAST_DT, CD.LAST_ID
+                  <if test=" deptCd != null and deptCd != '' ">
+                      , (SELECT USER_ID FROM info_menu WHERE MENU_CD = CD.CODE_CD AND USER_ID = #{deptCd}) AS USER_ID
+                      , (SELECT DISPLAY_USE_YN FROM info_menu WHERE MENU_CD = CD.CODE_CD AND USER_ID = #{deptCd}) AS DISPLAY_USE_YN
+                      , (SELECT AUTH_C FROM info_menu WHERE MENU_CD = CD.CODE_CD AND USER_ID = #{deptCd}) AS AUTH_C
+                      , (SELECT AUTH_R FROM info_menu WHERE MENU_CD = CD.CODE_CD AND USER_ID = #{deptCd}) AS AUTH_R
+                      , (SELECT AUTH_U FROM info_menu WHERE MENU_CD = CD.CODE_CD AND USER_ID = #{deptCd}) AS AUTH_U
+                      , (SELECT AUTH_D FROM info_menu WHERE MENU_CD = CD.CODE_CD AND USER_ID = #{deptCd}) AS AUTH_D
+                      , (SELECT AUTH_F FROM info_menu WHERE MENU_CD = CD.CODE_CD AND USER_ID = #{deptCd}) AS AUTH_F
+                  </if>
+                   FROM INFO_COMMON_CD CD
+        LEFT OUTER JOIN PARENT_CD PC ON SUBSTRING(CD.CODE_CD FROM 1 FOR 6) = SUBSTRING(PC.CODE_CD FROM 1 FOR 6)
+                  WHERE SUBSTRING(CD.CODE_CD FROM 1 FOR 4) = 'MENU' AND CODE_ORD <![CDATA[>]]> 0
+                    AND CD.USE_YN = 'Y'
+                    AND CD.DEL_YN = 'N'
+               ORDER BY CD.CODE_CD
+    </select>
+
+    <select id="findMenuSeqByUserId">
+        /* 메뉴에 대한 권한 여부 조회 MenuMapper.findMenuSeqByUserId */
+        SELECT NVL(SUM(MENU_SEQ), 0)
+          FROM INFO_MENU
+         WHERE MENU_CD = #{menuCd}
+           AND USER_ID = #{userId}
+    </select>
+</mapper>

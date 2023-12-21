@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="sidebarFragment">
+    <aside class="side-bar">
+        <h1 class="sid-bar_title">menu</h1>
+        <section class="side-bar__icon-box">
+            <section class="side-bar__icon-1">
+                <div></div>
+                <div></div>
+                <div></div>
+            </section>
+        </section>
+        <ul id="menu-parent">
+
+        </ul>
+    </aside>
+    <script src="/static/js/common.js"></script>
+    <script th:inline="javascript">
+        let codeMap = new Map();
+        $.ajax({
+            type: "POST",
+            url: "/code/list",
+            contentType: "application/json",
+            async:false,
+            success: function(result){
+                let dataList = Array.from(result);
+
+                menuLgDraw(dataList);
+                menuSmDraw(dataList);
+            },
+            error: function(request, status, error){
+                console.log(request);
+            }
+        });
+        // 사이드바 대메뉴 생성
+        function menuLgDraw(dataList){
+            for(let data of dataList){
+                let realCodeCd = data.codeCd;
+                let codeCd = data.codeCd.substr(4);
+                if(codeCd.charAt(codeCd.length-1)==="0" && codeCd!=="0000"){
+                    let menuParent = $("#menu-parent");
+                    codeMap.set(codeCd.substring(0,2), realCodeCd);
+                    menuParent.append(`<li> <a href='#'>${data.codeNm}</a><ul id= ${realCodeCd}> </ul></li>`);
+                }
+            }
+        }
+        // 소메뉴 생성
+        function menuSmDraw(dataList){
+            for(let data of dataList){
+                let realCodeCd = data.codeCd;
+                let codeCd = data.codeCd.substr(4);
+
+                if(codeCd.charAt(codeCd.length-1)!=='0'){
+                    // 부모ID
+                    let parentId = codeMap.get(codeCd.substring(0,2));
+                    let parentElement = document.getElementById(parentId);
+                    let url = data.codeEtc;
+                    if(isEmpty(url)) {
+                        url = "#";
+                    }
+                    parentElement.innerHTML +=`<li id= ${realCodeCd}> <a href='${url}'>${data.codeNm}</a></li>`;
+
+                }
+            }
+        }
+    </script>
+</th:block>
+
+</html>

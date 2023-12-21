@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.record.RecordMapper">
+
+    <!-- 공통 [[ -->
+
+    <!-- column [[ -->
+
+    <sql id = "recordColumn">
+        ${alias}LOG_SEQ, ${alias}TOKEN_SEQ
+        , ${alias}USER_SEQ, ${alias}MENU_SEQ
+        , ${alias}CLIENT_IP, ${alias}LOG_TYPE, ${alias}LOG_ETC
+        , ${alias}REG_DT, ${alias}REG_ID
+    </sql>
+
+    <!-- column ]] -->
+
+    <!-- whereClause [[ -->
+
+    <sql id = "whereClause">
+        <if test="logSeq != null and logSeq != '' ">
+            AND ${alias}LOG_SEQ = #{logSeq}
+        </if>
+        <if test="tokenSeq != null and tokenSeq != '' ">
+            AND ${alias}TOKEN_SEQ = #{tokenSeq}
+        </if>
+        <if test="userSeq != null and userSeq != '' ">
+            AND ${alias}USER_SEQ = #{userSeq}
+        </if>
+        <if test="menuSeq != null and menuSeq != '' ">
+            AND ${alias}MENU_SEQ = #{menuSeq}
+        </if>
+        <if test="logType != null and logType != '' ">
+            AND ${alias}LOG_TYPE = #{logType}
+        </if>
+        <if test="logEtc != null and logEtc != '' ">
+            AND  ${alias}LOG_ETC = #{logEtc}
+        </if>
+        <if test="(startDt != null and startDt != '') and (endDt != null and endDt != '')">
+            <if test="searchDateType == 'REG_DT'">
+                AND ${alias}REG_DT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+            </if>
+        </if>
+        <if test="searchWord1 != null and searchWord1 != ''">
+            <choose>
+                <when test="searchKeywordType == 'USER'">
+                    AND LOWER(${alias}REG_ID) LIKE LOWER(CONCAT('%', #{searchWord1}, '%'))
+                </when>
+                <when test="searchKeywordType == 'MENU'">
+                    AND LOWER(CD.CODE_NM) LIKE LOWER(CONCAT('%', #{searchWord1}, '%'))
+                </when>
+            </choose>
+        </if>
+    </sql>
+
+    <!-- whereClause ]] -->
+
+    <!-- orderClause [[ -->
+    <sql id="orderClause">
+        ORDER BY
+        <choose>
+            <when test="orderBy eq 'ls'">${alias}LOG_SEQ</when>
+            <when test="orderBy eq 'ts'">${alias}TOKEN_SEQ</when>
+            <when test="orderBy eq 'us'">${alias}USER_SEQ</when>
+            <when test="orderBy eq 'ms'">${alias}MENU_SEQ</when>
+            <when test="orderBy eq 'lt' ">${alias}LOG_TYPE</when>
+            <when test="orderBy eq 'le' ">${alias}LOG_ETC</when>
+            <otherwise>${alias}REG_DT</otherwise>
+        </choose>
+        <choose>
+            <when test="descAsc != null and descAsc.equalsIgnoreCase('ASC') ">ASC</when>
+            <otherwise>DESC</otherwise>
+        </choose>
+    </sql>
+    <!-- orderClause ]] -->
+    <!-- 공통 ]] -->
+
+
+    <!-- 조회 [[ -->
+
+    <select id="findAllTotalCount" resultType="int">
+        /* 이력 목록 total 조회 - RecordMapper.findAllTotalCount */
+                 SELECT COUNT(1)
+                   FROM INFO_LOG IL
+        LEFT OUTER JOIN INFO_COMMON_CD CD
+                     ON IL.MENU_SEQ = CD.CODE_SEQ
+        <where>
+            <include refid="whereClause"><property name="alias" value="IL."/></include>
+        </where>
+    </select>
+
+    <select id="findAll" resultType="RecordVO">
+        /* 이력 목록 조회 - RecordMapper.findAll */
+                 SELECT <include refid="recordColumn"><property name="alias" value="IL."/></include>
+                        , CD.CODE_CD AS CODE_CD
+                        , CD.CODE_NM AS CODE_NM
+                   FROM INFO_LOG IL
+        LEFT OUTER JOIN INFO_COMMON_CD CD
+                     ON IL.MENU_SEQ = CD.CODE_SEQ
+        <where>
+            <include refid="whereClause"><property name="alias" value="IL."/></include>
+        </where>
+        GROUP BY LOG_SEQ
+        <include refid="orderClause"><property name="alias" value="IL."/></include>
+        <if test="paging.displayRow > 0">
+            LIMIT #{paging.displayRow} OFFSET #{paging.offset}
+        </if>
+    </select>
+
+    <select id="findById" resultType="RecordVO">
+        /* 이력 상세 조회 - RecordMapper.findById */
+                 SELECT <include refid="recordColumn"><property name="alias" value="IL."/></include>
+                        , CD.CODE_CD AS CODE_CD
+                        , CD.CODE_NM AS CODE_NM
+                   FROM INFO_LOG IL
+        LEFT OUTER JOIN INFO_COMMON_CD CD
+                     ON IL.MENU_SEQ = CD.CODE_SEQ
+                  WHERE IL.LOG_SEQ = #{seq}
+    </select>
+
+
+    <!-- 조회 ]] -->
+
+
+    <!-- 저장/수정/삭제 [[ -->
+
+
+    <!-- 저장/수정/삭제 [[ -->
+</mapper>

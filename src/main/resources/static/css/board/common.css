@@ -1,0 +1,13 @@
+#main_wrapper {
+    margin-left: 270px;
+}
+
+#content_wrapper {
+    margin-left: 280px;
+    margin-right: 10px;
+    margin-bottom: 85px;
+}
+
+.no-list-found {
+    text-align:center;
+}

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.code.CodeMapper">
+
+    <!--
+        * For short
+        1. cd : CODE
+        2. cn : CODE_NAME
+        3. co : CODE_ORD
+        4. r1 : REMARK1
+        5. r2 : REMARK2
+    -->
+
+    <!-- 공통 [[ -->
+
+    <!-- column [[ -->
+
+    <sql id="codeColumn">
+        ${alias}CODE_SEQ, ${alias}CODE_CD
+        , ${alias}CODE_NM, ${alias}CODE_DESC
+        , ${alias}CODE_ETC, ${alias}USE_YN
+        , ${alias}DEL_YN, ${alias}REG_DT
+        , ${alias}REG_ID, ${alias}LAST_DT
+    </sql>
+
+
+    <sql id="authColumn">
+        ${alias}AUTH_ID, ${alias}AUTH_LEVEL
+    </sql>
+
+
+
+    <!-- column ]] -->
+
+
+    <!-- whereClause [[ -->
+    <sql id="whereClause">
+
+        <if test="useYn != null and useYn != '' ">
+            AND ${alias}USE_YN = #{useYn}
+        </if>
+
+        <if test="parentCode != null and parentCode != '' ">
+            <choose>
+                <when test="parentCode == '0000'">
+                    AND ${alias}CODE LIKE CONCAT('%', '0000')
+                </when>
+                <otherwise>
+                    AND ( ${alias}CODE LIKE CONCAT(#{parentCode}, '%') and ${alias}CODE != CONCAT('0001', '0000') )
+                </otherwise>
+            </choose>
+        </if>
+
+        <if test="searchWord1 != null and searchWord1 != '' ">
+            <choose>
+                <when test="type1 eq 'cn'">AND ${alias}CODE_NAME LIKE CONCAT('%', #{searchWord1}, '%')</when>
+                <when test="type1 eq 'r1'">AND ${alias}REMARK1 LIKE CONCAT('%', #{searchWord1}, '%')</when>
+                <when test="type1 == null or type1 eq '' ">AND ( ${alias}CODE_NAME LIKE CONCAT('%', #{searchWord1}, '%') OR ${alias}REMARK1 LIKE CONCAT('%', #{searchWord1}, '%') )</when>
+                <otherwise></otherwise>
+            </choose>
+        </if>
+
+    </sql>
+    <!-- whereClause ]] -->
+
+
+    <!-- orderClause [[ -->
+    <sql id="orderClause">
+        ORDER BY
+        <choose>
+            <when test="orderBy eq 'cd' ">${alias}CODE</when>
+            <when test="orderBy eq 'cn' ">${alias}CODE_NAME</when>
+            <when test="orderBy eq 'co' ">${alias}CODE_ORD</when>
+            <when test="orderBy eq 'r1' ">${alias}REMARK1</when>
+            <when test="orderBy eq 'r2' ">${alias}REMARK2</when>
+            <otherwise>${alias}CODE</otherwise>
+        </choose>
+        <choose>
+            <when test="descAsc != null and descAsc.equalsIgnoreCase('ASC') ">ASC</when>
+            <otherwise>DESC</otherwise>
+        </choose>
+    </sql>
+    <!-- orderClause ]] -->
+    <!-- 공통 ]] -->
+
+
+
+
+
+    <!-- 조회 [[ -->
+
+    <select id="pagingBySearch" resultType="CodeVO" parameterType="SearchVO">
+        /* 코드 페이징 조회 - CodeMapper.pagingBySearch */
+        SELECT
+        <include refid="codeColumn"><property name="alias" value="CD."/></include>
+        FROM CODE CD
+        <where>
+            <include refid="whereClause"><property name="alias" value="CD."/></include>
+        </where>
+
+        <include refid="orderClause"><property name="alias" value="CD."/></include>
+
+        <include refid="mapper.paging.pagingQuery"></include>
+
+    </select>
+
+    <select id="pagingCountBySearch" resultType="Integer" parameterType="SearchVO">
+        /* 코드 페이징 카운트 조회 - CodeMapper.pagingCountBySearch */
+        SELECT COUNT(*)
+        FROM CODE CD
+        <where>
+            <include refid="whereClause"><property name="alias" value="CD."/></include>
+        </where>
+    </select>
+
+
+
+
+    <select id="listBySearch" resultType="CodeVO" parameterType="SearchVO">
+        /* 코드 목록 조회 - CodeMapper.listBySearch */
+        SELECT
+            <include refid="codeColumn"><property name="alias" value="CD."/></include>
+        FROM CODE CD
+        <where>
+            <include refid="whereClause"><property name="alias" value="CD."/></include>
+        </where>
+
+        <include refid="orderClause"><property name="alias" value="CD."/></include>
+    </select>
+
+
+    <select id="rowBySearch" resultType="CodeVO" parameterType="SearchVO">
+        /* 코드 단 건 조회 - CodeMapper.rowBySearch */
+        SELECT
+            <include refid="codeColumn"><property name="alias" value="CD."/></include>
+        FROM CODE CD
+        WHERE CD.CODE = #{code}
+    </select>
+
+    <select id="listCode" resultType="CodePublicVO">
+        SELECT
+            <include refid="codeColumn"><property name="alias" value="CD."/></include>
+        FROM INFO_COMMON_CD CD
+        WHERE CD.CODE_CD LIKE 'MENU%';
+    </select>
+    <!-- 조회 ]] -->
+
+
+
+
+
+    <!-- 저장/수정/삭제 [[ -->
+
+    <insert id="insert">
+        /* 코드 저장 - CodeMapper.insert */
+        INSERT INTO CODE
+        (
+            CODE, CODE_NAME
+            , REMARK1, VALUE1, REMARK2, VALUE2
+            , CODE_ORD, USE_YN
+        )
+        VALUES
+        (
+            #{code}, #{codeName}
+            , #{remark1}, #{value1}, #{remark2}, #{value2}
+            , #{codeOrd}, #{useYn}
+        )
+    </insert>
+
+
+
+    <update id="update">
+        /* 코드 수정 - CodeMapper.update */
+        UPDATE CODE
+        <set>
+            <if test="codeName != null and codeName != ''">CODE_NAME = #{codeName},</if>
+            <if test="remark1 != null and remark1 != ''">REMARK1 = #{remark1},</if>
+            <if test="value1 != null ">VALUE1 = #{value1},</if>
+            <if test="remark2 != null and remark2 != ''">REMARK2 = #{remark2},</if>
+            <if test="value2 != null">VALUE2 = #{value2},</if>
+            <if test="useYn != null and useYn != ''">USE_YN = #{useYn},</if>
+        </set>
+        WHERE CODE = #{code}
+    </update>
+
+    <update id="updateCodeOrder">
+        /* 코드 순서 UPDATE - CodeMapper.updateCodeOrder */
+        UPDATE CODE
+            SET CODE_ORD = #{codeOrd}
+        WHERE CODE = #{code}
+    </update>
+
+    <!-- 저장/수정/삭제 ]] -->
+
+
+<!--#################### DEJAY_COMMON ####################-->
+    <select id="commonCodeGroupList">
+        /* 코드 그룹 조회 - CodeMapper.commonCodeGroupList */
+            SELECT CODE_SEQ AS SEQ, CODE_CD AS CODE, CODE_NM AS DISPLAY_NAME
+              FROM INFO_COMMON_CD
+             WHERE SUBSTRING(CODE_CD, 5) = '0000'
+          ORDER BY CODE_SEQ
+    </select>
+
+    <select id="commonCodeCategoryList">
+        /* 공통 코드 구분(카테고리) - CodeMapper.commonCodeCategoryList */
+          SELECT CODE_SEQ AS SEQ, CODE_CD AS CODE, CODE_NM AS DISPLAY_NAME
+            FROM INFO_COMMON_CD
+           WHERE CONCAT(SUBSTRING(CODE_CD FROM 1 FOR 4), SUBSTRING(CODE_CD, 7)) = CONCAT(#{code}, '00')
+             AND SUBSTRING(CODE_CD FROM 5) <![CDATA[<>]]> '0000'
+        ORDER BY CODE_SEQ
+    </select>
+
+    <select id="findAll">
+        /* 공통 코드 목록 조회 - CodeMapper.findAll */
+        SELECT ROW_NUMBER() OVER(ORDER BY CODE_SEQ, CODE_ORD) AS ROW_NUM
+               , CODE_SEQ, CODE_CD, CODE_NM, CODE_DESC, CODE_ETC, CODE_ORD, USE_YN, DEL_YN, REG_DT, REG_ID, LAST_DT, LAST_ID
+        FROM INFO_COMMON_CD
+        WHERE DEL_YN = 'N'
+          AND CODE_ORD <![CDATA[>]]> 0
+          <if test="code != null and code != ''">
+          AND SUBSTRING(CODE_CD FROM 1 FOR 4) = #{code}
+          </if>
+    </select>
+
+    <insert id="saveCommonCode">
+        /* 공통 코드 저장 - CodeMapper.saveCommonCode */
+        INSERT INTO INFO_COMMON_CD
+        (
+            CODE_CD, CODE_NM, CODE_DESC, USE_YN, REG_DT, REG_ID
+        )
+        VALUES
+        (
+            #{codeCd}, #{codeNm}, #{codeDesc}, #{useYn}, NOW(), #{regId}
+        )
+    </insert>
+
+    <update id="updateCommonCode">
+        /* 공통 코드 수정 - CodeMapper.updateCommonCode */
+        UPDATE INFO_COMMON_CD
+           SET CODE_NM = #{codeNm}
+             , CODE_DESC = #{codeDesc}
+             , USE_YN = #{useYn}
+             , DEL_YN = #{delYn}
+             , LAST_DT = NOW()
+             , LAST_ID = 'ijzone'
+         WHERE CODE_SEQ = #{codeSeq}
+           AND CODE_CD = #{codeCd}
+    </update>
+</mapper>

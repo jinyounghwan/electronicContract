@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="ko">
+
+<th:block layout:fragment="css">
+    <head>
+        <link rel="stylesheet" type="text/css" th:href="@{/static/css/record/common.css}"/>
+        <title>이력 조회</title>
+        <style>
+
+
+        </style>
+    </head>
+</th:block>
+
+<th:block layout:fragment="content">
+    <div id="main_wrapper">
+        <h1>이력 조회</h1>
+    </div>
+    <div id="content_wrapper">
+        <div id="search_wrapper" class="bg-secondary p-1">
+            <caption>검색</caption>
+            <p>
+                <span th:text="날짜"/>
+                <select id="searchDateType" th:field="*{searchDateRangeOptionList}" th:onchange="'fnOnChangeHandler(this)'">
+                    <option th:each="ele : ${searchDateRangeOptionList}" th:value="${ele.getCode()}" th:text="|${ele.getDisplayName()}|"></option>
+                </select>
+
+                <label for="sDate">시작일
+                    <input type="text" id="sDate" name="sDate">
+                </label>
+                <label>~</label>
+                <label for="eDate">종료일
+                    <input type="text" id="eDate" name="eDate">
+                </label>
+            </p>
+
+            <p>
+                <span th:text="검색"></span>
+                <select id="searchKeywordType" th:field="*{searchKeywordTypeOptionList}" th:onchange="'fnOnChangeHandler(this)'">
+                    <option th:each="ele : ${searchKeywordTypeOptionList}" th:value="${ele.getCode()}" th:text="|${ele.getDisplayName()}|"></option>
+                </select>
+                <input type="text" name="searchWord1">
+                <input type="button" th:value="검색" th:class="detail_info_trigger" th:onclick="'fnSearchList(1, '+ ${paging.getDisplayRow()} + ', ' + ${totalCount} + ')'">
+            </p>
+        </div>
+
+        <div id="list_wrapper" class="p-sm-2">
+            <table class="table table-bordered text-center">
+                <div>
+                    <span id="totalCount" th:text="|전체 ${totalCount}개|"></span>
+                    <input id="excel-download" type="button" value="엑셀 다운로드(준비중)">
+                </div>
+                <thead>
+                    <tr>
+                        <th class="text-center" scope="col">seq</th>
+                        <th class="text-center" scope="col">접속 IP</th>
+                        <th class="text-center" scope="col">접속 일시</th>
+                        <th class="text-center" scope="col">회원 ID</th>
+                        <th class="text-center" scope="col">접속 메뉴</th>
+                        <th class="text-center" scope="col">수행업무</th>
+                        <th class="text-center" scope="col">상세</th>
+                    </tr>
+                </thead>
+                <tbody id="boardList">
+                    <tr th:if="${not #lists.isEmpty(list)}" th:each="row, stat : ${list}">
+                        <td th:text="${row.getLogSeq()}"></td>
+                        <td th:text="${row.getClientIp()}"></td>
+                        <td th:text="${row.getRegDtStr()}"></td>
+                        <td th:text="${row.getRegId()}"></td>
+                        <td th:text="${row.getMenuNm()}"></td>
+                        <td th:text="${row.getLogTypeKoreanStr()}"></td>
+                        <td><input th:if="${row.getLogSeq() > 0}" th:field="${row.getLogSeq()}" type="button" value="상세" th:onclick="'fnModalHandler(this, 1)'"/></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(list)}">
+                        <td class="no-row-found" colspan="9" th:text="|데이터가 없습니다.|"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation" class="d-flex justify-content-center">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" th:onclick="'fnSearchList(1, ' + ${paging.getDisplayRow()} + ', ' + ${totalCount} + ')'" href="#" aria-label="First">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">First</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:onclick="'fnSearchList(' + ${paging.getPrevPage()} + ', ' + ${paging.getDisplayRow()} + ', ' + ${totalCount} + ')'" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&lt;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:classappend="${page == paging.getCurrentPage()} ? 'active'" th:each="page: ${#numbers.sequence(paging.getBeginPage(), paging.getEndPage())}">
+                        <a class="page-link" href="#" th:text="${page}" th:onclick="'fnSearchList(' + ${page} + ', ' + ${paging.getDisplayRow()} + ', ' + ${totalCount} + ')'">page number</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:onclick="'fnSearchList(' + ${paging.getNextPage()} + ', ' + ${paging.getDisplayRow()} + ', ' + ${totalCount} + ')'" href="#" aria-label="Next">
+                            <span aria-hidden="true">&gt;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:onclick="'fnSearchList(' + ${paging.getTotalPage()} + ', ' + ${paging.getDisplayRow()} + ', ' + ${paging.getTotalCount()} + ')'" href="#" aria-label="Last">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Last</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div>
+                <select id="pageRowCriteria" th:onchange="'fnChangePageRowCriteria(1, ' + ${paging.getTotalCount()} + ')'">
+                    <option th:selected="${paging.getDisplayRow()} == '10'" th:value="10" th:text="|10개|"></option>
+                    <option th:selected="${paging.getDisplayRow()} == '20'" th:value="20" th:text="|20개|"></option>
+                    <option th:selected="${paging.getDisplayRow()} == '30'" th:value="30" th:text="|30개|"></option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modalContainer" class="hidden">
+        <div id="detail_wrapper" th:object="${rowData}">
+            <p><b th:text="|이력 상세 조회|"></b><span class="glyphicon glyphicon-remove" id="modalCloseBtn" th:onclick="'fnModalHandler(this, 0)'"></span></p>
+            <p><span th:text="|접속 메뉴 : *{getMenuNm()}|"></span></p>
+            <p><span th:text="|수행 업무 : *{getLogTypeKoreanStr()}|"></span></p>
+            <p><span th:text="|처리 상세 내용 : *{getLogEtc()}|"></span></p>
+        </div>
+    </div>
+
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        // Modal open
+        let fnModalHandler = (t, f) => {
+
+            if(f === 0) {
+                $('#modalContainer').addClass('hidden');
+            }else {
+                const logSeq = $(t).attr('field');
+                fnRecordDetail(logSeq);
+                $('#modalContainer').removeClass('hidden');
+            }
+        }
+
+        // 이력 목록 조회
+        let fnSearchList = (currentPage, displayRow, totalCount) => {
+            // 날짜 조건 검증
+            if($('#searchDateType option:selected').val() === 'REG_DT') {
+                if($('#sDate').val() === '' || $('#eDate').val() === '') {
+                    alert('검색할 날짜를 선택하세요.');
+                    return false;
+                }
+            }
+
+            // 검색어 조건 검증
+            if($('#searchKeywordType option:selected').val() !== 'ALL') {
+                if($('input[name=searchWord1]').val() === '') {
+                    alert('검색어를 입력하세요.');
+                    return false;
+                }
+            }
+
+            const data = {
+                recordSearchVO: {
+                    searchDateType: $('#searchDateType option:selected').val(),
+                    startDt: $('#sDate').val(),
+                    endDt: $('#eDate').val(),
+                    searchKeywordType: $('#searchKeywordType option:selected').val(),
+                    searchWord1: $('input[name=searchWord1]').val()},
+                paging: {
+                    currentPage: currentPage,
+                    displayRow: displayRow,
+                    totalCount: totalCount
+                }
+            }
+
+            $.ajax({
+                url: '/record/api/list',
+                type: 'post',
+                dataType: 'text',
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(data)
+            })
+            .done(function(data) {
+                $('#list_wrapper').replaceWith(data);
+            })
+            .fail(function(jqXHR) {
+                console.log(jqXHR);
+            });
+        }
+
+        // 게시글 갯수 선택에 따른 목록 조회
+        let fnChangePageRowCriteria = (currentPage, totalCount) => {
+            let displayRow = $('#pageRowCriteria option:selected').val();
+            const data = {
+                recordSearchVO: {
+                    searchDateType: $('#searchDateType option:selected').val(),
+                    startDt: $('#sDate').val(),
+                    endDt: $('#eDate').val(),
+                    searchKeywordType: $('#searchKeywordType option:selected').val(),
+                    searchWord1: $('input[name=searchWord1]').val()
+                },
+                paging: {
+                    currentPage: currentPage,
+                    displayRow: displayRow,
+                    totalCount: totalCount,
+                }
+            }
+
+            $.ajax({
+                url: '/record/api/list',
+                type: 'post',
+                dataType: 'text',
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(data)
+            })
+            .done(function(data) {
+                $('#list_wrapper').replaceWith(data);
+            })
+            .fail(function(jqXHR) {
+                console.log(jqXHR);
+            });
+        }
+
+        // 이력 상세 조회
+        let fnRecordDetail = (seq) => {
+            $.ajax({
+                url: `/record/api/${seq}`,
+                type: 'get',
+                dataType: 'text',
+                contentType: 'application/json; charset=UTF-8'
+            })
+                .done(function(data) {
+                    $('#detail_wrapper').replaceWith(data);
+                })
+                .fail(function(jqXHR) {
+                    console.log(jqXHR);
+                });
+        }
+
+        // on change event handler
+        let fnOnChangeHandler = (t) => {
+            let id = $(t);
+            if(id.val() === 'ALL') {
+                if(id.attr('id') === 'searchDateType') {
+                    $('#sDate').val('');
+                    $('#eDate').val('');
+                }
+                if(id.attr('id') === 'searchKeywordType') {
+                    $('input[name=searchWord1]').val('');
+                }
+            }
+        }
+    </script>
+</th:block>
+</html>

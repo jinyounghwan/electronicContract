@@ -1,0 +1,60 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    hikari:
+      minimum-idle: 5 # Connection Pool에 유지 가능한 최소 커넥션 개수
+      maximum-pool-size: 10 # Connection Pool에 유지 가능한 최대 커넥션 개수
+      idle-timeout: 30000 # Connection이 Pool에서 유휴상태(사용하지 않는 상태)로 남을 수 있는 최대 시간
+      max-lifetime: 200000 # Connection의 최대 유지 가능 시간
+      connection-timeout: 30000 #  Pool에서 Connection을 구할 때 대기시간, DB서버에 맞출것
+      connection-test-query: SELECT NOW() FROM DUAL
+#  autoconfigure:
+#    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
+#      settings:
+#        trace: false
+  security:
+    user:
+      password: 0000
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+    cache: false
+    encoding: UTF-8
+  mvc:
+    static-path-pattern: "/static/**"
+server:
+  port: 3030
+  context-path: /
+  encoding:
+    charset: UTF-8
+    enabled: true
+    force: true
+
+## MyBatis
+# mapper.xml 위치 지정
+mybatis:
+  mapper-locations: classpath:mybatis-mappers/**/*Mapper.xml
+  type-aliases-package: com.samsung.framework.vo
+
+# properties 관리
+properties:
+  jasypt:
+    encryptor:
+      bean: jasyptStringEncryptor
+      password: ${JASYPT_PASSWORD}
+  # file
+  file:
+    rootDir: /files/dejay_public
+    tempDir: /temp
+    realDir: /upload
+
+# jwt
+jwt:
+  secret: frameworkspringsecurityjwtsecretkeytestijzone
+  issuer: ikjooLee
+

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:input="http://www.w3.org/1999/html"
+      layout:decorate="~{layout/layout}" lang="ko">
+
+<th:block layout:fragment="css">
+    <head>
+        <link rel="stylesheet" type="text/css" th:href="@{/static/css/board/common.css}"/>
+        <title>공통 게시판 수정</title>
+    </head>
+</th:block>
+
+<th:block layout:fragment="content">
+    <div id="main_wrapper">
+        <h1>공통 게시판 수정</h1>
+    </div>
+
+    <form id="form" th:object="${rowData}" method="post" enctype="multipart/form-data">
+        <div id="content_wrapper">
+            <div id="info_wrapper" class="bg-secondary p-sm-2">
+                <p>
+                    <span>작성자</span>
+                    <span>name</span>
+                </p>
+                <p>
+                    <span>제목<span class="glyphicon-asterisk"></span></span>
+                    <span><input type="text" th:field="*{title}"></span>
+                </p>
+                <p>
+                    <span>썸네일 이미지</span>
+                    <span>THUMBNAIL IMAGE</span>
+                </p>
+
+            </div>
+            <div id="detail_wrapper" class="p-sm-2">
+                <textarea th:field="*{contents}"></textarea>
+            </div>
+            <div class="container">
+                <p class="col-md-2"></p>
+                <p class="col-md-6">파일명</p>
+                <p class="col-md-2">상태</p>
+                <p class="col-md-2">크기</p>
+            </div>
+            <div id="file_wrapper">
+                <div id="data-files">
+                    <div class="data-file" th:each="ele : ${files}" >
+                        <div th:id="${ele.getFileNm()}" th:text="${ele.getFileNmOrg()}"></div><button type="button" th:data-index="${ele.getFileNm()}" onclick="fileDeleteFn(this)">X</button>
+                    </div>
+                </div>
+                <div>
+                    <label for="files">파일 추가</label>
+                    <input type="file" id="files" name="files" onchange="addFile()" style="display:none" multiple>
+                </div>
+            </div>
+            <div id="button_wrapper">
+                <input type="button" th:value="삭제" th:onclick="'fnDeleteBoard(' + *{boardSeq} + ')'" />
+                <input type="button" th:value="수정" th:onclick="'fnUpdateBoard(' + *{boardSeq} + ')'"  />
+            </div>
+        </div>
+    </form>
+</th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        let filesArr =[[${files}]];
+
+        let newFilesArr = [];
+
+        function fileDeleteFn(obj){
+            const removeTargetId = obj.dataset.index;
+            let removeTarget = document.getElementById(removeTargetId);
+
+            fileArrDelete(removeTargetId);
+            removeTarget.remove();
+        }
+
+        function fileArrDelete(removeTargetId){
+            let arr = filesArr.filter(file => file.fileNm != removeTargetId);
+            let newArr = newFilesArr.filter(file => file.lastModified != removeTargetId);
+            filesArr=Array.from(arr);
+            newFilesArr = Array.from(newArr);
+        }
+
+        function createFileInfo(files){
+            const dataFiles = document.getElementById("data-files");
+            files.forEach(file=>{
+                newFilesArr.push(file);
+                dataFiles.innerHTML += '<div id="'+file.lastModified+'">'+file.name+'</div><button type="button" data-index="'+file.lastModified +'" onclick="fileDeleteFn(this)">X</button>';
+            });
+        }
+
+        function addFile(){
+            const addFile = document.querySelector("#files");
+            const arrData = Array.from(addFile.files);
+            createFileInfo(arrData);
+        }
+        // 게시글 삭제
+        let fnDeleteBoard = (seq) => {
+            if(!confirm('삭제 하시겠습니까?')) {
+                return false;
+            }
+            let checkedList = [];
+            checkedList.push(seq);
+            $.ajax({
+                url: '/board/api/delete',
+                type: 'delete',
+                data: {lastId: 'ij', checkedList: checkedList}
+            })
+                .done(function(data) {
+                    window.location.href = '/board';
+                })
+                .fail(function(jqXHR) {
+                    console.log(jqXHR);
+                });
+        }
+
+        let fnUpdateBoard = (seq) => {
+            if(!confirm('수정 하시겠습니까?')) {
+                return false;
+            }
+
+            if($('input[name=title]').val() === '') {
+                alert('필수 정보를 입력해주세요.');
+                return false;
+            }
+            const data = {
+                boardSeq: seq,
+                title: $('input[name=title]').val(),
+                contents: $('#contents').val(),
+                lastId: 'ij',
+                files: filesArr
+                // thumbnail image file
+                // ck editor
+                // multiple file upload
+            }
+
+            let formData = new FormData();
+            for(let i=0; i<newFilesArr.length; i++){
+                formData.append("files", newFilesArr[i]);
+            }
+
+            formData.append('data', new Blob([JSON.stringify(data)],{type: "application/json"}));
+            $.ajax({
+                url: `/board/api/update/${seq}`,
+                type: 'post',
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                data: formData
+            })
+            .done(function(data) {
+                console.log(data);
+                window.location.href = `/board/${seq}`;
+            })
+            .fail(function(jqXHR) {
+                console.log(jqXHR);
+            });
+        }
+    </script>
+</th:block>
+</html>

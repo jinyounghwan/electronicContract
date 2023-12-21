@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="ko">
+
+<th:block layout:fragment="content">
+    <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    sample
+                </div>
+                <div class="col-md-4">
+                    sample
+                </div>
+                <div class="col-md-4">
+                    sample
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    sample
+                </div>
+                <div class="col-md-6">
+                    sample
+                </div>
+            </div>
+            <h1>Started Index Pages</h1>
+            <div id="date-wrapper">
+                <label for="sDate">시작일
+                    <input type="text" id="sDate" name="sDate">
+                </label>
+                <label>~</label>
+                <label for="eDate">종료일
+                    <input type="text" id="eDate" name="eDate">
+                </label>
+
+            </div>
+    </div>
+
+</th:block>
+</html>

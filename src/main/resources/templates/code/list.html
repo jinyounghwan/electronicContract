@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="ko">
+
+<th:block layout:fragment="css">
+    <head>
+        <link rel="stylesheet" type="text/css" th:href="@{/static/css/code/common.css}"/>
+        <title>공통 코드 관리</title>
+    </head>
+</th:block>
+
+<th:block layout:fragment="content">
+    <div id="main_wrapper">
+        <h1>공통 코드 관리</h1>
+    </div>
+    <div id="content_wrapper">
+        <div id="search_wrapper" class="bg-secondary p-1">
+            <p>
+                <span th:text="구분"/>
+                <select id="searchDateType" th:field="*{commonCodeCategoryList}" th:onchange="'fnOnChangeHandler(this)'">
+                    <option th:each="ele : ${commonCodeCategoryList}" th:value="${ele.getCode()}" th:text="|${ele.getDisplayName()}|" />
+                </select>
+            </p>
+            <p>
+                <span th:text="|코드 그룹 선택|"></span>
+                <select id="searchKeywordType" th:field="*{commonCodeGroupList}" th:onchange="'fnOnChangeHandler(this)'">
+                    <option th:each="ele : ${commonCodeGroupList}" th:value="${ele.getCode()}" th:text="|${ele.getDisplayName()}|" />
+                </select>
+            </p>
+        </div>
+
+        <div id="list_wrapper" class="p-sm-2">
+            <table class="table table-bordered text-center">
+                <div>
+                    <input id="saveBtn" type="button" value="저장" th:onclick="fnSaveCode()">
+                </div>
+                <thead>
+                    <tr>
+                        <th class="text-center" scope="col">No</th>
+                        <th class="text-center" scope="col">코드</th>
+                        <th class="text-center" scope="col">항목명</th>
+                        <th class="text-center" scope="col">설명</th>
+                        <th class="text-center" scope="col">사용설정</th>
+                        <th class="text-center" scope="col">추가 / 삭제</th>
+                    </tr>
+                </thead>
+                <tbody id="codeList">
+                    <tr th:data-del-yn="N">
+                        <td>추가</td>
+                        <td th:text="|auto-generated|"></td>
+                        <td><input type="text"></td>
+                        <td><input type="text"></td>
+                        <td>
+                            <select th:class="use-select" th:data-add="Y" th:data-code-seq="0" th:data-code-cd="FIXED" th:name="useYn">
+                                <option th:text="|사용|" th:value="Y" selected="selected"></option>
+                                <option th:text="|미사용|" th:value="N"></option>
+                            </select>
+                        </td>
+                        <td><input type="button" value="추가" th:onclick="'fnButtonHandler(this, &quot;a&quot;)'"></td>
+                    </tr>
+                    <tr th:if="${not #lists.isEmpty(list)}" th:each="row, stat : ${list}" th:data-del-yn="N">
+                        <td th:text="${row.getRowNum()}"></td>
+                        <td th:text="${row.getCodeCd()}"></td>
+                        <td>
+                            <input type="text" th:name="codeNm" th:value="${row.getCodeNm()}">
+                        </td>
+                        <td>
+                            <input type="text" th:name="codeDesc" th:value="${row.getCodeDesc()}">
+                        </td>
+                        <td>
+                            <select th:class="use-select" th:data-add="N" th:data-code-seq="${row.getCodeSeq()}" th:data-code-cd="${row.getCodeCd()}" th:name="useYn">
+                                <option th:text="|사용|" th:value="Y" th:selected="${row.getUseYn() == 'Y'}"></option>
+                                <option th:text="|미사용|" th:value="N" th:selected="${row.getUseYn() == 'N'}"></option>
+                            </select>
+                        </td>
+                        <td><input type="button" value="삭제" th:onclick="'fnButtonHandler(this, &quot;d&quot;)'"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(list)}">
+                        <td class="no-row-found" colspan="9" th:text="|데이터가 없습니다.|"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        // 공통 코드 저장
+        let fnSaveCode = () => {
+            let arr = [];
+            $('select[name=useYn]').each(function() {
+                let _codeSeq = $(this).data('codeSeq');
+                let _codeCd = $(this).data('codeCd');
+                let _codeNm = $(this).parent().prev().prev().find('input').val();
+                let _codeDesc = $(this).parent().prev().find('input').val();
+                let _useYn = $(this).val();
+                let _delYn = $(this).closest('tr').data('delYn');
+                let _newlyAdded = $(this).data('add');
+
+                if(_codeCd !== 'FIXED' && !_codeNm) {
+                    alert('항목명을 입력 하세요.');
+                    arr = [];
+                    return false;
+                }
+
+                const data = {
+                    codeSeq: _codeSeq,
+                    codeCd: _codeCd,
+                    codeNm: _codeNm,
+                    codeDesc: _codeDesc,
+                    // codeOrd:
+                    useYn: _useYn,
+                    delYn: _delYn,
+                    newlyAdded: _newlyAdded
+                }
+                arr.push(data);
+            })
+
+            if(arr.length < 1) {
+                return false;
+            }
+
+            $.ajax({
+                url: '/code/api',
+                type: 'put',
+                dataType: 'text',
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(arr)
+            })
+            .done(function(data) {
+                alert('저장 완료 되었습니다.');
+                $('#list_wrapper').replaceWith(data);
+            })
+            .fail(function(jqXHR) {
+                console.error(jqXHR);
+            });
+        }
+
+        // 추가, 삭제 버튼 핸들러
+        let fnButtonHandler = (t, f) => {
+            let codeCd = $(t).parent().prev().find('.use-select').data('codeCd');
+
+            if(f === 'd') {
+                if(codeCd === 'ADD') {
+                    $(t).parent().parent().remove();
+                    return false;
+                }
+
+                $(t).closest('tr').data('delYn', 'Y');
+                $(t).closest('tr').hide();
+            }
+            if(f === 'a') {
+                $(t).parent().parent().after(`<tr data-del-yn="N">
+                                                <td>추가</td>
+                                                <td>auto-generated</td>
+                                                <td><input type="text"></td>
+                                                <td><input type="text"></td>
+                                                <td>
+                                                    <select class="use-select" data-add="Y" data-code-seq="0" data-code-cd="ADD" name="useYn">
+                                                        <option value="Y" selected="selected">사용</option>
+                                                        <option value="N">미사용</option>
+                                                    </select>
+                                                </td>
+                                                <td><input type="button" value="삭제" onclick="fnButtonHandler(this, &quot;d&quot;)"></td>
+                                            </tr>`
+                );
+            }
+        }
+
+        // on change event handler
+        let fnOnChangeHandler = (t) => {
+            const _codeCd = $(t).val();
+
+            $.ajax({
+                url: '/code/api',
+                type: 'get',
+                dataType: 'text',
+                contentType: 'application/json; charset=UTF-8',
+                data: {codeCd: _codeCd}
+            })
+            .done(function(data) {
+                $('#list_wrapper').replaceWith(data);
+            })
+            .fail(function(jqXHR) {
+                console.error(jqXHR);
+            });
+        }
+    </script>
+</th:block>
+</html>

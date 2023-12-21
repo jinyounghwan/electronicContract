@@ -1,0 +1,22 @@
+.detail_wrapper{
+    margin-top : 5px;
+    margin-bottom : 10px;
+}
+
+#sign_up_wrapper{
+    width:100%;
+    display:flex;
+    justify-content: center;
+}
+
+#user_info_wrapper{
+    height:200px;
+}
+
+#sign_width_wrapper{
+    width:900px;
+}
+
+.form-control{
+    margin-top:5px;
+}

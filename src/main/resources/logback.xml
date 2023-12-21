@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+    <!-- Properties -->
+    <property name="LOG_DIR" value="logs" />
+    <property name="LOG_FILE_NAME" value="application" />
+    <property name="CONSOLE_ENCODING_PATTERN" value="[ %d{yyyy-MM-dd HH:mm:ss.SSS} ] %highlight(%-5level) %magenta(%-4relative) --- [ %thread{10} ] %cyan(%logger{20}) : %msg%n" />
+    <property name="FILE_ENCODING_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-4relative --- [ %thread{10} ] %logger{35} - %msg%n" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_ENCODING_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${LOG_FILE_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/%d{yyyy-MM}/${LOG_FILE_NAME}_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <maxFileSize>50MB</maxFileSize>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>${FILE_ENCODING_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="jdbc.sqlonly" level="INFO"/>
+    <logger name="jdbc.sqltiming" level="DEBUG"/>
+    <logger name="jdbc.audit" level="FALSE" />
+    <logger name="jdbc.resultset" level="OFF"/>
+    <logger name="jdbc.resultsettable" level="DEBUG"/>
+
+    <logger name="org.springframework.core" level="info" />
+    <logger name="org.springframework.beans" level="info" />
+    <logger name="org.springframework.context" level="info" />
+    <logger name="org.springframework.web" level="DEBUG" />
+
+    <!-- transaction log -->
+<!--    <logger name="org.mybatis.spring.SqlSessionUtils" level="DEBUG"/>-->
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/> <!-- Console 로그 출력 -->
+        <appender-ref ref="FILE"/> <!-- 로그 File -->
+    </root>
+
+</configuration>

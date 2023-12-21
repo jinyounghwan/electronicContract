@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:input="http://www.w3.org/1999/html" layout:decorate="~{layout/layout}" lang="ko">
+
+<th:block layout:fragment="css">
+    <head>
+        <link rel="stylesheet" type="text/css" th:href="@{/static/css/approve/common.css}"/>
+        <title>전자결재 작성</title>
+    </head>
+</th:block>
+
+<th:block layout:fragment="content">
+    <div id="main_wrapper">
+        <h1>전자결재 작성</h1>
+    </div>
+
+    <form id="form" th:action="@{/board/registration}" th:object="${boardPublic}" method="post" enctype="multipart/form-data">
+        <div id="content_wrapper">
+            <div id="info_wrapper" class="bg-secondary p-sm-2">
+                <p>
+                    <span>문서번호</span>
+                    <span>자동채번</span>
+                </p>
+                <p>
+                    <span>작성일</span>
+                    <span id="regDate"></span>
+                </p>
+                <p>
+                    <span>작성자</span>
+                    <span>이익주</span>
+                </p>
+                <p>
+                    <span>기안부서</span>
+                    <span>부서</span>
+                </p>
+                <p id="approver">
+                    <span>결재자<span class="glyphicon-asterisk"/></span>
+                    <span><input type="button" value="사용자 선택" th:data-search-type="APPROVER" th:onclick="'fnSearchUserList(this)'"></span>
+                </p>
+                <p id="referrer">
+                    <span>참조자</span>
+                    <span><input type="button" value="사용자 선택" th:data-search-type="REFERRER" th:onclick="'fnSearchUserList(this)'"></span>
+                </p>
+                <p>
+                    <span>문서제목<span class="glyphicon-asterisk"/></span>
+                    <span><input type="text" id="approve-title"/></span>
+                </p>
+            </div>
+            <div id="detail_wrapper" class="p-sm-2">
+                <textarea id="contents" th:field="*{contents}"></textarea>
+            </div>
+            <div id="file_wrapper">
+                <div id="data-files">
+
+                </div>
+                <div>
+                    <label for="files">파일 추가</label>
+                    <input type="file" id="files" name="files" onchange="addFile()" style="display:none" multiple>
+                </div>
+            </div>
+            <div id="button_wrapper">
+                <input type="button" th:value="취소" th:onclick=""/>
+                <input type="button" th:value="저장" th:onclick="fnSaveAuthority()"/>
+            </div>
+        </div>
+        <input type="hidden" th:field="*{regId}">
+        <input type="hidden" th:field="*{boardCd}">
+    </form>
+
+    <!-- Modal -->
+    <div id="modalContainer" class="hidden">
+        <input type="hidden" name="appendFlag" value="">
+        <div id="modal_detail_wrapper" class="container">
+            <div class="row">
+                <p>
+                    <span><b>회원 선택</b></span>
+                    <span class="glyphicon glyphicon-remove" id="modalCloseButton" th:onclick="'fnModalHandler(this, 0)'" style="font-size: 4rem"></span>
+                </p>
+            </div>
+            <div class="modal_search_wrapper row">
+                <p>
+                    <span th:text="검색"></span>
+                    <input type="text" name="searchKeyword">
+                    <input type="button" value="검색" th:data-search-type="SEARCH" th:onclick="'fnSearchUserList(this)'">
+                    <input type="button" value="초기화" th:onclick="fnRefreshHandler()">
+                </p>
+            </div>
+            <div id="user_list_wrapper" class="row">
+                <div id="valid_user_list" class="left_wrapper col-sm-5">
+                    <p th:each="user : ${users}" th:class="left-list" th:value="${user.getUserSeq()}" th:onclick="'fnSubjectSelectHandler(this)'">
+                        <span th:value="${user.getUserNm()}" th:text="${user.getUserNm()} + ' ' + ${user.getPositionNm()} + ' / ' + ${user.getAppointNm()} + ' ' + ${user.getDeptNm()}"></span>
+                    </p>
+                </div>
+                <div id="modal_list_action_wrapper" class="col-sm-1 pt-sm-3">
+                    <p class="glyphicon glyphicon-chevron-right" style="font-size: 4rem" th:onclick="'fnMoveSubjectHandler(this, &quot;LTR&quot;)'"></p>
+                    <p class="glyphicon glyphicon-chevron-left" style="font-size: 4rem" th:onclick="'fnMoveSubjectHandler(this, &quot;RTL&quot;)'"></p>
+                    <p class="glyphicon glyphicon-refresh" style="font-size: 4rem" th:onclick="'fnMoveSubjectHandler(this, &quot;CLEAR&quot;)'"></p>
+                </div>
+                <div id="auth_subject_list" class="right_wrapper col-sm-5"></div>
+            </div>
+            <div id="modal_action_wrapper" class="align-items-center">
+                <input type="button" value="취소" th:onclick="'fnModalHandler(this, 0)'">
+                <input type="button" value="선택" th:onclick="fnSelectSubject()">
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        const now = new Date();
+        const date = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + ('0' + now.getDate()).slice(-2);
+        const time = now.getHours() + ':' + now.getMinutes();
+        $('#regDate').text(date + ' ' + time);
+
+        // 사용자 조회
+        let fnSearchUserList = (t) => {
+            const _this = $(t);
+            $('input[name=appendFlag]').val(_this.data('searchType'));
+
+            let _searchKeyword = $('input[name=searchKeyword]').val();
+            $.ajax({
+                url: '/auth/auth-popup',
+                type: 'get',
+                contentType: 'application/json; charset=UTF-8',
+                data: {searchKeyword: _searchKeyword}
+            })
+            .done(function(data) {
+                $('#user_list_wrapper').replaceWith(data);
+                $('#modalContainer').removeClass('hidden');
+            })
+            .fail(function(jqXHR) {
+                console.log(jqXHR);
+            });
+        }
+
+        // Modal handler
+        let fnModalHandler = (t, f) => {
+            if (f === 0) {
+                $('#modalContainer').addClass('hidden');
+            } else {
+                $('#modalContainer').removeClass('hidden');
+            }
+        }
+
+        // 대상 회원 선택
+        let fnSelectSubject = () => {
+            let _finalList = $('#auth_subject_list > .right-list');
+            if(_finalList.length < 1) {
+                alert('회원을 선택 해주세요.');
+                return false;
+            }
+
+            // TODO 대상자 선택부터 개발...
+            if(confirm('선택 하시겠습니까?')) {
+                _finalList.each(function() {
+                    let _seq = $(this).attr('value');
+                    let _value = $(this).children('span').attr('value');
+                    if(fnOnSubjectListChecker(_seq)) {
+                        if($('input[name=appendFlag]').val() === 'APPROVER') {
+                            $('#approver').append(`<span class="approver-list" value="${_seq}">${_value}<span class="glyphicon glyphicon-remove" onclick="fnElementHandler(this, 0)"></span></span>`);
+                        }
+                        if($('input[name=appendFlag]').val() === 'REFERRER') {
+                            $('#referrer').append(`<span class="referrer-list" value="${_seq}">${_value}<span class="glyphicon glyphicon-remove" onclick="fnElementHandler(this, 0)"></span></span>`);
+                        }
+                    }
+                })
+
+                $('input[name=appendFlag]').val('');
+                $('#modalContainer').addClass('hidden');
+            }
+        }
+
+        // 대상 목록 체커
+        let fnOnSubjectListChecker = (s) => {
+            let flag = true;
+            if(s == undefined || s === '') {
+                return false;
+            }
+
+            if($('#final_subject_list > span').length > 0) {
+                $('#final_subject_list > span').each(function() {
+                    let _this = $(this);
+                    let _val = _this.attr('value');
+                    if(_val === s) {
+                        flag = false;
+                    }
+                })
+            }
+
+            return flag;
+        }
+
+        // 대상자 선택 handler
+        let fnSubjectSelectHandler = (t) => {
+            const _this = $(t);
+
+            let _parentId = _this.parent().attr('id');
+            if(_parentId === 'valid_user_list') {
+                if(_this.hasClass('bg-dark-subtle')) {
+                    _this.removeClass('bg-dark-subtle');
+                }else {
+                    _this.addClass('bg-dark-subtle');
+                }
+            }
+            if(_parentId === 'auth_subject_list') {
+                if(_this.hasClass('bg-dark-subtle')) {
+                    _this.removeClass('bg-dark-subtle');
+                }else {
+                    _this.addClass('bg-dark-subtle');
+                }
+            }
+        }
+
+        // 대상자 이동
+        let fnMoveSubjectHandler = (t, d) => {
+            const _this = $(t);
+            let _parentId = _this.parent().attr('id');
+
+            if(d === 'LTR') {
+                $('p.left-list.bg-dark-subtle').each(function() {
+                    let _ele = $(this).clone();
+                    let _val = _ele.attr('value');
+                    let movable = true;
+
+                    movable = fnSelectedSubjectChecker('p.right-list', _val);
+                    if(movable) {
+                        _ele.removeClass('left-list');
+                        _ele.removeClass('bg-dark-subtle');
+                        _ele.addClass('right-list');
+                        _ele.appendTo('#auth_subject_list');
+                    }
+                })
+            }
+            if(d === 'RTL') {
+                $('p.right-list.bg-dark-subtle').each(function() {
+                    let _val = $(this).attr('value');
+                    $(this).remove();
+
+                    $('p.left-list.bg-dark-subtle').each(function() {
+                        let _this = $(this);
+                        if(_this.attr('value') === _val) {
+                            _this.removeClass('bg-dark-subtle');
+                        }
+                    })
+                })
+            }
+            if(d === 'CLEAR') {
+                $('p.right-list').each(function() {
+                    $(this).remove();
+                })
+                $('p.left-list.bg-dark-subtle').each(function() {
+                    $(this).removeClass('bg-dark-subtle');
+                })
+
+            }
+
+        }
+
+        // 대상자 기 추가 여부 체커
+        let fnSelectedSubjectChecker = (c, v) => {
+            let flag = true;
+            $(c).each(function() {
+                let _valCompare = $(this).attr('value');
+                if(v === _valCompare) {
+                    flag = false;
+                    return false;
+                }
+            })
+
+            return flag;
+        }
+
+        // 초기화
+        let fnRefreshHandler = () => {
+            $('input[name=searchKeyword]').val('');
+            fnSearchUserList();
+        }
+
+        // Element handler
+        let fnElementHandler = (t, f) => {
+            const _this = $(t);
+            if (f === 0) {
+                _this.parent('span').remove();
+            }
+        }
+
+        // 권한 저장
+        let fnSaveAuthority = () => {
+            const aList = $('.approver-list');
+            let approverList = [];
+            const rList = $('.referrer-list');
+            let referrerList = [];
+
+            let approveTitle = $('#approve-title').val();
+            if((aList.length < 1) || approveTitle === '') {
+                alert('필수 정보를 입력해주세요.');
+                return false;
+            }
+
+            $(aList).each(function() {
+                if($(this).attr('value') != undefined) {
+                    approverList.push($(this).attr('value'));
+                }
+            })
+            $(rList).each(function() {
+                if($(this).attr('value') != undefined) {
+                    referrerList.push($(this).attr('value'));
+                }
+            })
+
+            let data = {
+                  title: approveTitle
+                , contents: $('#contents').val()
+                , approverList: approverList
+                , referrerList: referrerList
+            }
+
+            let formData = new FormData();
+            let filesArr = [];
+            for(let i=0; i<filesArr.length; i++){
+                formData.append("files", filesArr[i]);
+            }
+
+            formData.append('data', new Blob([JSON.stringify(data)],{type: "application/json"}));
+
+            $.ajax({
+                url: '/approve/api/registration',
+                type: 'post',
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                data: formData
+            })
+            .done(function (data) {
+                alert(data.message);
+                $('input[type=checkbox]').each(function () {
+                    this.checked = false;
+                })
+                $('#final_subject_list').empty();
+            })
+            .fail(function (jqXHR) {
+                console.log(jqXHR);
+            });
+        }
+    </script>
+</th:block>
+</html>

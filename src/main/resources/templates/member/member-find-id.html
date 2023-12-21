@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="ko">
+<th:block layout:fragment="css">
+    <head>
+        <link rel="stylesheet" type="text/css" th:href="@{/static/css/member/member-find.css}"/>
+        <title>아이디 찾기</title>
+    </head>
+</th:block>
+<th:block layout:fragment="content">
+    <div id="main_wrapper">
+        <div class="container">
+            <div id="find-wrapper" class="row">
+                <div id="findById-wrapper" class="col-md-6">
+                    <a id="findById" href="/member/findById"><label> 아이디 찾기 </label></a>
+                </div>
+                <div id="findByPassword-wrapper" class="col-md-6">
+                    <a id="findByPassword" href="/member/findByPwd"><label> 비밀번호 찾기 </label></a>
+                </div>
+            </div><br>
+            <div class="row">
+                <h2>아이디 찾기</h2><br><hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="pull-left" for="receiver">이메일 * </label><br>
+                        <input type="email" class=" form-control" id="receiver" path="userEmail" required/>
+                    </div>
+                    <div>
+                        <input id="sendEmail" class="col-md-4 btn btn-default align-self-end" type="button" onclick="sendEmail()" value="인증 번호 받기">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label id="authNumber-label" class="pull-left">인증 번호 *</label><br>
+                        <input id="authNumber" type="text" class="form-control"/>
+                    </div>
+                </div><br>
+                <div id="timer-wrapper" class="col-md-4">
+
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center" >
+                <input id="btnCancle" class="btn btn-default col-md-2 text-center" type="button" value="취소" onclick="cancel()"/>
+                <input id="btnNext" class="btn btn-default col-md-2 text-center" type="button" value="다음" onclick="next()"/>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script src="/static/js/common.js"></script>
+    <script th:inline="javascript">
+        let PLAYTIME;
+
+        function sendEmail() {
+            let receiver = sendEmailValidation();
+            // 메일 전송 버튼을 다시 보낼 시, createTimer가 이미 생성되어있다면 interval 시간을 멈춤
+            if(!isEmpty(PLAYTIME)) clearInterval(PLAYTIME)
+
+            // 이메일 미입력인 경우 return
+            if(isEmpty(receiver)) return;
+
+            let member = {
+                "userEmail": receiver
+            };
+
+            // 회원 가입 이메일 판별
+           let targetEmail;
+
+           $.ajax({
+                url:"/mail/getEmail",
+                type: "POST",
+                contentType: "application/json",
+                async: false,
+                data: JSON.stringify(member),
+                success:function(data){
+                    targetEmail = data.userEmail;
+                    if(data.userEmail===undefined) alert("존재하지 않는 이메일입니다.");
+                },
+                error: function(request, status, error){
+                    alert(request);
+                }
+            });
+            // 회원가입 아닐 경우 return
+           if(targetEmail===undefined) return;
+
+           // 회원가입 이메일인 경우 인증번호 발송
+            $.ajax({
+                url:"/mail/auth",
+                type:"POST",
+                contentType: "application/json",
+                async:false,
+                data: JSON.stringify(member),
+                success: function(data){
+                    alert("입력하신 이메일로\n 인증번호를 발송 하였습니다.");
+                    createTimer();
+                },
+                error: function(request, status, error){
+                    let result = JSON.parse(request.responseText);
+                    alert(result.message);
+                }
+            });
+        }
+
+        // 이메일 형식
+        function sendEmailValidation() {
+            let receiver = document.getElementById("receiver").value;
+            let regExp = new RegExp("[a-z0-9]+@[a-z]+\\.[a-z]{2,3}");
+            let validation = regExp.test(receiver);
+
+            if(!validation){
+                alert("잘못된 이메일 형식입니다.\n 다시 한번 입력해주세요.");
+                receiver='';
+            }
+            return receiver;
+        }
+
+        // timer 생성 시
+        function createTimer(){
+            let arrayTag = ['timer-label','timer'];
+
+            if(!isExist(arrayTag)){
+                const child = '<label id="timer-label" for="timer">남은 시간:</label><input id="timer" type="text" data-time=0 readonly/>';
+                let timerWrapper = $("#timer-wrapper");
+                timerWrapper.append(child);
+            }
+
+            let time= 180000;
+            let sendTime=0;
+            let min=3;
+            // 타이머 생성
+            PLAYTIME = setInterval(function () {
+                time = time - 1000;   // 1초씩 줄어든다.
+                sendTime = sendTime + 1000;
+                min = time / (60 * 1000); // 초를 분으로 나눠준다.
+                let sec = (time - (Math.floor(min) * (60 * 1000))) / 1000; // 실시간 초 세팅
+                let timerTag = document.getElementById("timer");
+                timerTag.dataset.time = sendTime;
+                if (sec > 10) {
+                    timer.value = Math.floor(min)+":"+sec;
+                } else if (sec === 0) {
+                    timer.value = Math.floor(min)+':'+'00';
+                } else if(sec < 10) {
+                    timer.value = Math.floor(min)+":0"+sec;
+                } if(time < 0) {
+                    timer.value = "00:00";
+                    clearInterval(PLAYTIME);
+                }
+            }, 1000);
+        }
+
+        // 다음 버튼 클릭 시
+        function next() {
+            let userEmail= document.getElementById("receiver").value;
+            let authNumber= document.getElementById("authNumber").value;
+            let timerTime = document.getElementById("timer");
+
+            if(isEmpty(authNumber)) {
+                alert("입력하신 인증번호가 일치하지 않습니다.\n 다시 한번 입력 해주세요.");
+            }
+
+            let member={
+                userEmail : userEmail,
+                userEtc : authNumber,
+                authEmailSendTime : timerTime.dataset.time
+            };
+
+            $.ajax({
+                url:"/mail/authNumberCheck",
+                type: "POST",
+                contentType:"application/json",
+                async:true, //비동기 처리
+                data: JSON.stringify(member),
+                success: function(data){
+                    if(isEmpty(data.memberInfo.userId)){
+                        alert(data.memberInfo.message);
+                    }else {
+                        let id = data.memberInfo.userId;
+                        location.href= '/member/userId-check?id='+ id;
+                    }
+                },
+                error: function(request, status, error){
+                    let result = JSON.parse(request.responseText);
+                    alert(result.message);
+                }
+            });
+        }
+
+        function cancel() {
+            if(confirm("취소 하시겠습니까?")){
+                window.location.href="/login";
+            }
+        }
+    </script>
+</th:block>
+</html>

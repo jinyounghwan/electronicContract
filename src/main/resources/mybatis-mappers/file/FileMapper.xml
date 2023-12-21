@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.file.FileMapper">
+    <!-- 공통 [[ -->
+    <!-- column [[ -->
+    <sql id="fileColumn">
+        ${alias}FILE_SEQ, ${alias}BOARD_SEQ
+        , ${alias}FILE_NO, ${alias}FILE_PATH
+        , ${alias}FILE_NM, ${alias}FILE_NM_ORG
+        , ${alias}THUMBNAIL_YN, ${alias}DEL_YN
+        , ${alias}FILE_SIZE, ${alias}REG_DT
+        , ${alias}REG_ID
+    </sql>
+
+    <sql id="tempFileColumn">
+          ${alias}ENTITY_NAME, ${alias}ENTITY_TYPE
+          , ${alias}FILE_NAME, ${alias}ORIGIN_FILE_NAME
+          , ${alias}FILE_SIZE
+    </sql>
+
+    <!-- column ]] -->
+
+    <!-- whereClause [[ -->
+
+    <sql id="whereClause" >
+        AND FE.DEL_YN = 'N'
+        <if test="boardSeq != null and boardSeq !=''">
+            AND ${alias}BOARD_SEQ = #{boardSeq}
+        </if>
+        <if test="fileNm != null and fileNm != ''">
+            AND ${alias}FILE_NM = #{fileNm}
+        </if>
+        <if test="fileSeq != null and fileSeq != ''">
+            AND ${alias}FILE_SEQ = #{fileSeq}
+        </if>
+    </sql>
+
+    <!-- whereClause ]] -->
+
+    <!-- 공통 ]] -->
+
+
+    <!-- 조회 [[ -->
+
+    <select id="getFiles" resultType="FilePublicVO">
+        SELECT
+            <include refid="fileColumn"><property name="alias" value="FE."/></include>
+        FROM BOARD_FILE FE
+        <where>
+            <include refid="whereClause"><property name="alias" value="FE."/></include>
+        </where>
+    </select>
+
+
+    <select id="getFile" resultType="FilePublicVO">
+        SELECT
+            <include refid="fileColumn"><property name="alias" value="FE."/></include>
+        FROM BOARD_FILE FE
+        <where>
+            <include refid="whereClause"><property name="alias" value="FE."/></include>
+        </where>
+    </select>
+
+    <select id="getTempFile" parameterType="String" resultType="FilePublicVO">
+        SELECT
+            <include refid="tempFileColumn"><property name="alias" value="FT."/></include>
+        FROM FILE_TEMP FT
+        WHERE FT.FILE_NAME = #{fileName}
+    </select>
+    <!-- 조회 ]] -->
+
+    <!-- 저장/수정/삭제 [[ -->
+
+    <insert id="save" >
+        /* 파일 저장 - FileMapper.save */
+        INSERT INTO BOARD_FILE
+        (
+            BOARD_SEQ, FILE_NO,
+            FILE_PATH, FILE_NM,
+            THUMBNAIL_YN, DEL_YN,
+            REG_DT, REG_ID,
+            FILE_NM_ORG, FILE_SIZE
+        )
+        VALUES
+            (
+                #{boardSeq},#{fileNo},
+                #{filePath},#{fileNm},
+                #{thumbnailYn},#{delYn},
+                sysdate(),#{regId},
+                #{fileNmOrg}, #{fileSize}
+            )
+    </insert>
+
+    <insert id="saveExcelFile">
+        /* 엑셀 파일 저장 - FileMapper.saveExcelFile */
+        INSERT INTO BOARD_FILE
+        (
+            FILE_NO, FILE_PATH,
+            FILE_NM, THUMBNAIL_YN,
+            DEL_YN, REG_DT,
+            REG_ID, FILE_NM_ORG,
+            FILE_SIZE
+        )
+        VALUES
+        (
+            1, #{filePath},
+            #{fileNm}, #{thumbnailYn},
+            #{delYn}, sysdate(),
+            #{regId}, #{fileNmOrg},
+            #{fileSize}
+        )
+    </insert>
+    <!--<insert id="saveTempFile">
+        /** 임시 파일 저장 - FileMapper.saveTempFile*/
+        INSERT INTO FILE_TEMP
+        (
+            FILE_NAME, ENTITY_NAME,
+            ENTITY_TYPE, ORIGIN_FILE_NAME,
+            FILE_SIZE
+        )
+        VALUES
+            (
+              #{fileName}, #{entityName},
+              #{entityType}, #{originFileName},
+              #{fileSize}
+            )
+    </insert> -->
+    <update id="deleteFile">
+        /* 파일 삭제 - FileMapper.deleteFile */
+        UPDATE BOARD_FILE
+        SET DEL_YN = 'Y' , REG_DT = sysdate() , REG_ID = #{lastId}
+        WHERE FILE_NM = #{fileNm}
+    </update>
+
+    <update id="deleteFileList">
+        /* 파일 삭제 리스트 - FileMapper.deleteFileList */
+        UPDATE BOARD_FILE
+        SET DEL_YN = 'Y', REG_DT = sysdate() , REG_ID = #{lastId}
+        WHERE BOARD_SEQ IN
+        <foreach collection="seqList" item="seq" index="idx" separator="," open="(" close=")">
+            #{seq}
+        </foreach>
+    </update>
+
+
+    <!-- 저장/수정/삭제 ]] -->
+</mapper>

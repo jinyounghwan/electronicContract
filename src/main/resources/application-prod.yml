@@ -1,0 +1,57 @@
+spring:
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    jdbc-url: jdbc:log4jdbc:mariadb://10.34.220.195:3307/dejay_common
+    username: dejay_was
+    password: 22@dejay
+    hikari:
+      maximum-pool-size: 10
+      connection-test-query: SELECT NOW() FROM DUAL
+  security:
+    user:
+      password: 0000
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+    cache: false
+    encoding: UTF-8
+  mvc:
+    static-path-pattern: "/static/**"
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    port: 587
+    username: dejayframework@gmail.com
+    password: tvrx phxd gheh bcps
+    properties:
+      mail:
+        debug: true
+        mine:
+          charset: UTF-8
+        transport:
+          protocol: smtp
+        smtp:
+          starttls:
+            enable: true
+## mapper logging level
+logging:
+  level:
+    org:
+      springframework:
+        boot:
+          autoconfigure: info
+    com:
+      samsung:
+        framework:
+          mapper: trace
+## Log Level Setting(default info)
+    root: error
+
+server:
+  port: 3030
+
+# file
+file:
+  rootDir: /files/dejay_public
+  tempDir: /temp
+  realDir: /upload

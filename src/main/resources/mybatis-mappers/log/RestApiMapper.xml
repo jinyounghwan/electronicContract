@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.log.RestApiMapper">
+    <insert id="insertApiAccessLog" useGeneratedKeys="true">
+        INSERT INTO INFO_LOG(TOKEN_SEQ, USER_SEQ, MENU_SEQ, LOG_TYPE, LOG_ETC , REG_DT, REG_ID, CLIENT_IP)
+        VALUES (#{tokenSeq}, #{userSeq}, #{menuSeq}, #{logType}, #{logEtc}, sysdate(), #{regId}, #{clientIp})
+        <selectKey keyProperty="logSeq" resultType="long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="updateApiAccessLog">
+        UPDATE INFO_LOG SET LOG_TYPE = #{status}, REG_DT = sysdate() WHERE LOG_SEQ = #{logSeq}
+    </update>
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.mail.MailMapper">
+<!-- whereClause [[ -->
+    <sql id="whereClause">
+        <if test="userEmail != null and userEmail != ''">
+            AND ${alias}USER_EMAIL = #{userEmail}
+        </if>
+
+        <if test="userId != null and userId != ''">
+            AND ${alias}USER_ID = #{userId}
+        </if>
+    </sql>
+
+
+<!-- whereClause ]] -->
+
+
+<!-- 조회 [[ -->
+    <!-- 유저 이메일 정보 조회 -->
+    <select id="getAuthEmailMember" parameterType="MemberVO">
+        SELECT USER.USER_EMAIL
+        FROM INFO_USER USER
+       <where>
+            <include refid="whereClause"><property name="alias" value="USER."/></include>
+       </where>
+    </select>
+
+    <!-- 유저 인증 정보 조회 -->
+    <select id="getAuthNumber">
+        SELECT USER.USER_ETC , USER.USER_ID
+        FROM INFO_USER USER
+        WHERE USER.USER_EMAIL = #{userEmail}
+          AND USER.USER_ETC = #{userEtc}
+          AND USER.REG_DT BETWEEN DATE_SUB(STR_TO_DATE(#{authEmailSendTime}, '%Y%m%d %H%i%s'), INTERVAL 30 SECOND) AND DATE_ADD(STR_TO_DATE(#{authEmailSendTime}, '%Y%m%d %H%i%s'), INTERVAL 30 SECOND)
+    </select>
+
+<!-- 조회 ]] -->
+
+<!-- 저장/수정/삭제 [[ -->
+
+    <!--유저 메일 인증정보 변경 -->
+
+    <insert id="insertMailAuth">
+        UPDATE  INFO_USER USER
+        SET USER.USER_ETC = #{userEtc}
+            ,USER.REG_DT = sysdate()
+        WHERE USER.USER_EMAIL = #{userEmail}
+    </insert>
+
+<!-- 저장/수정/삭제 ]] -->
+
+</mapper>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.member.MemberMapper">
+
+    <select id="memberListCount">
+        SELECT COUNT(1) FROM MEMBER
+    </select>
+
+    <select id="memberListSearchCount">
+        SELECT COUNT(1) FROM MEMBER
+        <where></where>
+        ORDER BY MEMBER_SEQ DESC
+    </select>
+
+    <select id="getMemberList" resultType="MemberVO">
+        SELECT MEMBER_SEQ, MEMBER_ID, MEMBER_NAME, EMAIL FROM MEMBER ORDER BY MEMBER_SEQ DESC
+        <include refid="mapper.paging.pagingQuery"/>
+    </select>
+
+    <select id="findMemberById" resultType="MemberVO">
+        SELECT MEMBER_SEQ, MEMBER_ID, DEPT_CODE, MEMBER_NAME, EMAIL FROM MEMBER WHERE MEMBER_SEQ = #{id}
+    </select>
+
+<!--#################### DEJAY_COMMON ####################-->
+    <select id="findMemberByUserName" resultType="MemberVO">
+                 SELECT U.USER_SEQ, U.USER_ID, U.USER_PWD, U.USER_NM, U.USER_EMAIL, U.DEPT_CD
+                   FROM INFO_USER U
+                 WHERE USER_ID = #{userName}
+    </select>
+
+    <!-- 최근 로그인 이력 저장을 위한 정보 조회 -->
+    <select id="getLoginInfo" resultType="MemberVO">
+                 SELECT U.USER_SEQ, U.USER_ID, U.USER_PWD, U.USER_NM, U.USER_EMAIL, U.DEPT_CD
+                      , U.USER_TYPE
+                   FROM INFO_USER U
+                  WHERE USER_ID = #{userName}
+    </select>
+
+    <select id="findAllUsers">
+        /* 전체 사용자 조회 - MemberMapper.findAllUsers */
+        WITH DEPT AS (
+        SELECT CODE_NM, CODE_CD
+        FROM INFO_COMMON_CD WHERE SUBSTRING(CODE_CD FROM 1 FOR 4) = 'DEPT' AND DEL_YN = 'N' AND USE_YN = 'Y'
+        )
+        SELECT A.* FROM (
+            SELECT USERS.USER_SEQ
+            , USERS.USER_ID
+            , USERS.USER_NM
+            , USERS.DEPT_CD
+            , USERS.APPOINT_CD
+            , USERS.POSITION_CD
+            , (SELECT CODE_NM FROM DEPT WHERE CODE_CD = USERS.DEPT_CD) AS DEPT_NM
+            , (SELECT CODE_NM FROM DEPT WHERE CODE_CD = USERS.APPOINT_CD) AS APPOINT_NM
+            , (SELECT CODE_NM FROM DEPT WHERE CODE_CD = USERS.POSITION_CD) AS POSITION_NM
+            FROM INFO_USER USERS
+            WHERE DEL_YN = 'N' AND USE_YN = 'Y'
+        ) A
+        <if test="searchWord1 != null and searchWord1 != ''">
+            <where>
+                A.USER_NM LIKE CONCAT('%', #{searchWord1}, '%') OR A.DEPT_NM LIKE CONCAT('%', #{searchWord1}, '%') OR A.POSITION_NM LIKE CONCAT('%', #{searchWord1}, '%')
+            </where>
+        </if>
+    </select>
+
+    <insert id="insertMember" useGeneratedKeys="true">
+        INSERT INTO INFO_USER(MEMBER_ID, MEMBER_NAME, EMAIL)
+             VALUES (#{memberId}, #{memberName}, #{email})
+        <selectKey keyProperty="id" resultType="long">
+             SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="insert" useGeneratedKeys="true">
+        INSERT INTO INFO_USER(USER_TYPE,USER_ID, USER_PWD, DEPT_CD, USER_NM, USER_EMAIL, USER_TEL, APPOINT_CD, POSITION_CD, REG_DT, REG_ID, LAST_DT, LAST_ID)
+             VALUES ('USER0102',#{id}, #{password}, #{deptCode}, #{name}, #{email}, #{tel}, #{appointCode}, #{positionCode}, sysdate() ,'admin', sysdate(), 'admin')
+        <selectKey keyProperty="logId1" resultType="String">
+             SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="updatePwd">
+        UPDATE INFO_USER U
+        SET USER_PWD = #{password}
+        WHERE U.USER_ID = #{memberId}
+    </update>
+</mapper>
