@@ -12,8 +12,6 @@ import java.util.Map;
 public interface FileMapper extends GeneralMapper {
     List<FilePublicVO> getFiles(Object obj);
     FilePublicVO getFile(Object obj);
-    FileVO getTempFile(String fileName);
-    int saveTempFile(Object obj);
     int save(Object obj);
     int deleteFile(Object obj);
     int saveExcelFile(Object obj);

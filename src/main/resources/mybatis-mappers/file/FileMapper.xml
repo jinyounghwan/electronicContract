@@ -63,12 +63,12 @@
         </where>
     </select>
 
-    <select id="getTempFile" parameterType="String" resultType="FilePublicVO">
-        SELECT
-            <include refid="tempFileColumn"><property name="alias" value="FT."/></include>
-        FROM FILE_TEMP FT
-        WHERE FT.FILE_NAME = #{fileName}
-    </select>
+<!--    <select id="getTempFile" parameterType="String" resultType="FilePublicVO">-->
+<!--        SELECT-->
+<!--            <include refid="tempFileColumn"><property name="alias" value="FT."/></include>-->
+<!--        FROM FILE_TEMP FT-->
+<!--        WHERE FT.FILE_NAME = #{fileName}-->
+<!--    </select>-->
     <!-- 조회 ]] -->
 
     <!-- 저장/수정/삭제 [[ -->
