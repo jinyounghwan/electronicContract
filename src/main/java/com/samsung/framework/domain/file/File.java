@@ -13,8 +13,8 @@ public class File {
     // 게시판 SEQ
     private String boardSeq;
 
-    // 파일 크기
-    private Long fileSize;
+    // 파일 용량
+    private String fileSize;
 
     //파일 번호
     private Long fileNo;
@@ -34,9 +34,15 @@ public class File {
     // 삭제 여부
     private String delYn;
 
+    // 파일 유형 01:이미지, 02:비디오, 03:엑셀, 04:워드, 05:한글, 06: 그 외 문
+    private String fileType;
+
     // 등록일
     private String regDt;
 
     // 등록자
     private String regId;
+
+    // 마지막 등록일
+    private String lastId;
 }
