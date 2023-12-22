@@ -1,5 +1,6 @@
 package com.samsung.framework.service.file;
 
+import com.samsung.framework.common.utils.FileUtil;
 import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.file.File;
 import com.samsung.framework.service.common.ParentService;
@@ -26,6 +27,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
     public List<FilePublicVO> uploadFile(List<MultipartFile> files) throws Exception {
         return getFileUtil().uploadFiles(files,getPropertiesUtil().getFile().getRootDir() + getPropertiesUtil().getFile().getRealDir());
     }
+
     public int saveFile(List<FilePublicVO> files, Long seq, String regId) throws Exception {
         int insert=0;
         Long fileCount=1L;
@@ -71,13 +73,6 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
         }
         return 0;
     }
-
-    @Override
-    public int saveFile(List<File> files, String tableName, Long seq) throws Exception {
-
-        return 0;
-    }
-
     @Override
     public int deleteFile(String fileName) {
         return 0;
@@ -121,7 +116,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
     }
 
     @Override
-    public int updateFile(List<File> newFiles, String tableName, Long entitySeq) throws Exception {
+    public int updateFile(List<FilePublicVO> newFiles, String tableName, Long entitySeq) throws Exception {
         return 0;
     }
 
@@ -169,15 +164,11 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
         return delete > 0 ? 1 : 0;
     }
 
-
-    public FilePublicVO getFile(Long fileSeq){
-        FilePublicVO target = FilePublicVO.builder()
-                                           .fileSeq(fileSeq)
-                                           .build();
-
-        return getCommonMapper().getFileMapper().getFile(target);
-    }
-
+    /**
+     * file이름 기준으로 문자열 가져오기
+     * @param fileNm
+     * @return
+     */
     @Override
     public FilePublicVO getFile(String fileNm) {
         FilePublicVO target = FilePublicVO.builder()
@@ -187,6 +178,18 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
         return getCommonMapper().getFileMapper().getFile(target);
     }
 
+    /**
+     * fileSeq 기준으로 directory가져오기
+     * @param fileSeq
+     * @return FilePublicVO
+     */
+    public FilePublicVO getFile(Long fileSeq){
+        FilePublicVO target = FilePublicVO.builder()
+                                            .fileSeq(fileSeq)
+                                            .build();
+        return getCommonMapper().getFileMapper().getFile(target);
+    }
+    
     @Override
     public List<FileVO> getFiles(Long entitySeq, String tableName) {
         return null;
@@ -199,15 +202,36 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
 
         return getCommonMapper().getFileMapper().getFiles(file);
     }
+    @Override
+    public int saveFile(List<FilePublicVO> files, String tableName, Long seq) throws Exception {
+        return 0;
+    }
 
+    /**
+     * 파일 한개 삽입
+     * @param file
+     * @param request
+     * @param response
+     * @throws IOException
+     */
     public void downloadFile(FilePublicVO file, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String realPath = getFileUtil().getOsRootDir() + file.getFilePath();
+        String realPath = FileUtil.getOsRootDir() + file.getFilePath();
         String fileNmOrg = file.getFileNmOrg();
         getFileUtil().downloadFile(fileNmOrg ,realPath, request, response);
     }
 
+    /**
+     * 파일 여러개 다운로드
+     * @param fileList
+     * @param reqeust
+     * @param response
+     * @throws IOException
+     */
     @Override
     public void downloadFiles(List<FilePublicVO> fileList, HttpServletRequest reqeust, HttpServletResponse response) throws IOException {
-
+        for(FilePublicVO file: fileList){
+           downloadFile(file, reqeust, response);
+        }
     }
+
 }
