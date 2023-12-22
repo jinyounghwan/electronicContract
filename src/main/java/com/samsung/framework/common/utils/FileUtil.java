@@ -51,7 +51,7 @@ public class FileUtil {
     public FilePublicVO uploadFile(MultipartFile multipartFile, String fileDir) throws Exception {
        String fileName = createFileName(multipartFile.getOriginalFilename());
        String nowDay = DateUtil.getUtcNowDateFormat("yyMM");
-       String uploadPath = getUploadPath(nowDay, getOsRootDir()+fileDir) + "/" + fileName;
+       String uploadPath = getUploadPath(getOsRootDir()+fileDir,nowDay) + "/" + fileName;
 
        File uploadFile = new File(uploadPath);
 
@@ -82,7 +82,7 @@ public class FileUtil {
      * @param addPath -> 폴더 Path
      * @return 업로드 경로
      */
-    private String getUploadPath(final String addPath, String filePath){
+    private String getUploadPath(String filePath,final String addPath ){
         return makeDirectories(filePath+ "/" + addPath);
     }
 
@@ -149,7 +149,7 @@ public class FileUtil {
      */
     public void moveFile(final String fileName, String fromFilePath, String toFilePath) throws Exception {
         String nowDay = DateUtil.getUtcNowDateFormat("yyMM");
-        String beforeFilePath = getUploadPath(nowDay, getOsRootDir()+ fromFilePath)+ "/" + fileName;
+        String beforeFilePath = getUploadPath(getOsRootDir()+ fromFilePath,nowDay)+ "/" + fileName;
         String afterFilePath = makeDirectories(getOsRootDir() + toFilePath)+ "/" + fileName;
 
         Path file = Paths.get(beforeFilePath);
