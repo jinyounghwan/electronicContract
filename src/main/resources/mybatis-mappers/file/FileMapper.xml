@@ -6,12 +6,11 @@
     <!-- 공통 [[ -->
     <!-- column [[ -->
     <sql id="fileColumn">
-        ${alias}FILE_SEQ, ${alias}BOARD_SEQ
+        ${alias}FILE_SEQ, ${alias}TARGET_ID
         , ${alias}FILE_NO, ${alias}FILE_PATH
         , ${alias}FILE_NM, ${alias}FILE_NM_ORG
-        , ${alias}THUMBNAIL_YN, ${alias}DEL_YN
-        , ${alias}FILE_SIZE, ${alias}REG_DT
-        , ${alias}REG_ID
+        , ${alias}DEL_YN, ${alias}FILE_SIZE
+        , ${alias}REG_DT, ${alias}REG_ID
     </sql>
 
     <sql id="tempFileColumn">
@@ -77,19 +76,19 @@
         /* 파일 저장 - FileMapper.save */
         INSERT INTO BOARD_FILE
         (
-            BOARD_SEQ, FILE_NO,
+            TARGET_ID, FILE_NO,
             FILE_PATH, FILE_NM,
-            THUMBNAIL_YN, DEL_YN,
-            REG_DT, REG_ID,
-            FILE_NM_ORG, FILE_SIZE
+            DEL_YN, REG_DT,
+            REG_ID,FILE_NM_ORG,
+            FILE_SIZE
         )
         VALUES
             (
-                #{boardSeq},#{fileNo},
+                #{targetId},#{fileNo},
                 #{filePath},#{fileNm},
-                #{thumbnailYn},#{delYn},
-                sysdate(),#{regId},
-                #{fileNmOrg}, #{fileSize}
+                #{delYn},sysdate(),
+                #{regId},#{fileNmOrg},
+                #{fileSize}
             )
     </insert>
 
@@ -98,18 +97,16 @@
         INSERT INTO BOARD_FILE
         (
             FILE_NO, FILE_PATH,
-            FILE_NM, THUMBNAIL_YN,
-            DEL_YN, REG_DT,
-            REG_ID, FILE_NM_ORG,
-            FILE_SIZE
+            FILE_NM, DEL_YN,
+            REG_DT, REG_ID,
+            FILE_NM_ORG, FILE_SIZE
         )
         VALUES
         (
             1, #{filePath},
-            #{fileNm}, #{thumbnailYn},
-            #{delYn}, sysdate(),
-            #{regId}, #{fileNmOrg},
-            #{fileSize}
+            #{fileNm}, #{delYn},
+            sysdate(), #{regId},
+            #{fileNmOrg}, #{fileSize}
         )
     </insert>
     <!--<insert id="saveTempFile">
