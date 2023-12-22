@@ -6,11 +6,11 @@ import com.samsung.framework.common.utils.ObjectHandlingUtil;
 import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.common.Paging;
-import com.samsung.framework.domain.file.File;
 import com.samsung.framework.service.common.ParentService;
 import com.samsung.framework.service.file.FileService;
 import com.samsung.framework.vo.board.BoardPublicVO;
 import com.samsung.framework.vo.board.BoardVO;
+import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.file.FileVO;
 import com.samsung.framework.vo.member.MemberVO;
 import com.samsung.framework.vo.search.board.BoardSearchVO;
@@ -33,7 +33,7 @@ public class BoardServiceImpl extends ParentService implements BoardService{
      * @return
      * @throws Exception
      */
-    public int insertBoard(Board board, List<File> files, MemberVO member) throws Exception{
+    public int insertBoard(Board board, List<FilePublicVO> files, MemberVO member) throws Exception{
 
         Board target = Board.builder()
                             .boardCode(board.getBoardCode())
@@ -56,7 +56,7 @@ public class BoardServiceImpl extends ParentService implements BoardService{
 
         //파일 저장
         if(StringUtil.isNotEmpty(files)) {
-            fileService.saveFile(files, TableNameEnum.BOARD.name(), Long.valueOf(target.getLogId1()));
+            fileService.saveFile(files, target.getRegId(), Long.valueOf(target.getLogId1()));
         }
 
         return iAffectedRows;
@@ -122,7 +122,7 @@ public class BoardServiceImpl extends ParentService implements BoardService{
      * @param board
      * @return
      */
-    public int updateBoard(Board board, List<File> fileList, MemberVO member) throws Exception {
+    public int updateBoard(Board board, List<FilePublicVO> fileList, MemberVO member) throws Exception {
         Board target = Board.builder()
                             .boardSeq(board.getBoardSeq())
                             .title(board.getTitle())
@@ -175,7 +175,7 @@ public class BoardServiceImpl extends ParentService implements BoardService{
         // Board에 물린 File삭제
         List<FileVO> fileList = fileService.getFiles(board.getBoardSeq(), target.getTableName());
         for(FileVO file : fileList){
-            fileService.deleteFile(file.getFileName());
+            fileService.deleteFile(file.getFileNm());
         }
 
         return iAffectedRows;

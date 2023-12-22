@@ -29,7 +29,7 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
     @Autowired
     FilePublicServiceImpl fileServiceImpl;
     @Override
-    public int insertBoard(Board board, List<File> files, MemberVO member) throws Exception {
+    public int insertBoard(Board board, List<FilePublicVO> files, MemberVO member) throws Exception {
         return 0;
     }
 
@@ -106,7 +106,7 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
     }
 
     @Override
-    public int updateBoard(Board board, List<File> fileList, MemberVO member) throws Exception {
+    public int updateBoard(Board board, List<FilePublicVO> fileList, MemberVO member) throws Exception {
         return 0;
     }
 

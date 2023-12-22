@@ -16,7 +16,7 @@ public interface FileService {
     List<FilePublicVO> uploadFile(List<MultipartFile> files) throws Exception;
     
     // 파일 저장
-    int saveFile(List<File> files, String tableName, Long seq) throws Exception;
+    int saveFile(List<FilePublicVO> files, String tableName, Long seq) throws Exception;
 
     // 파일 삭제
     int deleteFile(String fileName);
@@ -25,7 +25,7 @@ public interface FileService {
     int deleteFiles(List<File> files);
 
     // 파일 업데이트
-    int updateFile(List<File> newFiles, String tableName ,Long entitySeq) throws Exception;
+    int updateFile(List<FilePublicVO> newFiles, String tableName ,Long entitySeq) throws Exception;
     
     // 단 건 파일 조회
     FilePublicVO getFile(String fileNm);
