@@ -42,8 +42,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
                         .fileSize(file.getFileSize())
                         .fileNm(createFileNm)
                         .fileNmOrg(file.getFileNmOrg())
-                        .boardSeq(seq)
-                        .thumbnailYn("N")
+                        .targetId(String.valueOf(seq))
                         .delYn("N")
                         .regId(regId)
                         .build();
@@ -54,8 +53,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
                         .fileSize(file.getFileSize())
                         .fileNm(file.getFileNm())
                         .fileNmOrg(file.getFileNmOrg())
-                        .boardSeq(seq)
-                        .thumbnailYn("N")
+                        .targetId(String.valueOf(seq))
                         .delYn("N")
                         .regId(regId)
                         .build();
@@ -197,7 +195,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
 
     public List<FilePublicVO> getFiles(Long seq) {
         FilePublicVO file = FilePublicVO.builder()
-                .boardSeq(seq)
+                .targetId(String.valueOf(seq))
                 .build();
 
         return getCommonMapper().getFileMapper().getFiles(file);
