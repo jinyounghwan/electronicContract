@@ -135,7 +135,7 @@
         /* 파일 삭제 리스트 - FileMapper.deleteFileList */
         UPDATE BOARD_FILE
         SET DEL_YN = 'Y', REG_DT = sysdate() , REG_ID = #{lastId}
-        WHERE BOARD_SEQ IN
+        WHERE TARGET_ID IN
         <foreach collection="seqList" item="seq" index="idx" separator="," open="(" close=")">
             #{seq}
         </foreach>
