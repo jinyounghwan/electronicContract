@@ -1,6 +1,7 @@
 package com.samsung.framework.service.board;
 
 import com.samsung.framework.common.utils.DateUtil;
+import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.board.BoardPublic;
 import com.samsung.framework.domain.file.File;
@@ -237,8 +238,20 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
             return result;
         }
 
-        List<FilePublicVO> targetFiles = fileServiceImpl.uploadFile(files);
-        fileServiceImpl.saveFile(targetFiles, boardPublic.getBoardSeq(),boardPublic.getRegId());
+        if(!StringUtil.isEmpty(files)){
+            List<FilePublicVO> targetFiles = fileServiceImpl.uploadFile(files);
+            fileServiceImpl.saveFile(targetFiles, boardPublic.getBoardSeq(),boardPublic.getRegId());
+            String attachIds = getFileUtil().makeAttachId(targetFiles);
+            Board fileTargetBoard = Board.builder()
+                    .title(boardPublic.getTitle())
+                    .boardSeq(boardPublic.getBoardSeq())
+                    .contents(boardPublic.getContents())
+                    .regId(boardPublic.getRegId())
+                    .attachId(attachIds)
+                    .build();
+
+            getCommonMapper().getBoardMapper().updateBoard(fileTargetBoard);
+        }
 
         result.put("message", "등록 되었습니다.");
 
