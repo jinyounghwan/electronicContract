@@ -1,5 +1,6 @@
 package com.samsung.framework.vo.board;
 
+import com.samsung.framework.vo.file.FilePublicVO;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -34,6 +35,8 @@ public class BoardPublicVO {
     // Reply
     private List<BoardReplyVO> replyList;
 
+    // 파일 목록
+    private List<FilePublicVO> files;
     public void setApproveStateInKorean() {
         if(this.approveState.equalsIgnoreCase("HDLE0401")) {
             setApproveStateStr("요청");

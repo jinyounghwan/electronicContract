@@ -11,8 +11,8 @@ public class FilePublicVO {
     // 파일 SEQ
     private Long fileSeq;
 
-    // 게시판 식별 번호
-    private Long boardSeq;
+    // 사용한 곳 식별 번호
+    private String targetId;
 
     //파일 번호
     private Long fileNo;

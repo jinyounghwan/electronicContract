@@ -46,5 +46,5 @@ public class BoardVO {
     private String regId;
 
     // 파일 리스트
-    private List<FileVO> fileList;
+    private List<FileVO> files;
 }

@@ -10,8 +10,8 @@ public class File {
     // 파일 SEQ
     private  Long fileSeq;
 
-    // 게시판 SEQ
-    private String boardSeq;
+    // 저장한 곳 식별
+    private String targetId;
 
     // 파일 용량
     private String fileSize;
@@ -27,9 +27,6 @@ public class File {
 
     // 기존 파일 명
     private String fileNmOrg;
-
-    // 썸네일 여부
-    private String thumbnailYn;
 
     // 삭제 여부
     private String delYn;
