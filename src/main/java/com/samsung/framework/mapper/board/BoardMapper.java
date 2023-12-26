@@ -17,6 +17,13 @@ public interface BoardMapper extends GeneralMapper {
     List<FileVO> boardFileSearch(SearchVO search);
 
     /**
+     * 공통 게시판 파일 업데이트
+     * @param board
+     * @return
+     */
+    int updateBoardFile(Board board);
+
+    /**
      * 공통 게시판 전체 게시물 수
      * @param searchVO
      * @return int {@link Integer}

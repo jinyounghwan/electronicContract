@@ -219,11 +219,8 @@ public class ApproveController extends ParentController {
     @ResponseBody
     @PostMapping("/api/update/{seq}")
     public ResponseEntity deleteBoard(Model model, @RequestPart(value="data") Board board, @RequestPart(value="files",required = false) List<MultipartFile> files) throws Exception {
-        Map<String, Object> result = getCommonService().getBoardPublicServiceImpl().updateBoard(board);
-        // 파일 수정
-        getCommonService().getFileServiceImpl().updateFile(board.getFiles(), board.getBoardSeq(), board.getLastId());
-        List<FilePublicVO> targetFiles = getCommonService().getFileServiceImpl().uploadFile(files);
-        getCommonService().getFileServiceImpl().saveFile(targetFiles, board.getBoardSeq(),board.getRegId());
+        Map<String, Object> result = getCommonService().getBoardPublicServiceImpl().updateBoard(board,files);
+
         return ResponseEntity.ok(result);
     }
 

@@ -1,10 +1,10 @@
 package com.samsung.framework.service.board;
 
+import com.samsung.framework.common.exception.CustomFileException;
 import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.board.BoardPublic;
-import com.samsung.framework.domain.file.File;
 import com.samsung.framework.service.common.ParentService;
 import com.samsung.framework.service.file.FilePublicServiceImpl;
 import com.samsung.framework.vo.board.BoardPublicVO;
@@ -190,7 +190,7 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
      * @param board {@link Board}
      * @return result {@link Map}
      */
-    public Map<String, Object> updateBoard(Board board) {
+    public Map<String, Object> updateBoard(Board board, List<MultipartFile> files) throws Exception {
         // TODO 수정 전 해당 시퀀스 조회
         var result = new HashMap<String, Object>();
         result.put("code", 200);
@@ -203,7 +203,38 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
         }
         result.put("message", "수정 되었습니다.");
 
+        // 신규 파일 upload
+        if(!StringUtil.isEmpty(files)){
+            List<FilePublicVO> targetFiles = fileServiceImpl.uploadFile(files);
+            // 공통 File에 신규 file 저장
+            fileServiceImpl.saveFile(targetFiles, board.getBoardSeq(),board.getRegId());
+        }
+
+        // update 시, 최종 fileNm 값을 Board attachId에 반영
+        List<FilePublicVO> resultFiles = fileServiceImpl.getFiles(board.getBoardSeq());
+        String attachId="";
+        if(!StringUtil.isEmpty(resultFiles)){
+            attachId = getFileUtil().makeAttachId(resultFiles);
+            Board targetBoardFile = Board.builder()
+                    .boardSeq(board.getBoardSeq())
+                    .attachId(attachId)
+                    .build();
+            updateBoardFile(targetBoardFile);
+        }
+
         return result;
+    }
+
+    /**
+     * 게시판 파일 수정
+     */
+    public void updateBoardFile(Board board) throws CustomFileException {
+        try{
+            getCommonMapper().getBoardMapper().updateBoardFile(board);
+        } catch(Exception e){
+            throw new CustomFileException();
+        }
+
     }
 
     /**
@@ -243,14 +274,11 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
             fileServiceImpl.saveFile(targetFiles, boardPublic.getBoardSeq(),boardPublic.getRegId());
             String attachIds = getFileUtil().makeAttachId(targetFiles);
             Board fileTargetBoard = Board.builder()
-                    .title(boardPublic.getTitle())
                     .boardSeq(boardPublic.getBoardSeq())
-                    .contents(boardPublic.getContents())
-                    .regId(boardPublic.getRegId())
                     .attachId(attachIds)
                     .build();
 
-            getCommonMapper().getBoardMapper().updateBoard(fileTargetBoard);
+            getCommonMapper().getBoardMapper().updateBoardFile(fileTargetBoard);
         }
 
         result.put("message", "등록 되었습니다.");

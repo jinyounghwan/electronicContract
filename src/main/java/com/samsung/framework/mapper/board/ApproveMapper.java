@@ -7,6 +7,7 @@ import com.samsung.framework.vo.board.BoardPublicVO;
 import com.samsung.framework.vo.board.BoardReplyVO;
 import com.samsung.framework.vo.search.SearchVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,7 @@ public interface ApproveMapper extends GeneralMapper {
      * @param board {@link Board}
      * @return {@link Integer}
      */
-    int updateBoard(Board board);
+    int updateBoard(Board board, List<MultipartFile> files);
 
     /**
      * 공통 게시판 등록

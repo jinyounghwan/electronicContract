@@ -1,6 +1,7 @@
 package com.samsung.framework.controller.board;
 
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
+import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.controller.common.ParentController;
 import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.board.BoardPublic;
@@ -200,11 +201,11 @@ public class BoardController extends ParentController {
     @ResponseBody
     @PostMapping("/api/update/{seq}")
     public ResponseEntity deleteBoard(Model model, @RequestPart(value="data") Board board, @RequestPart(value="files",required = false) List<MultipartFile> files) throws Exception {
-        Map<String, Object> result = getCommonService().getBoardPublicServiceImpl().updateBoard(board);
+        Map<String, Object> result = getCommonService().getBoardPublicServiceImpl().updateBoard(board,files);
         // 파일 수정
         getCommonService().getFileServiceImpl().updateFile(board.getFiles(), board.getBoardSeq(), board.getLastId());
-        List<FilePublicVO> targetFiles = getCommonService().getFileServiceImpl().uploadFile(files);
-        getCommonService().getFileServiceImpl().saveFile(targetFiles, board.getBoardSeq(),board.getRegId());
+        
+
         return ResponseEntity.ok(result);
     }
 
