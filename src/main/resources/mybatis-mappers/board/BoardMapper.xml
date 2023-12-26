@@ -257,6 +257,13 @@
          WHERE BOARD_SEQ = #{boardSeq}
     </update>
 
+    <update id="updateBoardFile">
+        /* 게시판 파일 수정 - BoardMapper.updateBoardFile */
+        UPDATE BOARD_PUBLIC
+            SET ATTACH_ID = #{attachId}
+        WHERE BOARD_SEQ = #{boardSeq}
+    </update>
+
     <insert id="registrationBoard">
         /* 게시판 등록 - BoardMapper.registrationBoard */
         INSERT INTO BOARD_PUBLIC (BOARD_CD, TITLE, CONTENTS, REG_DT, REG_ID)
