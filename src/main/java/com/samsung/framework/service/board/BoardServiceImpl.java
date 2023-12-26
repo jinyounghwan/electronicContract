@@ -88,7 +88,7 @@ public class BoardServiceImpl extends ParentService implements BoardService{
         BoardVO board = (BoardVO) getCommonMapper().getBoardMapper().rowBySearch(search);
 
         // 게시판에 물린 파일 목록 가져오기
-        board.setFileList(boardFileSearch(search));
+        board.setFiles(boardFileSearch(search));
 
         return board;
     }
