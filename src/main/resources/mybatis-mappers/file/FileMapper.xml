@@ -25,8 +25,8 @@
 
     <sql id="whereClause" >
         AND FE.DEL_YN = 'N'
-        <if test="boardSeq != null and boardSeq !=''">
-            AND ${alias}BOARD_SEQ = #{boardSeq}
+        <if test="targetId != null and targetId !=''">
+            AND ${alias}TARGET_ID = #{targetId}
         </if>
         <if test="fileNm != null and fileNm != ''">
             AND ${alias}FILE_NM = #{fileNm}
