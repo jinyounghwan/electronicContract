@@ -334,4 +334,15 @@ public class FileUtil {
 
         return f.length();
     }
+
+    public String makeAttachId(List<FilePublicVO> list){
+        String attachId = "";
+        if(!list.isEmpty()){
+            attachId = list.get(0).getFileNm();
+            for(int i=1;i<list.size();i++){
+                attachId += ","+list.get(i).getFileNm();
+            }
+        }
+        return attachId;
+    }
 }
