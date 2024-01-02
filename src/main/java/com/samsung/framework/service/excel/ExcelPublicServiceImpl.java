@@ -1,10 +1,15 @@
 package com.samsung.framework.service.excel;
 
+import com.samsung.framework.common.exception.CustomFileException;
 import com.samsung.framework.common.utils.FileUtil;
 import com.samsung.framework.service.common.ParentService;
 import com.samsung.framework.vo.file.FilePublicVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Iterator;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -36,6 +41,14 @@ public class ExcelPublicServiceImpl extends ParentService implements ExcelServic
                                         .build();
         int save = saveExcelFile(file);
         return file.getFileNm();
+    }
+
+    public void readExcelFile(List<MultipartFile> multipartFiles){
+        Iterator<MultipartFile> iter = multipartFiles.listIterator();
+        iter.forEachRemaining(value->{
+            String filePath = "C:\\files\\dejay_public\\" + value.getOriginalFilename();
+            getExcelUtil().readExcel(filePath);
+        });
     }
 
     /**

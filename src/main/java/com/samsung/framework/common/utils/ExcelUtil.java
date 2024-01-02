@@ -10,7 +10,6 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +60,7 @@ public class ExcelUtil {
      * 엑셀 데이터 읽기
      * @param filePath
      */
-    public List<String> readExcel(String filePath) {
+    public List<String> readExcel(String filePath){
         ArrayList<String> list = new ArrayList<>();
         try{
             File f = new File(filePath);
@@ -77,6 +76,7 @@ public class ExcelUtil {
 
                 for(int i= 1; i < sheet.getPhysicalNumberOfRows(); i++){
                     XSSFRow row = sheet.getRow(i);
+
                     for(int cellIdx=0; cellIdx<row.getPhysicalNumberOfCells(); cellIdx++){
                         XSSFCell cell = row.getCell(cellIdx);
                         log.info("cell data : {}", cell);
@@ -104,12 +104,10 @@ public class ExcelUtil {
                 }
                 log.info("sheet : {}", sheet);
             }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         return list;
     }
+
 }

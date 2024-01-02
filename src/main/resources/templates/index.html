@@ -35,7 +35,33 @@
                 </label>
 
             </div>
+            <div>
+                <h1>Excel Upload</h1>
+                <form id="form1" name="form1" method="post" enctype="multipart/form-data">
+                    <input type="file" multiple>
+                    <button type="submit" th:onclick="fnExcelUpload">Excel</button>
+                </form>
+            </div>
     </div>
 
+</th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        let fnExcelUpload = () => {
+            console.log("fnExcelUpload");
+            $.ajax({
+                url: '/excel/write',
+                type: 'post',
+                enctype: 'multipart/form-data',
+                dataType: 'text',
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(data)
+            })
+            .done(function(data){
+                console.log(data);
+            })
+
+        }
+    </script>
 </th:block>
 </html>
