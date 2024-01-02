@@ -271,7 +271,14 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
 
         if(!StringUtil.isEmpty(files)){
             List<FilePublicVO> targetFiles = fileServiceImpl.uploadFile(files);
-            fileServiceImpl.saveFile(targetFiles, boardPublic.getBoardSeq(),boardPublic.getRegId());
+            int inserted = fileServiceImpl.saveFile(targetFiles, boardPublic.getBoardSeq(),boardPublic.getRegId());
+            if(inserted < 0) {
+                result.put("code","204");
+                result.put("message","파일 저장에 실패하였습니다.");
+                result.put("errMsg", "incomplete");
+                return result;
+            }
+
             String attachIds = getFileUtil().makeAttachId(targetFiles);
             Board fileTargetBoard = Board.builder()
                     .boardSeq(boardPublic.getBoardSeq())

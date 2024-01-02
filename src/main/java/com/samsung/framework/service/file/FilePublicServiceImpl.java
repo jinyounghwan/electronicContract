@@ -24,8 +24,31 @@ import java.util.Map;
 @Slf4j
 public class FilePublicServiceImpl extends ParentService implements FileService {
 
+    @Override
     public List<FilePublicVO> uploadFile(List<MultipartFile> files) throws Exception {
         return getFileUtil().uploadFiles(files,getPropertiesUtil().getFile().getRootDir() + getPropertiesUtil().getFile().getRealDir());
+    }
+
+    public List<FilePublicVO> uploadFile(List<MultipartFile> files, String type) throws Exception {
+        return getFileUtil().uploadFiles(files, getPropertiesUtil().getFile().getRootDir() + getPropertiesUtil().getFile().getRealDir() + "/" +type);
+    }
+
+    public int saveFile(List<FilePublicVO> files) throws Exception {
+        int insert=0;
+        for(FilePublicVO file : files){
+            FilePublicVO target = FilePublicVO.builder()
+                                        .filePath(file.getFilePath())
+                                        .fileNo(1L)
+                                        .fileSize(file.getFileSize())
+                                        .fileNm(file.getFileNm())
+                                        .fileNmOrg(file.getFileNmOrg())
+                                        .delYn("N")
+                                        .regId("hsk9839")
+                                        .build();
+            insert = getCommonMapper().getFileMapper().save(target);
+            if(insert<0) break;
+        }
+        return insert;
     }
 
     public int saveFile(List<FilePublicVO> files, Long seq, String regId) throws Exception {
@@ -66,11 +89,14 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
     }
 
     public int saveFile(List<FilePublicVO> files, Long seq) throws Exception {
+        int insert = 0;
         for(FilePublicVO file : files){
-            getCommonMapper().getFileMapper().insert(files);
+            insert = getCommonMapper().getFileMapper().insert(files);
+            if(insert<0) break;
         }
-        return 0;
+        return insert;
     }
+
     @Override
     public int deleteFile(String fileName) {
         return 0;
