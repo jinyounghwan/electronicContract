@@ -6,11 +6,11 @@
     <!-- 공통 [[ -->
     <!-- column [[ -->
     <sql id="fileColumn">
-        ${alias}FILE_SEQ, ${alias}TARGET_ID
-        , ${alias}FILE_NO, ${alias}FILE_PATH
-        , ${alias}FILE_NM, ${alias}FILE_NM_ORG
-        , ${alias}DEL_YN, ${alias}FILE_SIZE
-        , ${alias}REG_DT, ${alias}REG_ID
+        ${alias}FILE_SEQ, ${alias}FILE_NO
+        , ${alias}FILE_PATH, ${alias}FILE_NM
+        , ${alias}FILE_NM_ORG, ${alias}DEL_YN
+        , ${alias}FILE_SIZE, ${alias}REG_DT
+        , ${alias}REG_ID
     </sql>
 
     <sql id="tempFileColumn">
@@ -25,9 +25,6 @@
 
     <sql id="whereClause" >
         AND FE.DEL_YN = 'N'
-        <if test="targetId != null and targetId !=''">
-            AND ${alias}TARGET_ID = #{targetId}
-        </if>
         <if test="fileNm != null and fileNm != ''">
             AND ${alias}FILE_NM = #{fileNm}
         </if>
@@ -50,6 +47,12 @@
         <where>
             <include refid="whereClause"><property name="alias" value="FE."/></include>
         </where>
+        <if test='!@org.springframework.util.CollectionUtils@isEmpty(attachList)'>
+            AND FILE_SEQ IN
+            <foreach collection="attachList" item="seq" index="idx" separator="," open="(" close=")">
+                #{seq}
+            </foreach>
+        </if>
     </select>
 
 
@@ -76,20 +79,21 @@
         /* 파일 저장 - FileMapper.save */
         INSERT INTO BOARD_FILE
         (
-            TARGET_ID, FILE_NO,
-            FILE_PATH, FILE_NM,
-            DEL_YN, REG_DT,
-            REG_ID,FILE_NM_ORG,
-            FILE_SIZE
+            FILE_NO,FILE_PATH,
+            FILE_NM,DEL_YN,
+            REG_DT,REG_ID,
+            FILE_NM_ORG,FILE_SIZE
         )
         VALUES
             (
-                #{targetId},#{fileNo},
-                #{filePath},#{fileNm},
-                #{delYn},sysdate(),
-                #{regId},#{fileNmOrg},
-                #{fileSize}
+                #{fileNo},#{filePath},
+                #{fileNm},#{delYn},
+                sysdate(),#{regId},
+                #{fileNmOrg},#{fileSize}
             )
+        <selectKey resultType="Long" keyProperty="fileSeq" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
     </insert>
 
     <insert id="saveExcelFile">
@@ -135,7 +139,7 @@
         /* 파일 삭제 리스트 - FileMapper.deleteFileList */
         UPDATE BOARD_FILE
         SET DEL_YN = 'Y', REG_DT = sysdate() , REG_ID = #{lastId}
-        WHERE TARGET_ID IN
+        WHERE FILE_SEQ IN
         <foreach collection="seqList" item="seq" index="idx" separator="," open="(" close=")">
             #{seq}
         </foreach>
