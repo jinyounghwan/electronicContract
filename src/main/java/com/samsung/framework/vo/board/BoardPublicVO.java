@@ -31,12 +31,12 @@ public class BoardPublicVO {
     // 진행상태
     private String approveState;
     private String approveStateStr;
-
+    private String attachId;
     // Reply
     private List<BoardReplyVO> replyList;
 
     // 파일 목록
-    private List<FilePublicVO> files;
+    private List<String> attachList;
     public void setApproveStateInKorean() {
         if(this.approveState.equalsIgnoreCase("HDLE0401")) {
             setApproveStateStr("요청");

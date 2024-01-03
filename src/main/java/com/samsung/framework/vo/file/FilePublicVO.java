@@ -2,6 +2,8 @@ package com.samsung.framework.vo.file;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -10,9 +12,6 @@ import lombok.*;
 public class FilePublicVO {
     // 파일 SEQ
     private Long fileSeq;
-
-    // 사용한 곳 식별 번호
-    private String targetId;
 
     //파일 번호
     private Long fileNo;
@@ -43,4 +42,7 @@ public class FilePublicVO {
 
     // 마지막 등록일
     private String lastId;
+
+    // 파일 리스트
+    private List<String> attachList;
 }
