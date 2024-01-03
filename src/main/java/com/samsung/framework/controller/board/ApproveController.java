@@ -106,8 +106,8 @@ public class ApproveController extends ParentController {
         BoardPublicVO rowData = getCommonService().getBoardService().findById(boardSearchVO);
         mv.addObject("rowData", rowData);
         mv.addObject("replyList", rowData.getReplyList());
-
-        List<FilePublicVO> files= getCommonService().getFileServiceImpl().getFiles(seq);
+        List<String> attachIdList = getFileUtil().splitAttachId(rowData.getAttachId());
+        List<FilePublicVO> files= getCommonService().getFileServiceImpl().getFiles(attachIdList);
 
         mv.addObject("files", files);
         getCommonService().getBoardService().increaseHits(seq);
@@ -148,7 +148,8 @@ public class ApproveController extends ParentController {
         boardSearchVO.setBoardSeq(seq);
         BoardPublicVO rowData = getCommonService().getBoardService().findById(boardSearchVO);
         mv.addObject("rowData", rowData);
-        List<FilePublicVO> files = getCommonService().getFileServiceImpl().getFiles(seq);
+        List<String> attachList = getFileUtil().splitAttachId(rowData.getAttachId());
+        List<FilePublicVO> files = getCommonService().getFileServiceImpl().getFiles(attachList);
         mv.addObject("files",files);
 
         return mv;

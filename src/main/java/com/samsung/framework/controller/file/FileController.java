@@ -2,6 +2,7 @@ package com.samsung.framework.controller.file;
 
 import com.samsung.framework.common.exception.CustomFileException;
 import com.samsung.framework.controller.common.ParentController;
+import com.samsung.framework.domain.file.File;
 import com.samsung.framework.vo.file.FilePublicVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,9 +37,11 @@ public class FileController extends ParentController {
     @PostMapping("/upload")
     public ResponseEntity upload(@RequestBody List<MultipartFile> multipartFileList) throws Exception {
         Map<String,Object> result = new HashMap<>();
-        List<FilePublicVO> fileList  = getCommonService().getFileServiceImpl().uploadFile(multipartFileList,"PDF");
-        int insert = getCommonService().getFileServiceImpl().saveFile(fileList);
-        if(insert < 0) {
+        List<FilePublicVO> fileList  = getCommonService().getFileServiceImpl().uploadFile(multipartFileList);
+
+        List<FilePublicVO> saveFileList = getCommonService().getFileServiceImpl().saveFile(fileList);
+
+        if(saveFileList.isEmpty()) {
             result.put("code","204");
             result.put("message","파일 저장에 실패하였습니다.");
             result.put("errMsg", "incomplete");

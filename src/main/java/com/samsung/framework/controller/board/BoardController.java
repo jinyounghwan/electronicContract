@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -97,9 +98,13 @@ public class BoardController extends ParentController {
         mv.addObject("rowData", rowData);
         mv.addObject("replyList", rowData.getReplyList());
 
-        List<FilePublicVO> files= getCommonService().getFileServiceImpl().getFiles(seq);
-
-        mv.addObject("files", files);
+        if(!StringUtil.isEmpty(rowData.getAttachId())){
+            log.info("rowData AttachId {} ",rowData.getAttachId());
+            List<String> attachList = getFileUtil().splitAttachId(rowData.getAttachId());
+            attachList.iterator().forEachRemaining(value-> log.info("attachId : {}",value));
+            List<FilePublicVO> files= getCommonService().getFileServiceImpl().getFiles(attachList);
+            mv.addObject("files", files);
+        }
         getCommonService().getBoardService().increaseHits(seq);
 
         return mv;
@@ -131,8 +136,12 @@ public class BoardController extends ParentController {
         boardSearchVO.setBoardSeq(seq);
         BoardPublicVO rowData = getCommonService().getBoardService().findById(boardSearchVO);
         mv.addObject("rowData", rowData);
-        List<FilePublicVO> files = getCommonService().getFileServiceImpl().getFiles(seq);
-        mv.addObject("files",files);
+
+        if(!StringUtil.isEmpty(rowData.getAttachId())){
+            List<String> attachList = getFileUtil().splitAttachId(rowData.getAttachId());
+            List<FilePublicVO> files = getCommonService().getFileServiceImpl().getFiles(attachList);
+            mv.addObject("files",files);
+        }
 
         return mv;
     }
@@ -202,9 +211,7 @@ public class BoardController extends ParentController {
     @PostMapping("/api/update/{seq}")
     public ResponseEntity deleteBoard(Model model, @RequestPart(value="data") Board board, @RequestPart(value="files",required = false) List<MultipartFile> files) throws Exception {
         Map<String, Object> result = getCommonService().getBoardPublicServiceImpl().updateBoard(board,files);
-        // 파일 수정
-        getCommonService().getFileServiceImpl().updateFile(board.getFiles(), board.getBoardSeq(), board.getLastId());
-        
+
 
         return ResponseEntity.ok(result);
     }

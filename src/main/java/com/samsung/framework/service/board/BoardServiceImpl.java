@@ -142,8 +142,6 @@ public class BoardServiceImpl extends ParentService implements BoardService{
         // Mapper Update
         int iAffectedRows = getCommonMapper().getBoardMapper().update(target);
 
-        //File Update
-        fileService.updateFile(fileList, TableNameEnum.BOARD.name(), target.getBoardSeq());
 
         return iAffectedRows;
     }
@@ -173,8 +171,8 @@ public class BoardServiceImpl extends ParentService implements BoardService{
         int iAffectedRows = getCommonMapper().getBoardMapper().delete(target);
 
         // Board에 물린 File삭제
-        List<FileVO> fileList = fileService.getFiles(board.getBoardSeq(), target.getTableName());
-        for(FileVO file : fileList){
+        List<FilePublicVO> fileList = fileService.getFiles(board.getBoardSeq(), target.getTableName());
+        for(FilePublicVO file : fileList){
             fileService.deleteFile(file.getFileNm());
         }
 

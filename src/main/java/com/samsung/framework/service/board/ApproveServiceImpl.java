@@ -69,12 +69,14 @@ public class ApproveServiceImpl extends ParentService implements ApproveService 
         var paramMap = new HashMap<String, Object>();
         paramMap.put("lastId", lastId);
         paramMap.put("boardSeqList", tgtList);
+
         int deleteCount = getCommonMapper().getBoardMapper().deleteList(paramMap);
         if(deleteCount < 1) {
             result.put("code", 204);
             result.put("message", "삭제할 대상이 없습니다.");
             return result;
         }
+
         paramMap.put("seqList",tgtList); // 파일 입출력을 위한 seqList Setting
         getCommonMapper().getFileMapper().deleteFileList(paramMap);
         result.put("message", "삭제 되었습니다.");

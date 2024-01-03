@@ -33,27 +33,27 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
         return getFileUtil().uploadFiles(files, getPropertiesUtil().getFile().getRootDir() + getPropertiesUtil().getFile().getRealDir() + "/" +type);
     }
 
-    public int saveFile(List<FilePublicVO> files) throws Exception {
-        int insert=0;
+    public List<FilePublicVO> saveFile(List<FilePublicVO> files) throws Exception {
+        List<FilePublicVO> targetFiles = new ArrayList<>();
         for(FilePublicVO file : files){
             FilePublicVO target = FilePublicVO.builder()
-                                        .filePath(file.getFilePath())
-                                        .fileNo(1L)
-                                        .fileSize(file.getFileSize())
-                                        .fileNm(file.getFileNm())
-                                        .fileNmOrg(file.getFileNmOrg())
-                                        .delYn("N")
-                                        .regId("hsk9839")
-                                        .build();
-            insert = getCommonMapper().getFileMapper().save(target);
-            if(insert<0) break;
+                                .filePath(file.getFilePath())
+                                .fileNo(1L)
+                                .fileSize(file.getFileSize())
+                                .fileNm(file.getFileNm())
+                                .fileNmOrg(file.getFileNmOrg())
+                                .delYn("N")
+                                .regId("hsk9839")
+                                .build();
+            getCommonMapper().getFileMapper().save(target);
+            targetFiles.add(target);
         }
-        return insert;
+        return targetFiles;
     }
 
-    public int saveFile(List<FilePublicVO> files, Long seq, String regId) throws Exception {
-        int insert=0;
+    public List<FilePublicVO> saveFile(List<FilePublicVO> files,String regId) throws Exception {
         Long fileCount=1L;
+        List<FilePublicVO> targetFiles = new ArrayList<>();
 
         for(FilePublicVO file : files){
             FilePublicVO target;
@@ -65,7 +65,6 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
                         .fileSize(file.getFileSize())
                         .fileNm(createFileNm)
                         .fileNmOrg(file.getFileNmOrg())
-                        .targetId(String.valueOf(seq))
                         .delYn("N")
                         .regId(regId)
                         .build();
@@ -76,16 +75,15 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
                         .fileSize(file.getFileSize())
                         .fileNm(file.getFileNm())
                         .fileNmOrg(file.getFileNmOrg())
-                        .targetId(String.valueOf(seq))
                         .delYn("N")
                         .regId(regId)
                         .build();
             }
             fileCount++;
-            insert = getCommonMapper().getFileMapper().save(target);
-           if(insert<0) break;
+            getCommonMapper().getFileMapper().save(target);
+            targetFiles.add(target);
         }
-        return insert;
+        return targetFiles;
     }
 
     public int saveFile(List<FilePublicVO> files, Long seq) throws Exception {
@@ -102,9 +100,9 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
         return 0;
     }
 
-    public int deleteFile(String fileName, String lastId) {
+    public int deleteFile(Long seq, String lastId) {
         FilePublicVO srchFile = FilePublicVO.builder()
-                .fileNm(fileName)
+                .fileSeq(seq)
                 .lastId(lastId)
                 .build();
 
@@ -117,7 +115,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
         return iAffectedRows;
     }
 
-
+    @Override
     public int deleteFiles(String lastId, List<Integer> tgtList){
         int iAffectedRows = 0;
         Map<String, Object> paramMap = new HashMap<>();
@@ -128,61 +126,32 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
         return iAffectedRows;
     }
 
-    @Override
-    public int deleteFiles(List<File> files) {
-        int iAffectedRows = 0;
-
-        for(File file : files){
-            iAffectedRows = deleteFile(file.getFileNm());
-        }
-
-        return iAffectedRows;
-    }
-
-    @Override
-    public int updateFile(List<FilePublicVO> newFiles, String tableName, Long entitySeq) throws Exception {
-        return 0;
-    }
 
     /**
      * 파일 수정
      * @param files
-     * @param seq
      * @param lastId
      * @return
      * @throws Exception
      */
-    public int updateFile(List<FilePublicVO> files, Long seq, String lastId) throws Exception {
-        List<FilePublicVO> originFiles = getFiles(seq);
+    @Override
+    public int updateFiles(List<FilePublicVO> files, List<String> attachList, String lastId) throws Exception {
 
-        //삭제할 리스트
-        List<FilePublicVO> originList = new ArrayList<>();
+        List<Long> removeList = new ArrayList<>();
+        List<Long> targetFiles = new ArrayList<>();
+        files.forEach(file->targetFiles.add(file.getFileSeq()));
 
-        // 원본 FileVO를 originList 안에 넣어 준다.
-        for(FilePublicVO file: originFiles){
-            originList.add(file);
-        }
-
-        List<FilePublicVO> newFileList = new ArrayList<>();
-        //원본 FilePublicVO를 origin 리스트 안에 넣어 준다.
-        for(FilePublicVO file : files){
-            newFileList.add(file);
-            for(int index = originList.size()-1; index >= 0; index--) {
-                String originFileName = originList.get(index).getFileNmOrg();
-                if (originFileName.equals(file.getFileNmOrg())) {
-                    newFileList.remove(file); // 새로운 리스트에 원본 리스트와 같다면 삭제
-                    originList.remove(index);
-                }
-            }
-        }
-
-        int delete = 0;
-        // 수정 시 기존 파일이 없으면 삭제
-        if(StringUtil.isNotEmpty(originList)){
-            for(FilePublicVO file : originList){
-                delete = deleteFile(file.getFileNm(), lastId);
-                if(delete<=0) return delete;
-            }
+        attachList.forEach(file-> {
+            Long seq = Long.valueOf(file);
+            boolean flag = targetFiles.contains(seq);
+            if(!flag) removeList.add(seq);
+        });
+        int delete =0;
+        if(!removeList.isEmpty()){
+            HashMap<String, Object> paramMap = new HashMap<>();
+            paramMap.put("lastId",lastId);
+            paramMap.put("seqList", removeList);
+            delete = getCommonMapper().getFileMapper().deleteFileList(paramMap);
         }
 
         return delete > 0 ? 1 : 0;
@@ -215,20 +184,20 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
     }
     
     @Override
-    public List<FileVO> getFiles(Long entitySeq, String tableName) {
+    public List<FilePublicVO> getFiles(Long entitySeq, String tableName) {
         return null;
     }
 
-    public List<FilePublicVO> getFiles(Long seq) {
+    public List<FilePublicVO> getFiles(List<String> attachIdList) {
         FilePublicVO file = FilePublicVO.builder()
-                .targetId(String.valueOf(seq))
-                .build();
+                                        .attachList(attachIdList)
+                                        .build();
 
         return getCommonMapper().getFileMapper().getFiles(file);
     }
     @Override
-    public int saveFile(List<FilePublicVO> files, String tableName, Long seq) throws Exception {
-        return 0;
+    public List<FilePublicVO> saveFile(List<FilePublicVO> files, String tableName, Long seq) throws Exception {
+        return null;
     }
 
     /**

@@ -2,9 +2,11 @@ package com.samsung.framework.service.board;
 
 import com.samsung.framework.common.exception.CustomFileException;
 import com.samsung.framework.common.utils.DateUtil;
+import com.samsung.framework.common.utils.FileUtil;
 import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.board.BoardPublic;
+import com.samsung.framework.domain.file.File;
 import com.samsung.framework.service.common.ParentService;
 import com.samsung.framework.service.file.FilePublicServiceImpl;
 import com.samsung.framework.vo.board.BoardPublicVO;
@@ -14,11 +16,13 @@ import com.samsung.framework.vo.common.SelectOptionVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.file.FileVO;
 import com.samsung.framework.vo.member.MemberVO;
+import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.board.BoardSearchVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
@@ -177,10 +181,18 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
             result.put("message", "삭제할 대상이 없습니다.");
             return result;
         }
-        paramMap.put("seqList",tgtList); // 파일 입출력을 위한 seqList Setting
+
+
+        ArrayList<String> attachList= new ArrayList<>();
+        tgtList.forEach(value->{
+            BoardSearchVO searchVO = new BoardSearchVO();
+            searchVO.setBoardSeq(Long.valueOf(value));
+            BoardPublicVO target = getCommonMapper().getBoardMapper().findById(searchVO);
+            attachList.addAll(getFileUtil().splitAttachId(target.getAttachId()));
+        });
+        paramMap.put("seqList",attachList); // 파일 입출력을 위한 seqList Setting
         getCommonMapper().getFileMapper().deleteFileList(paramMap);
         result.put("message", "삭제 되었습니다.");
-
 
         return result;
     }
@@ -203,25 +215,42 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
         }
         result.put("message", "수정 되었습니다.");
 
-        // 신규 파일 upload
-        if(!StringUtil.isEmpty(files)){
-            List<FilePublicVO> targetFiles = fileServiceImpl.uploadFile(files);
-            // 공통 File에 신규 file 저장
-            fileServiceImpl.saveFile(targetFiles, board.getBoardSeq(),board.getRegId());
+        // FileUpdate로직
+        List<String> originFiles = new ArrayList<>();
+        BoardSearchVO boardSearchVO = new BoardSearchVO();
+        boardSearchVO.setBoardSeq(board.getBoardSeq());
+        BoardPublicVO boardPublicVO =getCommonMapper().getBoardMapper().findById(boardSearchVO);
+        if(!StringUtil.isEmpty(boardPublicVO.getAttachId())){
+            originFiles.addAll(getFileUtil().splitAttachId(boardPublicVO.getAttachId()));
         }
 
-        // update 시, 최종 fileNm 값을 Board attachId에 반영
-        List<FilePublicVO> resultFiles = fileServiceImpl.getFiles(board.getBoardSeq());
+        List<String> attachList = new ArrayList<>();
+        // board.getFiles가 빈배열이 아닐때,
+        if(!ObjectUtils.isEmpty(board.getFiles()) && !ObjectUtils.isEmpty(originFiles.isEmpty())){
+            fileServiceImpl.updateFiles(board.getFiles(), originFiles, board.getLastId());
+            board.getFiles().forEach(file -> {
+                attachList.add(String.valueOf(file.getFileSeq()));
+            });
+        }
+
+
+        // 신규 파일 upload
+        if(!ObjectUtils.isEmpty(files)){
+            List<FilePublicVO> targetFiles = fileServiceImpl.uploadFile(files);
+            // 공통 File에 신규 file 저장
+
+            fileServiceImpl.saveFile(targetFiles,board.getRegId()).forEach(value-> attachList.add(String.valueOf(value.getFileSeq())));
+        }
+
         String attachId="";
-        if(!StringUtil.isEmpty(resultFiles)){
-            attachId = getFileUtil().makeAttachId(resultFiles);
+        if(!ObjectUtils.isEmpty(attachList)){
+            attachId = getFileUtil().makeAttachIdStr(attachList);
             Board targetBoardFile = Board.builder()
                     .boardSeq(board.getBoardSeq())
                     .attachId(attachId)
                     .build();
             updateBoardFile(targetBoardFile);
         }
-
         return result;
     }
 
@@ -270,16 +299,19 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
         }
 
         if(!StringUtil.isEmpty(files)){
+            // 실제 directory에 저장한 파일 리스트
             List<FilePublicVO> targetFiles = fileServiceImpl.uploadFile(files);
-            int inserted = fileServiceImpl.saveFile(targetFiles, boardPublic.getBoardSeq(),boardPublic.getRegId());
-            if(inserted < 0) {
-                result.put("code","204");
+            // DB에 저장한 파일 리스트
+            List<FilePublicVO> saveFileList = fileServiceImpl.saveFile(targetFiles, boardPublic.getRegId());
+
+            if(saveFileList.isEmpty()){
+                result.put("code",204);
                 result.put("message","파일 저장에 실패하였습니다.");
-                result.put("errMsg", "incomplete");
-                return result;
+                result.put("errMsg","incomplete");
             }
 
-            String attachIds = getFileUtil().makeAttachId(targetFiles);
+            String attachIds = getFileUtil().makeAttachIdVO(saveFileList);
+            log.info("attachIds : {}",attachIds);
             Board fileTargetBoard = Board.builder()
                     .boardSeq(boardPublic.getBoardSeq())
                     .attachId(attachIds)
