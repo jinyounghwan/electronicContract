@@ -16,10 +16,15 @@
 [//]: # (| Spring Security |6.1.1|)
 
 ## 환경 변수
-```bash
+```
 -Dspring.profiles.active=<profile>
 JASYPT_PASSWORD='dejay1234!@#$'
 ```
 
 ## 서버 접속
 [전자 계약 관리 시스템](http://10.34.220.195:3030/)
+
+## 애플리케이션 실행
+```bash
+java -jar -Dspring.profiles.active=local <jar>
+```
