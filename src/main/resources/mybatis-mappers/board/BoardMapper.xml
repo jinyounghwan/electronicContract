@@ -254,7 +254,7 @@
     <update id="updateBoard">
         /* 게시판 수정 - BoardMapper.updateBoard */
         UPDATE BOARD_PUBLIC
-           SET TITLE = #{title}, CONTENTS = #{contents}, LAST_DT = NOW(), LAST_ID = #{lastId},ATTACH_ID = #{attachId}
+           SET TITLE = #{title}, CONTENTS = #{contents}, LAST_DT = NOW(), LAST_ID = #{lastId}
          WHERE BOARD_SEQ = #{boardSeq}
     </update>
 

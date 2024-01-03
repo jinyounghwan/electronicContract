@@ -132,7 +132,7 @@
         /* 파일 삭제 - FileMapper.deleteFile */
         UPDATE BOARD_FILE
         SET DEL_YN = 'Y' , REG_DT = sysdate() , REG_ID = #{lastId}
-        WHERE FILE_NM = #{fileNm}
+        WHERE FILE_SEQ = #{seq}
     </update>
 
     <update id="deleteFileList">
