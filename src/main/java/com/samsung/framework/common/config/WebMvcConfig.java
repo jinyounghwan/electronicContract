@@ -34,10 +34,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loggerInterceptor)
-                .addPathPatterns(loggerIncludePattern)
-                .excludePathPatterns(loggerExcludePattern)
-                .order(1);
+//        registry.addInterceptor(loggerInterceptor)
+//                .addPathPatterns(loggerIncludePattern)
+//                .excludePathPatterns(loggerExcludePattern)
+//                .order(1);
 
 //        registry.addInterceptor(loginInterceptor)
 //                .addPathPatterns(loginIncludePattern)

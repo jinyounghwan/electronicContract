@@ -35,7 +35,7 @@ public class TestController {
     @GetMapping("/jasypt-encryption")
     public ResponseEntity jasyptEncoding() {
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("url", jasyptConfig.jasyptEncrypt("jdbc:log4jdbc:mariadb://10.34.220.168:3307/dejay_common"));
+        resultMap.put("url", jasyptConfig.jasyptEncrypt("jdbc:log4jdbc:mariadb://10.34.220.168:3307/electronic_contract"));
         resultMap.put("username", jasyptConfig.jasyptEncrypt("dejay_was"));
         resultMap.put("password", jasyptConfig.jasyptEncrypt("22@samsung"));
 
