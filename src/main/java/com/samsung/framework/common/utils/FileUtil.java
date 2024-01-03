@@ -334,15 +334,33 @@ public class FileUtil {
 
         return f.length();
     }
+    
+    // 첨부파일 아이디 만들기
+    public String makeAttachIdVO(List<FilePublicVO> list){
+        StringBuilder sb = new StringBuilder();
 
-    public String makeAttachId(List<FilePublicVO> list){
-        String attachId = "";
         if(!list.isEmpty()){
-            attachId = list.get(0).getFileNm();
+            sb.append(list.get(0).getFileSeq());
             for(int i=1;i<list.size();i++){
-                attachId += ","+list.get(i).getFileNm();
+                sb.append(",").append(list.get(i).getFileSeq());
             }
         }
-        return attachId;
+        return sb.toString();
+    }
+
+    public String makeAttachIdStr(List<String> list){
+        StringBuilder sb = new StringBuilder();
+        if(!list.isEmpty()){
+            sb.append(list.get(0));
+            for(int i=1;i<list.size();i++){
+                sb.append(",").append(list.get(i));
+            }
+        }
+        return sb.toString();
+    }
+
+    // AttachId , List로 반환
+    public List<String> splitAttachId(String attachId){
+        return Arrays.stream(attachId.split(",")).toList();
     }
 }
