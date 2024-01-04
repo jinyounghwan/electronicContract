@@ -1,3 +1,4 @@
+/*
 package com.samsung.framework.common.config;
 
 import com.samsung.framework.common.utils.*;
@@ -36,11 +37,13 @@ public class EntityLogAspect extends CommonUtil {
 //        String methodName = joinPoint.getSignature().getName();
 //        String tablePrimaryKey = entityLogMapper.getTablePrimaryKey(((BaseEntity) args[0]).getTableName());
 
-        /**
+        */
+/**
          * 1. ENTITY_LOG 저장 대상 객체 세팅
          * 2. ENTITY_LOG & ENTITY_HISTORY 저장
          * 3. 처리 유형(logType) 별 분기 처리
-         * */
+         * *//*
+
         if(retVal != null) {
             BaseEntity target = null;
 
@@ -62,12 +65,14 @@ public class EntityLogAspect extends CommonUtil {
         }
     }
 
-    /**
+    */
+/**
      * ENTITY_LOG & ENTITY_HISTORY 저장 대상 객체 Setter
      * @param castObj
      * @return {@link BaseEntity}
      * @throws JsonProcessingException
-     */
+     *//*
+
     private BaseEntity entitySaveTargetSetter(BaseEntity castObj) throws JsonProcessingException {
         BaseEntity target = new BaseEntity(castObj.getTableName()
                 , castObj.getLogId1()
@@ -82,10 +87,12 @@ public class EntityLogAspect extends CommonUtil {
         return target;
     }
 
-    /**
+    */
+/**
      * ENTITY_LOG & ENTITY_HISTORY 저장
      * @param target {@link BaseEntity}
-     */
+     *//*
+
     private void storeEntityLog(BaseEntity target) {
         boolean isEntityLogExist = entityLogMapper.isEntityLogExist(target);
 
@@ -122,3 +129,4 @@ public class EntityLogAspect extends CommonUtil {
         }
     }
 }
+*/
