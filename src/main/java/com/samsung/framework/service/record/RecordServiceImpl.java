@@ -61,8 +61,8 @@ public class RecordServiceImpl extends ParentService implements RecordService {
                 ele.setLogTypeKoreanStr(setProcessTypeStringInKorean(ele.getLogType()));
                 ele.setLogEtc(StringUtil.NVL(ele.getLogEtc()));
                 if (ele.getCodeCd() != null) {
-                    Optional<MenuVO> parentMenu = menuList.stream().filter(ml -> ml.getCodeCd().substring(0, 6).equals(ele.getCodeCd().substring(0, 6))).findFirst();
-                    parentMenu.ifPresent(pm -> ele.setMenuNm(pm.getCodeNm() + " > " + ele.getCodeNm()));
+                    Optional<MenuVO> parentMenu = menuList.stream().filter(ml -> ml.getMenuCode().substring(0, 6).equals(ele.getCodeCd().substring(0, 6))).findFirst();
+                    parentMenu.ifPresent(pm -> ele.setMenuNm(pm.getName() + " > " + ele.getCodeNm()));
                 }else {
                     ele.setMenuNm("");
                 }
@@ -79,8 +79,8 @@ public class RecordServiceImpl extends ParentService implements RecordService {
             rowData.setLogEtc(StringUtil.NVL(rowData.getLogEtc()));
             if(rowData.getCodeCd() != null) {
                 List<MenuVO> menuList = getCommonMapper().getMenuMapper().findCommonMenuCodeList();
-                Optional<MenuVO> parentMenu = menuList.stream().filter(ml -> ml.getCodeCd().substring(0, 6).equals(rowData.getCodeCd().substring(0, 6))).findFirst();
-                parentMenu.ifPresent(pm -> rowData.setMenuNm(pm.getCodeNm() + " > " + rowData.getCodeNm()));
+                Optional<MenuVO> parentMenu = menuList.stream().filter(ml -> ml.getMenuCode().substring(0, 6).equals(rowData.getCodeCd().substring(0, 6))).findFirst();
+                parentMenu.ifPresent(pm -> rowData.setMenuNm(pm.getName() + " > " + rowData.getCodeNm()));
             }else {
                 rowData.setMenuNm("");
             }

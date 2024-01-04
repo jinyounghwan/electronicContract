@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -13,26 +15,14 @@ public class MenuVO {
     // 메뉴 SEQ
     private Long menuSeq;
 
-    // 부모 메뉴 SEQ
-    private Long pMenuSeq;
+    // 메뉴 코드
+    private String menuCode;
 
-    //메뉴 유형 01:ADMIN , 02:USER
-    private String menuType;
-
-    // 메뉴 ID
-    private String menuId;
-
-    // 메뉴 DEPTH
-    private Long menuDepth;
-
-    // 메뉴 타이틀
-    private String menuTitle;
-
-    // 메뉴 URL
-    private String menuUrl;
+    // 메뉴 명
+    private String name;
 
     // 메뉴 순서
-    private Long menuOrd;
+    private int ord;
 
     // 노출 여부
     private String displayYn;
@@ -40,12 +30,24 @@ public class MenuVO {
     // 사용 여부
     private String useYn;
 
+    // 삭제 여부
+    private String delYn;
+
+    // 생성자
+    private String createdBy;
+
+    // 생성 일
+    private LocalDateTime createdAt;
+
+    // 수정자
+    private String updatedBy;
+
+    // 수정일
+    private String updatedAt;
+
     // 부모 메뉴 타이틀
-    private String pTitle;
+//    private String pTitle;
 
-    // 공통 코드 값
-    private String codeCd;
-
-    // 공통 코드 명
-    private String codeNm;
+    // 부모 메뉴 SEQ
+//    private Long pMenuSeq;
 }

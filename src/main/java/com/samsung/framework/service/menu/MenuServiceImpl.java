@@ -25,13 +25,10 @@ public class MenuServiceImpl extends ParentService implements MenuService {
      */
     public int insertMenu(Menu menu, MemberVO member){
         Menu target = Menu.builder()
-                .pMenuSeq(menu.getPMenuSeq())
-                .menuId(menu.getMenuId())
-                .menuType(menu.getMenuType())
-                .menuDepth(menu.getMenuDepth())
-                .menuTitle(menu.getMenuTitle())
-                .menuUrl(menu.getMenuUrl())
-                .menuOrd(getOrdMax(menu.getPMenuSeq()))
+//              .pMenuSeq(menu.getPMenuSeq())
+                .menuCode(menu.getMenuCode())
+                .name(menu.getName())
+                .ord(menu.getOrd())
                 .displayYn(menu.getDisplayYn())
                 .useYn(menu.getUseYn())
                 .tableName(TableNameEnum.MENU.name())
@@ -96,12 +93,12 @@ public class MenuServiceImpl extends ParentService implements MenuService {
     public int updateMenu(Menu menu, MemberVO member) {
 
         // menuId에 해당하는 menuSeq 조회
-        Long menuSeq = (Long) getCommonMapper().getMenuMapper().rowByKey(menu.getMenuId());
+        Long menuSeq = (Long) getCommonMapper().getMenuMapper().rowByKey(menu.getMenuCode());
 
          Menu target = Menu.builder()
-                            .menuTitle(menu.getMenuTitle())
-                            .menuId(menu.getMenuId())
-                            .menuUrl(menu.getMenuUrl())
+                            .name(menu.getName())
+                            .menuCode(menu.getMenuCode())
+//                          .menuUrl(menu.getMenuUrl())
                             .displayYn(menu.getDisplayYn())
                             .tableName(TableNameEnum.MENU.name())
                             .logId1(String.valueOf(menuSeq))
@@ -129,11 +126,11 @@ public class MenuServiceImpl extends ParentService implements MenuService {
         int iAffectedRows=0;
         while(iter.hasNext()) {
             Menu menu = iter.next();
-            Long menuSeq = (Long) getCommonMapper().getMenuMapper().rowByKey(menu.getMenuId());
+            Long menuSeq = (Long) getCommonMapper().getMenuMapper().rowByKey(menu.getMenuCode());
             Menu target = Menu.builder()
-                                .menuId(menu.getMenuId())
-                                .menuOrd(menu.getMenuOrd())
-                                .pMenuSeq(menu.getPMenuSeq())
+                                .menuCode(menu.getMenuCode())
+                                .ord(menu.getOrd())
+//                              .pMenuSeq(menu.getPMenuSeq())
                                 .tableName(TableNameEnum.MENU.name())
                                 .logId1(String.valueOf(menuSeq))
                                 .logType(RequestTypeEnum.UPDATE.getRequestType())

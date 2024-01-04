@@ -7,11 +7,12 @@
     <!-- column [[ -->
 
     <sql id="menuColumn">
-            ${alias}MENU_SEQ, ${alias}P_MENU_SEQ
-            , ${alias}MENU_TYPE, ${alias}MENU_ID
-            , ${alias}MENU_DEPTH, ${alias}MENU_TITLE
-            , ${alias}MENU_URL, ${alias}MENU_ORD
+            ${alias}MENU_SEQ, ${alias}MENU_CODE
+            , ${alias}NAME, ${alias}ORD
             , ${alias}DISPLAY_YN, ${alias}USE_YN
+            , ${alias}DEL_YN, ${alias}CREATED_BY
+            , ${alias}CREATE_AT, ${alias}UPDATED_BY
+            , ${alias}UPDATE_AT
     </sql>
 
 
@@ -19,28 +20,20 @@
 
     <!-- whereClause [[ -->
     <sql id="whereClause">
-        <if test="menuTitle != null and menuTitle != '' ">
-            AND ${alias}MENU_TITLE = #{menuTitle}
+        <if test="name != null and name != '' ">
+            AND ${alias}NAME = #{name}
         </if>
-        <if test="menuId != null and menuId != '' ">
-            AND ${alias}MENU_ID = #{menuId}
-        </if>
-        <if test="menuUrl != null and menuUrl != '' ">
-            AND ${alias}MENU_URL = #{menuUrl}
+        <if test="menuCode != null and menuCode != '' ">
+            AND ${alias}MENU_CODE = #{menuCode}
         </if>
     </sql>
-
+    <!--상위 메뉴 조건 들어갈 곳 -->
     <sql id= "whereClausePSeq">
-        <choose>
-            <when test="pMenuSeq != null and  pMenuSeq != '' ">
-                ${alias}P_MENU_SEQ = #{pMenuSeq}
-            </when>
-            <otherwise> ${alias}P_MENU_SEQ IS NULL </otherwise>
-        </choose>
+
     </sql>
 
     <sql id = "whereClauseId">
-        AND ${alias}MENU_ID = #{menuId}
+        AND ${alias}MENU_CODE = #{menu_Code}
     </sql>
 
 
@@ -57,7 +50,7 @@
 
     <!-- 조회 [[ -->
 
-    <select id="getSmMenuList" resultType="MenuVO" parameterType="MenuSearchVO">
+   <!-- <select id="getSmMenuList" resultType="MenuVO" parameterType="MenuSearchVO">
         /* 소메뉴 조회 - MenuMapper.getSmMenuList */
         WITH SRCH_MENU AS(
             SELECT MN.MENU_SEQ
@@ -72,9 +65,9 @@
         INNER JOIN SRCH_MENU SMN
                 ON MN.P_MENU_SEQ = SMN.MENU_SEQ
                 ORDER BY MENU_ORD ASC
-        </select>
+        </select>-->
 
-    <select id="getLgMenuList" resultType="MenuVO">
+    <!--<select id="getLgMenuList" resultType="MenuVO">
         /* 대메뉴 조회 - MenuMapper.getLgMenuList */
         SELECT
             <include refid="menuColumn"><property name="alias" value="MN."/></include>
@@ -82,16 +75,16 @@
         WHERE
             MN.P_MENU_SEQ IS NULL
         ORDER BY MENU_ORD ASC
-    </select>
+    </select>-->
 
-    <select id="getOrdMax" resultType="Long" parameterType="Long">
+    <!--<select id="getOrdMax" resultType="Long" parameterType="Long">
         /* 최대 메뉴 순서 조회 - MenuMapper.getOrdMax*/
         SELECT MAX(MN.MENU_ORD) + 1 AS MO
         FROM MENU MN
         <where>
             <include refid="whereClausePSeq"><property name="alias" value="MN."/></include>
         </where>
-    </select>
+    </select>-->
 
     <select id="rowByKey" resultType="Long" parameterType="String">
         /* 메뉴 SEQ 값 조회 */
@@ -102,7 +95,7 @@
         </where>
     </select>
 
-    <select id = "rowBySearch" resultType="MenuVO" parameterType="MenuSearchVO">
+    <!--<select id = "rowBySearch" resultType="MenuVO" parameterType="MenuSearchVO">
         /* 메뉴 단 건 조회 */
         SELECT MN.MENU_SEQ
             <include refid="menuColumn"><property name="alias" value="MN."/></include>
@@ -111,7 +104,7 @@
         <where>
             <include refid="whereClause"><property name="alias" value="MN."/></include>
         </where>
-    </select>
+    </select>-->
     <!-- 조회 ]] -->
 
 
@@ -120,30 +113,34 @@
     <insert id="insert" useGeneratedKeys="true">
         /* 메뉴 삽입 - MenuMapper.insertMenu*/
             INSERT INTO MENU
-                (P_MENU_SEQ,
-                 MENU_TYPE,
-                 MENU_ID,
-                 MENU_DEPTH,
-                 MENU_TITLE,
-                 MENU_URL,
-                 MENU_ORD,
+                (MENU_CODE,
+                 NAME,
+                 ORD,
                  DISPLAY_YN,
-                 USE_YN )
-            VALUES ( #{pMenuSeq},
-                     #{menuType},
-                     #{menuId},
-                     #{menuDepth},
-                     #{menuTitle},
-                     #{menuUrl},
-                     #{menuOrd},
+                 USE_YN,
+                 DEL_YN,
+                 CREATE_BY,
+                 CREATE_AT,
+                 UPDATE_BY,
+                 UPDATE_AT
+                 )
+            VALUES ( #{menuCode},
+                     #{name},
+                     #{ord},
                      #{displayYn},
-                     #{useYn} )
+                     #{useYn},
+                     #{delYn},
+                     #{createBy},
+                     #{createAt},
+                     #{updateBy},
+                     #{updateAt}
+                     )
             <selectKey keyProperty="logId1" resultType="String">
                 SELECT LAST_INSERT_ID()
             </selectKey>
         </insert>
 
-    <update id="update">
+  <!--  <update id="update">
         /* 메뉴 업데이트 MenuMapper.update*/
         UPDATE MENU MN
         <set>
@@ -154,9 +151,9 @@
         <where>
             <include refid="whereClauseId"><property name="alias" value="MN."/></include>
         </where>
-    </update>
+    </update>-->
 
-    <update id="updateOrd">
+   <!-- <update id="updateOrd">
         /* 메뉴 순서 업데이트 MenuMapper.updateOrd */
         UPDATE MENU MN
         <set>
@@ -165,7 +162,7 @@
         WHERE
             <include refid="whereClausePSeq"><property name="alias" value="MN."/></include>
             AND MN.MENU_ID = #{menuId}
-    </update>
+    </update>-->
 
     <!-- 저장/수정/삭제 [[ -->
 
