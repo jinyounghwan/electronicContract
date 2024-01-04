@@ -2,6 +2,7 @@ package com.samsung.framework.vo.file;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -12,36 +13,33 @@ import java.util.List;
 public class FilePublicVO {
     // 파일 SEQ
     private Long fileSeq;
-
-    //파일 번호
-    private Long fileNo;
-
-    // 파일 이름
-    private String fileNm;
-
-    // 파일 원본 이름
-    private String fileNmOrg;
-
-    // 파일 용량
-    private String fileSize;
-
-    // 파일 경로
-    private String filePath;
-
-    // 썸네일 여부
-    private String thumbnailYn;
+    
+    // 원본 파일 명 
+    private String originalName;
+    
+    // 파일 명 
+    private String name;
+    
+    // 파일 번호
+    private int fileNo;
+    
+    // 확장자
+    private String extension;
+    
+    // 저장 경로
+    private String storagePath;
+    
+    // 파일 크기
+    private String size;
 
     // 삭제 여부
     private String delYn;
 
-    // 등록일
-    private String regDt;
+    // 생성자
+    private String createdBy;
 
-    // 등록자
-    private String regId;
-
-    // 마지막 등록일
-    private String lastId;
+    // 생성일
+    private LocalDateTime createdAt;
 
     // 파일 리스트
     private List<String> attachList;

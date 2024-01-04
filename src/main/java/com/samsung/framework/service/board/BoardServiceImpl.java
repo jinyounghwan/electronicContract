@@ -173,7 +173,7 @@ public class BoardServiceImpl extends ParentService implements BoardService{
         // Board에 물린 File삭제
         List<FilePublicVO> fileList = fileService.getFiles(board.getBoardSeq(), target.getTableName());
         for(FilePublicVO file : fileList){
-            fileService.deleteFile(file.getFileNm());
+            fileService.deleteFile(file.getName());
         }
 
         return iAffectedRows;

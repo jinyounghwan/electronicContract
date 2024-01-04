@@ -114,7 +114,7 @@ public class AuthorityServiceImpl extends ParentService implements AuthorityServ
     public Map<String,Object> updAuthFile(FilePublicVO file, int memberSeq) throws IOException {
         List<Authority> userMenuList =getCommonMapper().getAuthorityMapper().findUserMenuAuthority(memberSeq);
 
-        ArrayList<String> list = (ArrayList<String>) getExcelUtil().readExcel(file.getFilePath());
+        ArrayList<String> list = (ArrayList<String>) getExcelUtil().readExcel(file.getStoragePath());
         ArrayList<String> menuOrgList = (ArrayList<String>) createMenuList(list);
         int count = 1;
         ArrayList<Authority> menuAuthList = new ArrayList<>();

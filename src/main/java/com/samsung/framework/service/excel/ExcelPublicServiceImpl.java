@@ -31,16 +31,16 @@ public class ExcelPublicServiceImpl extends ParentService implements ExcelServic
 
         Long size = FileUtil.getFileSize(path);
         FilePublicVO file =  FilePublicVO.builder()
-                                        .filePath(filePath)
-                                        .fileNm(fileName)
-                                        .fileNmOrg(fileName)
-                                        .thumbnailYn("N")
-                                        .delYn("N")
-                                        .regId("hsk9839")
-                                        .fileSize(String.valueOf(size))
+                                        .originalName(fileName)
+                                        .name(fileName)
+                                        .fileNo(1)
+                                        .extension(getFileUtil().checkFileType(fileName))
+                                        .storagePath(filePath)
+                                        .size(String.valueOf(size))
+                                        .createdBy("hsk9839")
                                         .build();
         int save = saveExcelFile(file);
-        return file.getFileNm();
+        return file.getName();
     }
 
     public void readExcelFile(List<MultipartFile> multipartFiles){

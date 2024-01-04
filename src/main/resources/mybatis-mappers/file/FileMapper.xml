@@ -6,19 +6,18 @@
     <!-- 공통 [[ -->
     <!-- column [[ -->
     <sql id="fileColumn">
-        ${alias}FILE_SEQ, ${alias}FILE_NO
-        , ${alias}FILE_PATH, ${alias}FILE_NM
-        , ${alias}FILE_NM_ORG, ${alias}DEL_YN
-        , ${alias}FILE_SIZE, ${alias}REG_DT
-        , ${alias}REG_ID
+        ${alias}FILE_SEQ, ${alias}ORIGINAL_NAME
+        , ${alias}NAME, ${alias}EXTENSION
+        , ${alias}STORAGE_PATH, ${alias}SIZE
+        , ${alias}DEL_YN, ${alias}CREATED_BY
+        , ${alias}CREATED_AT
     </sql>
 
-    <sql id="tempFileColumn">
+    <!--<sql id="tempFileColumn">
           ${alias}ENTITY_NAME, ${alias}ENTITY_TYPE
           , ${alias}FILE_NAME, ${alias}ORIGIN_FILE_NAME
           , ${alias}FILE_SIZE
-    </sql>
-
+    </sql>-->
     <!-- column ]] -->
 
     <!-- whereClause [[ -->
@@ -26,7 +25,7 @@
     <sql id="whereClause" >
         AND FE.DEL_YN = 'N'
         <if test="fileNm != null and fileNm != ''">
-            AND ${alias}FILE_NM = #{fileNm}
+            AND ${alias}NAME = #{name}
         </if>
         <if test="fileSeq != null and fileSeq != ''">
             AND ${alias}FILE_SEQ = #{fileSeq}
@@ -43,7 +42,7 @@
     <select id="getFiles" resultType="FilePublicVO">
         SELECT
             <include refid="fileColumn"><property name="alias" value="FE."/></include>
-        FROM BOARD_FILE FE
+        FROM FILE_INTEGRATION FE
         <where>
             <include refid="whereClause"><property name="alias" value="FE."/></include>
         </where>
@@ -55,11 +54,10 @@
         </if>
     </select>
 
-
     <select id="getFile" resultType="FilePublicVO">
         SELECT
             <include refid="fileColumn"><property name="alias" value="FE."/></include>
-        FROM BOARD_FILE FE
+        FROM FILE_INTEGRATION FE
         <where>
             <include refid="whereClause"><property name="alias" value="FE."/></include>
         </where>
@@ -77,20 +75,22 @@
 
     <insert id="save" >
         /* 파일 저장 - FileMapper.save */
-        INSERT INTO BOARD_FILE
+        INSERT INTO FILE_INTEGRATION
         (
-            FILE_NO,FILE_PATH,
-            FILE_NM,DEL_YN,
-            REG_DT,REG_ID,
-            FILE_NM_ORG,FILE_SIZE
+            ORIGINAL_NAME, NAME
+            , FILE_NO, EXTENSION
+            , STORAGE_PATH, SIZE
+            , DEL_YN, CREATED_AT
+            , CREATED_BY
         )
         VALUES
-            (
-                #{fileNo},#{filePath},
-                #{fileNm},#{delYn},
-                sysdate(),#{regId},
-                #{fileNmOrg},#{fileSize}
-            )
+        (
+              #{originalName}, #{name}
+            , #{fileNo}, #{extension}
+            , #{storagePath}, #{size}
+            , 'N', #{createdAt}
+            , #{createdBy}
+        )
         <selectKey resultType="Long" keyProperty="fileSeq" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -98,19 +98,21 @@
 
     <insert id="saveExcelFile">
         /* 엑셀 파일 저장 - FileMapper.saveExcelFile */
-        INSERT INTO BOARD_FILE
+        INSERT INTO FILE_INTEGRATION
         (
-            FILE_NO, FILE_PATH,
-            FILE_NM, DEL_YN,
-            REG_DT, REG_ID,
-            FILE_NM_ORG, FILE_SIZE
+             ORIGINAL_NAME, NAME
+            , FILE_NO, EXTENSION
+            , STORAGE_PATH, SIZE
+            , DEL_YN, CREATED_BY
+            , CREATED_AT
         )
         VALUES
         (
-            1, #{filePath},
-            #{fileNm}, #{delYn},
-            sysdate(), #{regId},
-            #{fileNmOrg}, #{fileSize}
+              #{originalName}, #{name}
+            , #{fileNo}, #{extension}
+            , #{storagePath}, #{size}
+            , 'N', #{createdBy}
+            , #{createdAt}
         )
     </insert>
     <!--<insert id="saveTempFile">
@@ -130,15 +132,15 @@
     </insert> -->
     <update id="deleteFile">
         /* 파일 삭제 - FileMapper.deleteFile */
-        UPDATE BOARD_FILE
-        SET DEL_YN = 'Y' , REG_DT = sysdate() , REG_ID = #{lastId}
+        UPDATE FILE_INTEGRATION
+        SET DEL_YN = 'Y' , UPDATED_AT = sysdate() , UPDATED_BY = #{lastId}
         WHERE FILE_SEQ = #{seq}
     </update>
 
     <update id="deleteFileList">
         /* 파일 삭제 리스트 - FileMapper.deleteFileList */
-        UPDATE BOARD_FILE
-        SET DEL_YN = 'Y', REG_DT = sysdate() , REG_ID = #{lastId}
+        UPDATE FILE_INTEGRATION
+        SET DEL_YN = 'Y',  UPDATED_AT = sysdate() , UPDATED_BY = #{lastId}
         WHERE FILE_SEQ IN
         <foreach collection="seqList" item="seq" index="idx" separator="," open="(" close=")">
             #{seq}

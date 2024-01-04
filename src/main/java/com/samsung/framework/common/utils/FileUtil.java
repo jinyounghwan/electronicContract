@@ -62,10 +62,11 @@ public class FileUtil {
        }
 
        return FilePublicVO.builder()
-                    .filePath(fileDir+ "/"+nowDay+"/"+fileName)
-                    .fileNm(fileName)
-                    .fileSize(String.valueOf(multipartFile.getSize()))
-                    .fileNmOrg(multipartFile.getOriginalFilename())
+                    .storagePath(fileDir+ "/"+nowDay+"/"+fileName)
+                    .name(fileName)
+                    .size(String.valueOf(multipartFile.getSize()))
+                    .originalName(multipartFile.getOriginalFilename())
+                    .extension(checkFileType(fileName))
                     .build();
     }
 

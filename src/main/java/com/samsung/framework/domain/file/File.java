@@ -2,44 +2,40 @@ package com.samsung.framework.domain.file;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class File {
     // 파일 SEQ
-    private  Long fileSeq;
+    private Long fileSeq;
 
-    // 저장한 곳 식별
-    private String targetId;
+    // 원본 파일명
+    private String originalName;
 
-    // 파일 용량
-    private String fileSize;
+    // 파일 명
+    private String name;
 
-    //파일 번호
-    private Long fileNo;
+    // 파일 번호
+    private int fileNo;
 
-    // 파일 경로
-    private String filePath;
+    // 확장자
+    private String extension;
 
-    // 파일 이름
-    private String fileNm;
+    // 저장 경로
+    private String storagePath;
 
-    // 기존 파일 명
-    private String fileNmOrg;
+    // 파일 크기
+    private int size;
 
     // 삭제 여부
     private String delYn;
 
-    // 파일 유형 01:이미지, 02:비디오, 03:엑셀, 04:워드, 05:한글, 06: 그 외 문
-    private String fileType;
+    // 생성자
+    private String createdBy;
 
-    // 등록일
-    private String regDt;
-
-    // 등록자
-    private String regId;
-
-    // 마지막 등록일
-    private String lastId;
+    // 생성일
+    private LocalDateTime createdAt;
 }

@@ -37,13 +37,13 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
         List<FilePublicVO> targetFiles = new ArrayList<>();
         for(FilePublicVO file : files){
             FilePublicVO target = FilePublicVO.builder()
-                                .filePath(file.getFilePath())
-                                .fileNo(1L)
-                                .fileSize(file.getFileSize())
-                                .fileNm(file.getFileNm())
-                                .fileNmOrg(file.getFileNmOrg())
-                                .delYn("N")
-                                .regId("hsk9839")
+                                .originalName(file.getOriginalName())
+                                .name(file.getName())
+                                .fileNo(1)
+                                .extension(getFileUtil().checkFileType(file.getOriginalName()))
+                                .storagePath(file.getStoragePath())
+                                .size(file.getSize())
+                                .createdBy("hsk9839")
                                 .build();
             getCommonMapper().getFileMapper().save(target);
             targetFiles.add(target);
@@ -52,31 +52,31 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
     }
 
     public List<FilePublicVO> saveFile(List<FilePublicVO> files,String regId) throws Exception {
-        Long fileCount=1L;
+        int fileCount=1;
         List<FilePublicVO> targetFiles = new ArrayList<>();
 
         for(FilePublicVO file : files){
             FilePublicVO target;
-            if(StringUtil.isEmpty(file.getFilePath())){ //빈 값인 경우
-                String createFileNm = getFileUtil().createFileName(file.getFileNmOrg());
+            if(StringUtil.isEmpty(file.getStoragePath())){ //빈 값인 경우
+                String createFileNm = getFileUtil().createFileName(file.getOriginalName());
                 target = FilePublicVO.builder()
-                        .filePath(getPropertiesUtil().getFile().getRootDir() + getPropertiesUtil().getFile().getRealDir() +createFileNm)
+                        .originalName(file.getOriginalName())
+                        .name(file.getName())
                         .fileNo(fileCount)
-                        .fileSize(file.getFileSize())
-                        .fileNm(createFileNm)
-                        .fileNmOrg(file.getFileNmOrg())
-                        .delYn("N")
-                        .regId(regId)
+                        .extension(getFileUtil().checkFileType(file.getOriginalName()))
+                        .storagePath(getPropertiesUtil().getFile().getRootDir() + getPropertiesUtil().getFile().getRealDir() +createFileNm)
+                        .size(file.getSize())
+                        .createdBy(regId)
                         .build();
             }else{
                 target = FilePublicVO.builder()
-                        .filePath(file.getFilePath())
-                        .fileNo(fileCount)
-                        .fileSize(file.getFileSize())
-                        .fileNm(file.getFileNm())
-                        .fileNmOrg(file.getFileNmOrg())
-                        .delYn("N")
-                        .regId(regId)
+                            .originalName(file.getOriginalName())
+                            .name(file.getName())
+                            .fileNo(fileCount)
+                            .extension(file.getExtension())
+                            .storagePath(file.getStoragePath())
+                            .size(file.getSize())
+                            .createdBy(regId)
                         .build();
             }
             fileCount++;
@@ -103,7 +103,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
     public int deleteFile(Long seq, String lastId) {
         FilePublicVO srchFile = FilePublicVO.builder()
                 .fileSeq(seq)
-                .lastId(lastId)
+                .createdBy(lastId)
                 .build();
 
         // 삭제할 File 조회
@@ -165,7 +165,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
     @Override
     public FilePublicVO getFile(String fileNm) {
         FilePublicVO target = FilePublicVO.builder()
-                                            .fileNm(fileNm)
+                                            .name(fileNm)
                                             .build();
 
         return getCommonMapper().getFileMapper().getFile(target);
@@ -208,8 +208,8 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
      * @throws IOException
      */
     public void downloadFile(FilePublicVO file, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String realPath = FileUtil.getOsRootDir() + file.getFilePath();
-        String fileNmOrg = file.getFileNmOrg();
+        String realPath = FileUtil.getOsRootDir() + file.getStoragePath();
+        String fileNmOrg = file.getOriginalName();
         getFileUtil().downloadFile(fileNmOrg ,realPath, request, response);
     }
 
