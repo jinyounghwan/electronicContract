@@ -4,14 +4,14 @@
 
 <mapper namespace="com.samsung.framework.mapper.log.RestApiMapper">
     <insert id="insertApiAccessLog" useGeneratedKeys="true">
-        INSERT INTO INFO_LOG(TOKEN_SEQ, USER_SEQ, MENU_SEQ, LOG_TYPE, LOG_ETC , REG_DT, REG_ID, CLIENT_IP)
-        VALUES (#{tokenSeq}, #{userSeq}, #{menuSeq}, #{logType}, #{logEtc}, sysdate(), #{regId}, #{clientIp})
+        INSERT INTO PROCESS_LOG(LOG_SEQ, REF_NO, LOG_TYPE, PROCESS_STEP, IP_ADDRESS, MAC_ADDRESS, CREATED_BY, CREATED_AT)
+        VALUES (#{logSeq}, #{refNo}, #{logType}, #{processStep}, #{ipAddress}, #{macAddress}, #{createdBy}, Sysdate())
         <selectKey keyProperty="logSeq" resultType="long">
             SELECT LAST_INSERT_ID()
         </selectKey>
     </insert>
 
     <update id="updateApiAccessLog">
-        UPDATE INFO_LOG SET LOG_TYPE = #{status}, REG_DT = sysdate() WHERE LOG_SEQ = #{logSeq}
+        UPDATE PROCESS_LOG SET LOG_TYPE = #{logType}, CREATED_AT = sysdate() WHERE LOG_SEQ = #{logSeq}
     </update>
 </mapper>
