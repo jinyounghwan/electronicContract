@@ -5,39 +5,39 @@
 <mapper namespace="com.samsung.framework.mapper.member.MemberMapper">
 
     <select id="memberListCount">
-        SELECT COUNT(1) FROM MEMBER
+        SELECT COUNT(1) FROM USERS
     </select>
 
     <select id="memberListSearchCount">
-        SELECT COUNT(1) FROM MEMBER
+        SELECT COUNT(1) FROM USERS
         <where></where>
-        ORDER BY MEMBER_SEQ DESC
+        ORDER BY EMP_NO DESC
     </select>
 
     <select id="getMemberList" resultType="MemberVO">
-        SELECT MEMBER_SEQ, MEMBER_ID, MEMBER_NAME, EMAIL FROM MEMBER ORDER BY MEMBER_SEQ DESC
+        SELECT EMP_NO, DEPT_CODE, USER_ID, USER_PW, NAME, POSITION, EMAIL, PHONE FROM USERS ORDER BY EMP_NO DESC
         <include refid="mapper.paging.pagingQuery"/>
     </select>
 
     <select id="findMemberById" resultType="MemberVO">
-        SELECT MEMBER_SEQ, MEMBER_ID, DEPT_CODE, MEMBER_NAME, EMAIL FROM MEMBER WHERE MEMBER_SEQ = #{id}
+        SELECT EMP_NO, DEPT_CODE, USER_ID, USER_PW, NAME, POSITION, EMAIL, PHONE FROM USERS WHERE USER_ID = #{id}
     </select>
 
 <!--#################### DEJAY_COMMON ####################-->
     <select id="findMemberByUserName" resultType="MemberVO">
-                 SELECT U.USER_SEQ, U.USER_ID, U.USER_PWD, U.USER_NM, U.USER_EMAIL, U.DEPT_CD
-                   FROM INFO_USER U
-                 WHERE USER_ID = #{userName}
+                 SELECT U.EMP_NO, U.DEPT_CODE, U.USER_ID, U.USER_PW, U.NAME, U.POSITION, U.EMAIL
+                   FROM USERS U
+                 WHERE NAME = #{name}
     </select>
 
     <!-- 최근 로그인 이력 저장을 위한 정보 조회 -->
     <select id="getLoginInfo" resultType="MemberVO">
-                 SELECT U.USER_SEQ, U.USER_ID, U.USER_PWD, U.USER_NM, U.USER_EMAIL, U.DEPT_CD
-                      , U.USER_TYPE
-                   FROM INFO_USER U
-                  WHERE USER_ID = #{userName}
+                 SELECT U.EMP_NO, U.DEPT_CODE, U.USER_ID, U.USER_PW, U.NAME, U.EMAIL, U.ACCOUNT_TYPE, U.PHONE
+                   FROM USERS U
+                  WHERE USER_ID = #{userId}
     </select>
 
+    <!-- 정확한 화면나오면 수정-->
     <select id="findAllUsers">
         /* 전체 사용자 조회 - MemberMapper.findAllUsers */
         WITH DEPT AS (
@@ -64,25 +64,25 @@
         </if>
     </select>
 
-    <insert id="insertMember" useGeneratedKeys="true">
+    <!--<insert id="insertMember" useGeneratedKeys="true">
         INSERT INTO INFO_USER(MEMBER_ID, MEMBER_NAME, EMAIL)
              VALUES (#{memberId}, #{memberName}, #{email})
         <selectKey keyProperty="id" resultType="long">
              SELECT LAST_INSERT_ID()
         </selectKey>
-    </insert>
+    </insert>-->
 
     <insert id="insert" useGeneratedKeys="true">
-        INSERT INTO INFO_USER(USER_TYPE,USER_ID, USER_PWD, DEPT_CD, USER_NM, USER_EMAIL, USER_TEL, APPOINT_CD, POSITION_CD, REG_DT, REG_ID, LAST_DT, LAST_ID)
-             VALUES ('USER0102',#{id}, #{password}, #{deptCode}, #{name}, #{email}, #{tel}, #{appointCode}, #{positionCode}, sysdate() ,'admin', sysdate(), 'admin')
+        INSERT INTO USERS(EMP_NO, DEPT_CD, USER_ID, USER_PW, NAME, ACCOUNT_TYPE, POSITION, EMAIL, PHONE, USE_YN, EMPLOYEED_AT, RESIGNED_AT, CREATE_BY, CREATE_AT, UPDATED_BY, UPDATED_AT)
+             VALUES (#{empNo}, #{deptCd}, #{userId}, #{userPw}, #{name}, #{accountType}, #{position}, #{email}, #{phone},'Y', #{employeedAt}, #{resignedAt}, 'admin',sysdate() ,'admin', sysdate())
         <selectKey keyProperty="logId1" resultType="String">
              SELECT LAST_INSERT_ID()
         </selectKey>
     </insert>
 
     <update id="updatePwd">
-        UPDATE INFO_USER U
-        SET USER_PWD = #{password}
-        WHERE U.USER_ID = #{memberId}
+        UPDATE USER U
+        SET USER_PWD = #{userPw}
+        WHERE U.USER_ID = #{userId}
     </update>
 </mapper>

@@ -35,7 +35,7 @@ import java.util.Map;
 public class MemberServiceImpl extends ParentService implements MemberService{
     // TODO: IJ NPE 위험코드 Optional로 변경
     private final ValidationUtil validationUtil;
-//    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final TokenFactory tokenFactory;
 
     /**
@@ -100,7 +100,7 @@ public class MemberServiceImpl extends ParentService implements MemberService{
         return getCommonMapper().getMemberMapper().findMemberByUserName(userName);
     }
 
-    /**
+    /** TODO: 멤버등록 RestContorller 버전
      * 멤버 등록
      * @param member {@link Member}
      * @return {@link Member}
@@ -127,20 +127,21 @@ public class MemberServiceImpl extends ParentService implements MemberService{
      */
     public TokenObjectVO signUp(SignUpRequest signUpRequest) {
         var target = User.builder()
-                .id(signUpRequest.getId())
+                .empNo(signUpRequest.getEmpNo())
+                .deptCode(signUpRequest.getDeptCode())
+                .userId(signUpRequest.getUserId())
+                .userPw(bCryptPasswordEncoder.encode(signUpRequest.getUserPw()))
 //                .password(bCryptPasswordEncoder.encode(signUpRequest.getPassword()))
                 .name(signUpRequest.getName())
-                .tel(signUpRequest.getUserTel())
+                .accountType(signUpRequest.getAccountType())
+                .position(signUpRequest.getPosition())
                 .email(signUpRequest.getEmail())
-                .deptCode(signUpRequest.getDeptCode())
-                .appointCode(signUpRequest.getAppointCode())
-                .positionCode(signUpRequest.getPositionCode())
-                .regId(signUpRequest.getId())
+                .phone(signUpRequest.getPhone())
                 .build();
 
         int inserted = getCommonMapper().getMemberMapper().insert(target);
-        if(inserted > 0) {
-            TokenObjectVO tokenObjectVO = tokenFactory.createJWT(signUpRequest.getId(), signUpRequest.getPassword(), signUpRequest.getAuthority());
+        if(inserted > 0) { // TOKEN 추후 제거
+            TokenObjectVO tokenObjectVO = tokenFactory.createJWT(signUpRequest.getUserId(), signUpRequest.getUserPw(), "ROLE_USER");
             return tokenObjectVO;
         }
 

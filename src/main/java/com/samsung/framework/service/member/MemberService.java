@@ -25,7 +25,7 @@ public interface MemberService {
     MemberVO findMemberByUserName(String userName);
 
     // 멤버 등록
-    Member insertMember(Member member);
+    //Member insertMember(Member member);
 
     // 사용자 등록(w/ token)
     TokenObjectVO signUp(SignUpRequest signUpRequest);

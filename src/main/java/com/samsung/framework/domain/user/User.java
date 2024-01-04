@@ -7,46 +7,61 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @ToString(callSuper = false)
 @Getter
-@EqualsAndHashCode(of = {"id", "name"}, callSuper = false)
+@EqualsAndHashCode(of = {"empNo", "userId","name"}, callSuper = false)
 public class User extends BaseEntity {
-
-    private long seq;
+    @NotNull(message= "사번은 필수 값 입니다.")
+    private int empNo;
+    private String deptCode;
     @NotNull(message = "아이디는 필수 값 입니다.")
-    private String id;
+    private String userId;
     @NotNull(message = "비밀번호는 필수 값 입니다.")
-    private String password;
+    private String userPw;
     @NotNull(message = "이름은 필수 값 입니다.")
     private String name;
+    private String accountType;
+    @NotNull(message = "직위는 필수 값 입니다.")
+    private String position;
     private String email;
-    private String tel;
-    private String picture;
-    private String userType;
-//    private Set<AuthorityEnum> authority;
-    private String deptCode;
-    private String appointCode;
-    private String positionCode;
+    private String phone;
+    private String useYn;
+    private LocalDateTime employeedAt;
+    private LocalDateTime resignedAt;
+    private String createdBy;
+    private LocalDateTime createdAt;
+    private String updatedBy;
+    private LocalDateTime updatedAt;
 
+//    private Set<AuthorityEnum> authority;
     @Builder
-    public User(String tableName, String logId1, String logId2, String logType, String logJson, String remark, String regId, String id, String password, String name, String email, String tel, String userType ,String picture,String deptCode, String appointCode, String positionCode) {
+    public User(String tableName, String logId1, String logId2, String logType, String logJson, String remark, String regId
+            , int empNo, String deptCode, String userId, String userPw, String name, String accountType, String position, String email, String phone,String useYn
+            , LocalDateTime employeedAt,  LocalDateTime resignedAt, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt) {
         super(tableName, logId1, logId2, logType, logJson, remark, regId);
-        this.id = id;
-        this.password = password;
-        this.name = name;
-        this.email = email;
-        this.tel = tel;
-        this.picture = picture;
-        this.userType = userType;
-//      this.authority = authority;
+        this.empNo = empNo;
         this.deptCode = deptCode;
-        this.appointCode = appointCode;
-        this.positionCode = positionCode;
+        this.userId = userId;
+        this.userPw = userPw;
+        this.name = name;
+        this.accountType = accountType;
+        this.position = position;
+        this.email = email;
+        this.phone = phone;
+        this.useYn = useYn;
+        this.employeedAt = employeedAt;
+        this.resignedAt = resignedAt;
+        this.createdBy = createdBy;
+        this.createdAt = createdAt;
+        this.updatedBy = updatedBy;
+        this.updatedAt = updatedAt;
+//      this.authority = authority;
     }
 
-    public User update(String name, String picture) {
+    public User update(String name) {
         this.name = name;
-        this.picture = picture;
 
         return this;
     }

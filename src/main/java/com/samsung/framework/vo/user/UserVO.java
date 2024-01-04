@@ -5,28 +5,25 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @ToString
-@EqualsAndHashCode(of = {"logSeq", "tokenSeq", "userSeq", "menuSeq"}, callSuper = false)
+@EqualsAndHashCode(of = {"empNo","userId","name"}, callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 public class UserVO {
-    private long userSeq;
-    private String userType;
+    private int empNo;
+    private String deptCode;
     private String userId;
-    private String userNm;
-    private String deptCd;
-    private String deptNm;
-    private String appointCd;
-    private String appointNm;
-    private String positionCd;
-    private String positionNm;
-    private String userTel;
-    private String userEmail;
-    private String userEtc;
+    private String userPw;
+    private String name;
+    private String accountType;
+    private String position;
+    private String email;
+    private String phone;
     private String useYn;
-    private String delYn;
-    private LocalDateTime regDt;
-    private String regId;
-    private LocalDateTime lastDt;
-    private String lastId;
+    private LocalDateTime employeedAt;
+    private LocalDateTime resignedAt;
+    private String createdBy;
+    private LocalDateTime createdAt;
+    private String updatedBy;
+    private LocalDateTime updatedAt;
 }

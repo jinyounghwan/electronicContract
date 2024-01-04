@@ -87,7 +87,7 @@ public class MemberController extends ParentController {
 
     @PostMapping("/sign-up")
     public ResponseEntity signUp(@RequestBody SignUpRequest signUpRequest) throws CustomLoginException {
-        MemberVO memberVO = getCommonService().getMemberService().findMemberByUserName(signUpRequest.getId());
+        MemberVO memberVO = getCommonService().getMemberService().findMemberByUserName(signUpRequest.getUserId());
 
         if(!StringUtil.isEmpty(memberVO)){
             throw new CustomLoginException(ExceptionCodeMsgEnum.ACCOUNT_DUPLICATE.getCode(), ExceptionCodeMsgEnum.ACCOUNT_DUPLICATE.getMsg());

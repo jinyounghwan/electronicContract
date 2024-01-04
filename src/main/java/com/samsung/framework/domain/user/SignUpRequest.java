@@ -3,43 +3,55 @@ package com.samsung.framework.domain.user;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @ToString(callSuper = false)
 @Setter
 @Getter
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"id", "name"})
+@EqualsAndHashCode(of = {"empNo","userId", "name"})
 public class SignUpRequest {
-
-    private long seq;
+    @NotNull(message= "사번은 필수 값 입니다.")
+    private int empNo;
+    private String deptCode;
     @NotNull(message = "아이디는 필수 값 입니다.")
-    private String id;
+    private String userId;
     @NotNull(message = "비밀번호는 필수 값 입니다.")
-    private String password;
+    private String userPw;
     @NotNull(message = "이름은 필수 값 입니다.")
     private String name;
-    private String userTel;
+    private String accountType;
+    @NotNull(message = "직위는 필수 값 입니다.")
+    private String position;
     private String email;
-    private String picture;
-    private String userType;
-    @NotNull(message = "권한은 필수 값 입니다.")
-    private String authority; // 권한 임시로 String으로 변경
-    private String deptCode;
-    private String appointCode;
-    private String positionCode;
+    private String phone;
+    private String useYn;
+    private LocalDateTime employeedAt;
+    private LocalDateTime resignedAt;
+    private String createdBy;
+    private LocalDateTime createdAt;
+    private String updatedBy;
+    private LocalDateTime updatedAt;
+
 
     @Builder
-    public SignUpRequest(long seq, String id, String password, String name, String email, String picture, String userType, String authority, String deptCode, String appointCode, String positionCode, String userTel) {
-        this.seq = seq;
-        this.id = id;
-        this.password = password;
-        this.name = name;
-        this.email = email;
-        this.userTel = userTel;
-        this.picture = picture;
-        this.userType = userType;
-        this.authority = authority;
+    public SignUpRequest(int empNo, String deptCode, String userId, String userPw, String name, String accountType, String position, String email, String phone,String useYn
+            , LocalDateTime employeedAt,  LocalDateTime resignedAt, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt) {
+        this.empNo = empNo;
         this.deptCode = deptCode;
-        this.appointCode = appointCode;
-        this.positionCode = positionCode;
+        this.userId = userId;
+        this.userPw = userPw;
+        this.name = name;
+        this.accountType = accountType;
+        this.position = position;
+        this.email = email;
+        this.phone = phone;
+        this.useYn = useYn;
+        this.employeedAt = employeedAt;
+        this.resignedAt = resignedAt;
+        this.createdBy = createdBy;
+        this.createdAt = createdAt;
+        this.updatedBy = updatedBy;
+        this.updatedAt = updatedAt;
     }
 }
