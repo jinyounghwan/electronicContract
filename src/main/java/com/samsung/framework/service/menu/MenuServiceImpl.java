@@ -56,6 +56,14 @@ public class MenuServiceImpl extends ParentService implements MenuService {
     }
 
     /**
+     * 메뉴 리스트 조회
+     */
+    public List<MenuVO> getMenuList(){
+        return getCommonMapper().getMenuMapper().getMenuList();
+    }
+
+
+    /**
      * 대메뉴 리스트 조회
      * @return 대메뉴 List
      */

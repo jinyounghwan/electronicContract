@@ -10,6 +10,7 @@ import com.samsung.framework.service.file.FilePublicServiceImpl;
 import com.samsung.framework.service.mail.MailService;
 import com.samsung.framework.service.member.MemberService;
 import com.samsung.framework.service.menu.MenuService;
+import com.samsung.framework.service.menu.MenuServiceImpl;
 import com.samsung.framework.service.record.RecordService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class CommonService {
     private final BoardService boardService;
     private final BoardPublicServiceImpl boardPublicServiceImpl;
     private final ExcelPublicServiceImpl excelPublicServiceImpl;
-    private final MenuService menuService;
+    private final MenuServiceImpl menuServiceImpl;
     private final FilePublicServiceImpl fileServiceImpl;
     private final MailService mailService;
     private final RecordService recordService;

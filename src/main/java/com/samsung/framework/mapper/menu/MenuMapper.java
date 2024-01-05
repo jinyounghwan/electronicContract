@@ -15,6 +15,8 @@ public interface MenuMapper extends GeneralMapper {
     // Menu Ord 최대 순서 조회
     Long getOrdMax(Long pMenuSeq);
 
+    // 메뉴 리스트
+    List<MenuVO> getMenuList();
     // 대메뉴 리스트 조회
     List<MenuVO> getLgMenuList();
 

@@ -11,8 +11,8 @@
             , ${alias}NAME, ${alias}ORD
             , ${alias}DISPLAY_YN, ${alias}USE_YN
             , ${alias}DEL_YN, ${alias}CREATED_BY
-            , ${alias}CREATE_AT, ${alias}UPDATED_BY
-            , ${alias}UPDATE_AT
+            , ${alias}CREATED_AT, ${alias}UPDATED_BY
+            , ${alias}UPDATED_AT
     </sql>
 
 
@@ -49,7 +49,14 @@
     <!-- 공통 ]] -->
 
     <!-- 조회 [[ -->
-
+    <select id="getMenuList" resultType="MenuVO">
+        SELECT
+            <include refid="menuColumn"><property name="alias" value="MN."/></include>
+        FROM
+            MENU MN
+        WHERE
+            SUBSTRING(MN.MENU_CODE FROM 1 FOR 4) = 'MENU'
+    </select>
    <!-- <select id="getSmMenuList" resultType="MenuVO" parameterType="MenuSearchVO">
         /* 소메뉴 조회 - MenuMapper.getSmMenuList */
         WITH SRCH_MENU AS(
