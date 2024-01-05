@@ -41,7 +41,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-aop:3.0.4'
-	compileOnly 'org.springframework.boot:spring-boot-starter-security'
+//	compileOnly 'org.springframework.boot:spring-boot-starter-security'
 	// Encryption
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 	// PropertiesUtil
@@ -66,13 +66,13 @@ dependencies {
 	implementation 'org.apache.poi:poi:5.2.0'
 	implementation 'org.apache.poi:poi-ooxml:5.2.0'
 
-	implementation (group: 'org.springframework.security', name: 'spring-security-config', version: '6.1.1')
+//	implementation (group: 'org.springframework.security', name: 'spring-security-config', version: '6.1.1')
 	implementation (group: 'org.springframework.security', name: 'spring-security-core', version: '6.1.1')
-	implementation (group: 'org.springframework.security', name: 'spring-security-crypto', version: '6.1.1')
-	implementation (group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: '6.1.1')
-	implementation (group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: '6.1.1')
-	implementation (group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: '6.1.1')
-	implementation (group: 'org.springframework.security', name: 'spring-security-web', version: '6.1.1')
+//	implementation (group: 'org.springframework.security', name: 'spring-security-crypto', version: '6.1.1')
+//	implementation (group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: '6.1.1')
+//	implementation (group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: '6.1.1')
+//	implementation (group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: '6.1.1')
+//	implementation (group: 'org.springframework.security', name: 'spring-security-web', version: '6.1.1')
 
 	// devtools
 	compileOnly('org.springframework.boot:spring-boot-devtools')
