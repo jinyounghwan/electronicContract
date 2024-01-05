@@ -2,8 +2,9 @@ package com.samsung.framework.service.member;
 
 import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
+import com.samsung.framework.common.utils.CryptoUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
-import com.samsung.framework.common.utils.TokenFactory;
+//import com.samsung.framework.common.utils.TokenFactory;
 import com.samsung.framework.common.utils.ValidationUtil;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.domain.common.SearchObject;
@@ -20,7 +21,6 @@ import com.samsung.framework.vo.user.UserVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,8 +35,8 @@ import java.util.Map;
 public class MemberServiceImpl extends ParentService implements MemberService{
     // TODO: IJ NPE 위험코드 Optional로 변경
     private final ValidationUtil validationUtil;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final TokenFactory tokenFactory;
+    private final CryptoUtil cryptoUtil;
+//    private final TokenFactory tokenFactory;
 
     /**
      * 멤버 목록 조회
@@ -125,12 +125,12 @@ public class MemberServiceImpl extends ParentService implements MemberService{
      * @param signUpRequest {@link SignUpRequest}
      * @return {@link TokenObjectVO}
      */
-    public TokenObjectVO signUp(SignUpRequest signUpRequest) {
+    public User signUp(SignUpRequest signUpRequest) {
         var target = User.builder()
                 .empNo(signUpRequest.getEmpNo())
                 .deptCode(signUpRequest.getDeptCode())
                 .userId(signUpRequest.getUserId())
-                .userPw(bCryptPasswordEncoder.encode(signUpRequest.getUserPw()))
+                .userPw(cryptoUtil.encodePassword(signUpRequest.getUserPw()))
 //                .password(bCryptPasswordEncoder.encode(signUpRequest.getPassword()))
                 .name(signUpRequest.getName())
                 .accountType(signUpRequest.getAccountType())
@@ -141,11 +141,12 @@ public class MemberServiceImpl extends ParentService implements MemberService{
 
         int inserted = getCommonMapper().getMemberMapper().insert(target);
         if(inserted > 0) { // TOKEN 추후 제거
-            TokenObjectVO tokenObjectVO = tokenFactory.createJWT(signUpRequest.getUserId(), signUpRequest.getUserPw(), "ROLE_USER");
-            return tokenObjectVO;
+//            TokenObjectVO tokenObjectVO = tokenFactory.createJWT(signUpRequest.getUserId(), signUpRequest.getUserPw(), "ROLE_USER");
+//            return tokenObjectVO;
+            return target;
         }
 
-        return new TokenObjectVO();
+        return null; // 임시 처리
     }
 
     /**

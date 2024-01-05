@@ -1,32 +1,32 @@
 package com.samsung.framework.service.member;
 
-import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
-import com.samsung.framework.common.enums.RequestTypeEnum;
-import com.samsung.framework.common.enums.TableNameEnum;
-import com.samsung.framework.common.exception.CustomLoginException;
-import com.samsung.framework.common.utils.ObjectHandlingUtil;
-import com.samsung.framework.common.utils.TokenFactory;
-import com.samsung.framework.common.utils.ValidationUtil;
-import com.samsung.framework.domain.common.Paging;
-import com.samsung.framework.domain.common.SearchObject;
-import com.samsung.framework.domain.common.TokenObjectVO;
-import com.samsung.framework.domain.member.LoginRequest;
-import com.samsung.framework.domain.member.Member;
-import com.samsung.framework.domain.user.SignUpRequest;
-import com.samsung.framework.domain.user.User;
-import com.samsung.framework.service.common.ParentService;
-import com.samsung.framework.vo.common.CollectionPagingVO;
-import com.samsung.framework.vo.member.MemberVO;
-import com.samsung.framework.vo.search.SearchVO;
-import com.samsung.framework.vo.user.UserVO;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+//import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
+//import com.samsung.framework.common.enums.RequestTypeEnum;
+//import com.samsung.framework.common.enums.TableNameEnum;
+//import com.samsung.framework.common.exception.CustomLoginException;
+//import com.samsung.framework.common.utils.ObjectHandlingUtil;
+//import com.samsung.framework.common.utils.TokenFactory;
+//import com.samsung.framework.common.utils.ValidationUtil;
+//import com.samsung.framework.domain.common.Paging;
+//import com.samsung.framework.domain.common.SearchObject;
+//import com.samsung.framework.domain.common.TokenObjectVO;
+//import com.samsung.framework.domain.member.LoginRequest;
+//import com.samsung.framework.domain.member.Member;
+//import com.samsung.framework.domain.user.SignUpRequest;
+//import com.samsung.framework.domain.user.User;
+//import com.samsung.framework.service.common.ParentService;
+//import com.samsung.framework.vo.common.CollectionPagingVO;
+//import com.samsung.framework.vo.member.MemberVO;
+//import com.samsung.framework.vo.search.SearchVO;
+//import com.samsung.framework.vo.user.UserVO;
+//import lombok.RequiredArgsConstructor;
+//import lombok.extern.slf4j.Slf4j;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.stereotype.Service;
+//
+//import java.util.ArrayList;
+//import java.util.List;
+//import java.util.Map;
 
 
 //@Slf4j

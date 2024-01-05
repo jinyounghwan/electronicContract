@@ -1,7 +1,7 @@
 package com.samsung.framework.service.test;
 
-import com.samsung.framework.common.utils.CryptoUtil;
-import com.samsung.framework.common.utils.JwtUtil;
+//import com.samsung.framework.common.utils.CryptoUtil;
+//import com.samsung.framework.common.utils.JwtUtil;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.domain.member.LoginRequest;
 import com.samsung.framework.vo.common.PagingVO;
@@ -19,8 +19,8 @@ import java.util.List;
 @Service
 public class TestService {
 
-    private final JwtUtil jwtUtil;
-    private final CryptoUtil cryptoUtil;
+//    private final JwtUtil jwtUtil;
+//    private final CryptoUtil cryptoUtil;
 
     private Long expiredMs = 1000 * 60 * 60l;
 
@@ -56,8 +56,8 @@ public class TestService {
      */
     public void passwordEncode(@Valid LoginRequest loginRequest) {
         String rawPassword = "ijzone";
-        String encodedPassword = cryptoUtil.encodePassword(loginRequest.getPassword());
-        log.info("encodedPassword: {}", encodedPassword);
+//        String encodedPassword = cryptoUtil.encodePassword(loginRequest.getPassword());
+//        log.info("encodedPassword: {}", encodedPassword);
 //        boolean passwordMatches = cryptoUtil.isPasswordMatches(loginRequest.getPassword(), encodedPassword);
 //        log.info("passwordMatches? {}", passwordMatches);
     }

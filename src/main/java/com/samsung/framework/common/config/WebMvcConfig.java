@@ -1,8 +1,8 @@
 package com.samsung.framework.common.config;
 
-import com.samsung.framework.common.interceptor.AuthorityInterceptor;
-import com.samsung.framework.common.interceptor.LoggerInterceptor;
-import com.samsung.framework.common.interceptor.LoginInterceptor;
+//import com.samsung.framework.common.interceptor.AuthorityInterceptor;
+//import com.samsung.framework.common.interceptor.LoggerInterceptor;
+//import com.samsung.framework.common.interceptor.LoginInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -16,9 +16,9 @@ import java.util.List;
 public class WebMvcConfig implements WebMvcConfigurer {
     private final long MAX_AGE_SEC = 3600L;
 
-    private final LoggerInterceptor loggerInterceptor;
-    private final LoginInterceptor loginInterceptor;
-    private final AuthorityInterceptor authorityInterceptor;
+//    private final LoggerInterceptor loggerInterceptor;
+//    private final LoginInterceptor loginInterceptor;
+//    private final AuthorityInterceptor authorityInterceptor;
 
     // Logging
     private final List<String> loggerIncludePattern = Arrays.asList("/**");

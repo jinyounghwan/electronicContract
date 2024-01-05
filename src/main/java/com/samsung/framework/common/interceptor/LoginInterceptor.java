@@ -3,7 +3,6 @@ package com.samsung.framework.common.interceptor;
 import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
 import com.samsung.framework.common.enums.MapKeyStringEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
-import com.samsung.framework.common.utils.JwtUtil;
 import com.samsung.framework.service.member.MemberService;
 import com.samsung.framework.vo.common.TokenVO;
 import com.samsung.framework.vo.member.MemberVO;
@@ -25,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
 
-    private final JwtUtil jwtUtil;
+//  private final JwtUtil jwtUtil;
     private final MemberService memberService;
 
     @Override

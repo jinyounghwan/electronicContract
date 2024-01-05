@@ -4,7 +4,6 @@ import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
 import com.samsung.framework.common.enums.MapKeyStringEnum;
 import com.samsung.framework.common.enums.RequestTypeEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
-import com.samsung.framework.common.utils.JwtUtil;
 import com.samsung.framework.mapper.authority.AuthorityMapper;
 import com.samsung.framework.service.member.MemberService;
 import com.samsung.framework.vo.authority.MenuAuthorityVO;
@@ -32,7 +31,6 @@ import java.util.Arrays;
 @Component
 public class AuthorityInterceptor implements HandlerInterceptor {
 
-    private final JwtUtil jwtUtil;
     private final MemberService memberService;
     private final AuthorityMapper authorityMapper;
 

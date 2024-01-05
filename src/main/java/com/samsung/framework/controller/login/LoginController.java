@@ -45,7 +45,7 @@ public class LoginController extends ParentController {
         HttpSession session = request.getSession();
 
         if(loginInfo!=null){
-            getCommonUtil().getTokenFactory().createJWT(loginInfo.getUserId(), null, loginInfo.getAuthority()); // token 생성
+//            getCommonUtil().getTokenFactory().createJWT(loginInfo.getUserId(), null, loginInfo.getAuthority()); // token 생성
             session.setAttribute("loginInfo", loginInfo);
             log.info("session userInfo : {}", loginInfo);
 

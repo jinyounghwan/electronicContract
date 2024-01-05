@@ -5,6 +5,7 @@ import com.samsung.framework.domain.common.TokenObjectVO;
 import com.samsung.framework.domain.member.LoginRequest;
 import com.samsung.framework.domain.member.Member;
 import com.samsung.framework.domain.user.SignUpRequest;
+import com.samsung.framework.domain.user.User;
 import com.samsung.framework.vo.common.CollectionPagingVO;
 import com.samsung.framework.vo.member.MemberVO;
 import com.samsung.framework.vo.search.SearchVO;
@@ -28,7 +29,7 @@ public interface MemberService {
     //Member insertMember(Member member);
 
     // 사용자 등록(w/ token)
-    TokenObjectVO signUp(SignUpRequest signUpRequest);
+    User signUp(SignUpRequest signUpRequest);
 
     // 로그인 정보 조회
     MemberVO getLoginInfo(LoginRequest loginRequest);
