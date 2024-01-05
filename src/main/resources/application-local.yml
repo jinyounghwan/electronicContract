@@ -5,8 +5,8 @@ spring:
     #    username: dejay_was
     #    password: 22@samsung
     jdbc-url: jdbc:log4jdbc:mariadb://10.34.220.195:3307/electronic_contract
-    username: dejay_was
-    password: 22@dejay
+    username: sdi_hungary_db
+    password: contract$@salary
   security:
     user:
       password: 0000

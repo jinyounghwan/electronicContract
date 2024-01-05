@@ -1,6 +1,5 @@
 package com.samsung.framework;
 
-import com.samsung.framework.domain.Hello;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -23,11 +22,10 @@ public class IndexController {
 
     @GetMapping({"", "/"})
     public ResponseEntity index() {
-        var hello = new Hello(counter.incrementAndGet(), String.format(content, "Samsung Framework"));
         HttpHeaders headers = new HttpHeaders();
-        headers.add("headertest", "headervalue");
+        headers.add("test", "value");
 
-        return ResponseEntity.ok().headers(headers).body(hello);
+        return ResponseEntity.ok().headers(headers).body(null);
     }
 
     /**
