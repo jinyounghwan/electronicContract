@@ -26,10 +26,6 @@ public interface MenuMapper extends GeneralMapper {
     // 소메뉴 리스트 조회
     List<MenuVO> getSmMenuList();
 
-    // 메뉴 순서 변경
-    //@EntityLog
-    int updateOrd(Menu menu);
-
     // [공통 코드] 메뉴 1 depth 조회
     List<MenuVO> findCommonMenuCodeList();
 

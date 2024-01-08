@@ -62,7 +62,6 @@ public class MenuServiceImpl extends ParentService implements MenuService {
         return getCommonMapper().getMenuMapper().getMenuList();
     }
 
-
     /**
      * 대메뉴 리스트 조회
      * @return 대메뉴 List
@@ -88,79 +87,4 @@ public class MenuServiceImpl extends ParentService implements MenuService {
     }
 
 
-    /**
-     * 메뉴 단 건 조회
-     * @param searchVO
-     * @return Menu Object
-     */
-    public MenuVO rowMenu(MenuSearchVO searchVO) {
-        return (MenuVO) getCommonMapper().getMenuMapper().rowBySearch(searchVO);
-    }
-
-    /**
-     * 메뉴 내용 수정
-     * @param menu
-     * @return 수정 성공 1, 수정 실패 0
-     */
-    public int updateMenu(Menu menu, MemberVO member) {
-
-        // menuId에 해당하는 menuSeq 조회
-        Long menuSeq = (Long) getCommonMapper().getMenuMapper().rowByKey(menu.getMenuCode());
-
-         Menu target = Menu.builder()
-                            .name(menu.getName())
-                            .menuCode(menu.getMenuCode())
-//                          .menuUrl(menu.getMenuUrl())
-                            .displayYn(menu.getDisplayYn())
-                            .tableName(TableNameEnum.MENU.name())
-                            .logId1(String.valueOf(menuSeq))
-                            .logType(RequestTypeEnum.UPDATE.getRequestType())
-                            .logId2(null)
-                            .logJson(null)
-                            .remark(null)
-                            .regId(member.getUserId())
-                            .build();
-
-         int iAffectedRows = getCommonMapper().getMenuMapper().update(target);
-         
-         return iAffectedRows;
-    }
-
-    /**
-     * 메뉴 순서 변경
-     * @param menuList
-     * @return 변경 성공 1 , 변경 실패 0
-     */
-    public Integer updateOrd(List<Menu> menuList, MemberVO member){
-
-        Iterator<Menu> iter = menuList.iterator();
-
-        int iAffectedRows=0;
-        while(iter.hasNext()) {
-            Menu menu = iter.next();
-            Long menuSeq = (Long) getCommonMapper().getMenuMapper().rowByKey(menu.getMenuCode());
-            Menu target = Menu.builder()
-                                .menuCode(menu.getMenuCode())
-                                .ord(menu.getOrd())
-//                              .pMenuSeq(menu.getPMenuSeq())
-                                .tableName(TableNameEnum.MENU.name())
-                                .logId1(String.valueOf(menuSeq))
-                                .logType(RequestTypeEnum.UPDATE.getRequestType())
-                                .logId2(null)
-                                .logJson(null)
-                                .remark(null)
-                                .regId(member.getUserId())
-                                .build();
-
-            iAffectedRows = getCommonMapper().getMenuMapper().updateOrd(target);
-            if(iAffectedRows<=0) {
-                break;
-            }
-            
-        }
-
-        /* int iAffectedRows  = getCommonMapper().getMenuMapper().updateOrd(menuList); */
-
-        return iAffectedRows;
-    }
 }
