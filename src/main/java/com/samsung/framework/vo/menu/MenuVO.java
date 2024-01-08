@@ -24,6 +24,9 @@ public class MenuVO {
     // 메뉴 순서
     private int ord;
 
+    // 메뉴 URL 정보
+    private String path;
+
     // 노출 여부
     private String displayYn;
 
@@ -43,11 +46,8 @@ public class MenuVO {
     private String updatedBy;
 
     // 수정일
-    private String updatedAt;
+    private LocalDateTime updatedAt;
 
-    // 부모 메뉴 타이틀
-//    private String pTitle;
-
-    // 부모 메뉴 SEQ
-//    private Long pMenuSeq;
+     //부모 메뉴 코드
+     private String pMenuCode;
 }

@@ -9,10 +9,10 @@
     <sql id="menuColumn">
             ${alias}MENU_SEQ, ${alias}MENU_CODE
             , ${alias}NAME, ${alias}ORD
-            , ${alias}DISPLAY_YN, ${alias}USE_YN
-            , ${alias}DEL_YN, ${alias}CREATED_BY
-            , ${alias}CREATED_AT, ${alias}UPDATED_BY
-            , ${alias}UPDATED_AT
+            , ${alias}PATH, ${alias}DISPLAY_YN
+            , ${alias}USE_YN, ${alias}DEL_YN
+            , ${alias}CREATED_BY, ${alias}CREATED_AT
+            , ${alias}UPDATED_BY, ${alias}UPDATED_AT
     </sql>
 
 
@@ -49,49 +49,62 @@
     <!-- 공통 ]] -->
 
     <!-- 조회 [[ -->
-    <select id="getMenuList" resultType="MenuVO">
+
+    <select id="getLgMenuList" resultType="MenuVO">
+        /* 대메뉴 조회 - MenuMapper.getLgMenuList */
         SELECT
             <include refid="menuColumn"><property name="alias" value="MN."/></include>
         FROM
             MENU MN
         WHERE
-            SUBSTRING(MN.MENU_CODE FROM 1 FOR 4) = 'MENU'
+            SUBSTRING(MN.MENU_CODE FROM 7 FOR 4) = '0000'
+            AND SUBSTRING(MN.MENU_CODE FROM 5 FOR 6) NOT IN ('000000')
+            AND USE_YN = 'Y'
+            AND DEL_YN = 'N'
+            AND display_yn = 'Y'
+        ORDER BY ORD ASC
     </select>
-   <!-- <select id="getSmMenuList" resultType="MenuVO" parameterType="MenuSearchVO">
+
+    <select id="getMidMenuList" resultType="MenuVO">
+        /* 중간 메뉴 조회 - MenuMapper.getMidMenuList */
+        WITH SRCH_MENU AS(
+            SELECT
+                MN.MENU_CODE PARENT_CODE
+            FROM MENU MN
+            WHERE
+                SUBSTRING(MN.MENU_CODE FROM 7 FOR 4) = '0000'
+              AND SUBSTRING(MN.MENU_CODE FROM 5 FOR 6) NOT IN ('000000')
+        )
+        SELECT  MN.MENU_CODE AS MENU_CODE, MN.NAME AS NAME
+             , SMN.PARENT_CODE AS P_MENU_CODE , MN.PATH AS PATH
+        FROM MENU MN
+        INNER JOIN SRCH_MENU SMN ON SUBSTRING(MN.MENU_CODE FROM 5 FOR 2) = SUBSTRING(SMN.PARENT_CODE FROM 5 FOR 2)
+        WHERE SUBSTRING(MN.MENU_CODE FROM 9 FOR 2) IN ('00') AND SUBSTRING(MN.MENU_CODE FROM 7 FOR 4) NOT IN ('0000')
+            AND USE_YN = 'Y'
+            AND DEL_YN = 'N'
+            AND display_yn = 'Y'
+        ORDER BY ORD ASC
+    </select>
+
+   <select id="getSmMenuList" resultType="MenuVO">
         /* 소메뉴 조회 - MenuMapper.getSmMenuList */
         WITH SRCH_MENU AS(
-            SELECT MN.MENU_SEQ
+            SELECT
+                MN.MENU_CODE PARENT_CODE
             FROM MENU MN
-            <where>
-                <include refid="whereClauseId"><property name="alias" value="MN."/></include>
-            </where>
+            WHERE
+                SUBSTRING (MN.MENU_CODE FROM 9 FOR 2) IN ('00') AND SUBSTRING(MN.MENU_CODE FROM 7 FOR 4) NOT IN ('0000')
         )
-        SELECT
-            <include refid="menuColumn"><property name="alias" value="MN."/></include>
+        SELECT   MN.MENU_CODE AS MENU_CODE, MN.NAME AS NAME
+                ,MN.PATH AS PATH , SMN.PARENT_CODE AS P_MENU_CODE
         FROM MENU MN
-        INNER JOIN SRCH_MENU SMN
-                ON MN.P_MENU_SEQ = SMN.MENU_SEQ
-                ORDER BY MENU_ORD ASC
-        </select>-->
-
-    <!--<select id="getLgMenuList" resultType="MenuVO">
-        /* 대메뉴 조회 - MenuMapper.getLgMenuList */
-        SELECT
-            <include refid="menuColumn"><property name="alias" value="MN."/></include>
-        FROM MENU MN
-        WHERE
-            MN.P_MENU_SEQ IS NULL
-        ORDER BY MENU_ORD ASC
-    </select>-->
-
-    <!--<select id="getOrdMax" resultType="Long" parameterType="Long">
-        /* 최대 메뉴 순서 조회 - MenuMapper.getOrdMax*/
-        SELECT MAX(MN.MENU_ORD) + 1 AS MO
-        FROM MENU MN
-        <where>
-            <include refid="whereClausePSeq"><property name="alias" value="MN."/></include>
-        </where>
-    </select>-->
+        INNER JOIN SRCH_MENU SMN ON SUBSTRING(MN.MENU_CODE FROM 5 FOR 4) = SUBSTRING(SMN.PARENT_CODE FROM 5 FOR 4)
+        WHERE SUBSTRING(MN.MENU_CODE FROM 9 FOR 2) NOT IN('00')
+            AND USE_YN = 'Y'
+            AND DEL_YN = 'N'
+            AND display_yn = 'Y'
+        ORDER BY ORD ASC
+        </select>
 
     <select id="rowByKey" resultType="Long" parameterType="String">
         /* 메뉴 SEQ 값 조회 */
@@ -113,7 +126,6 @@
         </where>
     </select>-->
     <!-- 조회 ]] -->
-
 
     <!-- 저장/수정/삭제 [[ -->
 

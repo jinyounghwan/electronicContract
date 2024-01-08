@@ -3,7 +3,7 @@
 
 <th:block th:fragment="sidebarFragment">
     <aside class="side-bar">
-        <h1 class="sid-bar_title">menu</h1>
+        <h1 class="sid-bar_title">전자 계약 시스템</h1>
         <section class="side-bar__icon-box">
             <section class="side-bar__icon-1">
                 <div></div>
@@ -20,14 +20,14 @@
         let codeMap = new Map();
         $.ajax({
             type: "POST",
-            url: "/code/list",
+            url: "/menu/LgList",
             contentType: "application/json",
             async:false,
             success: function(result){
                 let dataList = Array.from(result);
-
                 menuLgDraw(dataList);
-                menuSmDraw(dataList);
+                menuMidAjax();
+                menuSmAjax()
             },
             error: function(request, status, error){
                 console.log(request);
@@ -36,32 +36,77 @@
         // 사이드바 대메뉴 생성
         function menuLgDraw(dataList){
             for(let data of dataList){
-                let realCodeCd = data.codeCd;
-                let codeCd = data.codeCd.substr(4);
-                if(codeCd.charAt(codeCd.length-1)==="0" && codeCd!=="0000"){
+                let realCodeCd = data.menuCode;
+                if(realCodeCd==="MENU000000") continue;
+                let menuCode = data.menuCode.substr(4);
+                if(menuCode.charAt(2)==="0" && menuCode.substr(2)==="0000"){
                     let menuParent = $("#menu-parent");
-                    codeMap.set(codeCd.substring(0,2), realCodeCd);
-                    menuParent.append(`<li> <a href='#'>${data.codeNm}</a><ul id= ${realCodeCd}> </ul></li>`);
+                    codeMap.set(menuCode, realCodeCd);
+                    menuParent.append(`<li> <a href='#'>${data.name}</a><ul id= ${realCodeCd}> </ul></li>`);
                 }
             }
         }
+        function menuMidAjax(){
+            $.ajax({
+                type:"POST",
+                url:"menu/midList",
+                contentType: "application/json",
+                async: false,
+                success: function(result){
+                    let dataList = Array.from(result);
+                    menuMidDraw(dataList);
+                }
+            });
+        }
+
+        function menuSmAjax(){
+            $.ajax({
+               type:"POST",
+               url:"menu/smList",
+               contentType: "application/json",
+               async: false,
+               success: function(result){
+                   let dataList = Array.from(result);
+                   menuSmDraw(dataList);
+               }
+            });
+        }
+
         // 소메뉴 생성
+        function menuMidDraw(dataList){
+            for(let data of dataList){
+                let realCodeCd = data.menuCode;
+                let menuCode = data.pmenuCode.substr(4);
+                // 부모ID
+                let parentId = codeMap.get(menuCode);
+                let parentElement = document.getElementById(parentId);
+                let url = data.path;
+                if(isEmpty(url)) {
+                    url = "#";
+                }
+                parentElement.innerHTML +=`<li id= ${realCodeCd}> <a href='${url}'>${data.name}</a></li>`;
+            }
+            codeMap = new Map();
+            for(let data of dataList){
+                let realCodeCd = data.menuCode;
+                let menuCode = data.menuCode.substr(4);
+                codeMap.set(menuCode,realCodeCd);
+            }
+
+        }
+
         function menuSmDraw(dataList){
             for(let data of dataList){
-                let realCodeCd = data.codeCd;
-                let codeCd = data.codeCd.substr(4);
-
-                if(codeCd.charAt(codeCd.length-1)!=='0'){
-                    // 부모ID
-                    let parentId = codeMap.get(codeCd.substring(0,2));
-                    let parentElement = document.getElementById(parentId);
-                    let url = data.codeEtc;
-                    if(isEmpty(url)) {
-                        url = "#";
-                    }
-                    parentElement.innerHTML +=`<li id= ${realCodeCd}> <a href='${url}'>${data.codeNm}</a></li>`;
-
+                let realCodeCd = data.menuCode;
+                let menuCode = data.pmenuCode.substr(4);
+                // 부모 ID
+                let parentId = codeMap.get(menuCode);
+                let parentElement = document.getElementById(parentId);
+                let url = data.path;
+                if(isEmpty(url)){
+                    url='#';
                 }
+                parentElement.innerHTML +=`<li id= ${realCodeCd}> <a href='${url}'>${data.name}</a></li>`;
             }
         }
     </script>

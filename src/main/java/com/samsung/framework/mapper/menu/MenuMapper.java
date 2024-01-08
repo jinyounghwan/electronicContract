@@ -20,8 +20,11 @@ public interface MenuMapper extends GeneralMapper {
     // 대메뉴 리스트 조회
     List<MenuVO> getLgMenuList();
 
+    // 2depth Menu 리스트 조회
+    List<MenuVO> getMidMenuList();
+
     // 소메뉴 리스트 조회
-    List<MenuVO> getSmMenuList(MenuSearchVO searchVO);
+    List<MenuVO> getSmMenuList();
 
     // 메뉴 순서 변경
     //@EntityLog
