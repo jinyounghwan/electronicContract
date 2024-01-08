@@ -19,26 +19,26 @@ import java.util.Map;
 @RequestMapping("/mail")
 public class MailController extends ParentController {
 
-    @PostMapping("/auth")
-    public ResponseEntity mailAuthSend(@RequestBody MemberVO member){
-       getCommonService().getMailService().mailAuthSend(member);
-       return new ResponseEntity(member, HttpStatus.OK);
-   }
-
-   @PostMapping("/getEmail")
-    public ResponseEntity emailCheck(@RequestBody MemberVO member){
-        MemberVO target = getCommonService().getMailService().getEmail(member);
-
-        return new ResponseEntity(target, HttpStatus.OK);
-   }
-
-
-    @PostMapping("/authNumberCheck")
-    public ResponseEntity authNumberCheck(@RequestBody MemberVO member) throws Exception {
-        Map<String,Object> target = getCommonService().getMailService().getAuthNumber(member);
-
-        return ResponseEntity.ok(target);
-    }
+//    @PostMapping("/auth")
+//    public ResponseEntity mailAuthSend(@RequestBody MemberVO member){
+//       getCommonService().getMailService().mailAuthSend(member);
+//       return new ResponseEntity(member, HttpStatus.OK);
+//   }
+//
+//   @PostMapping("/getEmail")
+//    public ResponseEntity emailCheck(@RequestBody MemberVO member){
+//        MemberVO target = getCommonService().getMailService().getEmail(member);
+//
+//        return new ResponseEntity(target, HttpStatus.OK);
+//   }
+//
+//
+//    @PostMapping("/authNumberCheck")
+//    public ResponseEntity authNumberCheck(@RequestBody MemberVO member) throws Exception {
+//        Map<String,Object> target = getCommonService().getMailService().getAuthNumber(member);
+//
+//        return ResponseEntity.ok(target);
+//    }
 
 
 }

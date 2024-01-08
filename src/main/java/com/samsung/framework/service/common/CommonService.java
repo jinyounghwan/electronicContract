@@ -32,7 +32,7 @@ public class CommonService {
     private final ExcelPublicServiceImpl excelPublicServiceImpl;
     private final MenuServiceImpl menuServiceImpl;
     private final FilePublicServiceImpl fileServiceImpl;
-    private final MailService mailService;
+//  private final MailService mailService;
     private final RecordService recordService;
     private final ApproveService approveService;
 }
