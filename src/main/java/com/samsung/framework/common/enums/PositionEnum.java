@@ -9,11 +9,11 @@ public enum PositionEnum {
     /**
      * 직위 확정 X (임시 직위 Enum 타입)
      */
-    STAFF("POSI01","사원"),
-    SENIOR_MANAGER("POSI02", "대리"),
-    MANAGER("POSI03", "과장"),
-    DEPUTY_MANAGER("POSI04","차장"),
-    GENERAL_MANAGER("POSI05","부장");
+    STAFF("POSI","01"),
+    SENIOR_MANAGER("POSI", "02"),
+    MANAGER("POSI", "03"),
+    DEPUTY_MANAGER("POSI","04"),
+    GENERAL_MANAGER("POSI","05");
 
 
     private String prefix;
