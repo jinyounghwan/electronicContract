@@ -64,17 +64,29 @@
         </if>
     </select>
 
-    <!--<insert id="insertMember" useGeneratedKeys="true">
-        INSERT INTO INFO_USER(MEMBER_ID, MEMBER_NAME, EMAIL)
-             VALUES (#{memberId}, #{memberName}, #{email})
-        <selectKey keyProperty="id" resultType="long">
-             SELECT LAST_INSERT_ID()
-        </selectKey>
-    </insert>-->
 
     <insert id="insert" useGeneratedKeys="true">
-        INSERT INTO USERS(EMP_NO, DEPT_CD, USER_ID, USER_PW, NAME, ACCOUNT_TYPE, POSITION, EMAIL, PHONE, USE_YN, EMPLOYEED_AT, RESIGNED_AT, CREATE_BY, CREATE_AT, UPDATED_BY, UPDATED_AT)
-             VALUES (#{empNo}, #{deptCd}, #{userId}, #{userPw}, #{name}, #{accountType}, #{position}, #{email}, #{phone},'Y', #{employeedAt}, #{resignedAt}, 'admin',sysdate() ,'admin', sysdate())
+        INSERT INTO USERS
+            (
+             EMP_NO, DEPT_CODE
+            , USER_PW, NAME
+            , ACCOUNT_TYPE, POSITION
+            ,EMAIL, PHONE
+            , USE_YN, EMPLOYED_AT
+            , RESIGNED_AT, CREATED_BY
+            , CREATED_AT, UPDATED_BY
+            , UPDATED_AT
+            )
+             VALUES(
+                     #{empNo}, #{deptCode}
+                    , #{userPw}, #{name}
+                    , #{accountType}, #{position}
+                    , #{email}, #{phone}
+                    ,'Y', #{employedAt}
+                    , #{resignedAt}, 'admin'
+                    , sysdate(),'admin'
+                    , sysdate()
+             )
         <selectKey keyProperty="logId1" resultType="String">
              SELECT LAST_INSERT_ID()
         </selectKey>

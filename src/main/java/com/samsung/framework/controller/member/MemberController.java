@@ -85,17 +85,17 @@ public class MemberController extends ParentController {
         return mv;
     }
 
+    /**
+     * 회원가입
+     * @param signUpRequest
+     * @return
+     * @throws CustomLoginException
+     */
     @PostMapping("/sign-up")
     public ResponseEntity signUp(@RequestBody SignUpRequest signUpRequest) throws CustomLoginException {
-        MemberVO memberVO = getCommonService().getMemberService().findMemberByUserName(signUpRequest.getUserId());
-
-        if(!StringUtil.isEmpty(memberVO)){
-            throw new CustomLoginException(ExceptionCodeMsgEnum.ACCOUNT_DUPLICATE.getCode(), ExceptionCodeMsgEnum.ACCOUNT_DUPLICATE.getMsg());
-        } else {
-            getCommonService().getMemberService().signUp(signUpRequest);
-            return new ResponseEntity(HttpStatus.OK);
-        }
-
+//        MemberVO memberVO = getCommonService().getMemberService().findMemberByUserName(signUpRequest.getUserId());
+          getCommonService().getMemberService().signUp(signUpRequest);
+          return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/updatePwd")

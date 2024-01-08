@@ -1,10 +1,11 @@
 package com.samsung.framework.service.member;
 
+import com.samsung.framework.common.enums.AccountTypeEnum;
 import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
+import com.samsung.framework.common.enums.PositionEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
 import com.samsung.framework.common.utils.CryptoUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
-//import com.samsung.framework.common.utils.TokenFactory;
 import com.samsung.framework.common.utils.ValidationUtil;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.domain.common.SearchObject;
@@ -80,12 +81,11 @@ public class MemberServiceImpl extends ParentService implements MemberService{
         }
 
         MemberVO target = MemberVO.builder()
-                .userSeq(memberVO.getUserSeq())
+                .empNo(memberVO.getEmpNo())
                 .userId(memberVO.getUserId())
-                .deptCd(memberVO.getDeptCd())
-                .authority(memberVO.getDeptCd())
-                .userNm(memberVO.getUserNm())
-                .userEmail(memberVO.getUserEmail())
+                .deptCode(memberVO.getDeptCode())
+                .name(memberVO.getName())
+                .email(memberVO.getEmail())
                 .build();
 
         return target;
@@ -107,11 +107,13 @@ public class MemberServiceImpl extends ParentService implements MemberService{
      */
     public Member insertMember(Member member) {
         var target = Member.builder()
-                .memberId(member.getMemberId())
-//                .password(bCryptPasswordEncoder.encode(member.getPassword()))
-                .memberName(member.getMemberName())
-                .email(member.getEmail())
-                .build();
+                            .empNo(member.getEmpNo())
+                            .deptCode(member.getDeptCode())
+                            .userId(member.getUserId())
+                            .userPw(cryptoUtil.encodePassword(member.getUserPw()))
+                            .name(member.getName())
+                            .email(member.getEmail())
+                            .build();
 
         validationUtil.parameterValidator(target, Member.class);
         getCommonMapper().getMemberMapper().insertMember(target);
@@ -127,26 +129,25 @@ public class MemberServiceImpl extends ParentService implements MemberService{
      */
     public User signUp(SignUpRequest signUpRequest) {
         var target = User.builder()
-                .empNo(signUpRequest.getEmpNo())
-                .deptCode(signUpRequest.getDeptCode())
-                .userId(signUpRequest.getUserId())
-                .userPw(cryptoUtil.encodePassword(signUpRequest.getUserPw()))
-//                .password(bCryptPasswordEncoder.encode(signUpRequest.getPassword()))
-                .name(signUpRequest.getName())
-                .accountType(signUpRequest.getAccountType())
-                .position(signUpRequest.getPosition())
-                .email(signUpRequest.getEmail())
-                .phone(signUpRequest.getPhone())
-                .build();
+                        .empNo(signUpRequest.getEmpNo())
+                        .deptCode(signUpRequest.getDeptCode())
+                        .userPw(cryptoUtil.encodePassword(signUpRequest.getUserPw()))
+                        .name(signUpRequest.getName())
+                        .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.EMPLOYEE))
+                        .position(PositionEnum.menuCode(PositionEnum.STAFF))
+                        .email(signUpRequest.getEmail())
+                        .phone(signUpRequest.getPhone())
+                        .employedAt(signUpRequest.getEmployedAt())
+                        .resignedAt(signUpRequest.getResignedAt())
+                        .updatedAt(signUpRequest.getUpdatedAt())
+                        .build();
 
         int inserted = getCommonMapper().getMemberMapper().insert(target);
         if(inserted > 0) { // TOKEN 추후 제거
-//            TokenObjectVO tokenObjectVO = tokenFactory.createJWT(signUpRequest.getUserId(), signUpRequest.getUserPw(), "ROLE_USER");
-//            return tokenObjectVO;
             return target;
         }
-
-        return null; // 임시 처리
+        log.info("inserted :: {}" , inserted);
+        return new User(); // 임시 처리
     }
 
     /**
@@ -165,20 +166,12 @@ public class MemberServiceImpl extends ParentService implements MemberService{
             }
         }
 
-        if (loginRequest.getPassword().equals(target.getUserPwd())) {
+        if (loginRequest.getPassword().equals(target.getUserPw())) {
             return MemberVO.builder()
                     .userId(target.getUserId())
-                    .userNm(target.getUserNm())
-                    .userEmail(target.getUserEmail())
-                    .authority(target.getDeptCd())
-                    .deptCd(target.getDeptCd())
-                    /*.tableName(TableNameEnum.LOGIN.name())
-                      .logId1(String.valueOf(target.getMemberSeq()))
-                      .logType(RequestTypeEnum.LOGIN.getRequestType())
-                      .logId2(null)
-                      .logJson(null)
-                      .remark(null)
-                      .regId(target.getUserId())*/
+                    .name(target.getName())
+                    .email(target.getEmail())
+                    .deptCode(target.getDeptCode())
                     .build();
         }else {
             try {
@@ -199,7 +192,7 @@ public class MemberServiceImpl extends ParentService implements MemberService{
     public Map<String, Object> updatePwd(MemberVO member) {
         HashMap<String, Object> result = new HashMap<>();
         Member target = Member.builder()
-                                .memberId(member.getUserId())
+                                .userId(member.getUserId())
 //                                .password(bCryptPasswordEncoder.encode(member.getUserPwd()))
                                 .build();
         int update= getCommonMapper().getMemberMapper().updatePwd(target);
