@@ -3,6 +3,7 @@ package com.samsung.framework.vo.member;
 import com.samsung.framework.domain.common.BaseEntity;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @ToString
@@ -11,36 +12,40 @@ import java.util.Date;
 @Setter
 @Getter
 public class MemberVO extends BaseEntity {
-    private int userSeq;
+    private int empNo;
+    private String deptCode;
     private String userId;
-    private String userPwd;
-    private String userType;
-    private String userNm;
-    private String userTel;
-    private String userEmail;
-    private String authority; // 권한 임시로 String으로 변경
-    private String deptCd;
-    private String appointCode;
-    private String positionCode;
-    private String userEtc;
-    private String authEmailSendTime;
-    private Date regDt;
+    private String userPw;
+    private String name;
+    private String accountType;
+    private String position;
+    private String email; // 권한 임시로 String으로 변경
+    private String phone;
+    private String useYn;
+    private LocalDateTime employedAt;
+    private LocalDateTime resignedAt;
+    private String createdBy;
+    private LocalDateTime createdAt;
+    private String updatedBy;
+    private LocalDateTime updatedAt;
     @Builder
-    public MemberVO(String tableName, String logId1, String logId2, String logType, String logJson, String remark, String regId, int userSeq, String userType, String userId, String userPwd, String userNm, String userEmail, String authority, String deptCd, String appointCode, String positionCode, String userTel, String userEtc, Date regDt, String authEmailSendTime) {
+    public MemberVO(String tableName, String logId1, String logId2, String logType, String logJson, String remark, String regId, int empNo, String deptCode, String userId, String userPw, String name, String accountType, String position, String email, String phone, String useYn, LocalDateTime employedAt, LocalDateTime resignedAt, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt) {
         super(tableName, logId1, logId2, logType, logJson, remark, regId);
-        this.userSeq = userSeq;
+        this.empNo = empNo;
+        this.deptCode = deptCode;
         this.userId = userId;
-        this.userPwd = userPwd;
-        this.userType = userType;
-        this.userNm = userNm;
-        this.userTel = userTel;
-        this.userEmail = userEmail;
-        this.authority = authority;
-        this.deptCd = deptCd;
-        this.appointCode = appointCode;
-        this.positionCode = positionCode;
-        this.userEtc = userEtc;
-        this.regDt = regDt;
-        this.authEmailSendTime = authEmailSendTime;
+        this.userPw = userPw;
+        this.name = name;
+        this.accountType = accountType;
+        this.position = position;
+        this.email = email;
+        this.phone = phone;
+        this.useYn = useYn;
+        this.employedAt = employedAt;
+        this.resignedAt = resignedAt;
+        this.createdBy = createdBy;
+        this.createdAt = createdAt;
+        this.updatedBy = updatedBy;
+        this.updatedAt = updatedAt;
     }
 }

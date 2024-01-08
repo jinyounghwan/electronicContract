@@ -151,7 +151,7 @@ public class AuthorityController extends ParentController {
         MemberVO member = getCommonService().getMemberService().findMemberByUserName(loginInfo.getUserId());
 
         FilePublicVO file = getCommonService().getFileServiceImpl().getFile(fileNm.replaceAll("\"",""));
-        result = (HashMap<String, Object>) getCommonService().getAuthorityService().updAuthFile(file, member.getUserSeq());
+        result = (HashMap<String, Object>) getCommonService().getAuthorityService().updAuthFile(file, member.getEmpNo());
 
         return ResponseEntity.ok(result);
     }

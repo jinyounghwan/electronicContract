@@ -26,7 +26,7 @@ public class SignUpRequest {
     private String email;
     private String phone;
     private String useYn;
-    private LocalDateTime employeedAt;
+    private LocalDateTime employedAt;
     private LocalDateTime resignedAt;
     private String createdBy;
     private LocalDateTime createdAt;
@@ -36,7 +36,7 @@ public class SignUpRequest {
 
     @Builder
     public SignUpRequest(int empNo, String deptCode, String userId, String userPw, String name, String accountType, String position, String email, String phone,String useYn
-            , LocalDateTime employeedAt,  LocalDateTime resignedAt, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt) {
+            , LocalDateTime employedAt,  LocalDateTime resignedAt, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt) {
         this.empNo = empNo;
         this.deptCode = deptCode;
         this.userId = userId;
@@ -47,7 +47,7 @@ public class SignUpRequest {
         this.email = email;
         this.phone = phone;
         this.useYn = useYn;
-        this.employeedAt = employeedAt;
+        this.employedAt = employedAt;
         this.resignedAt = resignedAt;
         this.createdBy = createdBy;
         this.createdAt = createdAt;

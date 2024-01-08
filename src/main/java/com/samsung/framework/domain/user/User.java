@@ -2,15 +2,13 @@ package com.samsung.framework.domain.user;
 
 import com.samsung.framework.domain.common.BaseEntity;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @ToString(callSuper = false)
 @Getter
+@NoArgsConstructor
 @EqualsAndHashCode(of = {"empNo", "userId","name"}, callSuper = false)
 public class User extends BaseEntity {
     @NotNull(message= "사번은 필수 값 입니다.")
@@ -28,7 +26,7 @@ public class User extends BaseEntity {
     private String email;
     private String phone;
     private String useYn;
-    private LocalDateTime employeedAt;
+    private LocalDateTime employedAt;
     private LocalDateTime resignedAt;
     private String createdBy;
     private LocalDateTime createdAt;
@@ -39,7 +37,7 @@ public class User extends BaseEntity {
     @Builder
     public User(String tableName, String logId1, String logId2, String logType, String logJson, String remark, String regId
             , int empNo, String deptCode, String userId, String userPw, String name, String accountType, String position, String email, String phone,String useYn
-            , LocalDateTime employeedAt,  LocalDateTime resignedAt, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt) {
+            , LocalDateTime employedAt,  LocalDateTime resignedAt, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt) {
         super(tableName, logId1, logId2, logType, logJson, remark, regId);
         this.empNo = empNo;
         this.deptCode = deptCode;
@@ -51,7 +49,7 @@ public class User extends BaseEntity {
         this.email = email;
         this.phone = phone;
         this.useYn = useYn;
-        this.employeedAt = employeedAt;
+        this.employedAt = employedAt;
         this.resignedAt = resignedAt;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
