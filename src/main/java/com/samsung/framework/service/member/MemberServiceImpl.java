@@ -1,10 +1,10 @@
 package com.samsung.framework.service.member;
 
+import com.samsung.framework.common.config.JasyptConfig;
 import com.samsung.framework.common.enums.AccountTypeEnum;
 import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
 import com.samsung.framework.common.enums.PositionEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
-import com.samsung.framework.common.utils.CryptoUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
 import com.samsung.framework.common.utils.ValidationUtil;
 import com.samsung.framework.domain.common.Paging;
@@ -36,7 +36,8 @@ import java.util.Map;
 public class MemberServiceImpl extends ParentService implements MemberService{
     // TODO: IJ NPE 위험코드 Optional로 변경
     private final ValidationUtil validationUtil;
-    private final CryptoUtil cryptoUtil;
+//    private final CryptoUtil cryptoUtil;
+    private final JasyptConfig jasyptConfig;
 //    private final TokenFactory tokenFactory;
 
     /**
@@ -110,7 +111,7 @@ public class MemberServiceImpl extends ParentService implements MemberService{
                             .empNo(member.getEmpNo())
                             .deptCode(member.getDeptCode())
                             .userId(member.getUserId())
-                            .userPw(cryptoUtil.encodePassword(member.getUserPw()))
+                            .userPw(jasyptConfig.jasyptEncrypt(member.getUserPw()))
                             .name(member.getName())
                             .email(member.getEmail())
                             .build();
@@ -128,10 +129,11 @@ public class MemberServiceImpl extends ParentService implements MemberService{
      * @return {@link TokenObjectVO}
      */
     public User signUp(SignUpRequest signUpRequest) {
+
         var target = User.builder()
                         .empNo(signUpRequest.getEmpNo())
                         .deptCode(signUpRequest.getDeptCode())
-                        .userPw(cryptoUtil.encodePassword(signUpRequest.getUserPw()))
+                        .userPw(jasyptConfig.jasyptEncrypt(signUpRequest.getUserPw()))
                         .name(signUpRequest.getName())
                         .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.EMPLOYEE))
                         .position(PositionEnum.menuCode(PositionEnum.STAFF))
@@ -141,8 +143,8 @@ public class MemberServiceImpl extends ParentService implements MemberService{
                         .resignedAt(signUpRequest.getResignedAt())
                         .updatedAt(signUpRequest.getUpdatedAt())
                         .build();
-
         int inserted = getCommonMapper().getMemberMapper().insert(target);
+
         if(inserted > 0) { // TOKEN 추후 제거
             return target;
         }
@@ -206,6 +208,11 @@ public class MemberServiceImpl extends ParentService implements MemberService{
         return result;
     }
 
+    /**
+     *
+     * @param searchVO
+     * @return
+     */
     @Override
     public List<UserVO> findAllUsers(SearchVO searchVO) {
         List<UserVO> list = getCommonMapper().getMemberMapper().findAllUsers(searchVO);

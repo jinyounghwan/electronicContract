@@ -67,7 +67,7 @@ dependencies {
 	implementation 'org.apache.poi:poi-ooxml:5.2.0'
 
 //	implementation (group: 'org.springframework.security', name: 'spring-security-config', version: '6.1.1')
-	implementation (group: 'org.springframework.security', name: 'spring-security-core', version: '6.1.1')
+//	implementation (group: 'org.springframework.security', name: 'spring-security-core', version: '6.1.1')
 //	implementation (group: 'org.springframework.security', name: 'spring-security-crypto', version: '6.1.1')
 //	implementation (group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: '6.1.1')
 //	implementation (group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: '6.1.1')
