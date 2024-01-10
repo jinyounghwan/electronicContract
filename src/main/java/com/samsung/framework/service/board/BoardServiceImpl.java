@@ -56,7 +56,7 @@ public class BoardServiceImpl extends ParentService implements BoardService{
 
         //파일 저장
         if(StringUtil.isNotEmpty(files)) {
-            fileService.saveFile(files, target.getRegId(), Long.valueOf(target.getLogId1()));
+            fileService.saveFile(files);
         }
 
         return iAffectedRows;
@@ -142,39 +142,6 @@ public class BoardServiceImpl extends ParentService implements BoardService{
         // Mapper Update
         int iAffectedRows = getCommonMapper().getBoardMapper().update(target);
 
-
-        return iAffectedRows;
-    }
-
-    /**
-     * 게시판 삭제
-     * @param board
-     * @return
-     */
-    public int deleteBoard(Board board, MemberVO member){
-        Board target = Board.builder()
-                            .boardSeq(board.getBoardSeq())
-                            .title(board.getTitle())
-                            .contents(board.getContents())
-                            .fixYn(board.getFixYn())
-                            .displayYn(board.getDisplayYn())
-                            .useYn(board.getUseYn())
-                            .tableName(TableNameEnum.BOARD.name())
-                            .logId1(String.valueOf(board.getBoardSeq()))
-                            .logType(RequestTypeEnum.DELETE.getRequestType())
-                            .logId2(null)
-                            .logJson(null)
-                            .remark(null)
-                            .regId(member.getUserId())
-                            .build();
-
-        int iAffectedRows = getCommonMapper().getBoardMapper().delete(target);
-
-        // Board에 물린 File삭제
-        List<FilePublicVO> fileList = fileService.getFiles(board.getBoardSeq(), target.getTableName());
-        for(FilePublicVO file : fileList){
-            fileService.deleteFile(file.getName());
-        }
 
         return iAffectedRows;
     }

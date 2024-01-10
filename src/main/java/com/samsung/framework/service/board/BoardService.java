@@ -27,9 +27,6 @@ public interface BoardService  {
     // 게시판 수정
     int updateBoard(Board board, List<FilePublicVO> fileList, MemberVO member) throws Exception;
 
-    // 게시판 삭제
-    int deleteBoard(Board board, MemberVO member);
-
     // 공통 게시판 단 건 조회
     BoardPublicVO findById(BoardSearchVO boardSearchVO);
 

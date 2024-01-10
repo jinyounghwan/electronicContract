@@ -115,11 +115,6 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
         return 0;
     }
 
-    @Override
-    public int deleteBoard(Board board, MemberVO member) {
-        return 0;
-    }
-
     /**
      * 검색 날짜 범위 조회
      * @return list {@link List}
