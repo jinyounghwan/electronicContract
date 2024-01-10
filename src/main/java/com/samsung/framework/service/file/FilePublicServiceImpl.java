@@ -23,16 +23,35 @@ import java.util.Map;
 @Service
 @Slf4j
 public class FilePublicServiceImpl extends ParentService implements FileService {
-
+    /**
+     * 일반 파일 업로드 시 사용
+     * @param files
+     * @return
+     * @throws Exception
+     */
     @Override
     public List<FilePublicVO> uploadFile(List<MultipartFile> files) throws Exception {
         return getFileUtil().uploadFiles(files,getPropertiesUtil().getFile().getRootDir() + getPropertiesUtil().getFile().getRealDir());
     }
 
+    /**
+     * type으로 들어 온 변수의 값으로 폴더를 생성 후, 실제 directory 업로드
+     * @param files
+     * @param type
+     * @return
+     * @throws Exception
+     */
     public List<FilePublicVO> uploadFile(List<MultipartFile> files, String type) throws Exception {
         return getFileUtil().uploadFiles(files, getPropertiesUtil().getFile().getRootDir() + getPropertiesUtil().getFile().getRealDir() + "/" +type);
     }
 
+    /**
+     * DB Table에 파일 관련 정보 저장
+     * @param files
+     * @return
+     * @throws Exception
+     */
+    @Override
     public List<FilePublicVO> saveFile(List<FilePublicVO> files) throws Exception {
         List<FilePublicVO> targetFiles = new ArrayList<>();
         for(FilePublicVO file : files){
@@ -51,6 +70,13 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
         return targetFiles;
     }
 
+    /**
+     * 파일 등록자를 regId로 넘겨받은 후, 해당 값을 테이블에 저장
+     * @param files
+     * @param regId
+     * @return
+     * @throws Exception
+     */
     public List<FilePublicVO> saveFile(List<FilePublicVO> files,String regId) throws Exception {
         int fileCount=1;
         List<FilePublicVO> targetFiles = new ArrayList<>();
@@ -86,34 +112,6 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
         return targetFiles;
     }
 
-    public int saveFile(List<FilePublicVO> files, Long seq) throws Exception {
-        int insert = 0;
-        for(FilePublicVO file : files){
-            insert = getCommonMapper().getFileMapper().insert(files);
-            if(insert<0) break;
-        }
-        return insert;
-    }
-
-    @Override
-    public int deleteFile(String fileName) {
-        return 0;
-    }
-
-    public int deleteFile(Long seq, String lastId) {
-        FilePublicVO srchFile = FilePublicVO.builder()
-                .fileSeq(seq)
-                .createdBy(lastId)
-                .build();
-
-        // 삭제할 File 조회
-        FilePublicVO file = getCommonMapper().getFileMapper().getFile(srchFile);
-        int iAffectedRows = 0;
-        if(StringUtil.isNotEmpty(file)){
-            iAffectedRows = getCommonMapper().getFileMapper().deleteFile(srchFile);
-        }
-        return iAffectedRows;
-    }
 
     @Override
     public int deleteFiles(String lastId, List<Integer> tgtList){
@@ -158,7 +156,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
     }
 
     /**
-     * file이름 기준으로 문자열 가져오기
+     * file이름 기준으로 파일 정보 가져오기
      * @param fileNm
      * @return
      */
@@ -172,7 +170,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
     }
 
     /**
-     * fileSeq 기준으로 directory가져오기
+     * fileSeq 기준으로 파일 정보 가져오기
      * @param fileSeq
      * @return FilePublicVO
      */
@@ -182,22 +180,14 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
                                             .build();
         return getCommonMapper().getFileMapper().getFile(target);
     }
-    
-    @Override
-    public List<FilePublicVO> getFiles(Long entitySeq, String tableName) {
-        return null;
-    }
 
+    @Override
     public List<FilePublicVO> getFiles(List<String> attachIdList) {
         FilePublicVO file = FilePublicVO.builder()
                                         .attachList(attachIdList)
                                         .build();
 
         return getCommonMapper().getFileMapper().getFiles(file);
-    }
-    @Override
-    public List<FilePublicVO> saveFile(List<FilePublicVO> files, String tableName, Long seq) throws Exception {
-        return null;
     }
 
     /**
