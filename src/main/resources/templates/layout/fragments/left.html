@@ -49,7 +49,7 @@
         function menuMidAjax(){
             $.ajax({
                 type:"POST",
-                url:"menu/midList",
+                url:"/menu/midList",
                 contentType: "application/json",
                 async: false,
                 success: function(result){
@@ -62,7 +62,7 @@
         function menuSmAjax(){
             $.ajax({
                type:"POST",
-               url:"menu/smList",
+               url:"/menu/smList",
                contentType: "application/json",
                async: false,
                success: function(result){
