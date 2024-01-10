@@ -1,26 +1,31 @@
 package com.samsung.framework.controller;
 
+import com.samsung.framework.common.utils.FileUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/sample")
+@Slf4j
 public class SampleController {
 
     private final SampleService SampleService;
+    private final FileUtil fileUtil;
 
-    public SampleController(SampleService SampleService) {
+    public SampleController(SampleService SampleService , FileUtil fileUtil, FileUtil fileUtil1) {
         this.SampleService = SampleService;
+        this.fileUtil = fileUtil1;
     }
 
     @GetMapping({"", "/"})
@@ -58,5 +63,18 @@ public class SampleController {
         redirectAttributes.addFlashAttribute("savedBook", savedSampleVO);
         redirectAttributes.addFlashAttribute("addBookSuccess", true);
         return redirectView;
+    }
+
+    @GetMapping(value = "/example")
+    public String sampleView(){
+        return "sample/example";
+    }
+
+    @PostMapping(value = "/saveSignatur")
+    @ResponseBody
+    public ResponseEntity saveSignatur(@RequestParam(value = "signatureImg")List<MultipartFile> files){
+        log.info("param  ::::::::! " +  files);
+        Map<String,Object> fileMap = SampleService.saveSignatur(files);
+        return ResponseEntity.ok(null);
     }
 }
