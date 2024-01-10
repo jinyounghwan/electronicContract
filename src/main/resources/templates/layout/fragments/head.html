@@ -12,7 +12,12 @@
         <script th:inline="javascript" type="text/javascript" th:src="@{/static/lib/jquery/jquery-ui.min.js}"></script>
         <script th:inline="javascript" type="text/javascript" th:src="@{/static/lib/dist/xlsx.full.min.js}"></script>
         <link rel="stylesheet" type="text/css" th:href="@{/static/lib/jquery/jquery-ui.min.css}"/>
-
+        <!-- 전자서명 -->
+        <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+        <script th:inline="javascript" type="text/javascript" th:src="@{/static/js/signaturePad.js}"></script>
+        <!-- 테스트를 위해서 -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <!-- 공통 calenadr를 위한 datepicker -->
         <script th:inline="javascript" type="text/javascript" th:src="@{/static/js/dateUtil.js}"></script>
     </head>
