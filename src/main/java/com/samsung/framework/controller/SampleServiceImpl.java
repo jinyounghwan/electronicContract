@@ -47,7 +47,7 @@ public class SampleServiceImpl implements SampleService {
     public Map<String, Object> saveSignatur(List<MultipartFile> files) {
         try {
             List<FilePublicVO> filePublicVOList =  filePublicService.uploadFile(files);
-            filePublicService.saveFile(filePublicVOList,100200L,"heominji");
+            filePublicService.saveFile(filePublicVOList);
              filePublicVOList.forEach(data ->log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+data+""));
         } catch (Exception e) {
             throw new RuntimeException(e);
