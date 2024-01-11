@@ -53,6 +53,6 @@ server:
 
 # file
 file:
-  rootDir: classPath:files/dejay_public
+  rootDir: /files/electronicContract
   tempDir: /temp
   realDir: /upload
