@@ -53,8 +53,3 @@ properties:
     tempDir: /temp
     realDir: /upload
 
-# jwt
-jwt:
-  secret: frameworkspringsecurityjwtsecretkeytestijzone
-  issuer: ikjooLee
-

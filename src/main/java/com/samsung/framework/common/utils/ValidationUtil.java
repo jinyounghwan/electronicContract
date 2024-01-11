@@ -40,22 +40,20 @@ public class ValidationUtil {
 
         if(validate.size() > 0) {
             log.error(validate.toString());
-
             for (ConstraintViolation<T> violation : validate) {
                 log.error("[parameterValidator] {}", violation.getMessage());
             }
-
-            throw new IllegalArgumentException(ExceptionCodeMsgEnum.SERVER_DATA_ERROR.getMsg());
+            return false;
         }
 
         return true;
     }
 
     /**
-     * 요청 parameter 객체에 대한 검증
+     * 요청 parameter 객체에 대한 검증 및 에러 데이터 반환
      * @param obj {@link Object}  검증 대상 객체
      * @param clazz {@link Class} 대상 객체 클래스
-     * @return {@link Boolean}
+     * @return {@link Map}
      * @param <T>
      */
     public <T> Map<String, Object> clientRequestParameterValidator(T obj, Class<T> clazz) {

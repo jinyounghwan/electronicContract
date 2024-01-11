@@ -53,7 +53,6 @@ public class BoardController extends ParentController {
     public ModelAndView findAll(ModelAndView mv) {
         mv.setViewName("board/list");
 
-        // TODO: [노출 게시물 갯수 옵션 하드코딩 제거]
         // 전체 게시물 수
         int totalCount = getCommonService().getBoardPublicServiceImpl().totalCount(null);
         mv.addObject("totalCount", totalCount);

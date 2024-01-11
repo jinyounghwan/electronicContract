@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public enum LogTypeEnum {
 
-    LAST_LOGIN("마지막 로그인"), CONTRACT_PROCESS("계약서 진행상황");
+    LOGIN("로그인"), CONTRACT_PROCESS("계약서 진행상황");
 
     private String description;
 

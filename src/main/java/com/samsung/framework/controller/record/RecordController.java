@@ -47,9 +47,6 @@ public class RecordController extends ParentController {
     @GetMapping({"", "/"})
     public ModelAndView findAll(ModelAndView mv) {
         mv.setViewName("record/list");
-
-        // TODO: [노출 게시물 갯수 옵션 하드코딩 제거]
-
         mv.addObject("rowData", new RecordVO());
 
         var recordSearchVO = new RecordSearchVO();
