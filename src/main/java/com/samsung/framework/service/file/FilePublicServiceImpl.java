@@ -60,7 +60,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
                                 .name(file.getName())
                                 .fileNo(1)
                                 .extension(getFileUtil().checkFileType(file.getOriginalName()))
-                                .storagePath(file.getStoragePath())
+                                .storagePath(FileUtil.seperateOs(file.getStoragePath()))
                                 .size(file.getSize())
                                 .createdBy("hsk9839")
                                 .build();

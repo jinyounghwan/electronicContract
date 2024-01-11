@@ -6,6 +6,7 @@ import com.samsung.framework.vo.file.FilePublicVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
@@ -22,11 +23,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Component
 public class FileUtil {
-
     /**
      * 다중 파일 업로드
      * @param multipartFiles - 파일 객체 리스트
@@ -238,7 +240,7 @@ public class FileUtil {
      * @return
      * @throws IOException
      */
-    public void downloadFile(String originFileName, String filePath, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public static void downloadFile(String originFileName, String filePath, HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             File file = new File(filePath);
 
@@ -281,7 +283,7 @@ public class FileUtil {
      * @return
      * @throws IOException
      */
-    public MediaType getMediaType(String path) throws IOException {
+    public static MediaType getMediaType(String path) throws IOException {
        // 파일 이름에서 확장자 추출
        String fileExtension = Files.probeContentType(Paths.get(path));
        
@@ -300,8 +302,8 @@ public class FileUtil {
      * @return
      * @throws IOException
      */
-    public byte[] readFileToByteArray(String filePath) throws IOException {
-        File file = new File(filePath);
+    public byte[] readFileToByteArray(String path) throws IOException {
+        File file = new File(path);
         FileInputStream fis = new FileInputStream(file);
         byte[] fileBytes = new byte[(int)file.length()];
 
@@ -320,7 +322,7 @@ public class FileUtil {
      * @param originFileName
      * @return
      */
-    public String createDownloadFileName(String userAgent, String originFileName){
+    public static String createDownloadFileName(String userAgent, String originFileName){
         String encodedFileName = null;
 
         if (userAgent != null && userAgent.contains("MSIE")) {
@@ -333,7 +335,6 @@ public class FileUtil {
             // 다른 브라우저에서는 UTF-8로 인코딩
             encodedFileName = UriUtils.encode(originFileName, StandardCharsets.UTF_8);
         }
-
         return encodedFileName;
     }
 
@@ -370,5 +371,28 @@ public class FileUtil {
     // AttachId , List로 반환
     public List<String> splitAttachId(String attachId){
         return Arrays.stream(attachId.split(",")).toList();
+    }
+
+
+    // PDF img src \" => ' 로 변환
+    public static String imgTagConvert(String html){
+        //이미지 태그 안닫힌 태그들 찾아서 닫는 작업 진행
+        Pattern pattern  =  Pattern.compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
+        Matcher match = pattern.matcher(html);
+        while(match.find()){
+            String imgTag   = match.group();
+            String imgTag2  = imgTag.replaceAll(">", "/>");
+            html = html.replaceAll(imgTag, imgTag2);
+        }
+        String replace = html.replaceAll("\"", "'");
+
+        return replace;
+    }
+
+    public static String seperateOs(String path){
+        String rootDir = getOsRootDir();
+        path= path.replace(rootDir,"");
+
+        return path;
     }
 }
