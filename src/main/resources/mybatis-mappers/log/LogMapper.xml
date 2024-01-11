@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.log.LogMapper">
+    <insert id="saveLog" useGeneratedKeys="true">
+        INSERT INTO PROCESS_LOG(LOG_SEQ, LOG_TYPE, PROCESS_STEP, IP_ADDRESS, MAC_ADDRESS, CREATED_BY, CREATED_AT)
+             VALUES (#{logSeq}, #{logType}, #{processStep}, #{ipAddress}, #{macAddress}, #{createdBy}, sysdate())
+        <selectKey keyProperty="logSeq" resultType="long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+</mapper>
