@@ -44,6 +44,9 @@ public class PdfController extends ParentController {
         List<FilePublicVO> fileList = new ArrayList<>();
         fileList.add(file);
 
-        return new ResponseEntity(HttpStatus.OK);
+        // db에 save 저장
+        List<FilePublicVO> saveList = fileService.saveFile(fileList);
+
+        return new ResponseEntity(saveList, HttpStatus.OK);
     }
 }
