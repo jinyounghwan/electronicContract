@@ -27,6 +27,11 @@ public class LogUtil {
         this.logMapper = logMapper;
     }
 
+    /**
+     *
+     * @param logSaveRequest {@link LogSaveRequest}
+     * @return resultMap {@link Map}
+     */
     public Map<String, LogSaveResponse> saveLog(@Valid LogSaveRequest logSaveRequest) {
         log.info(logSaveRequest.toString());
         Map<String, LogSaveResponse> resultMap = new HashMap<>();
