@@ -7,11 +7,9 @@ import com.samsung.framework.service.board.BoardService;
 import com.samsung.framework.service.code.CodeService;
 import com.samsung.framework.service.excel.ExcelPublicServiceImpl;
 import com.samsung.framework.service.file.FilePublicServiceImpl;
-import com.samsung.framework.service.mail.MailService;
 import com.samsung.framework.service.member.MemberService;
-import com.samsung.framework.service.menu.MenuService;
 import com.samsung.framework.service.menu.MenuServiceImpl;
-import com.samsung.framework.service.pdf.PdfServiceImpl;
+import com.samsung.framework.service.pdf.PdfService;
 import com.samsung.framework.service.record.RecordService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +34,5 @@ public class CommonService {
 //  private final MailService mailService;
     private final RecordService recordService;
     private final ApproveService approveService;
-    private final PdfServiceImpl pdfService;
+    private final PdfService pdfService;
 }
