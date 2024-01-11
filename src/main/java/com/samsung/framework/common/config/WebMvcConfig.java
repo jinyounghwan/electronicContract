@@ -6,6 +6,7 @@ package com.samsung.framework.common.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
@@ -31,6 +32,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
     // Authority
     private final List<String> authorityIncludePattern = Arrays.asList("/auth/**", "/test/authorized-only");
     private final List<String> authorityExcludePattern = Arrays.asList("/login", "/member/**", "/test/**", "/error", "/jsp/**");
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/img/**")
+                .addResourceLocations("classpath:/static/img/");
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
