@@ -132,13 +132,13 @@
             console.log("fnModalClick");
             let html = document.querySelector(".modal_box").innerHTML;
             html = html.replaceAll("\n", "");
-
-            $.ajax({
+            let param = {}
+            param.html = $('.modal_box').html();
+             $.ajax({
                 url: '/pdf/upload',
                 type: 'post',
-                dataType: 'text',
                 contentType: 'application/json; charset=UTF-8',
-                data: JSON.stringify(html),
+                data: JSON.stringify(param),
                 success:function(data){
                     alert("성공");
                 },

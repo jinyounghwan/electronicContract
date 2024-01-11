@@ -90,12 +90,14 @@ public class PdfService extends ParentService{
             htmlPipelineContext.setLinkProvider(new LinkProvider() {
                 @Override
                 public String getLinkRoot() {
-                    return ;
+                    return null ;
                 }
             });
             XMLWorker xmlWorker = new XMLWorker(cssResolverPipeline, true);
             XMLParser xmlParser = new XMLParser(true, xmlWorker, StandardCharsets.UTF_8);
-
+            //html
+            //String testHtml = "<img sre";
+            String html2 = "<img src='http://localhost:3030/img/sample.jpg'/>";
             StringReader stringReader = new StringReader(html);
             xmlParser.parse(stringReader);
             document.close();
