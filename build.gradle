@@ -90,6 +90,11 @@ dependencies {
 	//jstl
 //	implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
 //	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
+	
+	// HTML TO PDF LIBRARY
+	implementation 'com.itextpdf:itextpdf:5.5.13.3'
+	implementation 'com.itextpdf.tool:xmlworker:5.5.13.3'
+	implementation 'com.itextpdf:pdfa:7.2.3'
 
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'

@@ -79,6 +79,13 @@ public class FileUtil {
     }
 
     /**
+     * pdf 파일 이름 생성
+     */
+    public static String createPdfFileName() throws Exception {
+        return (DateUtil.getUtcNowDateFormat("yyMMdd") + StringUtil.getRandomStringByUUID() + ".pdf").replaceAll(" ", "");
+    }
+
+    /**
      * 파일 업로드 임시 경로 (Temp)
      * @param addPath -> 폴더 Path
      * @return 업로드 경로

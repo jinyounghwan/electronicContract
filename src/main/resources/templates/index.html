@@ -42,6 +42,70 @@
                     <button type="submit" th:onclick="fnExcelUpload">Excel</button>
                 </form>
             </div>
+
+            <div class="modal_box">
+                <h2>Welcome</h2>
+                 <p>The following parties to the contract agree to fully comply with the terms of the contract stated hereinafter:</p>
+                <div>
+                    Working hours
+                    rom (      ) to (      )
+                    - average daily over time : hours(depending on an individual company)
+                    - shift system (□2groups 2shifts, □3groups 3shifts, □4groups 3shifts, □etc.)
+                    ※ An employer of workers in domestic help and nursing can omit the working hours. In pursuant to the Article 61 of the Labor Standards Act, working hours, recess hours, off-days are not applied to agriculture, forestry, live-stock breeding, silk-raising farming and marine product businesses.
+                </div>
+                <div>
+                    Payment
+                    Monthly Normal wages
+                    - M onthly (hourly, d aily, or weekly) w age (                 ) won
+                    - Fixed Allowances : (    )allowances :(    )won(    )allowances (    )won
+                    ※ Probation period - M onthly w age (      ) won
+                    2)Additional pay rate applied to overtime, night shift or holiday work.
+                </div>
+                <div>
+                    Payment date
+                    (          ) of e very month/every w eek. If the p ayment date falls on a holiday, payment will be made on the day before the holiday.
+
+                    Payment methods
+                    Wages and benefits will be paid to the worker or credited to the account of the worker. The employer will not retain the bank book and the seal of the worker.
+                </div>
+                <div>
+                    Other matters not regulated in this contract will follow provisions of the Labor Standard Act.
+                    ※ The terms and conditions of the labor contract for workers in domestic help and nursing can be freely decided through the agreement between an employer and a worker.
+                    ※ In pursuant to the Article 61 of the Labor Standards Act, working hours, recess hours, off-days are not applied to agriculture, forestry, live-stock breeding, silk-raising farming and marine product businesses.
+                    ____________ (YY/MM/DD)
+                    Employer :                       (signature)
+                    Worker :                         (signature)
+                </div>
+                <img src='http://localhost:3030/img/sample.jpg'/>
+                <button onclick="fnModal()">Close</button>
+                <br/>
+                <br/>
+                <br/>
+                <div>
+                    Payment
+                    Monthly Normal wages
+                    - M onthly (hourly, d aily, or weekly) w age (                 ) won
+                    - Fixed Allowances : (    )allowances :(    )won(    )allowances (    )won
+                    ※ Probation period - M onthly w age (      ) won
+                    2)Additional pay rate applied to overtime, night shift or holiday work.
+                </div>
+                <div>
+                    Payment date
+                    (          ) of e very month/every w eek. If the p ayment date falls on a holiday, payment will be made on the day before the holiday.
+
+                    Payment methods
+                    Wages and benefits will be paid to the worker or credited to the account of the worker. The employer will not retain the bank book and the seal of the worker.
+                </div>
+                <div>
+                    Other matters not regulated in this contract will follow provisions of the Labor Standard Act.
+                    ※ The terms and conditions of the labor contract for workers in domestic help and nursing can be freely decided through the agreement between an employer and a worker.
+                    ※ In pursuant to the Article 61 of the Labor Standards Act, working hours, recess hours, off-days are not applied to agriculture, forestry, live-stock breeding, silk-raising farming and marine product businesses.
+                    ____________ (YY/MM/DD)
+                    Employer :                       (signature)
+                    Worker :                         (signature)
+                </div>
+            </div>
+            <div class="modal_bg"></div>
     </div>
 
 </th:block>
@@ -49,6 +113,7 @@
     <script th:inline="javascript">
         let fnExcelUpload = () => {
             console.log("fnExcelUpload");
+
             $.ajax({
                 url: '/excel/write',
                 type: 'post',
@@ -61,6 +126,26 @@
                 console.log(data);
             })
 
+        }
+
+        let fnModal = () => {
+            console.log("fnModalClick");
+            let html = document.querySelector(".modal_box").innerHTML;
+            html = html.replaceAll("\n", "");
+
+            $.ajax({
+                url: '/pdf/upload',
+                type: 'post',
+                dataType: 'text',
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(html),
+                success:function(data){
+                    alert("성공");
+                },
+                error:function(data){
+                    alert("실패");
+                }
+            });
         }
     </script>
 </th:block>
