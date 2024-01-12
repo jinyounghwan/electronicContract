@@ -37,6 +37,7 @@ public interface AuthorityMapper extends GeneralMapper {
      * @return
      */
     List<Authority> findUserMenuAuthority(int memberSeq);
+
     /**
      * 개인 권한 저장
      * @param authority
@@ -55,4 +56,11 @@ public interface AuthorityMapper extends GeneralMapper {
      * 엑셀 권한 수정
      */
     int updateExcelAuthority(Authority authority);
+
+    /**
+     * Bulk 사용자 메뉴 권한 저장
+     * @param authorityList
+     * @return
+     */
+    int saveMenuAuthList(List<MenuAuthorityVO> authorityList);
 }

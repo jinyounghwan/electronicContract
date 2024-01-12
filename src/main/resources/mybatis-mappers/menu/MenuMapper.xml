@@ -53,7 +53,9 @@
     <select id="getLgMenuList" resultType="MenuVO">
         /* 대메뉴 조회 - MenuMapper.getLgMenuList */
         SELECT
-            <include refid="menuColumn"><property name="alias" value="MN."/></include>
+                MN.MENU_CODE AS MENU_CODE, MN.NAME AS NAME
+              , SMN.PARENT_CODE AS P_MENU_CODE , MN.PATH AS PATH
+              , MN.MENU_SEQ AS MENU_SEQ
         FROM
             MENU MN
         WHERE
@@ -77,6 +79,7 @@
         )
         SELECT  MN.MENU_CODE AS MENU_CODE, MN.NAME AS NAME
              , SMN.PARENT_CODE AS P_MENU_CODE , MN.PATH AS PATH
+             , MN.MENU_SEQ AS MENU_SEQ
         FROM MENU MN
         INNER JOIN SRCH_MENU SMN ON SUBSTRING(MN.MENU_CODE FROM 5 FOR 2) = SUBSTRING(SMN.PARENT_CODE FROM 5 FOR 2)
         WHERE SUBSTRING(MN.MENU_CODE FROM 9 FOR 2) IN ('00') AND SUBSTRING(MN.MENU_CODE FROM 7 FOR 4) NOT IN ('0000')
@@ -97,6 +100,7 @@
         )
         SELECT   MN.MENU_CODE AS MENU_CODE, MN.NAME AS NAME
                 ,MN.PATH AS PATH , SMN.PARENT_CODE AS P_MENU_CODE
+                ,MN.MENU_SEQ AS MENU_SEQ
         FROM MENU MN
         INNER JOIN SRCH_MENU SMN ON SUBSTRING(MN.MENU_CODE FROM 5 FOR 4) = SUBSTRING(SMN.PARENT_CODE FROM 5 FOR 4)
         WHERE SUBSTRING(MN.MENU_CODE FROM 9 FOR 2) NOT IN('00')
@@ -157,7 +161,8 @@
             <selectKey keyProperty="logId1" resultType="String">
                 SELECT LAST_INSERT_ID()
             </selectKey>
-        </insert>
+    </insert>
+
 
   <!--  <update id="update">
         /* 메뉴 업데이트 MenuMapper.update*/

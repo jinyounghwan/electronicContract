@@ -3,6 +3,7 @@ package com.samsung.framework.mapper.menu;
 import com.samsung.framework.domain.authority.Authority;
 import com.samsung.framework.domain.menu.Menu;
 import com.samsung.framework.mapper.common.GeneralMapper;
+import com.samsung.framework.vo.authority.MenuAuthorityVO;
 import com.samsung.framework.vo.code.CommonCodeVO;
 import com.samsung.framework.vo.menu.MenuVO;
 import com.samsung.framework.vo.search.menu.MenuSearchVO;

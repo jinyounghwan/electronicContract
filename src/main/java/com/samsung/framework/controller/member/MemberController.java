@@ -93,6 +93,8 @@ public class MemberController{
     @PostMapping("/sign-up")
     public ResponseEntity signUp(@RequestBody SignUpRequest signUpRequest) throws CustomLoginException {
           Map<String, Object> resultMap = memberService.signUp(signUpRequest);
+          menuService.saveAuthMenu(signUpRequest);
+
           return ResponseEntity.ok(resultMap);
     }
 
