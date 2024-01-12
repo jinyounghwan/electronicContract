@@ -1,15 +1,13 @@
 package com.samsung.framework.controller.member;
 
-import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
-import com.samsung.framework.common.utils.StringUtil;
-import com.samsung.framework.controller.common.ParentController;
 import com.samsung.framework.domain.user.SignUpRequest;
+import com.samsung.framework.service.member.MemberService;
+import com.samsung.framework.service.menu.MenuService;
 import com.samsung.framework.vo.member.MemberVO;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,8 +18,9 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/member")
-public class MemberController extends ParentController {
-
+public class MemberController{
+    private final MemberService memberService;
+    private final MenuService menuService;
     /**
      * 회원 가입 View
      * @param mv
@@ -93,14 +92,13 @@ public class MemberController extends ParentController {
      */
     @PostMapping("/sign-up")
     public ResponseEntity signUp(@RequestBody SignUpRequest signUpRequest) throws CustomLoginException {
-//        MemberVO memberVO = getCommonService().getMemberService().findMemberByUserName(signUpRequest.getUserId());
-          getCommonService().getMemberService().signUp(signUpRequest);
-          return new ResponseEntity(HttpStatus.OK);
+          Map<String, Object> resultMap = memberService.signUp(signUpRequest);
+          return ResponseEntity.ok(resultMap);
     }
 
     @PostMapping("/updatePwd")
     public Map<String,Object> updatePwd(@RequestBody MemberVO member){
-        Map<String, Object> map = getCommonService().getMemberService().updatePwd(member);
+        Map<String, Object> map = memberService.updatePwd(member);
         return map;
     }
 }

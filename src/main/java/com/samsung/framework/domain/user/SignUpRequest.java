@@ -9,19 +9,17 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"empNo","userId", "name"})
+@EqualsAndHashCode(of = {"empNo", "name"})
 public class SignUpRequest {
     @NotNull(message= "사번은 필수 값 입니다.")
-    private int empNo;
+    private long empNo;
     private String deptCode;
-    @NotNull(message = "아이디는 필수 값 입니다.")
     private String userId;
     @NotNull(message = "비밀번호는 필수 값 입니다.")
     private String userPw;
     @NotNull(message = "이름은 필수 값 입니다.")
     private String name;
     private String accountType;
-    @NotNull(message = "직위는 필수 값 입니다.")
     private String position;
     private String email;
     private String phone;

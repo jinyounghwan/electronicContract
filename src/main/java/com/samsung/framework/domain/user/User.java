@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(of = {"empNo", "userId","name"}, callSuper = false)
 public class User extends BaseEntity {
     @NotNull(message= "사번은 필수 값 입니다.")
-    private int empNo;
+    private long empNo;
     private String deptCode;
     @NotNull(message = "아이디는 필수 값 입니다.")
     private String userId;
@@ -36,7 +36,7 @@ public class User extends BaseEntity {
 //    private Set<AuthorityEnum> authority;
     @Builder
     public User(String tableName, String logId1, String logId2, String logType, String logJson, String remark, String regId
-            , int empNo, String deptCode, String userId, String userPw, String name, String accountType, String position, String email, String phone,String useYn
+            , long empNo, String deptCode, String userId, String userPw, String name, String accountType, String position, String email, String phone,String useYn
             , LocalDateTime employedAt,  LocalDateTime resignedAt, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt) {
         super(tableName, logId1, logId2, logType, logJson, remark, regId);
         this.empNo = empNo;
