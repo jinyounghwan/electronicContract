@@ -3,7 +3,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.samsung.framework.mapper.member.MemberMapper">
-
+    <select id="existsByEmpNo" resultType="boolean">
+        SELECT IF(COUNT(1) = 1, true, false)
+        FROM USERS
+        WHERE EMP_NO = #{empNo}
+    </select>
     <select id="memberListCount">
         SELECT COUNT(1) FROM USERS
     </select>

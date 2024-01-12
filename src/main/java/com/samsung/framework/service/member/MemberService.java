@@ -16,7 +16,6 @@ import com.samsung.framework.domain.user.SignUpRequest;
 import com.samsung.framework.domain.user.User;
 import com.samsung.framework.mapper.member.MemberMapper;
 import com.samsung.framework.mapper.menu.MenuMapper;
-import com.samsung.framework.service.common.ParentService;
 import com.samsung.framework.vo.common.CollectionPagingVO;
 import com.samsung.framework.vo.member.MemberVO;
 import com.samsung.framework.vo.search.SearchVO;
@@ -24,7 +23,6 @@ import com.samsung.framework.vo.user.UserVO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,7 +38,7 @@ public class MemberService{
     private final ValidationUtil validationUtil;
     private final JasyptConfig jasyptConfig;
     private final MemberMapper memberMapper;
-    private final MenuMapper menuMapper;
+
     /**
      * 멤버 목록 조회
      * @param searchObject {@link SearchObject}
@@ -126,17 +124,19 @@ public class MemberService{
 
 
     /**
-     * 사용자 등록(w/ token)
+     * 사용자 등록
      * @param signUpRequest {@link SignUpRequest}
-     * @return {@link TokenObjectVO}
+     * @return {@link Map<String,Object> }
      */
     public Map<String,Object> signUp(@Valid SignUpRequest signUpRequest) {
         Map<String, Object> resultMap = new HashMap<>();
 
         if(validationUtil.parameterValidator(signUpRequest, SignUpRequest.class)){
-            // 해당 사번 존재 여부 확인
-            memberMapper.existsByEmpNo(signUpRequest.getEmpNo());
-
+            // (임시코드) 추후 수정
+            if(memberMapper.existsByEmpNo(signUpRequest.getEmpNo())) {
+                resultMap.put("result", "이미 존재하는 사번입니다.");
+                return resultMap;
+            }
 
             var target = User.builder()
                     .empNo(signUpRequest.getEmpNo())

@@ -20,7 +20,7 @@ public interface MemberMapper extends GeneralMapper {
     MemberVO findMemberByUserName(String userName);
     MemberVO getLoginInfo(String userName);
     int updatePwd(Member member);
-
+    boolean existsByEmpNo(Long empNo);
     /**
      * 전체 사용자 조회
      * @return
