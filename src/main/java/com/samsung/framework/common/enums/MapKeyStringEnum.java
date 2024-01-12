@@ -36,6 +36,9 @@ public enum MapKeyStringEnum {
     , JWT_USERNAME("userName")
     , JWT_ROLES("roles")
     , TOKEN_REISSUE("reissue")
+
+    // Log
+    , SAVE_LOG("saveLog")
     ;
 
     private String keyString;

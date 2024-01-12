@@ -60,8 +60,6 @@ public class ApproveController extends ParentController {
     public ModelAndView findAll(ModelAndView mv) {
         mv.setViewName("board/approve-request-list");
 
-        // TODO: [노출 게시물 갯수 옵션 하드코딩 제거]
-
         BoardSearchVO boardSearchVO = new BoardSearchVO();
         boardSearchVO.setBoardCd("MENU0201");
         boardSearchVO.setPaging(Paging.builder()
@@ -92,7 +90,6 @@ public class ApproveController extends ParentController {
     }
 
     /**
-     * TODO 공통 게시판 상세 화면
      * @param mv
      * @param seq
      * @return
@@ -135,7 +132,6 @@ public class ApproveController extends ParentController {
     }
 
     /**
-     * TODO 공통 게시판 수정 화면
      * @param mv
      * @param seq
      * @return
@@ -198,7 +194,6 @@ public class ApproveController extends ParentController {
     }
 
     /**
-     * TODO 공통 게시판 등록 API
      * @param model
      * @param boardPublic
      * @return
@@ -212,7 +207,6 @@ public class ApproveController extends ParentController {
     }
 
     /**
-     * TODO 공통 게시판 수정 API
      * @param model
      * @param board
      * @return
@@ -242,7 +236,6 @@ public class ApproveController extends ParentController {
     }
 
     /**
-     * TODO 공통 게시판 댓글 삭제 API
      * @param model
      * @param paramMap
      * @return
