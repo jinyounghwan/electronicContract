@@ -54,7 +54,6 @@ public class FileUtil {
        String fileName = createFileName(multipartFile.getOriginalFilename());
        String nowDay = DateUtil.getUtcNowDateFormat("yyMM");
        String uploadPath = getUploadPath(getOsRootDir()+fileDir,nowDay) + "/" + fileName;
-
        File uploadFile = new File(uploadPath);
 
        try{
@@ -64,7 +63,7 @@ public class FileUtil {
        }
 
        return FilePublicVO.builder()
-                    .storagePath(fileDir+ "/"+nowDay+"/"+fileName)
+                    .storagePath(fileDir+ "/"+nowDay)
                     .name(fileName)
                     .size(String.valueOf(multipartFile.getSize()))
                     .originalName(multipartFile.getOriginalFilename())
@@ -101,7 +100,7 @@ public class FileUtil {
      * @param path 업로드 경로
      * @return 업로드 경로
      */
-    static String makeDirectories(final String path){
+    public static String makeDirectories(final String path){
         File dir = new File(path);
         if(!dir.exists()){
             if(dir.mkdirs()) {

@@ -20,6 +20,7 @@ import com.itextpdf.tool.xml.pipeline.html.AbstractImageProvider;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipeline;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
 import com.itextpdf.tool.xml.pipeline.html.LinkProvider;
+import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.FileUtil;
 import com.samsung.framework.service.common.ParentService;
 import com.samsung.framework.vo.file.FilePublicVO;
@@ -35,14 +36,20 @@ import java.util.regex.Pattern;
 @Slf4j
 @Service
 public class PdfService extends ParentService{
-
-    public static final String IMG_PATH = "/static/img";
+    private final String PDF_STORAGE_PATH= "/Contract/PDF/";
     public FilePublicVO createPDF(String html) throws Exception {
         // img src= \" -> ' 변경
         String convertHtml = FileUtil.imgTagConvert(html);
         String createFileName = FileUtil.createPdfFileName();
+        String nowDay = DateUtil.getUtcNowDateFormat("yyMM")+'/';
         // 파일 저장 위치 설정
-        String paths = FileUtil.getOsRootDir() + getPropertiesUtil().getFile().getRootDir() + getPropertiesUtil().getFile().getRealDir()+ '/' + createFileName;
+        final String storagePath = FileUtil.getOsRootDir()+getPropertiesUtil().getFile().getRootDir() + getPropertiesUtil().getFile().getRealDir()+ PDF_STORAGE_PATH + nowDay;
+        // 최초 PDF 저장 시 PDF 폴더가 없다면 생성
+        FileUtil.makeDirectories(storagePath);
+        // 실제 저장위치 및 파일이름
+        final String paths =  storagePath + createFileName;
+
+        log.info("File Paths : {} ",paths);
         // 최초 문서 사이즈 설정
         Document document = new Document(PageSize.A4, 30, 30, 30, 30);
         try{
@@ -115,7 +122,7 @@ public class PdfService extends ParentService{
 
         FilePublicVO filePublic = FilePublicVO.builder()
                                                 .fileNo(1)
-                                                .storagePath(paths)
+                                                .storagePath(FileUtil.seperateOs(storagePath))
                                                 .name(createFileName)
                                                 .extension(FileUtil.getFileExtension(createFileName))
                                                 .delYn("N")

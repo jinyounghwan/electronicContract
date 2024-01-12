@@ -40,17 +40,18 @@ public class ExcelController extends ParentController {
     @PostMapping("/write")
     public ResponseEntity readExcel(@RequestBody List<MultipartFile> multipartFiles) throws Exception {
         Map<String, Object> result = new HashMap<>();
-        List<FilePublicVO> fileList = getCommonService().getFileServiceImpl().uploadFile(multipartFiles, "CONTRACT");
-        List<FilePublicVO> saveFileList = getCommonService().getFileServiceImpl().saveFile(fileList);
-        if(saveFileList.isEmpty()) {
+        List<FilePublicVO> fileList = getCommonService().getFileServiceImpl().uploadFile(multipartFiles, "Contract/Excel");
+        if(fileList.isEmpty()) {
             result.put("code","204");
-            result.put("message", "파일 저장에 실패하였습니다.");
+            result.put("message", "엑셀 파일 저장 실패");
             result.put("errMsg", "incomplete");
         } else{
             result.put("code","200");
-            result.put("message", "파일 저장에 성공하였습니다.");
+            result.put("message", "엑셀 파일 저장 성공");
         }
-        getCommonService().getExcelPublicServiceImpl().readExcelFile(multipartFiles);
+        getCommonService().getExcelPublicServiceImpl().readExcelFile(fileList);
+
+
         return ResponseEntity.ok(result);
     }
 }

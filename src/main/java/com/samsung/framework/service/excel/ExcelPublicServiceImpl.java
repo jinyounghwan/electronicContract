@@ -43,10 +43,10 @@ public class ExcelPublicServiceImpl extends ParentService implements ExcelServic
         return file.getName();
     }
 
-    public void readExcelFile(List<MultipartFile> multipartFiles){
-        Iterator<MultipartFile> iter = multipartFiles.listIterator();
+    public void readExcelFile(List<FilePublicVO> fileList){
+        Iterator<FilePublicVO> iter = fileList.iterator();
         iter.forEachRemaining(value->{
-            String filePath = "C:\\files\\dejay_public\\" + value.getOriginalFilename();
+            String filePath = value.getStoragePath() + "/" + value.getName();
             getExcelUtil().readExcel(filePath);
         });
     }
