@@ -1,6 +1,7 @@
 package com.samsung.framework.controller.menu;
 
 import com.samsung.framework.controller.common.ParentController;
+import com.samsung.framework.service.menu.MenuService;
 import com.samsung.framework.vo.menu.MenuVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,15 +16,15 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/menu")
-public class MenuController extends ParentController {
-
+public class MenuController{
+    private final MenuService menuService;
     /**
      * 대메뉴 리스트
      * @return 대메뉴 리스트
      */
     @PostMapping("/LgList")
     public List<MenuVO> menuList(){
-        return getCommonService().getMenuServiceImpl().getLgMenuList();
+        return menuService.getLgMenuList();
     }
 
     /**
@@ -32,11 +33,12 @@ public class MenuController extends ParentController {
      */
     @PostMapping("/midList")
     public List<MenuVO> menuMidList(){
-        return getCommonService().getMenuServiceImpl().getMidMenuList();
+        return menuService.getMidMenuList();
     }
 
     @PostMapping("/smList")
     public List<MenuVO> menuSmList(){
-        return getCommonService().getMenuServiceImpl().getSmMenuList();
+        return menuService.getSmMenuList();
     }
+
 }
