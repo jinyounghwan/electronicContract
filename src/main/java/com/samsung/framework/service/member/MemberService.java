@@ -6,6 +6,7 @@ import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
 import com.samsung.framework.common.enums.PositionEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
+import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.common.utils.ValidationUtil;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.domain.common.SearchObject;
@@ -170,6 +171,7 @@ public class MemberService{
      */
     public MemberVO getLoginInfo(LoginRequest loginRequest) throws CustomLoginException {
         MemberVO target = memberMapper.getLoginInfo(loginRequest.getUserId());
+
         if(target == null) {
             try {
                 throw new CustomLoginException(ExceptionCodeMsgEnum.ACCOUNT_NOT_EXISTS.getCode(), ExceptionCodeMsgEnum.ACCOUNT_NOT_EXISTS.getMsg());
@@ -178,12 +180,16 @@ public class MemberService{
             }
         }
 
-        if (loginRequest.getPassword().equals(target.getUserPw())) {
+        if (loginRequest.getPassword().equals(jasyptConfig.jasyptDecrypt(target.getUserPw()))) {
             return MemberVO.builder()
-                    .userId(target.getUserId())
-                    .name(target.getName())
-                    .email(target.getEmail())
+                    .empNo(target.getEmpNo())
                     .deptCode(target.getDeptCode())
+                    .adminId(target.getAdminId())
+                    .name(target.getName())
+                    .accountType(target.getAccountType())
+                    .position(target.getPosition())
+                    .email(target.getEmail())
+                    .phone(target.getPhone())
                     .build();
         }else {
             try {

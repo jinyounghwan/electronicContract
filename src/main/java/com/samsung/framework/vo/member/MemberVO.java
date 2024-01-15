@@ -15,6 +15,7 @@ public class MemberVO extends BaseEntity {
     private int empNo;
     private String deptCode;
     private String userId;
+    private String adminId;
     private String userPw;
     private String name;
     private String accountType;
@@ -29,11 +30,12 @@ public class MemberVO extends BaseEntity {
     private String updatedBy;
     private LocalDateTime updatedAt;
     @Builder
-    public MemberVO(String tableName, String logId1, String logId2, String logType, String logJson, String remark, String regId, int empNo, String deptCode, String userId, String userPw, String name, String accountType, String position, String email, String phone, String useYn, LocalDateTime employedAt, LocalDateTime resignedAt, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt) {
+    public MemberVO(String tableName, String logId1, String logId2, String logType, String logJson, String remark, String regId, int empNo, String deptCode, String userId, String adminId, String userPw, String name, String accountType, String position, String email, String phone, String useYn, LocalDateTime employedAt, LocalDateTime resignedAt, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt) {
         super(tableName, logId1, logId2, logType, logJson, remark, regId);
         this.empNo = empNo;
         this.deptCode = deptCode;
         this.userId = userId;
+        this.adminId = adminId;
         this.userPw = userPw;
         this.name = name;
         this.accountType = accountType;

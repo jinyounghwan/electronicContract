@@ -36,9 +36,15 @@
 
     <!-- 최근 로그인 이력 저장을 위한 정보 조회 -->
     <select id="getLoginInfo" resultType="MemberVO">
-                 SELECT U.EMP_NO, U.DEPT_CODE, U.USER_ID, U.USER_PW, U.NAME, U.EMAIL, U.ACCOUNT_TYPE, U.PHONE
+                 SELECT U.EMP_NO, U.DEPT_CODE
+                      , U.ADMIN_ID,U.USER_PW
+                      , U.NAME, U.EMAIL
+                      , U.ACCOUNT_TYPE, U.PHONE
+                      , U.POSITION
                    FROM USERS U
-                  WHERE USER_ID = #{userId}
+                  WHERE U.EMP_NO = #{userId}
+                        OR U.ADMIN_ID = #{userId}
+                        AND USE_YN = 'Y'
     </select>
 
     <!-- 정확한 화면나오면 수정-->
