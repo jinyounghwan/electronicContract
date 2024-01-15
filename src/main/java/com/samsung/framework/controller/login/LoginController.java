@@ -4,6 +4,7 @@ import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
 import com.samsung.framework.controller.common.ParentController;
 import com.samsung.framework.domain.member.LoginRequest;
+import com.samsung.framework.service.member.MemberService;
 import com.samsung.framework.vo.member.MemberVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,7 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/login")
-public class LoginController extends ParentController {
+public class LoginController{
+    private final MemberService memberService;
     /**
      * login view를 가져와 준다.
      * @return
@@ -41,10 +43,9 @@ public class LoginController extends ParentController {
     @PostMapping({"", "/login"})
     public ResponseEntity login(@RequestBody LoginRequest loginRequest,HttpServletRequest request) throws CustomLoginException{
         // 유저 이름에 해당하는 유저 정보를 가져온다.
-        MemberVO loginInfo = getCommonService().getMemberService().getLoginInfo(loginRequest);
+        MemberVO loginInfo = memberService.getLoginInfo(loginRequest);
         HttpSession session = request.getSession();
         if(loginInfo!=null){
-//            getCommonUtil().getTokenFactory().createJWT(loginInfo.getUserId(), null, loginInfo.getAuthority()); // token 생성
             session.setAttribute("loginInfo", loginInfo);
             session.setMaxInactiveInterval(1800);
 
