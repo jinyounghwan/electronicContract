@@ -54,8 +54,7 @@
         /* 대메뉴 조회 - MenuMapper.getLgMenuList */
         SELECT
                 MN.MENU_CODE AS MENU_CODE, MN.NAME AS NAME
-              , SMN.PARENT_CODE AS P_MENU_CODE , MN.PATH AS PATH
-              , MN.MENU_SEQ AS MENU_SEQ
+               , MN.PATH AS PATH, MN.MENU_SEQ AS MENU_SEQ
         FROM
             MENU MN
         WHERE
