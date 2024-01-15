@@ -22,7 +22,7 @@ public class MenuController{
      * 대메뉴 리스트
      * @return 대메뉴 리스트
      */
-    @PostMapping("/LgList")
+    @PostMapping("/lgList")
     public List<MenuVO> menuList(){
         return menuService.getLgMenuList();
     }
