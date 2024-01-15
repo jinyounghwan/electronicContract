@@ -43,11 +43,10 @@ public class LoginController extends ParentController {
         // 유저 이름에 해당하는 유저 정보를 가져온다.
         MemberVO loginInfo = getCommonService().getMemberService().getLoginInfo(loginRequest);
         HttpSession session = request.getSession();
-
         if(loginInfo!=null){
 //            getCommonUtil().getTokenFactory().createJWT(loginInfo.getUserId(), null, loginInfo.getAuthority()); // token 생성
             session.setAttribute("loginInfo", loginInfo);
-            log.info("session userInfo : {}", loginInfo);
+            session.setMaxInactiveInterval(1800);
 
             return new ResponseEntity(loginInfo, HttpStatus.OK);
         }else {
