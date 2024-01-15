@@ -25,6 +25,7 @@ public class MenuService{
     // 모든 임직원이 접근 가능한 메뉴
     private final List<String> EMPLOYEE_ACCESS_MENU_LIST = new ArrayList<>() {
                                                         {
+                                                            add("MENU100000");
                                                             add("MENU104000");
                                                             add("MENU105000");
                                                         }
@@ -99,12 +100,13 @@ public class MenuService{
 
     public Map<String, Object> saveAuthMenu(SignUpRequest signUpRequest){
         Map<String, Object> resultMap = new HashMap<>();
-        
+        List<MenuVO> menuList = new ArrayList<>(new ArrayList<>(getLgMenuList()).stream().toList());
+
         // 1depth 메뉴 가져오기
-        List<MenuVO> menuList = new ArrayList<>(getMidMenuList().stream()
-                .filter(menuVO -> EMPLOYEE_ACCESS_MENU_LIST.contains(menuVO.getMenuCode()))
-                .toList());
-        
+        List<MenuVO> menuMidList = getMidMenuList().stream().toList();
+
+        menuList.addAll(menuMidList);
+
         // 2depth 메뉴 가져오기
         List<MenuVO> menuSmList = getSmMenuList();
         menuList.addAll(menuSmList);
