@@ -163,7 +163,6 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
      * @return result {@link Map}
      */
     public Map<String, Object> deleteBySeq(String lastId, List<Integer> tgtList) {
-        // TODO 삭제 처리 전 해당 시퀀스 조회
         var result = new HashMap<String, Object>();
         result.put("code", 200);
 
@@ -198,7 +197,6 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
      * @return result {@link Map}
      */
     public Map<String, Object> updateBoard(Board board, List<MultipartFile> files) throws Exception {
-        // TODO 수정 전 해당 시퀀스 조회
         var result = new HashMap<String, Object>();
         result.put("code", 200);
 

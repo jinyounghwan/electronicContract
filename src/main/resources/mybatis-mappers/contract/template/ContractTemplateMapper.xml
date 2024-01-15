@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.contract.template.ContractTemplateMapper">
+
+    <select id="getContractTemplateCode" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM CONTRACT_TEMPLATE WHERE TEMPLATE_SEQ = #{VALUE}
+    </select>
+
+</mapper>
