@@ -23,7 +23,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     // Login
     private final List<String> loginIncludePattern = Arrays.asList("/login/**", "/member/**", "/token/authentication-info");
-    private final List<String> loginExcludePattern = Arrays.asList("/login", "/member/sign-up","/error", "/resources/**", "/static/**" , "/menu/lgList", "/menu/midList", "/menu/smList");
+    private final List<String> loginExcludePattern = Arrays.asList("/login", "/error", "/resources/**", "/static/**" , "/menu/lgList", "/menu/midList", "/menu/smList" ,"/img/**");
 
 
     @Override
@@ -34,7 +34,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
 
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/**")
