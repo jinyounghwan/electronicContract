@@ -62,7 +62,6 @@ public class ApproveServiceImpl extends ParentService implements ApproveService 
 
     @Override
     public Map<String, Object> deleteBySeq(String lastId, List<Integer> tgtList) {
-        // TODO 삭제 처리 전 해당 시퀀스 조회
         var result = new HashMap<String, Object>();
         result.put("code", 200);
 

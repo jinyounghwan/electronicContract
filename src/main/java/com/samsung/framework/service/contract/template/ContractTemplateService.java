@@ -31,7 +31,7 @@ public class ContractTemplateService {
             return new ResultStatusVO(ResultCodeMsgEnum.NO_TEMPLATE_CODE.getCode(), ResultCodeMsgEnum.NO_TEMPLATE_CODE.getMsg());
         }
 
-        // IJ TODO: 임직원 번호 검증
+        // IJ TODO: 임직원 번호 검증 NOTE:매퍼 파일 변경 가능성 있음.
         if (!memberMapper.existsByEmpNo(Long.valueOf(target.getEmpNo()))) {
             return new ResultStatusVO(ResultCodeMsgEnum.INVALID_EMP_NO.getCode(), ResultCodeMsgEnum.INVALID_EMP_NO.getMsg());
         }
