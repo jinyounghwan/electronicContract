@@ -6,6 +6,7 @@ import com.samsung.framework.service.member.MemberService;
 import com.samsung.framework.service.menu.MenuService;
 import com.samsung.framework.vo.member.MemberVO;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -103,4 +104,13 @@ public class MemberController{
         Map<String, Object> map = memberService.updatePwd(member);
         return map;
     }
+
+    // 로그아웃
+    @PostMapping("/logout")
+    public ModelAndView logout(ModelAndView mv, HttpSession session){
+        session.invalidate();
+        mv.setViewName("redirect:/login");
+        return mv;
+    }
+    
 }
