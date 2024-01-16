@@ -16,36 +16,5 @@ import org.springframework.stereotype.Service;
 @Service
 public class ContractTemplateService {
 
-    private final ContractTemplateMapper contractTemplateMapper;
-    private final AccountMapper accountMapper;
 
-    /**
-     * 계약서 생성
-     * @param target
-     * @return
-     */
-    public ResultStatusVO saveContract(SaveContractRequest target) {
-        log.info(target.toString());
-        
-        // IJ TODO: 템플릿 코드 검증
-        if(!isTemplateCodeExists(Integer.parseInt(target.getTemplateCode()))) {
-            return ObjectHandlingUtil.setSingleObjResultStatusVO(null, ResultCodeMsgEnum.NO_TEMPLATE_CODE);
-        }
-
-        // IJ TODO: 임직원 번호 검증 NOTE:매퍼 파일 변경 가능성 있음.
-        if (!accountMapper.existsByEmpNo(target.getEmpNo())) {
-            return ObjectHandlingUtil.setSingleObjResultStatusVO(null, ResultCodeMsgEnum.INVALID_EMP_NO);
-        }
-
-        // IJ TODO: 계약서 생성
-
-        return new ResultStatusVO();
-    }
-
-    private boolean isTemplateCodeExists(int templateCode) {
-        if (contractTemplateMapper.getContractTemplateCode(templateCode) < 1) {
-            return false;
-        }
-        return true;
-    }
 }
