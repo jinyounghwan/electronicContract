@@ -23,7 +23,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     // Login
     private final List<String> loginIncludePattern = Arrays.asList("/login/**", "/member/**", "/token/authentication-info");
-    private final List<String> loginExcludePattern = Arrays.asList("/login", "/error", "/resources/**", "/static/**" , "/menu/lgList", "/menu/midList", "/menu/smList" ,"/img/**");
+    private final List<String> loginExcludePattern = Arrays.asList("/account/login", "/error", "/resources/**", "/static/**" ,"/menu/**", "/img/**");
 
 
     @Override
@@ -32,15 +32,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/static/img/");
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-
-        registry.addInterceptor(loginInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns(loginExcludePattern)
-                .order(1);
-
-
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//
+//        registry.addInterceptor(loginInterceptor)
+//                .addPathPatterns("/**")
+//                .excludePathPatterns(loginExcludePattern)
+//                .order(1);
+//
+//
+//    }
 
 }
