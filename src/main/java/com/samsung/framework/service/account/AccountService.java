@@ -1,4 +1,5 @@
-package com.samsung.framework.service.member;
+package com.samsung.framework.service.account;
+
 
 import com.samsung.framework.common.config.JasyptConfig;
 import com.samsung.framework.common.enums.AccountTypeEnum;
@@ -6,21 +7,15 @@ import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
 import com.samsung.framework.common.enums.PositionEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
-import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.common.utils.ValidationUtil;
+import com.samsung.framework.domain.account.LoginRequest;
+import com.samsung.framework.domain.account.SignUpRequest;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.domain.common.SearchObject;
-import com.samsung.framework.domain.common.TokenObjectVO;
-import com.samsung.framework.domain.member.LoginRequest;
-import com.samsung.framework.domain.member.Member;
-import com.samsung.framework.domain.user.SignUpRequest;
-import com.samsung.framework.domain.user.User;
-import com.samsung.framework.mapper.member.MemberMapper;
-import com.samsung.framework.mapper.menu.MenuMapper;
+import com.samsung.framework.mapper.account.AccountMapper;
+import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.common.CollectionPagingVO;
-import com.samsung.framework.vo.member.MemberVO;
 import com.samsung.framework.vo.search.SearchVO;
-import com.samsung.framework.vo.user.UserVO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,11 +29,11 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class MemberService{
+public class AccountService {
     // TODO: IJ NPE 위험코드 Optional로 변경
     private final ValidationUtil validationUtil;
     private final JasyptConfig jasyptConfig;
-    private final MemberMapper memberMapper;
+    private final AccountMapper accountMapper;
 
     /**
      * 멤버 목록 조회
@@ -47,15 +42,14 @@ public class MemberService{
      */
     public CollectionPagingVO getMemberList(SearchObject searchObject) {
 
-        int totalCount = memberMapper.memberListCount();
+        int totalCount = accountMapper.memberListCount();
         CollectionPagingVO collectionPagingVO = null;
         if(totalCount > 0) {
-
-            int totalSearchCount = memberMapper.memberListSearchCount(searchObject.getSearch());
+            int totalSearchCount = accountMapper.memberListSearchCount(searchObject.getSearch());
             Paging paging = ObjectHandlingUtil.pagingOperator(searchObject, totalSearchCount);
             SearchVO searchVO = new SearchVO();
             searchVO.setPaging(paging);
-            List<MemberVO> memberList = memberMapper.getMemberList(searchVO);
+            List<AccountVO> memberList = accountMapper.getMemberList(searchVO);
             collectionPagingVO = CollectionPagingVO.builder()
                     .objects(memberList)
                     .paging(paging)
@@ -73,21 +67,21 @@ public class MemberService{
     /**
      * 멤버 상세 조회
      * @param id int {@link Integer}
-     * @return {@link MemberVO}
+     * @return {@link AccountVO}
      */
-    public MemberVO findMemberById(int id){
-        MemberVO memberVO = memberMapper.findMemberById(id);
+    public AccountVO findMemberById(int id){
+        AccountVO AccountVO = accountMapper.findMemberById(id);
 
-        if(memberVO == null) {
+        if(AccountVO == null) {
             return null;
         }
 
-        MemberVO target = MemberVO.builder()
-                .empNo(memberVO.getEmpNo())
-                .userId(memberVO.getUserId())
-                .deptCode(memberVO.getDeptCode())
-                .name(memberVO.getName())
-                .email(memberVO.getEmail())
+        AccountVO target = AccountVO.builder()
+                .empNo(AccountVO.getEmpNo())
+                .userId(AccountVO.getUserId())
+                .deptCode(AccountVO.getDeptCode())
+                .name(AccountVO.getName())
+                .email(AccountVO.getEmail())
                 .build();
 
         return target;
@@ -96,50 +90,28 @@ public class MemberService{
     /**
      * 멤버 상세 조회
      * @param userName {@link String}
-     * @return {@link MemberVO}
+     * @return {@link AccountVO}
      */
-    public MemberVO findMemberByUserName(String userName) {
-        return memberMapper.findMemberByUserName(userName);
+    public AccountVO findMemberByUserName(String userName) {
+        return accountMapper.findMemberByUserName(userName);
     }
-
-    /** TODO: 멤버등록 RestContorller 버전
-     * 멤버 등록
-     * @param member {@link Member}
-     * @return {@link Member}
-     */
-    public Member insertMember(Member member) {
-        var target = Member.builder()
-                            .empNo(member.getEmpNo())
-                            .deptCode(member.getDeptCode())
-                            .userId(member.getUserId())
-                            .userPw(jasyptConfig.jasyptEncrypt(member.getUserPw()))
-                            .name(member.getName())
-                            .email(member.getEmail())
-                            .build();
-
-        validationUtil.parameterValidator(target, Member.class);
-        memberMapper.insertMember(target);
-
-        return target;
-    }
-
 
     /**
      * 사용자 등록
      * @param signUpRequest {@link SignUpRequest}
-     * @return {@link Map<String,Object> }
+     * @return {@link Map <String,Object> }
      */
     public Map<String,Object> signUp(@Valid SignUpRequest signUpRequest) {
         Map<String, Object> resultMap = new HashMap<>();
 
         if(validationUtil.parameterValidator(signUpRequest, SignUpRequest.class)){
             // (임시코드) 추후 수정
-            if(memberMapper.existsByEmpNo(signUpRequest.getEmpNo())) {
+            if(accountMapper.existsByEmpNo(signUpRequest.getEmpNo())) {
                 resultMap.put("result", "이미 존재하는 사번입니다.");
                 return resultMap;
             }
 
-            var target = User.builder()
+            var target = AccountVO.builder()
                     .empNo(signUpRequest.getEmpNo())
                     .deptCode(signUpRequest.getDeptCode())
                     .userPw(jasyptConfig.jasyptEncrypt(signUpRequest.getUserPw()))
@@ -152,7 +124,7 @@ public class MemberService{
                     .resignedAt(signUpRequest.getResignedAt())
                     .updatedAt(signUpRequest.getUpdatedAt())
                     .build();
-            int inserted = memberMapper.insert(target);
+            int inserted = accountMapper.insertMember(target);
 
             // 정상 insert
             if(inserted > 0) { // TOKEN 추후 제거
@@ -167,10 +139,10 @@ public class MemberService{
     /**
      * 로그인 정보 조회
      * @param loginRequest {@link LoginRequest}
-     * @return {@link MemberVO}
+     * @return {@link AccountVO}
      */
-    public MemberVO getLoginInfo(LoginRequest loginRequest) throws CustomLoginException {
-        MemberVO target = memberMapper.getLoginInfo(loginRequest.getUserId());
+    public AccountVO getLoginInfo(LoginRequest loginRequest) throws CustomLoginException {
+        AccountVO target = accountMapper.getLoginInfo(loginRequest.getUserId());
 
         if(target == null) {
             try {
@@ -181,7 +153,7 @@ public class MemberService{
         }
 
         if (loginRequest.getPassword().equals(jasyptConfig.jasyptDecrypt(target.getUserPw()))) {
-            return MemberVO.builder()
+            return AccountVO.builder()
                     .empNo(target.getEmpNo())
                     .deptCode(target.getDeptCode())
                     .adminId(target.getAdminId())
@@ -202,36 +174,13 @@ public class MemberService{
     }
 
     /**
-     * password 변경하기
-     * @param member
-     * @return
-     */
-    public Map<String, Object> updatePwd(MemberVO member) {
-        HashMap<String, Object> result = new HashMap<>();
-        Member target = Member.builder()
-                                .userId(member.getUserId())
-//                                .password(bCryptPasswordEncoder.encode(member.getUserPwd()))
-                                .build();
-        int update= memberMapper.updatePwd(target);
-
-        if(update > 0) {
-            result.put("result","success");
-        } else {
-            result.put("result", "fail");
-        }
-
-        return result;
-    }
-
-    /**
      *
      * @param searchVO
      * @return
      */
-    public List<UserVO> findAllUsers(SearchVO searchVO) {
-        List<UserVO> list = memberMapper.findAllUsers(searchVO);
+    public List<AccountVO> findAllUsers(SearchVO searchVO) {
+        List<AccountVO> list = accountMapper.findAllUsers(searchVO);
 
         return list;
     }
-
 }

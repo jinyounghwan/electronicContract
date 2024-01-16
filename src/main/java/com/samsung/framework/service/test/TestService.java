@@ -1,35 +1,28 @@
 package com.samsung.framework.service.test;
 
-//import com.samsung.framework.common.utils.CryptoUtil;
-//import com.samsung.framework.common.utils.JwtUtil;
+import com.samsung.framework.domain.account.LoginRequest;
 import com.samsung.framework.domain.common.Paging;
-import com.samsung.framework.domain.member.LoginRequest;
 import com.samsung.framework.vo.common.PagingVO;
-import com.samsung.framework.vo.test.TestVO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class TestService {
 
-//    private final JwtUtil jwtUtil;
-//    private final CryptoUtil cryptoUtil;
 
-    private Long expiredMs = 1000 * 60 * 60l;
-
-    public List<TestVO> getTest() {
-        List list = new ArrayList<>();
-        list.add(new TestVO(1234, "test"));
-
-        return list;
-    }
+//    private Long expiredMs = 1000 * 60 * 60l;
+//
+//    public List<TestVO> getTest() {
+//        List list = new ArrayList<>();
+//        list.add(new TestVO(1234, "test"));
+//
+//        return list;
+//    }
 
     /**
      * Paging

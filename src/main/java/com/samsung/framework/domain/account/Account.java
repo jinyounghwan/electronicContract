@@ -1,6 +1,5 @@
-package com.samsung.framework.domain.user;
+package com.samsung.framework.domain.account;
 
-import com.samsung.framework.domain.common.BaseEntity;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -10,9 +9,9 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"empNo", "userId","name"}, callSuper = false)
-public class User extends BaseEntity {
+public class Account {
     @NotNull(message= "사번은 필수 값 입니다.")
-    private long empNo;
+    private int empNo;
     private String deptCode;
     @NotNull(message = "아이디는 필수 값 입니다.")
     private String userId;
@@ -33,12 +32,9 @@ public class User extends BaseEntity {
     private String updatedBy;
     private LocalDateTime updatedAt;
 
-//    private Set<AuthorityEnum> authority;
     @Builder
-    public User(String tableName, String logId1, String logId2, String logType, String logJson, String remark, String regId
-            , long empNo, String deptCode, String userId, String userPw, String name, String accountType, String position, String email, String phone,String useYn
+    public Account(int empNo, String deptCode, String userId, String userPw, String name, String accountType, String position, String email, String phone,String useYn
             , LocalDateTime employedAt,  LocalDateTime resignedAt, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt) {
-        super(tableName, logId1, logId2, logType, logJson, remark, regId);
         this.empNo = empNo;
         this.deptCode = deptCode;
         this.userId = userId;
@@ -55,16 +51,5 @@ public class User extends BaseEntity {
         this.createdAt = createdAt;
         this.updatedBy = updatedBy;
         this.updatedAt = updatedAt;
-//      this.authority = authority;
     }
-
-    public User update(String name) {
-        this.name = name;
-
-        return this;
-    }
-
-//    public String getAuthorityKey() {
-//        return String.valueOf(this.authority);
-//    }
 }

@@ -7,7 +7,6 @@ import com.samsung.framework.service.board.BoardService;
 import com.samsung.framework.service.code.CodeService;
 import com.samsung.framework.service.excel.ExcelPublicServiceImpl;
 import com.samsung.framework.service.file.FilePublicServiceImpl;
-import com.samsung.framework.service.member.MemberService;
 import com.samsung.framework.service.menu.MenuService;
 import com.samsung.framework.service.pdf.PdfService;
 import com.samsung.framework.service.record.RecordService;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Component;
 public class CommonService {
 
     private final CodeService codeService;
-    private final MemberService memberService;
     private final AuthorityService authorityService;
     private final BoardService boardService;
     private final BoardPublicServiceImpl boardPublicServiceImpl;

@@ -6,17 +6,15 @@ import com.samsung.framework.common.utils.FileUtil;
 import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.board.BoardPublic;
-import com.samsung.framework.domain.file.File;
 import com.samsung.framework.service.common.ParentService;
 import com.samsung.framework.service.file.FilePublicServiceImpl;
+import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.board.BoardPublicVO;
 import com.samsung.framework.vo.board.BoardReplyVO;
 import com.samsung.framework.vo.board.BoardVO;
 import com.samsung.framework.vo.common.SelectOptionVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.file.FileVO;
-import com.samsung.framework.vo.member.MemberVO;
-import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.board.BoardSearchVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +32,7 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
     @Autowired
     FilePublicServiceImpl fileServiceImpl;
     @Override
-    public int insertBoard(Board board, List<FilePublicVO> files, MemberVO member) throws Exception {
+    public int insertBoard(Board board, List<FilePublicVO> files, AccountVO member) throws Exception {
         return 0;
     }
 
@@ -111,7 +109,7 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
     }
 
     @Override
-    public int updateBoard(Board board, List<FilePublicVO> fileList, MemberVO member) throws Exception {
+    public int updateBoard(Board board, List<FilePublicVO> fileList, AccountVO member) throws Exception {
         return 0;
     }
 

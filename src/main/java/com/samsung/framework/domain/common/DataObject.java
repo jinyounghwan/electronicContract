@@ -1,9 +1,9 @@
 package com.samsung.framework.domain.common;
 
+import com.samsung.framework.domain.account.Account;
 import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.code.Code;
 import com.samsung.framework.domain.file.File;
-import com.samsung.framework.domain.member.Member;
 import com.samsung.framework.domain.menu.Menu;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +26,7 @@ public class DataObject {
 
         private List<Code> codeList;
 
-        private Member member;
+        private Account account;
 
         private Board board;
 

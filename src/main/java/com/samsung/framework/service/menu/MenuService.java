@@ -2,12 +2,12 @@ package com.samsung.framework.service.menu;
 
 import com.samsung.framework.common.enums.RequestTypeEnum;
 import com.samsung.framework.common.enums.TableNameEnum;
+import com.samsung.framework.domain.account.SignUpRequest;
 import com.samsung.framework.domain.menu.Menu;
-import com.samsung.framework.domain.user.SignUpRequest;
 import com.samsung.framework.mapper.authority.AuthorityMapper;
 import com.samsung.framework.mapper.menu.MenuMapper;
+import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.authority.MenuAuthorityVO;
-import com.samsung.framework.vo.member.MemberVO;
 import com.samsung.framework.vo.menu.MenuVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class MenuService{
      * @param menu
      * @return 삽입 성공 1, 삽입 실패 0
      */
-    public int insertMenu(Menu menu, MemberVO member){
+    public int insertMenu(Menu menu, AccountVO member){
         Menu target = Menu.builder()
                 .menuCode(menu.getMenuCode())
                 .name(menu.getName())

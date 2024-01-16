@@ -2,8 +2,8 @@ package com.samsung.framework.service.contract.template;
 
 import com.samsung.framework.common.enums.ResultCodeMsgEnum;
 import com.samsung.framework.domain.contract.SaveContractRequest;
+import com.samsung.framework.mapper.account.AccountMapper;
 import com.samsung.framework.mapper.contract.template.ContractTemplateMapper;
-import com.samsung.framework.mapper.member.MemberMapper;
 import com.samsung.framework.vo.common.ResultStatusVO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class ContractTemplateService {
 
     private final ContractTemplateMapper contractTemplateMapper;
-    private final MemberMapper memberMapper;
+    private final AccountMapper accountMapper;
 
     /**
      * 계약서 생성
@@ -32,7 +32,7 @@ public class ContractTemplateService {
         }
 
         // IJ TODO: 임직원 번호 검증 NOTE:매퍼 파일 변경 가능성 있음.
-        if (!memberMapper.existsByEmpNo(Long.valueOf(target.getEmpNo()))) {
+        if (!accountMapper.existsByEmpNo(target.getEmpNo())) {
             return new ResultStatusVO(ResultCodeMsgEnum.INVALID_EMP_NO.getCode(), ResultCodeMsgEnum.INVALID_EMP_NO.getMsg());
         }
 

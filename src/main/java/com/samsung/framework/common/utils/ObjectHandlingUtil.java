@@ -5,9 +5,9 @@ import com.samsung.framework.common.enums.RequestTypeEnum;
 import com.samsung.framework.common.enums.ResultCodeMsgEnum;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.domain.common.SearchObject;
+import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.common.ResultStatusVO;
 import com.samsung.framework.vo.common.TokenVO;
-import com.samsung.framework.vo.member.MemberVO;
 import com.samsung.framework.vo.search.SearchVO;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -48,10 +48,10 @@ public class ObjectHandlingUtil {
     /**
      * API 요청: HttpServletRequest 로그인 정보 추출
      * @param request {@link HttpServletRequest}
-     * @return {@link MemberVO}
+     * @return {@link AccountVO}
      */
-    public static MemberVO extractLoginInfo(HttpServletRequest request) {
-        return (MemberVO) request.getAttribute(MapKeyStringEnum.MEMBER_VO.getKeyString());
+    public static AccountVO extractLoginInfo(HttpServletRequest request) {
+        return (AccountVO) request.getAttribute(MapKeyStringEnum.MEMBER_VO.getKeyString());
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.samsung.framework.domain.member;
+package com.samsung.framework.domain.account;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

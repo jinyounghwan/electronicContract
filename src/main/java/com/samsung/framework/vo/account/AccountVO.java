@@ -1,17 +1,15 @@
-package com.samsung.framework.vo.member;
+package com.samsung.framework.vo.account;
 
-import com.samsung.framework.domain.common.BaseEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
 @Setter
 @Getter
-public class MemberVO extends BaseEntity {
+@Builder
+public class AccountVO {
     private int empNo;
     private String deptCode;
     private String userId;
@@ -30,8 +28,7 @@ public class MemberVO extends BaseEntity {
     private String updatedBy;
     private LocalDateTime updatedAt;
     @Builder
-    public MemberVO(String tableName, String logId1, String logId2, String logType, String logJson, String remark, String regId, int empNo, String deptCode, String userId, String adminId, String userPw, String name, String accountType, String position, String email, String phone, String useYn, LocalDateTime employedAt, LocalDateTime resignedAt, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt) {
-        super(tableName, logId1, logId2, logType, logJson, remark, regId);
+    public AccountVO(int empNo, String deptCode, String userId, String adminId, String userPw, String name, String accountType, String position, String email, String phone, String useYn, LocalDateTime employedAt, LocalDateTime resignedAt, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt) {
         this.empNo = empNo;
         this.deptCode = deptCode;
         this.userId = userId;

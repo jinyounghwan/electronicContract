@@ -8,11 +8,11 @@ import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.service.common.ParentService;
 import com.samsung.framework.service.file.FileService;
+import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.board.BoardPublicVO;
 import com.samsung.framework.vo.board.BoardVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.file.FileVO;
-import com.samsung.framework.vo.member.MemberVO;
 import com.samsung.framework.vo.search.board.BoardSearchVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class BoardServiceImpl extends ParentService implements BoardService{
      * @return
      * @throws Exception
      */
-    public int insertBoard(Board board, List<FilePublicVO> files, MemberVO member) throws Exception{
+    public int insertBoard(Board board, List<FilePublicVO> files, AccountVO account) throws Exception{
 
         Board target = Board.builder()
                             .boardCode(board.getBoardCode())
@@ -48,7 +48,7 @@ public class BoardServiceImpl extends ParentService implements BoardService{
                             .logId2(null)
                             .logJson(null)
                             .remark(null)
-                            .regId(member.getUserId())
+                            .regId(account.getUserId())
                             .build();
 
         int iAffectedRows = getCommonMapper().getBoardMapper().insert(target);
@@ -122,7 +122,7 @@ public class BoardServiceImpl extends ParentService implements BoardService{
      * @param board
      * @return
      */
-    public int updateBoard(Board board, List<FilePublicVO> fileList, MemberVO member) throws Exception {
+    public int updateBoard(Board board, List<FilePublicVO> fileList, AccountVO account) throws Exception {
         Board target = Board.builder()
                             .boardSeq(board.getBoardSeq())
                             .title(board.getTitle())
@@ -136,7 +136,7 @@ public class BoardServiceImpl extends ParentService implements BoardService{
                             .logId2(null)
                             .logJson(null)
                             .remark(null)
-                            .regId(member.getUserId())
+                            .regId(account.getUserId())
                             .build();
 
         // Mapper Update

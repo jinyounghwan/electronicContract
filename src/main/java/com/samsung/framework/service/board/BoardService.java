@@ -1,19 +1,18 @@
 package com.samsung.framework.service.board;
 
 import com.samsung.framework.domain.board.Board;
-import com.samsung.framework.domain.file.File;
+import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.board.BoardPublicVO;
 import com.samsung.framework.vo.board.BoardVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.file.FileVO;
-import com.samsung.framework.vo.member.MemberVO;
 import com.samsung.framework.vo.search.board.BoardSearchVO;
 
 import java.util.List;
 
 public interface BoardService  {
     // 게시판 저장
-    int insertBoard(Board board, List<FilePublicVO> files, MemberVO member) throws Exception;
+    int insertBoard(Board board, List<FilePublicVO> files, AccountVO account) throws Exception;
 
     // 게시판 페이징 조회
     List<BoardVO> pagingBoard(BoardSearchVO search);
@@ -25,7 +24,7 @@ public interface BoardService  {
     List<FileVO> boardFileSearch(BoardSearchVO search);
 
     // 게시판 수정
-    int updateBoard(Board board, List<FilePublicVO> fileList, MemberVO member) throws Exception;
+    int updateBoard(Board board, List<FilePublicVO> fileList, AccountVO account) throws Exception;
 
     // 공통 게시판 단 건 조회
     BoardPublicVO findById(BoardSearchVO boardSearchVO);
