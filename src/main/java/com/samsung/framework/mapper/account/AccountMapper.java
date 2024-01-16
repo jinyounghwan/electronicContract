@@ -10,7 +10,6 @@ import java.util.List;
 
 @Mapper
 public interface AccountMapper {
-    int findAllTotalCount(SearchVO searchVO);
     int memberListCount();
     int memberListSearchCount(SearchVO search);
     List<AccountVO> getMemberList(SearchVO searchObject);
