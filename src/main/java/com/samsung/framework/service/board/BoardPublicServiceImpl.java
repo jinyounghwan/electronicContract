@@ -4,10 +4,11 @@ import com.samsung.framework.common.exception.CustomFileException;
 import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.FileUtil;
 import com.samsung.framework.common.utils.StringUtil;
+import com.samsung.framework.common.utils.ValidationUtil;
 import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.board.BoardPublic;
-import com.samsung.framework.domain.file.File;
-import com.samsung.framework.service.common.ParentService;
+import com.samsung.framework.mapper.board.BoardMapper;
+import com.samsung.framework.mapper.file.FileMapper;
 import com.samsung.framework.service.file.FilePublicServiceImpl;
 import com.samsung.framework.vo.board.BoardPublicVO;
 import com.samsung.framework.vo.board.BoardReplyVO;
@@ -16,8 +17,8 @@ import com.samsung.framework.vo.common.SelectOptionVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.file.FileVO;
 import com.samsung.framework.vo.member.MemberVO;
-import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.board.BoardSearchVO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -25,14 +26,24 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Primary
+@RequiredArgsConstructor
 @Component
-public class BoardPublicServiceImpl extends ParentService implements BoardService {
+public class BoardPublicServiceImpl implements BoardService {
+
     @Autowired
     FilePublicServiceImpl fileServiceImpl;
+
+    private final BoardMapper boardMapper;
+    private final FileMapper fileMapper;
+    private final ValidationUtil validationUtil;
+    private final FileUtil fileUtil;
     @Override
     public int insertBoard(Board board, List<FilePublicVO> files, MemberVO member) throws Exception {
         return 0;
@@ -57,13 +68,13 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
     public BoardPublicVO findById(BoardSearchVO search) {
 //        search.setEntityName(TableNameEnum.BOARD.name());
 
-        BoardPublicVO rowData = getCommonMapper().getBoardMapper().findById(search);
+        BoardPublicVO rowData = boardMapper.findById(search);
         rowData.setRegDtStr(DateUtil.convertLocalDateTimeToString(rowData.getRegDt(), DateUtil.DATETIME_YMDHM_PATTERN));
         rowData.setLastDtStr(DateUtil.convertLocalDateTimeToString(rowData.getLastDt(), DateUtil.DATETIME_YMDHM_PATTERN));
 
         // 게시판 댓글 목록 조회
         if(rowData != null) {
-            List<BoardReplyVO> replyBySeq = getCommonMapper().getBoardMapper().findReplyBySeq(rowData.getBoardSeq());
+            List<BoardReplyVO> replyBySeq = boardMapper.findReplyBySeq(rowData.getBoardSeq());
             if(!replyBySeq.isEmpty()) {
                 replyBySeq.forEach(ele -> {
                     ele.setRegDtStr(DateUtil.convertLocalDateTimeToString(ele.getRegDt(), DateUtil.DATETIME_YMDHM_PATTERN));
@@ -90,7 +101,7 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
             return new ArrayList<>();
         }
 
-        List<BoardPublicVO> list = getCommonMapper().getBoardMapper().findAll(boardSearchVO);
+        List<BoardPublicVO> list = boardMapper.findAll(boardSearchVO);
         list.forEach(ele -> {
             ele.setRegDtStr(DateUtil.convertLocalDateTimeToString(ele.getRegDt(), DateUtil.DATETIME_YMDHM_PATTERN));
             ele.setLastDtStr(DateUtil.convertLocalDateTimeToString(ele.getLastDt(), DateUtil.DATETIME_YMDHM_PATTERN));
@@ -101,7 +112,7 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
 
     @Override
     public void increaseHits(long boardSeq) {
-        int updateCount = getCommonMapper().getBoardMapper().increaseHits(boardSeq);
+        int updateCount = boardMapper.increaseHits(boardSeq);
         System.out.println("updateCount " + updateCount);
     }
 
@@ -153,7 +164,7 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
      * @return {@link Integer}
      */
     public int totalCount(BoardSearchVO boardSearchVO) {
-        return getCommonMapper().getBoardMapper().findAllTotalCount(boardSearchVO);
+        return boardMapper.findAllTotalCount(boardSearchVO);
     }
 
     /**
@@ -169,7 +180,7 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
         var paramMap = new HashMap<String, Object>();
         paramMap.put("lastId", lastId);
         paramMap.put("boardSeqList", tgtList);
-        int deleteCount = getCommonMapper().getBoardMapper().deleteList(paramMap);
+        int deleteCount = boardMapper.deleteList(paramMap);
         if(deleteCount < 1) {
             result.put("code", 204);
             result.put("message", "삭제할 대상이 없습니다.");
@@ -181,11 +192,11 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
         tgtList.forEach(value->{
             BoardSearchVO searchVO = new BoardSearchVO();
             searchVO.setBoardSeq(Long.valueOf(value));
-            BoardPublicVO target = getCommonMapper().getBoardMapper().findById(searchVO);
-            attachList.addAll(getFileUtil().splitAttachId(target.getAttachId()));
+            BoardPublicVO target = boardMapper.findById(searchVO);
+            attachList.addAll(fileUtil.splitAttachId(target.getAttachId()));
         });
         paramMap.put("seqList",attachList); // 파일 입출력을 위한 seqList Setting
-        getCommonMapper().getFileMapper().deleteFileList(paramMap);
+        fileMapper.deleteFileList(paramMap);
         result.put("message", "삭제 되었습니다.");
 
         return result;
@@ -200,7 +211,7 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
         var result = new HashMap<String, Object>();
         result.put("code", 200);
 
-        int updateCount = getCommonMapper().getBoardMapper().updateBoard(board);
+        int updateCount = boardMapper.updateBoard(board);
         if(updateCount < 1) {
             result.put("code", 204);
             result.put("message", "수정할 대상이 없습니다.");
@@ -212,9 +223,9 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
         List<String> originFiles = new ArrayList<>();
         BoardSearchVO boardSearchVO = new BoardSearchVO();
         boardSearchVO.setBoardSeq(board.getBoardSeq());
-        BoardPublicVO boardPublicVO =getCommonMapper().getBoardMapper().findById(boardSearchVO);
+        BoardPublicVO boardPublicVO =boardMapper.findById(boardSearchVO);
         if(!StringUtil.isEmpty(boardPublicVO.getAttachId())){
-            originFiles.addAll(getFileUtil().splitAttachId(boardPublicVO.getAttachId()));
+            originFiles.addAll(fileUtil.splitAttachId(boardPublicVO.getAttachId()));
         }
 
         List<String> attachList = new ArrayList<>();
@@ -237,7 +248,7 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
 
         String attachId="";
         if(!ObjectUtils.isEmpty(attachList)){
-            attachId = getFileUtil().makeAttachIdStr(attachList);
+            attachId = fileUtil.makeAttachIdStr(attachList);
             Board targetBoardFile = Board.builder()
                     .boardSeq(board.getBoardSeq())
                     .attachId(attachId)
@@ -252,7 +263,7 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
      */
     public void updateBoardFile(Board board) throws CustomFileException {
         try{
-            getCommonMapper().getBoardMapper().updateBoardFile(board);
+            boardMapper.updateBoardFile(board);
         } catch(Exception e){
             throw new CustomFileException();
         }
@@ -275,7 +286,7 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
                 .regId(boardPublic.getRegId())
                 .build();
 
-        Map<String, Object> validated = getValidationUtil().clientRequestParameterValidator(target, BoardPublic.class);
+        Map<String, Object> validated = validationUtil.clientRequestParameterValidator(target, BoardPublic.class);
         if(!validated.isEmpty()) {
             result.put("code", 400);
             result.put("message", "잘못된 요청");
@@ -283,7 +294,7 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
             return result;
         }
 
-        int regCount = getCommonMapper().getBoardMapper().registrationBoard(boardPublic);
+        int regCount = boardMapper.registrationBoard(boardPublic);
         if(regCount < 1) {
             result.put("code", 204);
             result.put("message", "등록에 실패 했습니다.");
@@ -303,14 +314,14 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
                 result.put("errMsg","incomplete");
             }
 
-            String attachIds = getFileUtil().makeAttachIdVO(saveFileList);
+            String attachIds = fileUtil.makeAttachIdVO(saveFileList);
             log.info("attachIds : {}",attachIds);
             Board fileTargetBoard = Board.builder()
                     .boardSeq(boardPublic.getBoardSeq())
                     .attachId(attachIds)
                     .build();
 
-            getCommonMapper().getBoardMapper().updateBoardFile(fileTargetBoard);
+            boardMapper.updateBoardFile(fileTargetBoard);
         }
 
         result.put("message", "등록 되었습니다.");
@@ -324,9 +335,9 @@ public class BoardPublicServiceImpl extends ParentService implements BoardServic
      * @return
      */
     public List<BoardReplyVO> removeBoardReply(Map<String, Object> paramMap) {
-        getCommonMapper().getBoardMapper().removeReplyBySeq(paramMap);
+        boardMapper.removeReplyBySeq(paramMap);
 
-        List<BoardReplyVO> replyBySeq = getCommonMapper().getBoardMapper().findReplyBySeq(Long.parseLong(paramMap.get("boardSeq").toString()));
+        List<BoardReplyVO> replyBySeq = boardMapper.findReplyBySeq(Long.parseLong(paramMap.get("boardSeq").toString()));
         if(!replyBySeq.isEmpty()) {
             replyBySeq.forEach(ele -> ele.setRegDtStr(DateUtil.convertLocalDateTimeToString(ele.getRegDt(), DateUtil.DATETIME_YMDHM_PATTERN)));
         }

@@ -1,8 +1,6 @@
 package com.samsung.framework.controller.file;
 
-import com.samsung.framework.common.exception.CustomFileException;
-import com.samsung.framework.controller.common.ParentController;
-import com.samsung.framework.domain.file.File;
+import com.samsung.framework.service.file.FilePublicServiceImpl;
 import com.samsung.framework.vo.file.FilePublicVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,11 +22,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/file")
-public class FileController extends ParentController {
+public class FileController {
+
+    private final FilePublicServiceImpl fileService;
+
     @GetMapping("/download/{fileSeq}")
     public ResponseEntity download(@PathVariable String fileSeq, HttpServletRequest request, HttpServletResponse response) throws IOException {
-      FilePublicVO file = getCommonService().getFileServiceImpl().getFile(Long.parseLong(fileSeq));
-      getCommonService().getFileServiceImpl().downloadFile(file, request, response);
+      FilePublicVO file = fileService.getFile(Long.parseLong(fileSeq));
+      fileService.downloadFile(file, request, response);
       HttpHeaders headers = new HttpHeaders();
       headers.setLocation(URI.create("/board/detail/"+fileSeq));
       return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
@@ -37,9 +38,9 @@ public class FileController extends ParentController {
     @PostMapping("/upload")
     public ResponseEntity upload(@RequestBody List<MultipartFile> multipartFileList) throws Exception {
         Map<String,Object> result = new HashMap<>();
-        List<FilePublicVO> fileList  = getCommonService().getFileServiceImpl().uploadFile(multipartFileList);
+        List<FilePublicVO> fileList  = fileService.uploadFile(multipartFileList);
 
-        List<FilePublicVO> saveFileList = getCommonService().getFileServiceImpl().saveFile(fileList);
+        List<FilePublicVO> saveFileList = fileService.saveFile(fileList);
 
         if(saveFileList.isEmpty()) {
             result.put("code","204");

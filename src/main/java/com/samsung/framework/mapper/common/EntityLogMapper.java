@@ -4,7 +4,7 @@ import com.samsung.framework.domain.common.BaseEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface EntityLogMapper extends GeneralMapper {
+public interface EntityLogMapper {
 
     String getTablePrimaryKey(String tableName);
     boolean isEntityLogExist(BaseEntity baseEntity);

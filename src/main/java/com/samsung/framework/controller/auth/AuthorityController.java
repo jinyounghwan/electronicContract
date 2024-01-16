@@ -1,8 +1,10 @@
 package com.samsung.framework.controller.auth;
 
 import com.samsung.framework.common.utils.StringUtil;
-import com.samsung.framework.controller.common.ParentController;
 import com.samsung.framework.domain.authority.Authority;
+import com.samsung.framework.service.authority.AuthorityServiceImpl;
+import com.samsung.framework.service.file.FilePublicServiceImpl;
+import com.samsung.framework.service.member.MemberService;
 import com.samsung.framework.vo.code.CommonCodeVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.member.MemberVO;
@@ -28,7 +30,11 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class AuthorityController extends ParentController {
+public class AuthorityController {
+
+    private final AuthorityServiceImpl authorityService;
+    private final MemberService memberService;
+    private final FilePublicServiceImpl fileService;
 
     /**
      * 개인 권한 관리 화면
@@ -40,7 +46,7 @@ public class AuthorityController extends ParentController {
         mv.setViewName("auth/individual");
 
         // 메뉴 목록 조회
-        List<CommonCodeVO> list = getCommonService().getAuthorityService().findMenuList(new String());
+        List<CommonCodeVO> list = authorityService.findMenuList(new String());
         mv.addObject("list", list);
         mv.addObject("code", new CommonCodeVO());
         mv.addObject("users", new ArrayList<UserVO>());
@@ -58,10 +64,10 @@ public class AuthorityController extends ParentController {
         mv.setViewName("auth/group");
 
         // 메뉴 목록 조회
-        List<CommonCodeVO> list = getCommonService().getAuthorityService().findMenuList(new String());
+        List<CommonCodeVO> list = authorityService.findMenuList(new String());
         mv.addObject("list", list);
         // 부서 목록 조회
-        List<CommonCodeVO> deptList = getCommonService().getAuthorityService().findDepartmentList();
+        List<CommonCodeVO> deptList = authorityService.findDepartmentList();
         mv.addObject("deptList", deptList);
         mv.addObject("code", new CommonCodeVO());
         mv.addObject("users", new ArrayList<UserVO>());
@@ -79,7 +85,7 @@ public class AuthorityController extends ParentController {
     @ResponseBody
     @PostMapping("/individual/api")
     public ResponseEntity saveIndividualAuthority(@RequestBody List<Authority> list) {
-        Map<String, Object> result = getCommonService().getAuthorityService().saveIndividualAuthority(list);
+        Map<String, Object> result = authorityService.saveIndividualAuthority(list);
 
         return ResponseEntity.ok(result);
     }
@@ -92,7 +98,7 @@ public class AuthorityController extends ParentController {
     @ResponseBody
     @PostMapping("/group/api")
     public ResponseEntity saveGroupAuthority(@RequestBody List<Authority> list) {
-        Map<String, Object> result = getCommonService().getAuthorityService().saveGroupAuthority(list);
+        Map<String, Object> result = authorityService.saveGroupAuthority(list);
 
         return ResponseEntity.ok(result);
     }
@@ -107,7 +113,7 @@ public class AuthorityController extends ParentController {
     public String authPopupList(Model model, @RequestParam(value = "searchKeyword") String searchKeyword) {
         SearchVO searchVO = new SearchVO();
         searchVO.setSearchWord1(searchKeyword);
-        List<UserVO> list = getCommonService().getMemberService().findAllUsers(searchVO);
+        List<UserVO> list = memberService.findAllUsers(searchVO);
         model.addAttribute("users", list);
 
         return "auth/individual :: #user_list_wrapper";
@@ -125,7 +131,7 @@ public class AuthorityController extends ParentController {
         var result = new HashMap<>();
 
         // 메뉴 목록 조회
-        List<CommonCodeVO> list = getCommonService().getAuthorityService().findMenuList(deptCd);
+        List<CommonCodeVO> list = authorityService.findMenuList(deptCd);
         model.addAttribute("list", list);
         result.put("list", list);
 
@@ -148,10 +154,10 @@ public class AuthorityController extends ParentController {
             return ResponseEntity.ok(result);
         }
 
-        MemberVO member = getCommonService().getMemberService().findMemberByUserName(loginInfo.getUserId());
+        MemberVO member = memberService.findMemberByUserName(loginInfo.getUserId());
 
-        FilePublicVO file = getCommonService().getFileServiceImpl().getFile(fileNm.replaceAll("\"",""));
-        result = (HashMap<String, Object>) getCommonService().getAuthorityService().updAuthFile(file, member.getEmpNo());
+        FilePublicVO file = fileService.getFile(fileNm.replaceAll("\"",""));
+        result = (HashMap<String, Object>) authorityService.updAuthFile(file, member.getEmpNo());
 
         return ResponseEntity.ok(result);
     }

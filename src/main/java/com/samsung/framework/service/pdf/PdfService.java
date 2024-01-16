@@ -16,34 +16,36 @@ import com.itextpdf.tool.xml.parser.XMLParser;
 import com.itextpdf.tool.xml.pipeline.css.CSSResolver;
 import com.itextpdf.tool.xml.pipeline.css.CssResolverPipeline;
 import com.itextpdf.tool.xml.pipeline.end.PdfWriterPipeline;
-import com.itextpdf.tool.xml.pipeline.html.AbstractImageProvider;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipeline;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
-import com.itextpdf.tool.xml.pipeline.html.LinkProvider;
 import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.FileUtil;
-import com.samsung.framework.service.common.ParentService;
 import com.samsung.framework.vo.file.FilePublicVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 @Slf4j
 @Service
-public class PdfService extends ParentService{
+public class PdfService {
     private final String PDF_STORAGE_PATH= "/Contract/PDF/";
+
+    @Value("${properties.file.rootDir}")
+    private String getRootDir;
+    @Value("${properties.file.realDir}")
+    private String getRealDir;
+
     public FilePublicVO createPDF(String html) throws Exception {
         // img src= \" -> ' 변경
         String convertHtml = FileUtil.imgTagConvert(html);
         String createFileName = FileUtil.createPdfFileName();
         String nowDay = DateUtil.getUtcNowDateFormat("yyMM")+'/';
         // 파일 저장 위치 설정
-        final String storagePath = FileUtil.getOsRootDir()+getPropertiesUtil().getFile().getRootDir() + getPropertiesUtil().getFile().getRealDir()+ PDF_STORAGE_PATH + nowDay;
+        final String storagePath = FileUtil.getOsRootDir() + getRootDir + getRealDir + PDF_STORAGE_PATH + nowDay;
         // 최초 PDF 저장 시 PDF 폴더가 없다면 생성
         FileUtil.makeDirectories(storagePath);
         // 실제 저장위치 및 파일이름

@@ -1,19 +1,31 @@
 package com.samsung.framework.service.excel;
 
-import com.samsung.framework.common.exception.CustomFileException;
+import com.samsung.framework.common.utils.ExcelUtil;
 import com.samsung.framework.common.utils.FileUtil;
-import com.samsung.framework.service.common.ParentService;
+import com.samsung.framework.mapper.file.FileMapper;
 import com.samsung.framework.vo.file.FilePublicVO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Iterator;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
-public class ExcelPublicServiceImpl extends ParentService implements ExcelService {
+public class ExcelPublicServiceImpl implements ExcelService {
+
+    private final ExcelUtil excelUtil;
+    private final FileUtil fileUtil;
+    private final FileMapper fileMapper;
+
+    @Value("${properties.file.rootDir}")
+    private String getRootDir;
+    @Value("${properties.file.realDir}")
+    private String getRealDir;
+
     /**
      * 엑셀 파일 실제 directory 생성하기
      * @param tableData
@@ -21,7 +33,7 @@ public class ExcelPublicServiceImpl extends ParentService implements ExcelServic
      * @throws Exception
      */
     public String createExcelFile(String[][] tableData) throws Exception {
-        String path = getExcelUtil().createExcel(tableData, getPropertiesUtil().getFile().getRootDir() + getPropertiesUtil().getFile().getRealDir());
+        String path = excelUtil.createExcel(tableData, getRootDir + getRealDir);
 
         int lastIndex =path.lastIndexOf("/");
         int index = path.indexOf(":");
@@ -34,7 +46,7 @@ public class ExcelPublicServiceImpl extends ParentService implements ExcelServic
                                         .originalName(fileName)
                                         .name(fileName)
                                         .fileNo(1)
-                                        .extension(getFileUtil().checkFileType(fileName))
+                                        .extension(fileUtil.checkFileType(fileName))
                                         .storagePath(filePath)
                                         .size(String.valueOf(size))
                                         .createdBy("hsk9839")
@@ -47,7 +59,7 @@ public class ExcelPublicServiceImpl extends ParentService implements ExcelServic
         Iterator<FilePublicVO> iter = fileList.iterator();
         iter.forEachRemaining(value->{
             String filePath = value.getStoragePath() + "/" + value.getName();
-            getExcelUtil().readExcel(filePath);
+            excelUtil.readExcel(filePath);
         });
     }
 
@@ -57,7 +69,7 @@ public class ExcelPublicServiceImpl extends ParentService implements ExcelServic
      * @return
      */
     public int saveExcelFile(FilePublicVO file){
-        return getCommonMapper().getFileMapper().saveExcelFile(file);
+        return fileMapper.saveExcelFile(file);
     }
 
 }

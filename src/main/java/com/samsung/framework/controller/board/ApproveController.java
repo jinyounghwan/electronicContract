@@ -1,10 +1,15 @@
 package com.samsung.framework.controller.board;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.samsung.framework.common.utils.FileUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
-import com.samsung.framework.controller.common.ParentController;
 import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.board.BoardPublic;
 import com.samsung.framework.domain.common.Paging;
+import com.samsung.framework.service.authority.AuthorityServiceImpl;
+import com.samsung.framework.service.board.ApproveServiceImpl;
+import com.samsung.framework.service.board.BoardPublicServiceImpl;
+import com.samsung.framework.service.file.FilePublicServiceImpl;
 import com.samsung.framework.vo.board.BoardPublicVO;
 import com.samsung.framework.vo.board.BoardReplyVO;
 import com.samsung.framework.vo.code.CommonCodeVO;
@@ -13,7 +18,6 @@ import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.board.BoardSearchVO;
 import com.samsung.framework.vo.user.UserVO;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -31,24 +35,30 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/approve")
-public class ApproveController extends ParentController {
+public class ApproveController {
+
+    private final BoardPublicServiceImpl boardService;
+    private final ApproveServiceImpl approveService;
+    private final FilePublicServiceImpl fileService;
+    private final AuthorityServiceImpl authorityService;
+    private final FileUtil fileUtil;
 
     // [검색옵션] 날짜
     @ModelAttribute("searchDateRangeOptionList")
     public List<SelectOptionVO> searchDateRangeOptionList() {
-        return getCommonService().getBoardPublicServiceImpl().getSearchDateRangeOptionList("APPROVE");
+        return boardService.getSearchDateRangeOptionList("APPROVE");
     }
 
     // [검색옵션] 키워드
     @ModelAttribute("searchKeywordTypeOptionList")
     public List<SelectOptionVO> searchKeywordTypeOptionList() {
-        return getCommonService().getBoardPublicServiceImpl().getSearchKeywordTypeList();
+        return boardService.getSearchKeywordTypeList();
     }
 
     // [검색옵션] 진행상태
     @ModelAttribute("searchStateTypeOptionList")
     public List<SelectOptionVO> searchStateTypeOptionList() {
-        return getCommonService().getApproveService().getSearchStateTypeOptionList();
+        return approveService.getSearchStateTypeOptionList();
     }
 
     /**
@@ -69,11 +79,11 @@ public class ApproveController extends ParentController {
         );
 
         // 전체 게시물 수
-        int totalCount = getCommonService().getApproveService().totalCount(boardSearchVO);
+        int totalCount = approveService.totalCount(boardSearchVO);
         mv.addObject("totalCount", totalCount);
 
         // 목록 조회
-        List<BoardPublicVO> list = getCommonService().getApproveService().findAll(boardSearchVO);
+        List<BoardPublicVO> list = approveService.findAll(boardSearchVO);
         mv.addObject("list", list);
 
         // paging
@@ -100,14 +110,14 @@ public class ApproveController extends ParentController {
 
         BoardSearchVO boardSearchVO = new BoardSearchVO();
         boardSearchVO.setBoardSeq(seq);
-        BoardPublicVO rowData = getCommonService().getBoardService().findById(boardSearchVO);
+        BoardPublicVO rowData = boardService.findById(boardSearchVO);
         mv.addObject("rowData", rowData);
         mv.addObject("replyList", rowData.getReplyList());
-        List<String> attachIdList = getFileUtil().splitAttachId(rowData.getAttachId());
-        List<FilePublicVO> files= getCommonService().getFileServiceImpl().getFiles(attachIdList);
+        List<String> attachIdList = fileUtil.splitAttachId(rowData.getAttachId());
+        List<FilePublicVO> files= fileService.getFiles(attachIdList);
 
         mv.addObject("files", files);
-        getCommonService().getBoardService().increaseHits(seq);
+        boardService.increaseHits(seq);
 
         return mv;
     }
@@ -123,7 +133,7 @@ public class ApproveController extends ParentController {
         mv.addObject("boardPublic", boardPublic);
 
         // 메뉴 목록 조회
-        List<CommonCodeVO> list = getCommonService().getAuthorityService().findMenuList(new String());
+        List<CommonCodeVO> list = authorityService.findMenuList(new String());
         mv.addObject("list", list);
 //        mv.addObject("code", new CommonCodeVO());
         mv.addObject("users", new ArrayList<UserVO>());
@@ -142,10 +152,10 @@ public class ApproveController extends ParentController {
 
         BoardSearchVO boardSearchVO = new BoardSearchVO();
         boardSearchVO.setBoardSeq(seq);
-        BoardPublicVO rowData = getCommonService().getBoardService().findById(boardSearchVO);
+        BoardPublicVO rowData = boardService.findById(boardSearchVO);
         mv.addObject("rowData", rowData);
-        List<String> attachList = getFileUtil().splitAttachId(rowData.getAttachId());
-        List<FilePublicVO> files = getCommonService().getFileServiceImpl().getFiles(attachList);
+        List<String> attachList = fileUtil.splitAttachId(rowData.getAttachId());
+        List<FilePublicVO> files = fileService.getFiles(attachList);
         mv.addObject("files",files);
 
         return mv;
@@ -174,12 +184,12 @@ public class ApproveController extends ParentController {
         );
 
         // 전체 게시물 수
-        int totalListCount = getCommonService().getApproveService().totalCount(boardSearchVO);
+        int totalListCount = approveService.totalCount(boardSearchVO);
 
         model.addAttribute("totalCount", totalListCount);
 //
 //        // 목록 조회
-        List<BoardPublicVO> list = getCommonService().getApproveService().findAll(boardSearchVO);
+        List<BoardPublicVO> list = approveService.findAll(boardSearchVO);
         model.addAttribute("list", list);
 
         // paging
@@ -201,7 +211,7 @@ public class ApproveController extends ParentController {
     @ResponseBody
     @PostMapping("/api/registration")
     public ResponseEntity registration(Model model, @RequestPart(value="data") BoardPublic boardPublic, @RequestPart(value="files",required = false) List<MultipartFile> files) throws Exception {
-        Map<String, Object> result = null;//getCommonService().getBoardPublicServiceImpl().registration(boardPublic, files);
+        Map<String, Object> result = null;//boardService.registration(boardPublic, files);
 
         return ResponseEntity.ok(result);
     }
@@ -214,7 +224,7 @@ public class ApproveController extends ParentController {
     @ResponseBody
     @PostMapping("/api/update/{seq}")
     public ResponseEntity deleteBoard(Model model, @RequestPart(value="data") Board board, @RequestPart(value="files",required = false) List<MultipartFile> files) throws Exception {
-        Map<String, Object> result = getCommonService().getBoardPublicServiceImpl().updateBoard(board,files);
+        Map<String, Object> result = boardService.updateBoard(board,files);
 
         return ResponseEntity.ok(result);
     }
@@ -229,9 +239,9 @@ public class ApproveController extends ParentController {
     @ResponseBody
     @DeleteMapping("/api/delete")
     public ResponseEntity deleteBoard(Model model, @RequestParam(value = "lastId") String lastId, @RequestParam(value = "checkedList[]") List<Integer> checkedList) {
-        Map<String, Object> result = getCommonService().getApproveService().deleteBySeq(lastId, checkedList);
+        Map<String, Object> result = approveService.deleteBySeq(lastId, checkedList);
 
-        getCommonService().getFileServiceImpl().deleteFiles(lastId, checkedList);
+        fileService.deleteFiles(lastId, checkedList);
         return ResponseEntity.ok(result);
     }
 
@@ -242,7 +252,7 @@ public class ApproveController extends ParentController {
      */
     @DeleteMapping("/api/reply")
     public String removeReply(Model model, @RequestBody Map<String, Object> paramMap) {
-        List<BoardReplyVO> replyList = getCommonService().getBoardPublicServiceImpl().removeBoardReply(paramMap);
+        List<BoardReplyVO> replyList = boardService.removeBoardReply(paramMap);
         model.addAttribute("replyList", replyList);
 
         return "board/detail :: #reply_wrapper";

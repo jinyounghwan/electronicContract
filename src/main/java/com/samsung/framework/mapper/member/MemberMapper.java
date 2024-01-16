@@ -1,7 +1,6 @@
 package com.samsung.framework.mapper.member;
 
 import com.samsung.framework.domain.member.Member;
-import com.samsung.framework.mapper.common.GeneralMapper;
 import com.samsung.framework.vo.member.MemberVO;
 import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.user.UserVO;
@@ -10,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 @Mapper
-public interface MemberMapper extends GeneralMapper {
+public interface MemberMapper {
 
     int memberListCount();
     int memberListSearchCount(SearchVO search);
@@ -26,4 +25,11 @@ public interface MemberMapper extends GeneralMapper {
      * @return
      */
     List<UserVO> findAllUsers(SearchVO searchVO);
+
+    /**
+     * 저장
+     * @param obj
+     * @return
+     */
+    int insert(Object obj);
 }

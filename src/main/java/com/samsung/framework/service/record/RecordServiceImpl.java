@@ -3,11 +3,13 @@ package com.samsung.framework.service.record;
 import com.samsung.framework.common.enums.HttpRequestTypeEnum;
 import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.StringUtil;
-import com.samsung.framework.service.common.ParentService;
+import com.samsung.framework.mapper.menu.MenuMapper;
+import com.samsung.framework.mapper.record.RecordMapper;
 import com.samsung.framework.vo.common.SelectOptionVO;
 import com.samsung.framework.vo.menu.MenuVO;
 import com.samsung.framework.vo.record.RecordVO;
 import com.samsung.framework.vo.search.record.RecordSearchVO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 @Slf4j
+@RequiredArgsConstructor
 @Service
-public class RecordServiceImpl extends ParentService implements RecordService {
+public class RecordServiceImpl implements RecordService {
+
+    private final RecordMapper recordMapper;
+    private final MenuMapper menuMapper;
 
     @Override
     public List<SelectOptionVO> getSearchDateRangeOptionList() {
@@ -44,7 +50,7 @@ public class RecordServiceImpl extends ParentService implements RecordService {
 
         }
 
-        return getCommonMapper().getRecordMapper().findAllTotalCount(recordSearchVO);
+        return recordMapper.findAllTotalCount(recordSearchVO);
     }
 
     @Override
@@ -54,8 +60,8 @@ public class RecordServiceImpl extends ParentService implements RecordService {
             return new ArrayList<>();
         }
 
-        List<RecordVO> list = getCommonMapper().getRecordMapper().findAll(recordSearchVO);
-        List<MenuVO> menuList = getCommonMapper().getMenuMapper().findCommonMenuCodeList();
+        List<RecordVO> list = recordMapper.findAll(recordSearchVO);
+        List<MenuVO> menuList = menuMapper.findCommonMenuCodeList();
         list.forEach(ele -> {
                 ele.setRegDtStr(DateUtil.convertLocalDateTimeToString(ele.getRegDt(), DateUtil.DATETIME_YMDHM_PATTERN));
                 ele.setLogTypeKoreanStr(setProcessTypeStringInKorean(ele.getLogType()));
@@ -73,12 +79,12 @@ public class RecordServiceImpl extends ParentService implements RecordService {
 
     @Override
     public RecordVO findById(long logSeq) {
-        RecordVO rowData = getCommonMapper().getRecordMapper().findById(logSeq);
+        RecordVO rowData = recordMapper.findById(logSeq);
         if(rowData != null) {
             rowData.setLogTypeKoreanStr(setProcessTypeStringInKorean(rowData.getLogType()));
             rowData.setLogEtc(StringUtil.NVL(rowData.getLogEtc()));
             if(rowData.getCodeCd() != null) {
-                List<MenuVO> menuList = getCommonMapper().getMenuMapper().findCommonMenuCodeList();
+                List<MenuVO> menuList = menuMapper.findCommonMenuCodeList();
                 Optional<MenuVO> parentMenu = menuList.stream().filter(ml -> ml.getMenuCode().substring(0, 6).equals(rowData.getCodeCd().substring(0, 6))).findFirst();
                 parentMenu.ifPresent(pm -> rowData.setMenuNm(pm.getName() + " > " + rowData.getCodeNm()));
             }else {
