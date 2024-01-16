@@ -3,9 +3,9 @@ package com.samsung.framework.controller.auth;
 import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.authority.Authority;
 import com.samsung.framework.service.account.AccountService;
-import com.samsung.framework.service.authority.AuthorityService;
 import com.samsung.framework.service.file.FilePublicServiceImpl;
 import com.samsung.framework.vo.account.AccountVO;
+import com.samsung.framework.service.authority.AuthorityServiceImpl;
 import com.samsung.framework.vo.code.CommonCodeVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.search.SearchVO;
@@ -30,10 +30,12 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class AuthorityController  {
-    AccountService accountService;
-    AuthorityService authorityService;
-    FilePublicServiceImpl fileService;
+public class AuthorityController {
+
+    private final AuthorityServiceImpl authorityService;
+    private final AccountService accountService;
+    private final FilePublicServiceImpl fileService;
+
     /**
      * 개인 권한 관리 화면
      * @param mv
@@ -151,9 +153,7 @@ public class AuthorityController  {
             result.put("result","fail");
             return ResponseEntity.ok(result);
         }
-
         AccountVO member = accountService.findMemberByUserName(loginInfo.getUserId());
-
         FilePublicVO file = fileService.getFile(fileNm.replaceAll("\"",""));
         result = (HashMap<String, Object>) authorityService.updAuthFile(file, member.getEmpNo());
 

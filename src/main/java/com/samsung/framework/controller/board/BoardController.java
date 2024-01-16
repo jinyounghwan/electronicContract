@@ -1,18 +1,20 @@
 package com.samsung.framework.controller.board;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.samsung.framework.common.utils.FileUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
 import com.samsung.framework.common.utils.StringUtil;
-import com.samsung.framework.controller.common.ParentController;
 import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.board.BoardPublic;
 import com.samsung.framework.domain.common.Paging;
+import com.samsung.framework.service.board.BoardPublicServiceImpl;
+import com.samsung.framework.service.file.FilePublicServiceImpl;
 import com.samsung.framework.vo.board.BoardPublicVO;
 import com.samsung.framework.vo.board.BoardReplyVO;
 import com.samsung.framework.vo.common.SelectOptionVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.board.BoardSearchVO;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,18 +31,22 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/board")
-public class BoardController extends ParentController {
+public class BoardController {
+
+    private final BoardPublicServiceImpl boardService;
+    private final FilePublicServiceImpl fileService;
+    private final FileUtil fileUtil;
 
     // [검색옵션] 날짜
     @ModelAttribute("searchDateRangeOptionList")
     public List<SelectOptionVO> searchDateRangeOptionList() {
-        return getCommonService().getBoardPublicServiceImpl().getSearchDateRangeOptionList(new String());
+        return boardService.getSearchDateRangeOptionList(new String());
     }
 
     // [검색옵션] 키워드
     @ModelAttribute("searchKeywordTypeOptionList")
     public List<SelectOptionVO> searchKeywordTypeOptionList() {
-        return getCommonService().getBoardPublicServiceImpl().getSearchKeywordTypeList();
+        return boardService.getSearchKeywordTypeList();
     }
 
     /**
@@ -54,7 +59,7 @@ public class BoardController extends ParentController {
         mv.setViewName("board/list");
 
         // 전체 게시물 수
-        int totalCount = getCommonService().getBoardPublicServiceImpl().totalCount(null);
+        int totalCount = boardService.totalCount(null);
         mv.addObject("totalCount", totalCount);
 
         BoardSearchVO boardSearchVO = new BoardSearchVO();
@@ -65,7 +70,7 @@ public class BoardController extends ParentController {
         );
 
         // 목록 조회
-        List<BoardPublicVO> list = getCommonService().getBoardPublicServiceImpl().findAll(boardSearchVO);
+        List<BoardPublicVO> list = boardService.findAll(boardSearchVO);
         mv.addObject("list", list);
 
         // paging
@@ -93,18 +98,18 @@ public class BoardController extends ParentController {
 
         BoardSearchVO boardSearchVO = new BoardSearchVO();
         boardSearchVO.setBoardSeq(seq);
-        BoardPublicVO rowData = getCommonService().getBoardService().findById(boardSearchVO);
+        BoardPublicVO rowData = boardService.findById(boardSearchVO);
         mv.addObject("rowData", rowData);
         mv.addObject("replyList", rowData.getReplyList());
 
         if(!StringUtil.isEmpty(rowData.getAttachId())){
             log.info("rowData AttachId {} ",rowData.getAttachId());
-            List<String> attachList = getFileUtil().splitAttachId(rowData.getAttachId());
+            List<String> attachList = fileUtil.splitAttachId(rowData.getAttachId());
             attachList.iterator().forEachRemaining(value-> log.info("attachId : {}",value));
-            List<FilePublicVO> files= getCommonService().getFileServiceImpl().getFiles(attachList);
+            List<FilePublicVO> files= fileService.getFiles(attachList);
             mv.addObject("files", files);
         }
-        getCommonService().getBoardService().increaseHits(seq);
+        boardService.increaseHits(seq);
 
         return mv;
     }
@@ -133,12 +138,12 @@ public class BoardController extends ParentController {
 
         BoardSearchVO boardSearchVO = new BoardSearchVO();
         boardSearchVO.setBoardSeq(seq);
-        BoardPublicVO rowData = getCommonService().getBoardService().findById(boardSearchVO);
+        BoardPublicVO rowData = boardService.findById(boardSearchVO);
         mv.addObject("rowData", rowData);
 
         if(!StringUtil.isEmpty(rowData.getAttachId())){
-            List<String> attachList = getFileUtil().splitAttachId(rowData.getAttachId());
-            List<FilePublicVO> files = getCommonService().getFileServiceImpl().getFiles(attachList);
+            List<String> attachList = fileUtil.splitAttachId(rowData.getAttachId());
+            List<FilePublicVO> files = fileService.getFiles(attachList);
             mv.addObject("files",files);
         }
 
@@ -167,12 +172,12 @@ public class BoardController extends ParentController {
         );
 
         // 전체 게시물 수
-        int totalListCount = getCommonService().getBoardPublicServiceImpl().totalCount(boardSearchVO);
+        int totalListCount = boardService.totalCount(boardSearchVO);
 
         model.addAttribute("totalCount", totalListCount);
 //
 //        // 목록 조회
-        List<BoardPublicVO> list = getCommonService().getBoardPublicServiceImpl().findAll(boardSearchVO);
+        List<BoardPublicVO> list = boardService.findAll(boardSearchVO);
         model.addAttribute("list", list);
 
         // paging
@@ -195,7 +200,7 @@ public class BoardController extends ParentController {
     @ResponseBody
     @PostMapping("/api/registration")
     public ResponseEntity registration(Model model, @RequestPart(value="data") BoardPublic boardPublic, @RequestPart(value="files",required = false) List<MultipartFile> files) throws Exception {
-        Map<String, Object> result = getCommonService().getBoardPublicServiceImpl().registration(boardPublic, files);
+        Map<String, Object> result = boardService.registration(boardPublic, files);
 
         return ResponseEntity.ok(result);
     }
@@ -209,7 +214,7 @@ public class BoardController extends ParentController {
     @ResponseBody
     @PostMapping("/api/update/{seq}")
     public ResponseEntity deleteBoard(Model model, @RequestPart(value="data") Board board, @RequestPart(value="files",required = false) List<MultipartFile> files) throws Exception {
-        Map<String, Object> result = getCommonService().getBoardPublicServiceImpl().updateBoard(board,files);
+        Map<String, Object> result = boardService.updateBoard(board,files);
 
 
         return ResponseEntity.ok(result);
@@ -225,9 +230,9 @@ public class BoardController extends ParentController {
     @ResponseBody
     @DeleteMapping("/api/delete")
     public ResponseEntity deleteBoard(Model model, @RequestParam(value = "lastId") String lastId, @RequestParam(value = "checkedList[]") List<Integer> checkedList) {
-        Map<String, Object> result = getCommonService().getBoardPublicServiceImpl().deleteBySeq(lastId, checkedList);
+        Map<String, Object> result = boardService.deleteBySeq(lastId, checkedList);
 
-        getCommonService().getFileServiceImpl().deleteFiles(lastId, checkedList);
+        fileService.deleteFiles(lastId, checkedList);
         return ResponseEntity.ok(result);
     }
 
@@ -239,7 +244,7 @@ public class BoardController extends ParentController {
      */
     @DeleteMapping("/api/reply")
     public String removeReply(Model model, @RequestBody Map<String, Object> paramMap) {
-        List<BoardReplyVO> replyList = getCommonService().getBoardPublicServiceImpl().removeBoardReply(paramMap);
+        List<BoardReplyVO> replyList = boardService.removeBoardReply(paramMap);
         model.addAttribute("replyList", replyList);
 
         return "board/detail :: #reply_wrapper";

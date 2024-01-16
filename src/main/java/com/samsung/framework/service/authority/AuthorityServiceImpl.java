@@ -1,7 +1,9 @@
 package com.samsung.framework.service.authority;
 
+import com.samsung.framework.common.utils.ExcelUtil;
 import com.samsung.framework.domain.authority.Authority;
-import com.samsung.framework.service.common.ParentService;
+import com.samsung.framework.mapper.authority.AuthorityMapper;
+import com.samsung.framework.mapper.menu.MenuMapper;
 import com.samsung.framework.vo.code.CommonCodeVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import lombok.RequiredArgsConstructor;
@@ -9,22 +11,30 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class AuthorityServiceImpl extends ParentService implements AuthorityService {
+public class AuthorityServiceImpl implements AuthorityService {
+
+    private final MenuMapper menuMapper;
+    private final AuthorityMapper authorityMapper;
+    private final ExcelUtil excelUtil;
+
     @Override
     public List<CommonCodeVO> findMenuList(String deptCd) {
-        List<CommonCodeVO> list = getCommonMapper().getMenuMapper().findMenuList(deptCd);
+        List<CommonCodeVO> list = menuMapper.findMenuList(deptCd);
         return list;
     }
 
     @Override
     public List<CommonCodeVO> findDepartmentList() {
-        List<CommonCodeVO> list = getCommonMapper().getAuthorityMapper().findDepartmentList();
+        List<CommonCodeVO> list = authorityMapper.findDepartmentList();
         return list;
     }
 
@@ -41,9 +51,9 @@ public class AuthorityServiceImpl extends ParentService implements AuthorityServ
                 row.getUserIdList().forEach(user -> {
                     row.setUserId(user);
                     if(isMenuAuthorityGranted(row)) {
-                        saveCount.addAndGet(getCommonMapper().getAuthorityMapper().updateIndividualAuthority(row));
+                        saveCount.addAndGet(authorityMapper.updateIndividualAuthority(row));
                     }else {
-                        saveCount.addAndGet(getCommonMapper().getAuthorityMapper().saveIndividualAuthority(row));
+                        saveCount.addAndGet(authorityMapper.saveIndividualAuthority(row));
                     }
                 });
             });
@@ -73,9 +83,9 @@ public class AuthorityServiceImpl extends ParentService implements AuthorityServ
         if(tgt.size() > 0) {
             tgt.forEach(row -> {
                 if(isMenuAuthorityGranted(row)) {
-                    saveCount.addAndGet(getCommonMapper().getAuthorityMapper().updateIndividualAuthority(row));
+                    saveCount.addAndGet(authorityMapper.updateIndividualAuthority(row));
                 }else {
-                    saveCount.addAndGet(getCommonMapper().getAuthorityMapper().saveIndividualAuthority(row));
+                    saveCount.addAndGet(authorityMapper.saveIndividualAuthority(row));
                 }
             });
         }else {
@@ -100,7 +110,7 @@ public class AuthorityServiceImpl extends ParentService implements AuthorityServ
      */
     private boolean isMenuAuthorityGranted(Authority authority) {
         log.info(authority.toString());
-        long menuSeq = getCommonMapper().getMenuMapper().findMenuSeqByUserId(authority);
+        long menuSeq = menuMapper.findMenuSeqByUserId(authority);
         if(menuSeq < 1) return false;
         authority.setMenuSeq(menuSeq);
 
@@ -112,9 +122,9 @@ public class AuthorityServiceImpl extends ParentService implements AuthorityServ
      * @param file
      */
     public Map<String,Object> updAuthFile(FilePublicVO file, int memberSeq) throws IOException {
-        List<Authority> userMenuList =getCommonMapper().getAuthorityMapper().findUserMenuAuthority(memberSeq);
+        List<Authority> userMenuList =authorityMapper.findUserMenuAuthority(memberSeq);
 
-        ArrayList<String> list = (ArrayList<String>) getExcelUtil().readExcel(file.getStoragePath());
+        ArrayList<String> list = (ArrayList<String>) excelUtil.readExcel(file.getStoragePath());
         ArrayList<String> menuOrgList = (ArrayList<String>) createMenuList(list);
         int count = 1;
         ArrayList<Authority> menuAuthList = new ArrayList<>();
@@ -143,7 +153,7 @@ public class AuthorityServiceImpl extends ParentService implements AuthorityServ
 
         int rowAffected = 0;
         for(Authority auth : menuAuthList){
-            rowAffected= getCommonMapper().getAuthorityMapper().updateExcelAuthority(auth);
+            rowAffected= authorityMapper.updateExcelAuthority(auth);
             if(rowAffected < 0) break;
         }
 
@@ -177,7 +187,7 @@ public class AuthorityServiceImpl extends ParentService implements AuthorityServ
             }
             menuCount ++;
         }
-        List<CommonCodeVO> commonCodeVOList = getCommonMapper().getAuthorityMapper().findMenuAuthority(menuOrgNm);
+        List<CommonCodeVO> commonCodeVOList = authorityMapper.findMenuAuthority(menuOrgNm);
         for(CommonCodeVO codeVO : commonCodeVOList){
             int count =0;
             for(String auth : list){

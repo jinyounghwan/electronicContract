@@ -1,12 +1,12 @@
 package com.samsung.framework.controller.record;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
-import com.samsung.framework.controller.common.ParentController;
 import com.samsung.framework.domain.common.Paging;
+import com.samsung.framework.service.record.RecordServiceImpl;
 import com.samsung.framework.vo.common.SelectOptionVO;
 import com.samsung.framework.vo.record.RecordVO;
 import com.samsung.framework.vo.search.record.RecordSearchVO;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,14 +21,16 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/record")
-public class RecordController extends ParentController {
+public class RecordController {
+
+    private final RecordServiceImpl recordService;
 
     /**
      * [검색옵션] 날짜
      */
     @ModelAttribute("searchDateRangeOptionList")
     public List<SelectOptionVO> searchDateRangeOptionList() {
-        return getCommonService().getRecordService().getSearchDateRangeOptionList();
+        return recordService.getSearchDateRangeOptionList();
     }
 
     /**
@@ -36,7 +38,7 @@ public class RecordController extends ParentController {
      */
     @ModelAttribute("searchKeywordTypeOptionList")
     public List<SelectOptionVO> searchKeywordTypeOptionList() {
-        return getCommonService().getRecordService().getSearchKeywordTypeList();
+        return recordService.getSearchKeywordTypeList();
     }
 
     /**
@@ -57,11 +59,11 @@ public class RecordController extends ParentController {
         );
 
         // 전체 게시물 수
-        int totalCount = getCommonService().getRecordService().totalCount(recordSearchVO);
+        int totalCount = recordService.totalCount(recordSearchVO);
         mv.addObject("totalCount", totalCount);
 
         // 목록 조회
-        List<RecordVO> list = getCommonService().getRecordService().findAll(recordSearchVO);
+        List<RecordVO> list = recordService.findAll(recordSearchVO);
         mv.addObject("list", list);
 
         // paging
@@ -91,11 +93,11 @@ public class RecordController extends ParentController {
         );
 
         // 전체 게시물 수
-        int totalListCount = getCommonService().getRecordService().totalCount(recordSearchVO);
+        int totalListCount = recordService.totalCount(recordSearchVO);
         model.addAttribute("totalCount", totalListCount);
 
         // 목록 조회
-        List<RecordVO> list = getCommonService().getRecordService().findAll(recordSearchVO);
+        List<RecordVO> list = recordService.findAll(recordSearchVO);
         model.addAttribute("list", list);
 
         // paging
@@ -118,7 +120,7 @@ public class RecordController extends ParentController {
     @GetMapping("/api/{logSeq}")
     public String findAll(Model model, @PathVariable long logSeq) {
         // 이력 상세 조회
-        RecordVO rowData = getCommonService().getRecordService().findById(logSeq);
+        RecordVO rowData = recordService.findById(logSeq);
         model.addAttribute("rowData", rowData);
 
         return "record/list :: #detail_wrapper";

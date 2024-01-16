@@ -1,16 +1,16 @@
 package com.samsung.framework.mapper.authority;
 
 import com.samsung.framework.domain.authority.Authority;
-import com.samsung.framework.mapper.common.GeneralMapper;
 import com.samsung.framework.vo.authority.MenuAuthorityVO;
 import com.samsung.framework.vo.code.CommonCodeVO;
+import com.samsung.framework.vo.search.SearchVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 @Mapper
-public interface AuthorityMapper extends GeneralMapper {
+public interface AuthorityMapper {
 
     /**
      * 메뉴 조회
@@ -63,4 +63,11 @@ public interface AuthorityMapper extends GeneralMapper {
      * @return
      */
     int saveMenuAuthList(List<MenuAuthorityVO> authorityList);
+
+    /**
+     * 단건 조회
+     * @param search
+     * @return
+     */
+    Object rowBySearch(SearchVO search);
 }

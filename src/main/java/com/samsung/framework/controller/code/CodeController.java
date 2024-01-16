@@ -1,7 +1,7 @@
 package com.samsung.framework.controller.code;
 
 
-import com.samsung.framework.controller.common.ParentController;
+import com.samsung.framework.service.code.CodeServiceImpl;
 import com.samsung.framework.vo.code.CodePublicVO;
 import com.samsung.framework.vo.code.CommonCodeVO;
 import com.samsung.framework.vo.common.SelectOptionVO;
@@ -21,14 +21,16 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/code")
-public class CodeController extends ParentController {
+public class CodeController {
+
+    private final CodeServiceImpl codeService;
 
     /**
      * [검색옵션] 코드 그룹 선택
      */
     @ModelAttribute("commonCodeGroupList")
     public List<SelectOptionVO> commonCodeGroupList() {
-        return getCommonService().getCodeService().commonCodeGroupList();
+        return codeService.commonCodeGroupList();
     }
 
     /**
@@ -37,7 +39,7 @@ public class CodeController extends ParentController {
      */
     @ModelAttribute("commonCodeCategoryList")
     public List<SelectOptionVO> commonCodeCategoryList() {
-        return getCommonService().getCodeService().commonCodeCategoryList("MENU");
+        return codeService.commonCodeCategoryList("MENU");
     }
 
     /**
@@ -50,7 +52,7 @@ public class CodeController extends ParentController {
         mv.setViewName("code/list");
         CodeSearchVO codeSearchVO = new CodeSearchVO();
         codeSearchVO.setCode("MENU");
-        List<CommonCodeVO> list = getCommonService().getCodeService().findAll(codeSearchVO);
+        List<CommonCodeVO> list = codeService.findAll(codeSearchVO);
         mv.addObject("list", list);
 
         return mv;
@@ -61,7 +63,7 @@ public class CodeController extends ParentController {
     @PostMapping("/list")
     @ResponseBody
     public List<CodePublicVO> codeList(){
-        return getCommonService().getCodeService().listCode();
+        return codeService.listCode();
     }
 
     /**
@@ -71,10 +73,10 @@ public class CodeController extends ParentController {
      */
     @PutMapping("/api")
     public String update(Model model, @RequestBody List<CommonCodeVO> tgt) {
-        Map<String, Object> result = getCommonService().getCodeService().updateCommonCode(tgt);
+        Map<String, Object> result = codeService.updateCommonCode(tgt);
         List<CommonCodeVO> list = new ArrayList<>();
         if((int)result.get("code") == 200) {
-            list = getCommonService().getCodeService().findAll(new CodeSearchVO());
+            list = codeService.findAll(new CodeSearchVO());
         }
         model.addAttribute("list", list);
 
@@ -85,7 +87,7 @@ public class CodeController extends ParentController {
     public String findAll(Model model, @RequestParam("codeCd") String codeCd) {
         CodeSearchVO codeSearchVO = new CodeSearchVO();
         codeSearchVO.setCode(codeCd.substring(0, 4));
-        List<CommonCodeVO> list = getCommonService().getCodeService().findAll(codeSearchVO);
+        List<CommonCodeVO> list = codeService.findAll(codeSearchVO);
         model.addAttribute("list", list);
 
         return "code/list :: #list_wrapper";

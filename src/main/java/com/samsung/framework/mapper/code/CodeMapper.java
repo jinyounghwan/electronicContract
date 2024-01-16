@@ -2,21 +2,20 @@ package com.samsung.framework.mapper.code;
 
 import com.samsung.framework.domain.code.Code;
 import com.samsung.framework.domain.code.CommonCode;
-import com.samsung.framework.mapper.common.GeneralMapper;
 import com.samsung.framework.vo.code.CodePublicVO;
 import com.samsung.framework.vo.code.CommonCodeVO;
 import com.samsung.framework.vo.common.SelectOptionVO;
+import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.code.CodeSearchVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 @Mapper
-public interface CodeMapper extends GeneralMapper {
+public interface CodeMapper {
 
     /**
      * 코드 순서 일괄변경
-     * @param list
      * @return
      */
     int updateCodeOrder(Code code);
@@ -58,4 +57,41 @@ public interface CodeMapper extends GeneralMapper {
      * @return
      */
     int updateCommonCode(CommonCode commonCode);
+
+    /**
+     * 단건 조회
+     * @param search
+     * @return
+     */
+    Object rowBySearch(SearchVO search);
+
+    /**
+     * 저장
+     * @param obj
+     * @return
+     */
+//    @EntityLog
+    int insert(Object obj);
+
+    /**
+     * 수정
+     * @param obj
+     * @return
+     */
+//    @EntityLog
+    int update(Object obj);
+
+    /**
+     * 페이지 목록 조회  건수
+     * @param search
+     * @return
+     */
+    int pagingCountBySearch(SearchVO search);
+
+    /**
+     * 페이지 목록 조회
+     * @param search
+     * @return
+     */
+    List<?> pagingBySearch(SearchVO search);
 }
