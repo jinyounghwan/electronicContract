@@ -8,6 +8,7 @@
         FROM USERS
         WHERE EMP_NO = #{empNo}
     </select>
+
     <select id="memberListCount">
         SELECT COUNT(1) FROM USERS
     </select>
@@ -19,7 +20,7 @@
     </select>
 
     <select id="getMemberList" resultType="AccountVO">
-        SELECT EMP_NO, DEPT_CODE, USER_ID, USER_PW, NAME, POSITION, EMAIL, PHONE FROM USERS ORDER BY EMP_NO DESC
+        SELECT EMP_NO, DEPT_CODE, ADMIN_ID, USER_PW, NAME, POSITION, EMAIL, PHONE FROM USERS ORDER BY EMP_NO DESC
         <if test="paging.displayRow > 0">
             LIMIT #{paging.displayRow} OFFSET #{paging.offset}
         </if>
