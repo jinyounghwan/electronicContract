@@ -1,6 +1,7 @@
 package com.samsung.framework.service.contract.template;
 
 import com.samsung.framework.common.enums.ResultCodeMsgEnum;
+import com.samsung.framework.common.utils.ObjectHandlingUtil;
 import com.samsung.framework.domain.contract.SaveContractRequest;
 import com.samsung.framework.mapper.account.AccountMapper;
 import com.samsung.framework.mapper.contract.template.ContractTemplateMapper;
@@ -28,15 +29,16 @@ public class ContractTemplateService {
         
         // IJ TODO: 템플릿 코드 검증
         if(!isTemplateCodeExists(Integer.parseInt(target.getTemplateCode()))) {
-            return new ResultStatusVO(ResultCodeMsgEnum.NO_TEMPLATE_CODE.getCode(), ResultCodeMsgEnum.NO_TEMPLATE_CODE.getMsg());
+            return ObjectHandlingUtil.setSingleObjResultStatusVO(null, ResultCodeMsgEnum.NO_TEMPLATE_CODE);
         }
 
         // IJ TODO: 임직원 번호 검증 NOTE:매퍼 파일 변경 가능성 있음.
         if (!accountMapper.existsByEmpNo(target.getEmpNo())) {
-            return new ResultStatusVO(ResultCodeMsgEnum.INVALID_EMP_NO.getCode(), ResultCodeMsgEnum.INVALID_EMP_NO.getMsg());
+            return ObjectHandlingUtil.setSingleObjResultStatusVO(null, ResultCodeMsgEnum.INVALID_EMP_NO);
         }
 
         // IJ TODO: 계약서 생성
+
         return new ResultStatusVO();
     }
 
