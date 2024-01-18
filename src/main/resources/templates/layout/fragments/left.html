@@ -26,19 +26,7 @@
                 console.log(request);
             }
         });
-            // 사이드바 대메뉴 생성
-            // function menuLgDraw(dataList){
-            //     for(let data of dataList){
-            //         let realCodeCd = data.menuCode;
-            //         if(realCodeCd==="MENU000000") continue;
-            //         let menuCode = data.menuCode.substr(4);
-            //         if(menuCode.charAt(2)==="0" && menuCode.substr(2)==="0000"){
-            //             let menuParent = $("#menu-parent");
-            //             codeMap.set(menuCode, realCodeCd);
-            //             menuParent.append(`<li> <a href='#'>${data.name}</a><ul id= ${realCodeCd}> </ul></li>`);
-            //         }
-            //     }
-            // }
+
         function menuMidAjax() {
             $.ajax({
                 type: "POST",
