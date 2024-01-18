@@ -11,36 +11,20 @@
         let session = [[ ${session.loginInfo} ]]; // 세션 정보 가져온다.
         /*]]*/
         let codeMap = new Map();
+
         $.ajax({
             type: "POST",
-            url: "/menu/lgList",
+            url: "/menu/midList",
             contentType: "application/json",
-            async:false,
-            success: function(result){
+            async: false,
+            success: function (result) {
                 let dataList = Array.from(result);
-                // menuLgDraw(dataList);
-                menuMidAjax(dataList);
-                menuSmAjax()
-            },
-            error: function(request, status, error){
-                console.log(request);
+                menuMidDraw(dataList);
+                getMenuSmList()
             }
         });
 
-        function menuMidAjax() {
-            $.ajax({
-                type: "POST",
-                url: "/menu/midList",
-                contentType: "application/json",
-                async: false,
-                success: function (result) {
-                    let dataList = Array.from(result);
-                    menuMidDraw(dataList);
-                }
-            });
-        }
-
-        function menuSmAjax(){
+        function getMenuSmList(){
             $.ajax({
                 type:"POST",
                 url:"/menu/smList",
