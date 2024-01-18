@@ -4,15 +4,10 @@
       layout:decorate="layout/layout">
 
 <th:block layout:fragment="css">
-    <head>
-        <link rel="stylesheet" type="text/css" th:href="@{/static/css/login/login.css}"/>
-        <title>로그인</title>
-    </head>
+
 </th:block>
 
 <th:block layout:fragment="content">
-    <div id="result-container">
-        <div id="main_wrapper">
             <form class="form-inline">
                 <h1> 로그인 </h1>
                 <div id="login_wrapper">
@@ -35,8 +30,6 @@
                 </div>
             </form>
             <div id="result"></div>
-        </div>
-    </div>
 </th:block>
 
 <th:block layout:fragment="script">
