@@ -64,7 +64,7 @@
                 <s  data-action="openSignaturePad" >(서명)
                 </s>
             </div>
-            <div class="sign-iImg-div">
+            <div class="sign-iImg-div" data-select="sigImgDiv">
                 <img />
             </div>
         </div>
@@ -74,7 +74,7 @@
             <div class="signDiv" >
                 성 &nbsp; &nbsp;명 : &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (서명)
             </div>
-            <div class="sign-iImg-div">
+            <div class="sign-iImg-div" data-select="sigImgDiv">
                 <img/>
             </div>
         </div>
@@ -135,7 +135,7 @@
                 <div class="signDiv">
                      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (서명)
                 </div>
-                <div class="sign-iImg-div">
+                <div class="sign-iImg-div" data-select="sigImgDiv">
                     <img/>
                 </div>
             </div>
@@ -314,7 +314,7 @@
             <li>임 금</li>
         </ol>
         <div style="margin-top:300px;">
-            <button class="custom-btn sava-btn" onclick="saveElectronicContract()">계약서 저장 </button>
+            <button class="custom-btn sava-btn" onclick="saveElectronicSignature()">계약서 저장 </button>
         </div>
     </div>
     <!--    <div id="content_wrapper">
@@ -356,20 +356,19 @@
 </th:block>
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-        var canvas = new signaturePad();
-        /*계약서 저장*/
-        function saveElectronicContract(){
-             var formData = new FormData();
-             var files = []; // 파일리스트
-             var obj = {}; // 파일을 담을 오브젝트
+        let canvas = new signaturePad();
+        /*계약서 저장 saveElectronicSignature */
+        function saveElectronicSignature(){
+             console.log('aaaa시작');
+             let formData = new FormData();
+             let files = []; // 파일리스트
+             let obj = {}; // 파일을 담을 오브젝트
              // 서명 된 image convert to file
-             var now = getNow();
+             let now = getNow();
              $('img').each(function(index,item){
-                var url = $(item).attr('src');
+                let url = $(item).attr('src');
                 if(typeof url != 'undefined'){
-                    var url = $(item).attr('src');
                     var fileName = 'signature'+ now + index +'.png';
-                    console.log(fileName);
                     if(typeof url != 'undefined'){
                         var arr = url.split(','),
                             mime = arr[0].match(/:(.*?);/)[1],
@@ -385,24 +384,56 @@
                         obj = {};
                     }
                 }
-
              });
-             $.ajax({
-                url: '/sample/saveSignatur',
-                type: 'post',
-                enctype: 'multipart/form-data',
-                processData: false,
-                contentType: false,
-                data: formData,
-            })
-            .done(function(data) {
-
-            })
-            .fail(function(jqXHR) {
-                console.log(jqXHR);
+            for (let i = 0; i <  files.length; i++){
+                formData.append('signatureImg' , files[i].signatureImg);
+            }
+            // formData valaue 확인
+            for (let value of formData.values()) {
+                  console.log(value);
+            }
+            const promis =new Promise((resolve , fail )=>{
+                console.log('111111');
+                $.ajax({
+                    url: '/sample/saveSignatureImg',
+                    type: 'post',
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                }).done(function(data) {
+                    // 저장 된 파일 이미지로 교체
+                    $('[data-select="sigImgDiv"]').each(function(i, item){
+                       var $this = $(item);
+                       var $img = $this.children('img');
+                       var stringUrl = '';
+                       //$img.attr('src' ,stringUrl);
+                       // 성공 했을 때
+                       resolve(data);
+                    });
+                }).fail(function(jqXHR) {
+                        console.log(jqXHR);
+                });
             });
+            promis.then((data) => {
+                console.log('22222');
+                var string = $('#content_wrapper').html().toString();
+                var param = {};
+                param.contractValue = string;
 
-
+                $.ajax({
+                    url: '/sample/saveSignature',
+                    type: 'post',
+                    contentType: 'application/json; charset=UTF-8',
+                    data: JSON.stringify(param)
+                })
+                .done(function(data) {
+                    console.log(data);
+                })
+                .fail(function(jqXHR) {
+                    console.log(jqXHR);
+                });
+            });
         }
     </script>
 </th:block>

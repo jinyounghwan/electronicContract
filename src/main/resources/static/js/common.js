@@ -11,7 +11,6 @@ function isExist(arrayTag){
     }
     return true;
 }
-
 /**
  * 빈 값 여부 확인
  * @param targetData
@@ -162,18 +161,4 @@ function fnExcelDownload(id, fileName){
         let wb = XLSX.utils.table_to_book(document.getElementById("rfrnc-table"), {sheet: "sheet", raw:true});
         XLSX.writeFile(wb, (fileName));
     });
-}
-
-function getNow(){
-    var today = new Date();
-
-    var year = today.getFullYear();
-    var month = ('0' + (today.getMonth() + 1)).slice(-2);
-    var day = ('0' + today.getDate()).slice(-2);
-
-    var dateString = year + '-' + month  + '-' + day;
-
-    return dateString;
-
-
 }
