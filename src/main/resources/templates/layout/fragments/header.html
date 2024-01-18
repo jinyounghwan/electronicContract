@@ -2,17 +2,20 @@
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:fragment="headerFragment">
 
 <!-- Head-->
-    <div id="wrapper">
-        <!-- Begin Header -->
-        <div class="header">
-            <h2 class="header-child left">ADMIN</h2>
-            <a th:if= "${session.loginInfo == null}" href="/account/login"><h2 class="header-child right">LOG-IN</h2></a>
-            <div th:if= "${session.loginInfo != null}">
-                <h2  th:text="${session.loginInfo.name}" class="header-child right"></h2>
-                <form action="/account/logout" method="post">
-                    <button type="submit"><span>로그아웃</span></button>
-                </form>
-            </div>
-        </div>
-    </div>
+    <nav class="navbar navbar-expand navbar-light topbar static-top">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#"><div class="sidebar-brand-text">Inc.HU 연봉계약시스템</div></a>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item no-arrow">
+                <a class="nav-link " href="#" >
+                    <span class="nav-text"><i class="fas fa-user-circle nav-icon"></i>홍길동</span>
+                </a>
+            </li>
+            <div class="topbar-divider d-none d-sm-block"></div>
+            <li class="nav-item no-arrow">
+                <a class="nav-link " href="#" >
+                    <span class="nav-text"><i class="fas fa-sign-out-alt nav-icon"></i>로그아웃</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </html>

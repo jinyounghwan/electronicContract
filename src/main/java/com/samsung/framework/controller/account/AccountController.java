@@ -13,6 +13,7 @@ import com.samsung.framework.domain.log.LogSaveRequest;
 import com.samsung.framework.service.account.AccountService;
 import com.samsung.framework.service.menu.MenuService;
 import com.samsung.framework.vo.account.AccountVO;
+import com.samsung.framework.vo.common.SelectOptionVO;
 import com.samsung.framework.vo.log.LogSaveResponse;
 import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.account.AccountSearchVO;
@@ -23,10 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -43,7 +41,20 @@ public class AccountController {
     private final AccountService accountService;
     private final MenuService menuService;
     private final LogUtil logUtil;
+    
+    // [검색옵션] 날짜
+    @ModelAttribute("searchDateRangeOptionList")
+    public List<SearchVO> searchDateRangeOptionList() {
+        SearchVO list = new SearchVO();
+        return list.getSearchDateRangeOptionList();
+    }
 
+    // [검색옵션] 키워드
+    @ModelAttribute("searchKeywordTypeOptionList")
+    public List<SearchVO> searchKeywordTypeOptionList() {
+        SearchVO list = new SearchVO();
+        return list.getSearchKeywordTypeOptionList();
+    }
 
     /**
      * 회원 가입 View
