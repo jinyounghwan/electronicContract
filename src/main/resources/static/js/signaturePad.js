@@ -1,14 +1,4 @@
 let pad;
-$(function(){
-    $('[data-action="openSignature"]').on('click' , function(){
-        // img data-id delete
-        $('img').each(function(index,item){
-            $(item).removeAttr('data-id');
-        });
-       var $this = $(this);
-       $this.find('img').attr('data-id' , 'signatureImg');
-    });
-});
 signaturePad = function(){
     var self = this;
     // default
@@ -18,8 +8,6 @@ signaturePad = function(){
         penColor: "rgb(66, 133, 244)",
         backgroundColor:"#00ff0000"
     }
-
-
     var canvas = document.getElementById("signaturePad");
     pad = new SignaturePad(canvas,option);
 }
@@ -33,5 +21,4 @@ function saveSignature(){
     var data = pad.toDataURL('image/png');
     $('[data-id="signatureImg"]').attr('src',data);
     $("#exampleModalScrollable").modal('hide');
-
 }

@@ -70,11 +70,19 @@ public class SampleController {
         return "sample/example";
     }
 
-    @PostMapping(value = "/saveSignatur")
+    @PostMapping(value = "/saveSignatureImg")
     @ResponseBody
-    public ResponseEntity saveSignatur(@RequestParam(value = "signatureImg")List<MultipartFile> files){
-        log.info("param  ::::::::! " +  files);
-        Map<String,Object> fileMap = SampleService.saveSignatur(files);
+    public ResponseEntity saveSignatureImg(@RequestParam(value = "signatureImg")List<MultipartFile> files){
+        log.info("param  111111::::::::! " +  files);
+        //Map<String,Object> fileMap = SampleService.saveSignatur(files);
         return ResponseEntity.ok(null);
+    }
+
+    @PostMapping(value = "/saveSignature")
+    @ResponseBody
+    public ResponseEntity saveSignature(@RequestBody  Map<String,Object> contractValue){
+        log.info("param 22222222::::::::::::::::::: " +  contractValue.toString());
+        return ResponseEntity.ok(null);
+
     }
 }
