@@ -10,31 +10,44 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.net.URI;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/index")
-@RestController
+@Controller
 public class IndexController {
-
-    private static final String content = "%s";
-    private final AtomicInteger counter = new AtomicInteger();
 
     private final LogUtil logUtil;
 
     @GetMapping({"", "/"})
-    public ResponseEntity index() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("test", "value");
+    public String index() {
+        return "sample/index";
+    }
 
-        return ResponseEntity.ok().headers(headers).body(null);
+    /**
+     * 로그 저장 테스트
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/saveLog")
+    public ResponseEntity saveLog(HttpServletRequest request) {
+        var logSaveRequest = LogSaveRequest.builder()
+                .logType(LogTypeEnum.LOGIN)
+                .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
+                .createdBy("ikjoo Lee")
+                .build();
+
+        Map<String, LogSaveResponse> resultMap = logUtil.saveLog(logSaveRequest);
+
+        return ResponseEntity.ok().body(resultMap);
     }
 
     /**
@@ -49,19 +62,6 @@ public class IndexController {
         headers.setLocation(URI.create("/member"));
 
         return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
-    }
-
-    @GetMapping("/saveLog")
-    public ResponseEntity saveLog(HttpServletRequest request) {
-        var logSaveRequest = LogSaveRequest.builder()
-                .logType(LogTypeEnum.LOGIN)
-                .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
-                .createdBy("ikjoo Lee")
-                .build();
-
-        Map<String, LogSaveResponse> resultMap = logUtil.saveLog(logSaveRequest);
-
-        return ResponseEntity.ok().body(resultMap);
     }
 }
 
