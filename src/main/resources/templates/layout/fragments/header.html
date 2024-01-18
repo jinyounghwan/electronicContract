@@ -6,8 +6,9 @@
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#"><div class="sidebar-brand-text">Inc.HU 연봉계약시스템</div></a>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item no-arrow">
-                <a class="nav-link " href="#" >
-                    <span class="nav-text"><i class="fas fa-user-circle nav-icon"></i>홍길동</span>
+                <a th:if= "${session.loginInfo == null}" class="nav-link" href="/account/login"><span class="nav-text">LOG-IN</span></a>
+                <a th:if= "${session.loginInfo != null}" class="nav-link " href="">
+                    <span class="nav-text" th:text="${session.loginInfo.name}"><i class="fas fa-user-circle nav-icon"></i></span>
                 </a>
             </li>
             <div class="topbar-divider d-none d-sm-block"></div>
