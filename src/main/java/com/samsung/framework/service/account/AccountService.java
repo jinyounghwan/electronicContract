@@ -6,6 +6,7 @@ import com.samsung.framework.common.enums.AccountTypeEnum;
 import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
 import com.samsung.framework.common.enums.PositionEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
+import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
 import com.samsung.framework.common.utils.ValidationUtil;
 import com.samsung.framework.domain.account.LoginRequest;
@@ -15,7 +16,9 @@ import com.samsung.framework.domain.common.SearchObject;
 import com.samsung.framework.mapper.account.AccountMapper;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.common.CollectionPagingVO;
+import com.samsung.framework.vo.common.SelectOptionVO;
 import com.samsung.framework.vo.search.SearchVO;
+import com.samsung.framework.vo.search.account.AccountSearchVO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,13 +38,37 @@ public class AccountService {
     private final JasyptConfig jasyptConfig;
     private final AccountMapper accountMapper;
 
+
+    /**
+     * 회원 총 개수 (임직원, 관리자)
+     * @param accountSearchVO {@link AccountSearchVO}
+     * @return {@link Integer}
+     */
+    public int totalCount(AccountSearchVO accountSearchVO) { return accountMapper.findAllTotalCount(accountSearchVO); }
+
+    /**
+     * 회원 목록 조회
+     * @param accountSearchVO {@link AccountSearchVO}
+     * @return 회원 목록 반환
+     */
+    public List<AccountVO> getAccountList(AccountSearchVO accountSearchVO){
+
+        List<AccountVO> list = accountMapper.getAccountList(accountSearchVO);
+        list.forEach(data -> {
+            data.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(data.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
+            data.setUpdatedAtStr(DateUtil.convertLocalDateTimeToString(data.getUpdatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
+            data.setLastLoginStr(DateUtil.convertLocalDateTimeToString(data.getLastLogin(), DateUtil.DATETIME_YMDHM_PATTERN));
+        });
+
+        return list;
+    }
+
     /**
      * 멤버 목록 조회
      * @param searchObject {@link SearchObject}
      * @return {@link CollectionPagingVO}
      */
     public CollectionPagingVO getMemberList(SearchObject searchObject) {
-
         int totalCount = accountMapper.memberListCount();
         CollectionPagingVO collectionPagingVO = null;
         if(totalCount > 0) {
@@ -141,7 +168,8 @@ public class AccountService {
      * @param loginRequest {@link LoginRequest}
      * @return {@link AccountVO}
      */
-    public AccountVO getLoginInfo(LoginRequest loginRequest) throws CustomLoginException {
+    public AccountVO getLoginInfo(@Valid LoginRequest loginRequest) throws CustomLoginException {
+        log.info("UserId : {}", loginRequest.getUserId());
         AccountVO target = accountMapper.getLoginInfo(loginRequest.getUserId());
 
         if(target == null) {
@@ -173,14 +201,4 @@ public class AccountService {
 
     }
 
-    /**
-     *
-     * @param searchVO
-     * @return
-     */
-    public List<AccountVO> findAllUsers(SearchVO searchVO) {
-        List<AccountVO> list = accountMapper.findAllUsers(searchVO);
-
-        return list;
-    }
 }

@@ -113,8 +113,8 @@ public class AuthorityController {
     public String authPopupList(Model model, @RequestParam(value = "searchKeyword") String searchKeyword) {
         SearchVO searchVO = new SearchVO();
         searchVO.setSearchWord1(searchKeyword);
-        List<AccountVO> list =accountService.findAllUsers(searchVO);
-        model.addAttribute("users", list);
+//        List<AccountVO> list =accountService.findAllUsers(searchVO);
+//        model.addAttribute("users", list);
 
         return "auth/individual :: #user_list_wrapper";
     }

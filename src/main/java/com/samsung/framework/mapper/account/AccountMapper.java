@@ -9,6 +9,8 @@ import java.util.List;
 
 @Mapper
 public interface AccountMapper {
+    List<AccountVO> getAccountList(SearchVO search);
+    int findAllTotalCount(SearchVO search);
     int memberListCount();
     int memberListSearchCount(SearchVO search);
     List<AccountVO> getMemberList(SearchVO searchObject);
@@ -18,9 +20,5 @@ public interface AccountMapper {
     AccountVO getLoginInfo(String userId);
     int updatePwd(Account member);
     boolean existsByEmpNo(int empNo);
-    /**
-     * 전체 사용자 조회
-     * @return
-     */
-    List<AccountVO> findAllUsers(SearchVO searchVO);
+
 }

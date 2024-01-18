@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="ko">
+<th:block layout:fragment="css">
+    <head>
+        <link rel="stylesheet" type="text/css" th:href="@{/static/css/board/common.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/static/css/board/list.css}"/>
+        <title>임직원 계정</title>
+    </head>
+</th:block>
+<th:block layout:fragment="content">
+    <div id="content_wrapper">
+        <div id="search_wrapper" class="bg-secondary p-1">
+            <caption>검색</caption>
+            <p>
+                <span th:text="날짜"/>
+                <select id="searchDateType">
+                    <option th:value="CREATE_AT" th:text="작성일"></option>
+                    <option th:value="UPDATED_AT" th:text="수정일"></option>
+                </select>
+
+                <label for="sDate">시작일
+                    <input type="text" id="sDate" name="sDate">
+                </label>
+                <label>~</label>
+                <label for="eDate">종료일
+                    <input type="text" id="eDate" name="eDate">
+                </label>
+            </p>
+            <p>
+                <span th:text="검색"></span>
+                <select id="searchKeywordType">
+                    <option th:value="ALL" th:text="전체"></option>
+                    <option th:value="NAME" th:text="이름"></option>
+                    <option th:value="ADMIN_ID" th:text="관리자아이디"></option>
+                    <option th:value="EMAIL" th:text="이메일"></option>
+                    <option th:value="CREATED_AT" th:text="생성일자"></option>
+                    <option th:value="UPDATED_AT" th:text="수정일자"></option>
+                    <input type="text" placeholder="검색어" name="searchWord1">
+                    <input type="button" th:value="검색" th:onclick="'fnSearchList(1, '+ ${paging.getDisplayRow()} +', ' + ${totalCount} + ')'">
+                </select>
+            </p>
+        </div>
+        <span id="totalCount" th:text="|전체 ${totalCount}개|"></span>
+        <table id="rfrnc-table" class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th class="text-center" scope="col">Full Name</th>
+                    <th class="text-center" scope="col">Employee ID</th>
+                    <th class="text-center" scope="col">Last LogIn</th>
+                    <th class="text-center" scope="col">Created</th>
+                    <th class="text-center" scope="col">Modified</th>
+                    <th class="Action" scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody id="accountList">
+                <tr th:if="${not #lists.isEmpty(list)}" th:each="row, stat : ${list}">
+                    <td th:text="${row.getName()}"></td>
+                    <td th:text="${row.getEmpNo()}"></td>
+                    <td th:text="${row.getLastLoginStr()}"></td>
+                    <td th:text="${row.getCreatedAtStr()}"></td>
+                    <td th:text="${row.getUpdatedAtStr()}"></td>
+                    <td th:text="ViewEdit"></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        let fnSearchList = (currentPage, displayRow, totalCount) => {
+            // 날짜 조건 검증
+            if($('#searchDateType option:selected').val() )
+
+
+            // 검색어 조건 Check
+            if($('#searchKeywordType option:selected').val() != 'ALL'){
+                if($('input[name=searchWord1]').val() === ''){
+                    alert('검색어를 입력하세요.');
+                    return false;
+                }
+            }
+        }
+
+        const data = {
+            AccountVO: {
+                searchDateType: $('#searchDateType option:selected').val(),
+                startDt: $('#sDate').val(),
+                endDt: $('#eDate').val(),
+            }
+        }
+    </script>
+</th:block>
+</html>

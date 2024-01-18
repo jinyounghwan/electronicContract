@@ -168,4 +168,23 @@ public class SearchVO {
      * 검색 키워드 유형
      */
     private String searchKeywordType;
+
+    /**
+     * 검색 상태 유형
+     */
+    private String searchStatusType;
+
+    /**
+     * 검색 dropdown seq
+     */
+    private long seq;
+    /**
+     * 검색 dropdown code
+     */
+    private String code;
+    /**
+     * 검색 dropdown 이름
+     */
+    private String displayName;
+
 }
