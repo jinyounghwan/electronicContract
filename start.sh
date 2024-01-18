@@ -1,25 +1,27 @@
-echo "PID Check..."
+echo ">> START DEPLOYING APPLICATION <<"
 
-CURRENT_PID=$(ps -ef | grep java | grep e-contract-1.*-RELEASE | awk '{print $2}')
+PROJECT_REPO=/home/app-test
+JAR_FILE=e-contract.jar
 
-echo "Running PID: {$CURRENT_PID}"
+chmod -R 775 $PROJECT_REPO
+
+echo ">> CURRENT_PID Checking... <<"
+CURRENT_PID=$(pgrep -f $JAR_FILE)
+
+echo ">> Running PID: {$CURRENT_PID}"
 
 if [ -z "$CURRENT_PID" ] ; then
-        echo "Project is not running"
+        echo ">> Project is not running"
 else
         kill -9 $CURRENT_PID
         sleep 10
 fi
 
-echo "Deploy Electronic Contract Project...."
+echo ">> Deploying Electronic Contract Project..."
 
 # TODO: 서버 세팅 후 경로 변경
-cd /path/to/deploy/project
+cd /home/app-test
 
-JAR_FILE=$(find ./build/libs/ -type f -iname "e-contract-1.*-RELEASE.jar")
-#echo $JAR_FILE
-
-#nohup java -jar -Dspring.profiles.active=dev -Dproperties.jasypt.encryptor.password='dejay1234!@#$' ./build/libs/framework-1.*.*.RELEASE.jar >> ./logs/framework.log 2>&1 &
 nohup java -jar -Dspring.profiles.active=dev -Dproperties.jasypt.encryptor.password='dejay1234!@#$' $JAR_FILE >> ./logs/contract.log 2>&1 &
 
 echo "Done"

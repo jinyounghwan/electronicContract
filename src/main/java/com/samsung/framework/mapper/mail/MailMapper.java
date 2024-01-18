@@ -1,10 +1,11 @@
 package com.samsung.framework.mapper.mail;
 
-import com.samsung.framework.vo.member.MemberVO;
+
+import com.samsung.framework.vo.account.AccountVO;
 
 public interface MailMapper {
-    void insertMailAuth(MemberVO member);
-    MemberVO getAuthEmailMember(MemberVO member);
+    void insertMailAuth(AccountVO member);
+    AccountVO getAuthEmailMember(AccountVO member);
 
-    MemberVO getAuthNumber(MemberVO member);
+    AccountVO getAuthNumber(AccountVO member);
 }

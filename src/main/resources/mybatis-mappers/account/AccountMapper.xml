@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.account.AccountMapper">
+    <sql id="search">
+        <if test="(startDt != null and startDt != '') and (endDt != null and endDt != '')">
+            <if test="searchDateType == 'CREATE_AT'">
+                AND CREATED_AT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+            </if>
+            <if test="searchDataType == 'UPDATED_AT'">
+                AND UPDATED_AT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+            </if>
+        </if>
+        <choose>
+            <when test="searchWord1 != null and searchWord1 != ''">
+                <choose>
+                    <when test="searchKeywordType == 'NAME'">
+                        AND LOWER(NAME) LIKE LOWER(CONCAT('%', #{searchWord1}, '%'))
+                    </when>
+                    <when test="searchKeywordType == 'ADMIN_ID'">
+                        AND LOWER(ADMIN_ID) LIKE LOWER(CONCAT('%', #{searchWord1}, '%'))
+                    </when>
+                    <when test="searchKeywordType == 'EMAIL'">
+                        AND LOWER(EMAIL) LIKE LOWER(CONCAT('%', #{searchWord1}, '%'))
+                    </when>
+                </choose>
+            </when>
+            <otherwise>
+                AND
+                    (
+                            LOWER(NAME) LIKE LOWER(CONCAT('%', #{searchWord1} , '%'))
+                        OR  LOWER(ADMIN_ID) LIKE LOWER(CONCAT('%', #{searchWord1}, '%'))
+                        OR  LOWER(EMAIL) LIKE LOWER(CONCAT('%', #{searchWord1}, '%'))
+                    )
+            </otherwise>
+        </choose>
+    </sql>
+
+    <select id="existsByEmpNo" resultType="boolean">
+        SELECT IF(COUNT(1) = 1, true, false)
+        FROM USERS
+        WHERE EMP_NO = #{empNo}
+    </select>
+
+    <select id="findAllTotalCount">
+        SELECT COUNT(1)
+        FROM USERS
+        WHERE
+            USE_YN = 'Y'
+        <if test="accountType != null and accountType != '' ">
+            AND ACCOUNT_TYPE = #{accountType}
+        </if>
+        <include refid="search"></include>
+    </select>
+
+    <select id = "getAccountList" resultType="AccountVO">
+        WITH LOG AS (
+            SELECT CREATED_BY AS CREATED_BY, MAX(CREATED_AT) AS LAST_LOGIN
+            FROM PROCESS_LOG
+            GROUP BY CREATED_BY
+            ORDER BY CREATED_AT DESC
+        )
+        SELECT  DISTINCT  U.EMP_NO AS EMP_NO , U.ADMIN_ID AS ADMIN_ID
+                , U.CREATED_AT AS CREATED_AT , U.UPDATED_AT AS UPDATED_AT
+                , L.LAST_LOGIN AS LAST_LOGIN , U.NAME AS NAME
+        FROM USERS U
+            LEFT JOIN LOG L ON U.EMP_NO = L.CREATED_BY
+        WHERE
+            ACCOUNT_TYPE = #{accountType}
+        <include refid="search"></include>
+    </select>
+
+
+    <select id="memberListCount">
+        SELECT COUNT(1) FROM USERS
+    </select>
+
+    <select id="memberListSearchCount">
+        SELECT COUNT(1) FROM USERS
+        <where></where>
+        ORDER BY EMP_NO DESC
+    </select>
+
+    <select id="getMemberList" resultType="AccountVO">
+        SELECT EMP_NO, DEPT_CODE, ADMIN_ID, USER_PW, NAME, POSITION, EMAIL, PHONE FROM USERS ORDER BY EMP_NO DESC
+    </select>
+
+    <select id="findMemberById" resultType="AccountVO">
+        SELECT EMP_NO, DEPT_CODE, USER_ID, USER_PW, NAME, POSITION, EMAIL, PHONE FROM USERS WHERE USER_ID = #{id}
+    </select>
+
+    <!--#################### DEJAY_COMMON ####################-->
+    <select id="findMemberByUserName" resultType="AccountVO">
+        SELECT U.EMP_NO, U.DEPT_CODE, U.USER_ID, U.USER_PW, U.NAME, U.POSITION, U.EMAIL
+        FROM USERS U
+        WHERE NAME = #{name}
+    </select>
+
+    <!-- 최근 로그인 이력 저장을 위한 정보 조회 -->
+    <select id="getLoginInfo" resultType="AccountVO">
+        SELECT U.EMP_NO, U.DEPT_CODE
+             , U.ADMIN_ID,U.USER_PW
+             , U.NAME, U.EMAIL
+             , U.ACCOUNT_TYPE, U.PHONE
+             , U.POSITION
+        FROM USERS U
+        WHERE U.EMP_NO = #{userId}
+           OR U.ADMIN_ID = #{userId}
+            AND USE_YN = 'Y'
+    </select>
+
+    <insert id="insertMember" useGeneratedKeys="true">
+        INSERT INTO USERS
+        (
+        EMP_NO, DEPT_CODE
+        , USER_PW, NAME
+        , ACCOUNT_TYPE, POSITION
+        ,EMAIL, PHONE
+        , USE_YN, EMPLOYED_AT
+        , RESIGNED_AT, CREATED_BY
+        , CREATED_AT, UPDATED_BY
+        , UPDATED_AT
+        )
+        VALUES(
+        #{empNo}, #{deptCode}
+        , #{userPw}, #{name}
+        , #{accountType}, #{position}
+        , #{email}, #{phone}
+        ,'Y', #{employedAt}
+        , #{resignedAt}, 'admin'
+        , sysdate(),'admin'
+        , sysdate()
+        )
+    </insert>
+
+    <update id="updatePwd">
+        UPDATE USER U
+        SET USER_PWD = #{userPw}
+        WHERE U.USER_ID = #{userId}
+    </update>
+</mapper>

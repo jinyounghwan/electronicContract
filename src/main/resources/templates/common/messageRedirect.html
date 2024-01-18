@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<!-- 공통 헤드 -->
+<th:block th:replace="~{layout/fragments/head :: headFragment}"></th:block>
+
+<body>
+    <script th:inline="javascript">
+        /* <![CDATA[ */
+       window.onload = () => {
+            const message = [[${msgCode}]];
+            const redirectUrl = [[${redirectUrl}]];
+            alert(message);
+            location.href = redirectUrl+ "";
+       }
+
+        /* ]]> */
+    </script>
+</body>
+</html>

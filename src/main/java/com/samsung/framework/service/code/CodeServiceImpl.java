@@ -3,14 +3,16 @@ package com.samsung.framework.service.code;
 import com.samsung.framework.common.enums.RequestTypeEnum;
 import com.samsung.framework.common.enums.TableNameEnum;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
+import com.samsung.framework.common.utils.ValidationUtil;
 import com.samsung.framework.domain.code.Code;
 import com.samsung.framework.domain.common.Paging;
-import com.samsung.framework.service.common.ParentService;
+import com.samsung.framework.mapper.code.CodeMapper;
 import com.samsung.framework.vo.code.CodePublicVO;
 import com.samsung.framework.vo.code.CodeVO;
 import com.samsung.framework.vo.code.CommonCodeVO;
 import com.samsung.framework.vo.common.SelectOptionVO;
 import com.samsung.framework.vo.search.code.CodeSearchVO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +20,12 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
-public class CodeServiceImpl extends ParentService implements CodeService{
+public class CodeServiceImpl implements CodeService{
+
+    private final CodeMapper codeMapper;
+    private final ValidationUtil validationUtil;
 
     /**
      * 코드 저장
@@ -46,17 +52,17 @@ public class CodeServiceImpl extends ParentService implements CodeService{
                 .remark(null)
                 .regId(regId)
                 .build();
-        getValidationUtil().parameterValidator(target, Code.class);
+        validationUtil.parameterValidator(target, Code.class);
 
         // 기존 코드 존재 유무 조회
         CodeSearchVO codeSearchVO = new CodeSearchVO();
         codeSearchVO.setCode(code.getCode());
-        CodeVO searched = (CodeVO) getCommonMapper().getCodeMapper().rowBySearch(codeSearchVO);
+        CodeVO searched = (CodeVO) codeMapper.rowBySearch(codeSearchVO);
 
         if(searched != null) {
             return null;
         }
-        int iAffectedRows = getCommonMapper().getCodeMapper().insert(target);
+        int iAffectedRows = codeMapper.insert(target);
 
         return target;
     }
@@ -86,8 +92,8 @@ public class CodeServiceImpl extends ParentService implements CodeService{
                 .remark(null)
                 .regId(regId)
                 .build();
-        getValidationUtil().parameterValidator(target, Code.class);
-        int iAffectedRows = getCommonMapper().getCodeMapper().update(target);
+        validationUtil.parameterValidator(target, Code.class);
+        int iAffectedRows = codeMapper.update(target);
 
         return iAffectedRows;
     }
@@ -100,7 +106,7 @@ public class CodeServiceImpl extends ParentService implements CodeService{
     public Integer updateCodeOrder(List<Code> codeList) {
         int iAffectedRows = 0;
         for (Code code : codeList) {
-            iAffectedRows += getCommonMapper().getCodeMapper().updateCodeOrder(code);
+            iAffectedRows += codeMapper.updateCodeOrder(code);
         }
 
         //변경된 내용이 없는 경우 null return(오류 발생)
@@ -114,18 +120,17 @@ public class CodeServiceImpl extends ParentService implements CodeService{
      */
     public List<CodeVO> pagingCode(CodeSearchVO search) {
 
-        int totalCount = getCommonMapper().getCodeMapper().pagingCountBySearch(search);
+        int totalCount = codeMapper.pagingCountBySearch(search);
         Paging paging = ObjectHandlingUtil.pagingOperatorBySearch(search, totalCount);
         search.setPaging(paging);
 
-        List<CodeVO> codeList = (List<CodeVO>) getCommonMapper().getCodeMapper().pagingBySearch(search);
+        List<CodeVO> codeList = (List<CodeVO>) codeMapper.pagingBySearch(search);
 
         return codeList;
     }
 
     /**
      * 코드 목록 조회
-     * @param search
      * @return
      */
     public List<CodePublicVO> listCode() {
@@ -138,7 +143,7 @@ public class CodeServiceImpl extends ParentService implements CodeService{
      * @return
      */
     public CodeVO rowCode(CodeSearchVO search) {
-        return (CodeVO) getCommonMapper().getCodeMapper().rowBySearch(search);
+        return (CodeVO) codeMapper.rowBySearch(search);
     }
 
     @Override

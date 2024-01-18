@@ -1,6 +1,5 @@
 package com.samsung.framework.mapper.record;
 
-import com.samsung.framework.mapper.common.GeneralMapper;
 import com.samsung.framework.vo.record.RecordVO;
 import com.samsung.framework.vo.search.SearchVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -8,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 @Mapper
-public interface RecordMapper extends GeneralMapper {
+public interface RecordMapper {
 
     /**
      * 이력 내역 total

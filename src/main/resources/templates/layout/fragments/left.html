@@ -11,104 +11,111 @@
                 <div></div>
             </section>
         </section>
-        <ul id="menu-parent">
+        <ul th:if="${session.loginInfo!=null}" id="menu-parent">
 
         </ul>
     </aside>
     <script src="/static/js/common.js"></script>
     <script th:inline="javascript">
+        /*<![CDATA[*/
+        let session = [[ ${session.loginInfo} ]]; // 세션 정보 가져온다.
+        /*]]*/
         let codeMap = new Map();
-        $.ajax({
-            type: "POST",
-            url: "/menu/LgList",
-            contentType: "application/json",
-            async:false,
-            success: function(result){
-                let dataList = Array.from(result);
-                menuLgDraw(dataList);
-                menuMidAjax();
-                menuSmAjax()
-            },
-            error: function(request, status, error){
-                console.log(request);
-            }
-        });
-        // 사이드바 대메뉴 생성
-        function menuLgDraw(dataList){
-            for(let data of dataList){
-                let realCodeCd = data.menuCode;
-                if(realCodeCd==="MENU000000") continue;
-                let menuCode = data.menuCode.substr(4);
-                if(menuCode.charAt(2)==="0" && menuCode.substr(2)==="0000"){
-                    let menuParent = $("#menu-parent");
-                    codeMap.set(menuCode, realCodeCd);
-                    menuParent.append(`<li> <a href='#'>${data.name}</a><ul id= ${realCodeCd}> </ul></li>`);
-                }
-            }
-        }
-        function menuMidAjax(){
+
+        if(session){ // 세션 정보가 있을 경우, menuList를 가져온다.
             $.ajax({
-                type:"POST",
-                url:"/menu/midList",
+                type: "POST",
+                url: "/menu/lgList",
                 contentType: "application/json",
-                async: false,
+                async:false,
                 success: function(result){
                     let dataList = Array.from(result);
-                    menuMidDraw(dataList);
+                    menuLgDraw(dataList);
+                    menuMidAjax();
+                    menuSmAjax()
+                },
+                error: function(request, status, error){
+                    console.log(request);
                 }
             });
-        }
-
-        function menuSmAjax(){
-            $.ajax({
-               type:"POST",
-               url:"/menu/smList",
-               contentType: "application/json",
-               async: false,
-               success: function(result){
-                   let dataList = Array.from(result);
-                   menuSmDraw(dataList);
-               }
-            });
-        }
-
-        // 소메뉴 생성
-        function menuMidDraw(dataList){
-            for(let data of dataList){
-                let realCodeCd = data.menuCode;
-                let menuCode = data.pmenuCode.substr(4);
-                // 부모ID
-                let parentId = codeMap.get(menuCode);
-                let parentElement = document.getElementById(parentId);
-                let url = data.path;
-                if(isEmpty(url)) {
-                    url = "#";
+            // 사이드바 대메뉴 생성
+            function menuLgDraw(dataList){
+                for(let data of dataList){
+                    let realCodeCd = data.menuCode;
+                    if(realCodeCd==="MENU000000") continue;
+                    let menuCode = data.menuCode.substr(4);
+                    if(menuCode.charAt(2)==="0" && menuCode.substr(2)==="0000"){
+                        let menuParent = $("#menu-parent");
+                        codeMap.set(menuCode, realCodeCd);
+                        menuParent.append(`<li> <a href='#'>${data.name}</a><ul id= ${realCodeCd}> </ul></li>`);
+                    }
                 }
-                parentElement.innerHTML +=`<li id= ${realCodeCd}> <a href='${url}'>${data.name}</a></li>`;
             }
-            codeMap = new Map();
-            for(let data of dataList){
-                let realCodeCd = data.menuCode;
-                let menuCode = data.menuCode.substr(4);
-                codeMap.set(menuCode,realCodeCd);
+            function menuMidAjax(){
+                $.ajax({
+                    type:"POST",
+                    url:"/menu/midList",
+                    contentType: "application/json",
+                    async: false,
+                    success: function(result){
+                        let dataList = Array.from(result);
+                        menuMidDraw(dataList);
+                    }
+                });
             }
 
-        }
+            function menuSmAjax(){
+                $.ajax({
+                    type:"POST",
+                    url:"/menu/smList",
+                    contentType: "application/json",
+                    async: false,
+                    success: function(result){
+                        let dataList = Array.from(result);
+                        menuSmDraw(dataList);
+                    }
+                });
+            }
 
-        function menuSmDraw(dataList){
-            for(let data of dataList){
-                let realCodeCd = data.menuCode;
-                let menuCode = data.pmenuCode.substr(4);
-                // 부모 ID
-                let parentId = codeMap.get(menuCode);
-                let parentElement = document.getElementById(parentId);
-                let url = data.path;
-                if(isEmpty(url)){
-                    url='#';
+            // 소메뉴 생성
+            function menuMidDraw(dataList){
+                for(let data of dataList){
+                    let realCodeCd = data.menuCode;
+                    let menuCode = data.pmenuCode.substr(4);
+                    // 부모ID
+                    let parentId = codeMap.get(menuCode);
+                    let parentElement = document.getElementById(parentId);
+                    let url = data.path;
+                    if(isEmpty(url)) {
+                        url = "#";
+                    }
+                    parentElement.innerHTML +=`<li id= ${realCodeCd}> <a href='${url}'>${data.name}</a></li>`;
                 }
-                parentElement.innerHTML +=`<li id= ${realCodeCd}> <a href='${url}'>${data.name}</a></li>`;
+                codeMap = new Map();
+                for(let data of dataList){
+                    let realCodeCd = data.menuCode;
+                    let menuCode = data.menuCode.substr(4);
+                    codeMap.set(menuCode,realCodeCd);
+                }
+
+            }
+
+            function menuSmDraw(dataList){
+                for(let data of dataList){
+                    let realCodeCd = data.menuCode;
+                    let menuCode = data.pmenuCode.substr(4);
+                    // 부모 ID
+                    let parentId = codeMap.get(menuCode);
+                    let parentElement = document.getElementById(parentId);
+                    let url = data.path;
+                    if(isEmpty(url)){
+                        url='#';
+                    }
+                    parentElement.innerHTML +=`<li id= ${realCodeCd}> <a href='${url}'>${data.name}</a></li>`;
+                }
             }
         }
+
     </script>
 </th:block>
 

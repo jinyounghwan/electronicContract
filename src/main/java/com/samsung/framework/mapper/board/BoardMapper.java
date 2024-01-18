@@ -2,7 +2,6 @@ package com.samsung.framework.mapper.board;
 
 import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.board.BoardPublic;
-import com.samsung.framework.mapper.common.GeneralMapper;
 import com.samsung.framework.vo.board.BoardPublicVO;
 import com.samsung.framework.vo.board.BoardReplyVO;
 import com.samsung.framework.vo.file.FileVO;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Mapper
-public interface BoardMapper extends GeneralMapper {
+public interface BoardMapper {
     List<FileVO> boardFileSearch(SearchVO search);
 
     /**
@@ -84,4 +83,40 @@ public interface BoardMapper extends GeneralMapper {
      * @return {@link Map}
      */
     int removeReplyBySeq(Map<String, Object> paramMap);
+
+    /**
+     * 단건 조회
+     * @param search
+     * @return
+     */
+    Object rowBySearch(SearchVO search);
+
+    /**
+     * 저장
+     * @param obj
+     * @return
+     */
+    int insert(Object obj);
+
+    /**
+     * 수정
+     * @param obj
+     * @return
+     */
+//    @EntityLog
+    int update(Object obj);
+
+    /**
+     * 페이지 목록 조회  건수
+     * @param search
+     * @return
+     */
+    int pagingCountBySearch(SearchVO search);
+
+    /**
+     * 페이지 목록 조회
+     * @param search
+     * @return
+     */
+    List<?> pagingBySearch(SearchVO search);
 }

@@ -77,6 +77,7 @@
                     Worker :                         (signature)
                 </div>
                 <img src='http://localhost:3030/img/sample.jpg'/>
+                <br/>
                 <button onclick="fnModal()">Close</button>
                 <br/>
                 <br/>
@@ -129,9 +130,6 @@
         }
 
         let fnModal = () => {
-            console.log("fnModalClick");
-            let html = document.querySelector(".modal_box").innerHTML;
-            html = html.replaceAll("\n", "");
             let param = {}
             param.html = $('.modal_box').html();
              $.ajax({

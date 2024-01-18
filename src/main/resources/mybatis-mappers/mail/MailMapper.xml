@@ -20,7 +20,7 @@
 
 <!-- 조회 [[ -->
     <!-- 유저 이메일 정보 조회 -->
-    <select id="getAuthEmailMember" parameterType="MemberVO">
+    <select id="getAuthEmailMember" parameterType="AccountVO">
         SELECT USER.USER_EMAIL
         FROM INFO_USER USER
        <where>

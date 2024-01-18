@@ -6,8 +6,13 @@
         <!-- Begin Header -->
         <div class="header">
             <h2 class="header-child left">ADMIN</h2>
-            <a th:if= "${session.loginInfo == null}" href="/login"><h2 class="header-child right">LOG-IN</h2></a>
-            <a th:if= "${session.loginInfo != null}" href="#"><h2  th:text="${session.loginInfo.userNm}" class="header-child right"></h2></a> <a th:if="${session.loginInfo != null}" th:href="@{/logout/{userSeq}(userSeq=${session.loginInfo.userSeq})}"><i class="fa-solid fa-right-to-bracket"></i></a>
+            <a th:if= "${session.loginInfo == null}" href="/account/login"><h2 class="header-child right">LOG-IN</h2></a>
+            <div th:if= "${session.loginInfo != null}">
+                <h2  th:text="${session.loginInfo.name}" class="header-child right"></h2>
+                <form action="/account/logout" method="post">
+                    <button type="submit"><span>로그아웃</span></button>
+                </form>
+            </div>
         </div>
     </div>
 </html>

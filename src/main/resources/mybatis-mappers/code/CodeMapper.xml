@@ -102,8 +102,6 @@
 
         <include refid="orderClause"><property name="alias" value="CD."/></include>
 
-        <include refid="mapper.paging.pagingQuery"></include>
-
     </select>
 
     <select id="pagingCountBySearch" resultType="Integer" parameterType="SearchVO">

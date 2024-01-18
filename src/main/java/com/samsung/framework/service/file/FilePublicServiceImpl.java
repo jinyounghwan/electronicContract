@@ -2,13 +2,13 @@ package com.samsung.framework.service.file;
 
 import com.samsung.framework.common.utils.FileUtil;
 import com.samsung.framework.common.utils.StringUtil;
-import com.samsung.framework.domain.file.File;
-import com.samsung.framework.service.common.ParentService;
+import com.samsung.framework.mapper.file.FileMapper;
 import com.samsung.framework.vo.file.FilePublicVO;
-import com.samsung.framework.vo.file.FileVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,9 +20,19 @@ import java.util.List;
 import java.util.Map;
 
 @Primary
+@RequiredArgsConstructor
 @Service
 @Slf4j
-public class FilePublicServiceImpl extends ParentService implements FileService {
+public class FilePublicServiceImpl implements FileService {
+
+    private final FileUtil fileUtil;
+    private final FileMapper fileMapper;
+
+    @Value("${properties.file.rootDir}")
+    private String getRootDir;
+    @Value("${properties.file.realDir}")
+    private String getRealDir;
+
     /**
      * 일반 파일 업로드 시 사용
      * @param files
@@ -31,7 +41,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
      */
     @Override
     public List<FilePublicVO> uploadFile(List<MultipartFile> files) throws Exception {
-        return getFileUtil().uploadFiles(files,getPropertiesUtil().getFile().getRootDir() + getPropertiesUtil().getFile().getRealDir());
+        return fileUtil.uploadFiles(files,getRootDir + getRealDir);
     }
 
     /**
@@ -42,7 +52,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
      * @throws Exception
      */
     public List<FilePublicVO> uploadFile(List<MultipartFile> files, String type) throws Exception {
-        return getFileUtil().uploadFiles(files, getPropertiesUtil().getFile().getRootDir() + getPropertiesUtil().getFile().getRealDir() + "/" +type);
+        return fileUtil.uploadFiles(files, getRootDir + getRealDir + "/" +type);
     }
 
     /**
@@ -59,12 +69,12 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
                                 .originalName(file.getOriginalName())
                                 .name(file.getName())
                                 .fileNo(1)
-                                .extension(getFileUtil().checkFileType(file.getOriginalName()))
-                                .storagePath(file.getStoragePath())
+                                .extension(fileUtil.checkFileType(file.getOriginalName()))
+                                .storagePath(FileUtil.seperateOs(file.getStoragePath()))
                                 .size(file.getSize())
                                 .createdBy("hsk9839")
                                 .build();
-            getCommonMapper().getFileMapper().save(target);
+            fileMapper.save(target);
             targetFiles.add(target);
         }
         return targetFiles;
@@ -84,13 +94,13 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
         for(FilePublicVO file : files){
             FilePublicVO target;
             if(StringUtil.isEmpty(file.getStoragePath())){ //빈 값인 경우
-                String createFileNm = getFileUtil().createFileName(file.getOriginalName());
+                String createFileNm = fileUtil.createFileName(file.getOriginalName());
                 target = FilePublicVO.builder()
                         .originalName(file.getOriginalName())
                         .name(file.getName())
                         .fileNo(fileCount)
-                        .extension(getFileUtil().checkFileType(file.getOriginalName()))
-                        .storagePath(getPropertiesUtil().getFile().getRootDir() + getPropertiesUtil().getFile().getRealDir() +createFileNm)
+                        .extension(fileUtil.checkFileType(file.getOriginalName()))
+                        .storagePath(getRootDir + getRealDir +createFileNm)
                         .size(file.getSize())
                         .createdBy(regId)
                         .build();
@@ -106,7 +116,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
                         .build();
             }
             fileCount++;
-            getCommonMapper().getFileMapper().save(target);
+            fileMapper.save(target);
             targetFiles.add(target);
         }
         return targetFiles;
@@ -119,7 +129,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("lastId", lastId);
         paramMap.put("seqList", tgtList);
-        iAffectedRows = getCommonMapper().getFileMapper().deleteFileList(paramMap);
+        iAffectedRows = fileMapper.deleteFileList(paramMap);
 
         return iAffectedRows;
     }
@@ -149,7 +159,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
             HashMap<String, Object> paramMap = new HashMap<>();
             paramMap.put("lastId",lastId);
             paramMap.put("seqList", removeList);
-            delete = getCommonMapper().getFileMapper().deleteFileList(paramMap);
+            delete = fileMapper.deleteFileList(paramMap);
         }
 
         return delete > 0 ? 1 : 0;
@@ -166,7 +176,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
                                             .name(fileNm)
                                             .build();
 
-        return getCommonMapper().getFileMapper().getFile(target);
+        return fileMapper.getFile(target);
     }
 
     /**
@@ -178,7 +188,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
         FilePublicVO target = FilePublicVO.builder()
                                             .fileSeq(fileSeq)
                                             .build();
-        return getCommonMapper().getFileMapper().getFile(target);
+        return fileMapper.getFile(target);
     }
 
     @Override
@@ -187,7 +197,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
                                         .attachList(attachIdList)
                                         .build();
 
-        return getCommonMapper().getFileMapper().getFiles(file);
+        return fileMapper.getFiles(file);
     }
 
     /**
@@ -200,7 +210,7 @@ public class FilePublicServiceImpl extends ParentService implements FileService 
     public void downloadFile(FilePublicVO file, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String realPath = FileUtil.getOsRootDir() + file.getStoragePath();
         String fileNmOrg = file.getOriginalName();
-        getFileUtil().downloadFile(fileNmOrg ,realPath, request, response);
+        fileUtil.downloadFile(fileNmOrg ,realPath, request, response);
     }
 
     /**

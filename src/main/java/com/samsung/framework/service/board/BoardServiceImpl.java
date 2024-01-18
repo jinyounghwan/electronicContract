@@ -6,26 +6,28 @@ import com.samsung.framework.common.utils.ObjectHandlingUtil;
 import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.common.Paging;
-import com.samsung.framework.service.common.ParentService;
-import com.samsung.framework.service.file.FileService;
+import com.samsung.framework.vo.account.AccountVO;
+import com.samsung.framework.mapper.board.BoardMapper;
+import com.samsung.framework.service.file.FilePublicServiceImpl;
 import com.samsung.framework.vo.board.BoardPublicVO;
 import com.samsung.framework.vo.board.BoardVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.file.FileVO;
-import com.samsung.framework.vo.member.MemberVO;
 import com.samsung.framework.vo.search.board.BoardSearchVO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
-public class BoardServiceImpl extends ParentService implements BoardService{
+public class BoardServiceImpl implements BoardService {
 
-    @Autowired
-    private FileService fileService;
+    private final FilePublicServiceImpl fileService;
+
+    private final BoardMapper boardMapper;
 
     /**
      * 게시판 저장
@@ -33,7 +35,7 @@ public class BoardServiceImpl extends ParentService implements BoardService{
      * @return
      * @throws Exception
      */
-    public int insertBoard(Board board, List<FilePublicVO> files, MemberVO member) throws Exception{
+    public int insertBoard(Board board, List<FilePublicVO> files, AccountVO account) throws Exception{
 
         Board target = Board.builder()
                             .boardCode(board.getBoardCode())
@@ -48,10 +50,10 @@ public class BoardServiceImpl extends ParentService implements BoardService{
                             .logId2(null)
                             .logJson(null)
                             .remark(null)
-                            .regId(member.getUserId())
+                            .regId(account.getUserId())
                             .build();
 
-        int iAffectedRows = getCommonMapper().getBoardMapper().insert(target);
+        int iAffectedRows = boardMapper.insert(target);
 
 
         //파일 저장
@@ -70,10 +72,10 @@ public class BoardServiceImpl extends ParentService implements BoardService{
     public List<BoardVO> pagingBoard(BoardSearchVO search){
         search.setEntityName(TableNameEnum.BOARD.name());
 
-        int totalCount = getCommonMapper().getBoardMapper().pagingCountBySearch(search);
+        int totalCount = boardMapper.pagingCountBySearch(search);
         Paging paging = ObjectHandlingUtil.pagingOperatorBySearch(search, totalCount);
         search.setPaging(paging);
-        List<BoardVO> boardList = (List<BoardVO>) getCommonMapper().getBoardMapper().pagingBySearch(search);
+        List<BoardVO> boardList = (List<BoardVO>) boardMapper.pagingBySearch(search);
         return boardList;
     }
 
@@ -85,7 +87,7 @@ public class BoardServiceImpl extends ParentService implements BoardService{
     public BoardVO rowBoard(BoardSearchVO search){
         search.setEntityName(TableNameEnum.BOARD.name());
 
-        BoardVO board = (BoardVO) getCommonMapper().getBoardMapper().rowBySearch(search);
+        BoardVO board = (BoardVO) boardMapper.rowBySearch(search);
 
         // 게시판에 물린 파일 목록 가져오기
         board.setFiles(boardFileSearch(search));
@@ -114,7 +116,7 @@ public class BoardServiceImpl extends ParentService implements BoardService{
      * @return
      */
     public List<FileVO> boardFileSearch(BoardSearchVO search){
-        return  getCommonMapper().getBoardMapper().boardFileSearch(search);
+        return  boardMapper.boardFileSearch(search);
     }
 
     /**
@@ -122,7 +124,7 @@ public class BoardServiceImpl extends ParentService implements BoardService{
      * @param board
      * @return
      */
-    public int updateBoard(Board board, List<FilePublicVO> fileList, MemberVO member) throws Exception {
+    public int updateBoard(Board board, List<FilePublicVO> fileList, AccountVO account) throws Exception {
         Board target = Board.builder()
                             .boardSeq(board.getBoardSeq())
                             .title(board.getTitle())
@@ -136,11 +138,11 @@ public class BoardServiceImpl extends ParentService implements BoardService{
                             .logId2(null)
                             .logJson(null)
                             .remark(null)
-                            .regId(member.getUserId())
+                            .regId(account.getUserId())
                             .build();
 
         // Mapper Update
-        int iAffectedRows = getCommonMapper().getBoardMapper().update(target);
+        int iAffectedRows = boardMapper.update(target);
 
 
         return iAffectedRows;

@@ -1,17 +1,14 @@
 package com.samsung.framework.mapper.menu;
 
 import com.samsung.framework.domain.authority.Authority;
-import com.samsung.framework.domain.menu.Menu;
-import com.samsung.framework.mapper.common.GeneralMapper;
 import com.samsung.framework.vo.code.CommonCodeVO;
 import com.samsung.framework.vo.menu.MenuVO;
-import com.samsung.framework.vo.search.menu.MenuSearchVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 @Mapper
-public interface MenuMapper extends GeneralMapper {
+public interface MenuMapper {
     // Menu Ord 최대 순서 조회
     Long getOrdMax(Long pMenuSeq);
 
@@ -34,4 +31,11 @@ public interface MenuMapper extends GeneralMapper {
 
     // 메뉴에 대한 권한 여부 조회
     long findMenuSeqByUserId(Authority authority);
+
+    /**
+     * 저장
+     * @param obj
+     * @return
+     */
+    int insert(Object obj);
 }

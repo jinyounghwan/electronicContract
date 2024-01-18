@@ -1,11 +1,12 @@
 package com.samsung.framework.service.code;
 
 import com.samsung.framework.domain.code.CommonCode;
-import com.samsung.framework.service.common.ParentService;
+import com.samsung.framework.mapper.code.CodeMapper;
 import com.samsung.framework.vo.code.CodePublicVO;
 import com.samsung.framework.vo.code.CommonCodeVO;
 import com.samsung.framework.vo.common.SelectOptionVO;
 import com.samsung.framework.vo.search.code.CodeSearchVO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -16,29 +17,33 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
+@RequiredArgsConstructor
 @Primary
-public class CodePublicServiceImpl extends ParentService implements CodeService {
+public class CodePublicServiceImpl implements CodeService {
+
+    private final CodeMapper codeMapper;
+
     // 사이드바 메뉴 조회
     @Override
     public List<CodePublicVO> listCode() {
-        return getCommonMapper().getCodeMapper().listCode();
+        return codeMapper.listCode();
     }
 
     @Override
     public List<SelectOptionVO> commonCodeGroupList() {
-        List<SelectOptionVO> list = getCommonMapper().getCodeMapper().commonCodeGroupList();
+        List<SelectOptionVO> list = codeMapper.commonCodeGroupList();
         return list;
     }
 
     @Override
     public List<SelectOptionVO> commonCodeCategoryList(String code) {
-        List<SelectOptionVO> list = getCommonMapper().getCodeMapper().commonCodeCategoryList(code);
+        List<SelectOptionVO> list = codeMapper.commonCodeCategoryList(code);
         return list;
     }
 
     @Override
     public List<CommonCodeVO> findAll(CodeSearchVO codeSearchVO) {
-        List<CommonCodeVO> list = getCommonMapper().getCodeMapper().findAll(codeSearchVO);
+        List<CommonCodeVO> list = codeMapper.findAll(codeSearchVO);
         return list;
     }
 
@@ -88,10 +93,10 @@ public class CodePublicServiceImpl extends ParentService implements CodeService 
 
         AtomicInteger updateCount = new AtomicInteger(0);
         addList.forEach(row -> {
-            updateCount.addAndGet(getCommonMapper().getCodeMapper().saveCommonCode(row));
+            updateCount.addAndGet(codeMapper.saveCommonCode(row));
         });
         updateList.forEach(row -> {
-            updateCount.addAndGet(getCommonMapper().getCodeMapper().updateCommonCode(row));
+            updateCount.addAndGet(codeMapper.updateCommonCode(row));
         });
 
         if(updateCount.get() < 1) {

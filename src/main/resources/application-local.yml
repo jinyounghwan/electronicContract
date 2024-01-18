@@ -57,6 +57,6 @@ server:
 
 # file
 file:
-  rootDir: /files/dejay_public
+  rootDir: /files/electronicContract
   tempDir: /temp
   realDir: /upload

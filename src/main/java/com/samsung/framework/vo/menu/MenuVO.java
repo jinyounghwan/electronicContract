@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuVO {
+public class MenuVO implements Comparable<MenuVO>{
     // 메뉴 SEQ
-    private Long menuSeq;
+    private int menuSeq;
 
     // 메뉴 코드
     private String menuCode;
@@ -50,4 +50,9 @@ public class MenuVO {
 
      //부모 메뉴 코드
      private String pMenuCode;
+
+    @Override
+    public int compareTo(MenuVO o) {
+        return this.getMenuSeq() - o.getMenuSeq();
+    }
 }

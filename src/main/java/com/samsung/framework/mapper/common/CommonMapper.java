@@ -7,7 +7,6 @@ import com.samsung.framework.mapper.board.BoardMapper;
 import com.samsung.framework.mapper.code.CodeMapper;
 import com.samsung.framework.mapper.file.FileMapper;
 import com.samsung.framework.mapper.mail.MailMapper;
-import com.samsung.framework.mapper.member.MemberMapper;
 import com.samsung.framework.mapper.menu.MenuMapper;
 import com.samsung.framework.mapper.record.RecordMapper;
 import lombok.Getter;
@@ -23,8 +22,6 @@ import org.springframework.stereotype.Component;
 public class CommonMapper {
 
     private final CodeMapper codeMapper;
-
-    private final MemberMapper memberMapper;
 
     private final BoardMapper boardMapper;
 

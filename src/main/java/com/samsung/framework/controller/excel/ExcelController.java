@@ -1,11 +1,10 @@
 package com.samsung.framework.controller.excel;
 
-import com.samsung.framework.controller.common.ParentController;
-import com.samsung.framework.domain.file.File;
+import com.samsung.framework.service.excel.ExcelPublicServiceImpl;
+import com.samsung.framework.service.file.FilePublicServiceImpl;
 import com.samsung.framework.vo.file.FilePublicVO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +20,11 @@ import java.util.Map;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/excel")
-public class ExcelController extends ParentController {
+public class ExcelController {
+
+    private final FilePublicServiceImpl fileService;
+    private final ExcelPublicServiceImpl excelService;
+
     /** TODO: 테이블 데이터 업로드
      * excel 업로드
      * @param tableData
@@ -40,17 +43,18 @@ public class ExcelController extends ParentController {
     @PostMapping("/write")
     public ResponseEntity readExcel(@RequestBody List<MultipartFile> multipartFiles) throws Exception {
         Map<String, Object> result = new HashMap<>();
-        List<FilePublicVO> fileList = getCommonService().getFileServiceImpl().uploadFile(multipartFiles, "CONTRACT");
-        List<FilePublicVO> saveFileList = getCommonService().getFileServiceImpl().saveFile(fileList);
-        if(saveFileList.isEmpty()) {
+        List<FilePublicVO> fileList = fileService.uploadFile(multipartFiles, "Contract/Excel");
+        if(fileList.isEmpty()) {
             result.put("code","204");
-            result.put("message", "파일 저장에 실패하였습니다.");
+            result.put("message", "엑셀 파일 저장 실패");
             result.put("errMsg", "incomplete");
         } else{
             result.put("code","200");
-            result.put("message", "파일 저장에 성공하였습니다.");
+            result.put("message", "엑셀 파일 저장 성공");
         }
-        getCommonService().getExcelPublicServiceImpl().readExcelFile(multipartFiles);
+        excelService.readExcelFile(fileList);
+
+
         return ResponseEntity.ok(result);
     }
 }

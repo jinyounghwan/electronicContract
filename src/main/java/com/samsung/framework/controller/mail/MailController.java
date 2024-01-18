@@ -1,23 +1,15 @@
 package com.samsung.framework.controller.mail;
 
-import com.samsung.framework.controller.common.ParentController;
-import com.samsung.framework.vo.member.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/mail")
-public class MailController extends ParentController {
+public class MailController {
 
 //    @PostMapping("/auth")
 //    public ResponseEntity mailAuthSend(@RequestBody MemberVO member){

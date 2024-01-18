@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Menu extends BaseEntity {
     // 메뉴 SEQ
-    private Long menuSeq;
+    private int menuSeq;
 
     // 메뉴 코드
     private String menuCode;
@@ -50,7 +50,7 @@ public class Menu extends BaseEntity {
     private String pMenuCode;
 
     @Builder
-    public Menu(String tableName, String logId1, String logId2, String logType, String logJson, String remark, String regId, Long menuSeq, String menuCode, String name, int ord, String path,String displayYn, String useYn, String createdBy, LocalDateTime createdAt,String updatedBy, LocalDateTime updatedAt){
+    public Menu(String tableName, String logId1, String logId2, String logType, String logJson, String remark, String regId, int menuSeq, String menuCode, String name, int ord, String path,String displayYn, String useYn, String createdBy, LocalDateTime createdAt,String updatedBy, LocalDateTime updatedAt){
         super(tableName, logId1, logId2, logType,logJson, remark, regId);
         this.menuSeq = menuSeq;
         this.menuCode = menuCode;

@@ -2,6 +2,8 @@ package com.samsung.framework.vo.authority;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @ToString
 @EqualsAndHashCode(of = {"menuSeq", "memberId"})
 @AllArgsConstructor
@@ -9,30 +11,17 @@ import lombok.*;
 @Getter
 @Builder
 public class MenuAuthorityVO {
+    private int authSeq;
     private int menuSeq;
-    private String memberId;
-    private String deptCode;
-    private String authLevel;
-    private boolean read;
-    private boolean create;
-    private boolean update;
-    private boolean delete;
-    private boolean download;
-
-    public void authLevelDivider() {
-        if(!authLevel.isBlank()) {
-            this.read = authLevelYn(authLevel.substring(0, 1));
-            this.create = authLevelYn(authLevel.substring(1, 2));
-            this.update = authLevelYn(authLevel.substring(2, 3));
-            this.delete = authLevelYn(authLevel.substring(3, 4));
-            this.download = authLevelYn(authLevel.substring(4, 5));
-        }
-    }
-
-    private boolean authLevelYn(String authValue) {
-        if(authValue.equals("1")) {
-            return true;
-        }
-        return false;
-    }
+    private String authC;
+    private String authR;
+    private String authU;
+    private String authD;
+    private String authF;
+    private String grantTo;
+    private String displayYn;
+    private String createdBy;
+    private LocalDateTime createdAt;
+    private String updatedBy;
+    private LocalDateTime updatedAt;
 }
