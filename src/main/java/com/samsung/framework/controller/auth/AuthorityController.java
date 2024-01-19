@@ -112,7 +112,7 @@ public class AuthorityController {
     @GetMapping("/auth-popup")
     public String authPopupList(Model model, @RequestParam(value = "searchKeyword") String searchKeyword) {
         SearchVO searchVO = new SearchVO();
-        searchVO.setSearchWord1(searchKeyword);
+//        searchVO.setSearchWord1(searchKeyword);
 //        List<AccountVO> list =accountService.findAllUsers(searchVO);
 //        model.addAttribute("users", list);
 
