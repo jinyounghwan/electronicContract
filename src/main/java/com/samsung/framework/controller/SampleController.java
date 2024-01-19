@@ -1,6 +1,8 @@
 package com.samsung.framework.controller;
 
 import com.samsung.framework.common.utils.FileUtil;
+import com.samsung.framework.domain.common.Paging;
+import com.samsung.framework.vo.search.SearchVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,18 +22,18 @@ import java.util.Map;
 @Slf4j
 public class SampleController {
 
-    private final SampleService SampleService;
+    private final SampleService sampleService;
     private final FileUtil fileUtil;
 
     public SampleController(SampleService SampleService , FileUtil fileUtil, FileUtil fileUtil1) {
-        this.SampleService = SampleService;
+        this.sampleService = SampleService;
         this.fileUtil = fileUtil1;
     }
 
     @GetMapping({"", "/"})
     public String view(Model model) {
 //        Collection<SampleVO> sampleList = SampleService.getSampleList();
-        SampleVO sample = SampleService.getSample();
+        SampleVO sample = sampleService.getSample();
 
         model.addAttribute("sample", sample);
 
@@ -59,7 +61,7 @@ public class SampleController {
     @PostMapping("/addRedirect")
     public RedirectView addRedirect(@ModelAttribute("sample") SampleVO sampleVO, RedirectAttributes redirectAttributes) {
         final RedirectView redirectView = new RedirectView("", true);
-        SampleVO savedSampleVO = SampleService.addSample(sampleVO);
+        SampleVO savedSampleVO = sampleService.addSample(sampleVO);
         redirectAttributes.addFlashAttribute("savedBook", savedSampleVO);
         redirectAttributes.addFlashAttribute("addBookSuccess", true);
         return redirectView;
@@ -85,4 +87,30 @@ public class SampleController {
         return ResponseEntity.ok(null);
 
     }
+
+    @GetMapping(value = "/sample")
+    public String getSample (){
+        return "sample/sample";
+    }
+    @PostMapping(value = "/getSampleList")
+    public String getSampleList (Model model , @RequestBody SearchVO searchVO){
+        // total
+        int totalCount = sampleService.getSampleListTotal(searchVO);
+        model.addAttribute("totalCount", totalCount);
+        // paging
+        model.addAttribute("paging",new Paging());
+//        model.addAttribute("paging111111", Paging.builder()
+//                .currentPage(searchVO.getPaging().getCurrentPage())
+//                .displayRow(searchVO.getPaging().getDisplayRow())
+//                .totalCount(totalCount)
+//                .build());
+
+        // list
+//        List<Map<String,Object>> list = sampleService.getSampleList(searchVO);
+//        model.addAttribute("list",list);
+        log.info("model =======================> :{} ",model.toString());
+        return "sample/sample :: #wrapper";
+//        return ResponseEntity.ok(null);
+    }
+
 }

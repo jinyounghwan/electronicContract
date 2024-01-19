@@ -1,11 +1,15 @@
 package com.samsung.framework.controller;
 
 import com.samsung.framework.common.utils.FileUtil;
+import com.samsung.framework.mapper.sample.SampleMapper;
 import com.samsung.framework.service.file.FilePublicServiceImpl;
 import com.samsung.framework.vo.file.FilePublicVO;
+import com.samsung.framework.vo.search.SearchVO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
@@ -15,8 +19,9 @@ import java.util.Map;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class SampleServiceImpl implements SampleService {
-
+    private final SampleMapper sampleMapper;
     @Autowired
     private FilePublicServiceImpl filePublicService;
 
@@ -25,18 +30,6 @@ public class SampleServiceImpl implements SampleService {
         return new SampleVO("00", "singleObject", "email value", new String[]{"workout", "tennis", "baseball"}, "N");
     }
 
-    @Override
-    public Collection<SampleVO> getSampleList() {
-        List<SampleVO> list = Arrays.asList(
-                  new SampleVO("1", "ikjoo1", "ijzone@samsung.co.kr", null, "Y")
-                , new SampleVO("2", "ikjoo2", "ijzone@samsung.co.kr", null, "N")
-                , new SampleVO("3", "ikjoo3", "ijzone@samsung.co.kr", null, "N")
-                , new SampleVO("4", "ikjoo4", "ijzone@samsung.co.kr", null, "Y")
-                , new SampleVO("5", "ikjoo5", "ijzone@samsung.co.kr", null, "Y")
-        );
-
-        return list;
-    }
 
     @Override
     public SampleVO addSample(SampleVO sampleVO) {
@@ -54,4 +47,16 @@ public class SampleServiceImpl implements SampleService {
         }
         return null;
     }
+
+    @Override
+    public int getSampleListTotal(SearchVO searchVO) {
+        return sampleMapper.getSampleListTotal(searchVO);
+    }
+
+    @Override
+    public List<Map<String, Object>> getSampleList(SearchVO searchVO) {
+        return sampleMapper.getSampleList(searchVO);
+    }
+
+
 }
