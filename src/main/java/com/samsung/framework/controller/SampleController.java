@@ -109,8 +109,13 @@ public class SampleController {
 //        List<Map<String,Object>> list = sampleService.getSampleList(searchVO);
 //        model.addAttribute("list",list);
         log.info("model =======================> :{} ",model.toString());
-        return "sample/sample :: #wrapper";
+        return "sample/sample :: #content";
 //        return ResponseEntity.ok(null);
     }
 
+
+    @GetMapping(value="/sample2")
+    public String getSample2() {
+        return "sample/sample";
+    }
 }

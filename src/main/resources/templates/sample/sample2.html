@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="ko">
+
+<th:block layout:fragment="content">
+      <div id="content">
+        <!--content-->
+        <div class="container-fluid">
+          <h1 class="page-title">계약서 템플릿</h1>
+          <!--search box-->
+          <div class="databox">
+            <div class="data-linebox">
+              <div class="data-line">
+                <div class="data-title">data</div>
+                <div class="data-select datatable-dropdown">
+                  <label>
+                    <select class="datatable-selector">
+                      <option value="10" selected="">전체</option>
+                      <option value="15">1234</option>
+                      <option value="20">12345</option></select>
+                  </label>
+                </div>
+                <div class="data-group">
+                  <input type="date" class="form-control form-control-user" id="date" placeholder="YYYY.MM.DD">
+                  <span>-</span>
+                </div>
+              </div>
+              <div class="data-line">
+                <div class="data-title">Search</div>
+                <div class="data-select datatable-dropdown">
+                  <label>
+                    <select class="datatable-selector">
+                      <option value="10" selected="">전체</option>
+                      <option value="15">1234</option>
+                      <option value="20">12345</option></select>
+                  </label>
+                </div>
+                <div class="data-group">
+                  <input type="" class="form-control form-control-user" placeholder="">
+                </div>
+              </div>
+            </div>
+            <div class="data-btn"><button class="btn btn-primary" type="button">Search
+              <i class="fas fa-search fa-sm"></i>
+            </button></div>
+          </div>
+          <!--search box-->
+          <div class="card shadow mb-4">
+            <!--<div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
+            </div>-->
+            <div class="datatable-top">
+              <div class="left"><p>22 items</p></div>
+              <div class="right datatable-dropdown">
+                <label>
+                  <select class="datatable-selector">
+                    <option value="5">5</option>
+                    <option value="10" selected="">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option></select>
+                </label>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                  <tr>
+                    <th>Template Code</th>
+                    <th>Template Title</th>
+                    <th>Template Type</th>
+                    <th>Contract Title (EN)</th>
+                    <th>Created</th>
+                    <th>Modified</th>
+                    <th>Action</th>
+                  </tr>
+                  </thead>
+
+                  <tbody>
+                  <!-- <tr>
+                       <td>00000022</td>
+                       <td>대체 휴무 합의서</td>
+                       <td>인센티브 계약서</td>
+                       <td>Employment contract</td>
+                       <td>2023-09-10</td>
+                       <td>2023-09-10</td>
+                       <td><a href="#" >View Edit</a></td>
+                   </tr>-->
+                  <tr  th:if="${not #lists.isEmpty(list)}" th:each="item, stat : ${list}">
+                    <td th:text="${item}"></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--pagination-->
+              <div th:replace="~{common/pagination}"></div>
+            </div>
+          </div>
+        </div>
+        <!--contents-->
+      </div>
+  <!-- End of Page Wrapper -->
+</th:block>
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+
+    // $(function(){
+    //   getList();
+    // });
+    // getList = (param)=> {
+    //   let search;
+    //   if(typeof param =='undefined' ){
+    //     search = setData();
+    //   }else{
+    //     search = param;
+    //   }
+    //   $.ajax({
+    //     url: '/sample/getSampleList',
+    //     type: 'post',
+    //     dataType: 'text',
+    //     contentType: 'application/json; charset=UTF-8',
+    //     data: JSON.stringify(search)
+    //   }).done(function(data) {
+    //     console.log(data);
+    //     $('#wrapper').replaceWith(data);
+    //   }).fail(function(jqXHR) {
+    //     console.log(jqXHR);
+    //   });
+    // }
+    // setData = () =>{
+    //   let value = {
+    //     paging :{}
+    //   }
+    //   return value;
+    // }
+  </script>
+</th:block>
+</html>
