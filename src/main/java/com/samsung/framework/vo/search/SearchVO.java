@@ -4,7 +4,10 @@ import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.vo.search.board.BoardSearchVO;
 import com.samsung.framework.vo.search.code.CodeSearchVO;
 import com.samsung.framework.vo.search.menu.MenuSearchVO;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,16 +20,9 @@ import java.util.List;
  */
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchVO {
-
-    /** paging 모델 [[ **/
-
-    private Paging paging;
-
-    /** paging 모델 ]] **/
 
 
     /**
@@ -41,11 +37,24 @@ public class SearchVO {
      * 검색 상태 유형
      */
     private String searchStatusType;
+    /**
+     * 검색어
+     */
+    private String searchKeyword = "";
+    /**
+     * 날짜 검색 시작일 YYYY-MM-DD
+     */
+    private String startDt = "";
 
     /**
-     * 검색 dropdown seq
+     * 날짜 검색 종료일 YYYY-MM-DD
      */
-    private long seq;
+    private String endDt = "";
+
+    /** paging 모델 [[ **/
+
+    private Paging paging;
+
     /**
      * 검색 dropdown code
      */
@@ -55,8 +64,7 @@ public class SearchVO {
      */
     private String displayName;
 
-    public SearchVO(long seq, String code, String displayName) {
-        this.seq = seq;
+    public SearchVO( String code, String displayName) {
         this.code = code;
         this.displayName = displayName;
     }
@@ -67,8 +75,8 @@ public class SearchVO {
      */
     public List<SearchVO> getSearchDateRangeOptionList() {
         var list = new ArrayList<SearchVO>();
-        list.add(new SearchVO(1,"CREATED_AT","작성일"));
-        list.add(new SearchVO(2,"UPDATED", "수정일"));
+        list.add(new SearchVO("CREATED_AT","작성일"));
+        list.add(new SearchVO("UPDATED", "수정일"));
         return list;
     }
 
@@ -78,10 +86,10 @@ public class SearchVO {
      */
     public List<SearchVO> getSearchKeywordTypeOptionList() {
         var list = new ArrayList<SearchVO>();
-        list.add(new SearchVO(1,"ALL", "전체"));
-        list.add(new SearchVO(2, "TITLE", "제목"));
-        list.add(new SearchVO(3,"EMPLOYEE_ID","사번"));
-        list.add(new SearchVO(4, "NAME","이름"));
+        list.add(new SearchVO("ALL", "전체"));
+        list.add(new SearchVO("TITLE", "제목"));
+        list.add(new SearchVO("EMPLOYEE_ID","사번"));
+        list.add(new SearchVO( "NAME","이름"));
         return list;
     }
 
@@ -91,23 +99,21 @@ public class SearchVO {
      */
     public List<SearchVO> getContractDocSearchStateTypeList(){
         var list = new ArrayList<SearchVO>();
-        list.add(new SearchVO(1,"ALL", "전체"));
-        list.add(new SearchVO(2, "CREATED","생성"));
-        list.add(new SearchVO(3,"ASSIGNED","ASSIGNED"));
-        list.add(new SearchVO(4,"RECALLED","회수"));
-        list.add(new SearchVO(5,"COMPLETED", "완료"));
-        list.add(new SearchVO(6,"PAPER_CONTRACT","수기 계약서"));
-
+        list.add(new SearchVO("ALL", "전체"));
+        list.add(new SearchVO( "CREATED","생성"));
+        list.add(new SearchVO("ASSIGNED","ASSIGNED"));
+        list.add(new SearchVO("RECALLED","회수"));
+        list.add(new SearchVO("COMPLETED", "완료"));
+        list.add(new SearchVO("PAPER_CONTRACT","수기 계약서"));
         return list;
     }
 
     public List<SearchVO> getContractSearchStateTypeList() {
         var list = new ArrayList<SearchVO>();
-        list.add(new SearchVO(1,"UNSEEN","확인 전"));
-        list.add(new SearchVO(2, "VIEW","확인 후"));
-        list.add(new SearchVO(3, "SIGNED", "서명 완료"));
-        list.add(new SearchVO(4, "REJECTED", "거절"));
-
+        list.add(new SearchVO("UNSEEN","확인 전"));
+        list.add(new SearchVO( "VIEW","확인 후"));
+        list.add(new SearchVO("SIGNED", "서명 완료"));
+        list.add(new SearchVO("REJECTED", "거절"));
         return list;
     }
     
