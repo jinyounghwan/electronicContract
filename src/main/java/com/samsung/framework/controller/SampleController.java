@@ -113,9 +113,4 @@ public class SampleController {
 //        return ResponseEntity.ok(null);
     }
 
-
-    @GetMapping(value="/sample2")
-    public String getSample2() {
-        return "sample/sample";
-    }
 }
