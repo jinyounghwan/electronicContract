@@ -28,13 +28,15 @@ public class ObjectHandlingUtil {
 
     /**
      * 다건 객체에 대한 결과 객체 생성
-     * @param list {@link List}
+     * @param list {@link List} 대상 객체
+     * @param resultCodeMsgEnum {@link ResultCodeMsgEnum} 응답 에러코드
      * @return {@link ResultStatusVO}
      * @param <T>
      */
     public static <T> ResultStatusVO setListResultStatusVO(List<T> list, ResultCodeMsgEnum resultCodeMsgEnum) {
         return list.size() > 0 ? new ResultStatusVO() : new ResultStatusVO(resultCodeMsgEnum.getCode(), resultCodeMsgEnum.getMsg());
     }
+
 
     /**
      * API 요청: HttpServletRequest 유효 토큰 정보 추출

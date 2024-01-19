@@ -8,4 +8,16 @@
         SELECT COUNT(1) FROM CONTRACT_TEMPLATE WHERE TEMPLATE_SEQ = #{VALUE}
     </select>
 
+    <select id="getContractTemplateListCount" resultType="java.lang.Integer">
+            SELECT COUNT(1)
+              FROM CONTRACT_TEMPLATE CT
+        INNER JOIN CONTRACT_TEMPLATE_DETAILS CTD ON CT.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
+    </select>
+
+    <select id="getContractTemplateList" resultType="ContractTemplateVO">
+            SELECT CT.TEMPLATE_SEQ, CT.TEMPLATE_TITLE, CT.TEMPLATE_TYPE, CTD.CONTRACT_TITLE_EN, CT.CREATED_AT, CT.UPDATED_AT
+              FROM CONTRACT_TEMPLATE CT
+        INNER JOIN CONTRACT_TEMPLATE_DETAILS CTD ON CT.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
+    </select>
+
 </mapper>

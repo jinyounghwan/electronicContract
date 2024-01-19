@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>계약서템플릿관리</title>
+    <link href="vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <link href="css/admin.css" rel="stylesheet">
+</head>
+
+	
+<body id="page-top">
+	
+	<nav class="navbar navbar-expand navbar-light topbar static-top">
+			<a class="sidebar-brand d-flex align-items-center justify-content-center" href="#"><div class="sidebar-brand-text">Inc.HU 연봉계약시스템</div></a>
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item no-arrow">
+                            <a class="nav-link " href="#" >
+                                <span class="nav-text"><i class="fas fa-user-circle nav-icon"></i>홍길동</span>
+                            </a>
+						</li>
+						<div class="topbar-divider d-none d-sm-block"></div>
+						<li class="nav-item no-arrow">
+                            <a class="nav-link " href="#" >
+                                <span class="nav-text"><i class="fas fa-sign-out-alt nav-icon"></i>로그아웃</span>
+                            </a>
+						</li>
+                    </ul>
+      </nav>
+
+	
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" ><i class="fas fa-fw fa-copy"></i><span>계약서 조회</span></a>
+					<div class="collapse" >
+						<div class="collapse-inner">
+							<a class="collapse-item" href="">진행중 계약서</a>
+							<a class="collapse-item" href="">서명완료 계약서</a>
+						</div>
+					</div>
+            </li>
+			
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" ><i class="fas fa-fw fa-file-alt"></i><span>계약서 생성</span></a>
+                <div class="collapse">
+                    <div class="collapse-inner">
+                        <a class="collapse-item" href="">계약서 생성</a>
+                        <a class="collapse-item" href="">계약서 일괄생성</a>
+                    </div>
+                </div>
+            </li>
+			 
+			
+			<li class="nav-item">
+                <a class="nav-link collapsed" href="#"><i class="fas fa-fw  fa-table"></i><span>계약서 템플릿관리</span></a>
+                <div  class="collapse">
+                    <div class="collapse-inner">
+                        <a class="collapse-item" href="">계약서템플릿</a>
+                    </div>
+                </div>
+            </li>
+			
+			<li class="nav-item">
+                <a class="nav-link collapsed" href="#" ><i class="fas fa-fw fa-cog"></i><span>계정관리</span></a>
+                <div class="collapse" >
+                    <div class="collapse-inner">
+                        <a class="collapse-item" href="">임직원계정</a>
+						<a class="collapse-item" href="">관리자계정</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+				<!--content-->
+                <div class="container-fluid">
+                    <h1 class="page-title">계약서 템플릿</h1>
+					<!--search box-->
+					<div class="databox">
+						<div class="data-linebox">
+							<div class="data-line">
+								<div class="data-title">data</div>
+								<div class="data-select datatable-dropdown">
+									<label>
+										<select class="datatable-selector">
+											<option value="10" selected="">전체</option>
+											<option value="15">1234</option>
+											<option value="20">12345</option></select>
+									</label>
+									</div>
+								<div class="data-group">
+											<input type="date" class="form-control form-control-user" id="date" placeholder="YYYY.MM.DD">
+											<span>-</span>
+											<input type="date" class="form-control form-control-user" id="date" placeholder="YYYY.MM.DD">
+										</div>
+								</div>
+							<div class="data-line">
+								<div class="data-title">Search</div>
+								<div class="data-select datatable-dropdown">
+									<label>
+										<select class="datatable-selector">
+											<option value="10" selected="">전체</option>
+											<option value="15">1234</option>
+											<option value="20">12345</option></select>
+									</label>
+									</div>
+								<div class="data-group">
+											<input type="" class="form-control form-control-user" placeholder="">
+										</div>
+								</div>
+						</div>	
+						<div class="data-btn"><button class="btn btn-primary" type="button">Search
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button></div>
+					</div>
+					<!--search box-->
+                    <div class="card shadow mb-4">
+                        <!--<div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
+                        </div>-->
+						<div class="datatable-top">
+							<div class="left"><p>22 items</p></div>
+  						  <div class="right datatable-dropdown">
+							<label>
+								<select class="datatable-selector">
+									<option value="5">5</option>
+									<option value="10" selected="">10</option>
+									<option value="15">15</option>
+									<option value="20">20</option>
+									<option value="25">25</option></select>
+							</label>
+							</div>
+						</div>
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Template Code</th>
+                                            <th>Template Title</th>
+                                            <th>Template Type</th>
+                                            <th>Contract Title (EN)</th>
+                                            <th>Created</th>
+											<th>Modified</th>
+											<th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody>
+                                        <tr>
+                                            <td>00000022</td>
+											<td>대체 휴무 합의서</td>
+											<td>인센티브 계약서</td>
+											<td>Employment contract</td>
+											<td>2023-09-10</td>
+											<td>2023-09-10</td>
+											<td><a href="#" >View Edit</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>00000022</td>
+											<td>대체 휴무 합의서</td>
+											<td>인센티브 계약서</td>
+											<td>Employment contract</td>
+											<td>2023-09-10</td>
+											<td>2023-09-10</td>
+											<td><a href="#" >View Edit</a></td>
+                                        </tr>
+										<tr>
+                                            <td>00000022</td>
+											<td>대체 휴무 합의서</td>
+											<td>인센티브 계약서</td>
+											<td>Employment contract</td>
+											<td>2023-09-10</td>
+											<td>2023-09-10</td>
+											<td><a href="#" >View Edit</a></td>
+                                        </tr>
+										<tr>
+                                            <td>00000022</td>
+											<td>대체 휴무 합의서</td>
+											<td>인센티브 계약서</td>
+											<td>Employment contract</td>
+											<td>2023-09-10</td>
+											<td>2023-09-10</td>
+											<td><a href="#" >View Edit</a></td>
+                                        </tr>
+										<tr>
+                                            <td>00000022</td>
+											<td>대체 휴무 합의서</td>
+											<td>인센티브 계약서</td>
+											<td>Employment contract</td>
+											<td>2023-09-10</td>
+											<td>2023-09-10</td>
+											<td><a href="#" >View Edit</a></td>
+                                        </tr>
+										<tr>
+                                            <td>00000022</td>
+											<td>대체 휴무 합의서</td>
+											<td>인센티브 계약서</td>
+											<td>Employment contract</td>
+											<td>2023-09-10</td>
+											<td>2023-09-10</td>
+											<td><a href="#" >View Edit</a></td>
+                                        </tr>
+										<tr>
+                                            <td>00000022</td>
+											<td>대체 휴무 합의서</td>
+											<td>인센티브 계약서</td>
+											<td>Employment contract</td>
+											<td>2023-09-10</td>
+											<td>2023-09-10</td>
+											<td><a href="#" >View Edit</a></td>
+                                        </tr>
+										<tr>
+                                            <td>00000022</td>
+											<td>대체 휴무 합의서</td>
+											<td>인센티브 계약서</td>
+											<td>Employment contract</td>
+											<td>2023-09-10</td>
+											<td>2023-09-10</td>
+											<td><a href="#" >View Edit</a></td>
+                                        </tr>
+										<tr>
+                                            <td>00000022</td>
+											<td>대체 휴무 합의서</td>
+											<td>인센티브 계약서</td>
+											<td>Employment contract</td>
+											<td>2023-09-10</td>
+											<td>2023-09-10</td>
+											<td><a href="#" >View Edit</a></td>
+                                        </tr>
+										<tr>
+                                            <td>00000022</td>
+											<td>대체 휴무 합의서</td>
+											<td>인센티브 계약서</td>
+											<td>Employment contract</td>
+											<td>2023-09-10</td>
+											<td>2023-09-10</td>
+											<td><a href="#" >View Edit</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+							
+							<div class="list-paging">
+								<div class="dataTables_paginate paging_simple_numbers" >
+									<ul class="pagination">
+										<li class="paginate_button page-item previous disabled"><a href="#" class="page-link"><</a></li>
+										<li class="paginate_button page-item active"><a href="#" class="page-link">1</a></li>
+										<li class="paginate_button page-item "><a href="#" class="page-link">2</a></li>
+										<li class="paginate_button page-item "><a href="#" class="page-link">3</a></li>
+										<li class="paginate_button page-item "><a href="#" class="page-link">4</a></li>
+										<li class="paginate_button page-item "><a href="#" class="page-link">5</a></li>
+										<li class="paginate_button page-item "><a href="#" class="page-link">6</a></li>
+										<li class="paginate_button page-item next"><a href="#" class="page-link">></a></li>
+									</ul>
+								</div>
+							</div>
+							
+                        </div>
+                    </div>
+                </div>
+				<!--contents-->
+            </div>
+        </div>
+        <!--Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+</body>
+
+</html>
