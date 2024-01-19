@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.sample.SampleMapper">
+    <select id="getSampleListTotal" parameterType="SearchVO" resultType="int">
+        SELECT count(emp_no)   /*getSampleListTotal - 샘플 테스트용*/
+          FROM users
+         LIMIT #{paging.displayRow} OFFSET #{paging.offset}
+    </select>
+
+    <select id="getSampleList" parameterType="SearchVO" resultType="java.util.Map">
+        SELECT emp_no /*getSampleList - 샘플 테스트용 */
+             , admin_id
+             , dept_code
+             , user_pw
+             , name
+             , account_type
+             , position
+             , email
+             , phone
+             , use_yn
+             , employed_at
+             , resigned_at
+             , created_by
+             , created_at
+             , updated_by
+             , updated_at
+          FROM users
+         LIMIT #{paging.displayRow} OFFSET #{paging.offset}
+    </select>
+</mapper>

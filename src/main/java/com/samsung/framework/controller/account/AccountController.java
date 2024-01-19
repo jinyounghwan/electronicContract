@@ -185,7 +185,7 @@ public class AccountController {
     }
 
     // 로그아웃
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public ModelAndView logout(ModelAndView mv, HttpSession session){
         session.invalidate();
         mv.setViewName("redirect:/account/login");

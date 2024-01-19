@@ -4,6 +4,7 @@ import com.samsung.framework.service.menu.MenuService;
 import com.samsung.framework.vo.menu.MenuVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +22,7 @@ public class MenuController{
      * @return 대메뉴 리스트
      */
     @PostMapping("/lgList")
-    public List<MenuVO> menuList(){
+    public List<MenuVO> getMenuList(){
         return menuService.getLgMenuList();
     }
 
@@ -30,12 +31,12 @@ public class MenuController{
      * @return
      */
     @PostMapping("/midList")
-    public List<MenuVO> menuMidList(){
+    public List<MenuVO> getMenuMidList(){
         return menuService.getMidMenuList();
     }
 
     @PostMapping("/smList")
-    public List<MenuVO> menuSmList(){
+    public List<MenuVO> getMenuSmList(){
         return menuService.getSmMenuList();
     }
 
