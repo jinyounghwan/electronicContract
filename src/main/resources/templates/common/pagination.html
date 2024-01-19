@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
     <div class="list-paging">
         <div class="dataTables_paginate paging_simple_numbers" >
             <ul class="pagination">
-               <div th:text="${paging}"></div>
+               <div th:text="${paging.getCurrentPage()}"></div>
 <!--                <li class="paginate_button page-item previous" th:classappend=" 1 == ${paging.getCurrentPage()} ? 'disabled'">-->
 <!--                    <a href="javascript:void(0)" class="page-link" th:onclick="'searchList(' + ${paging.getPrevPage()} + ', ' + ${paging.getDisplayRow()} + ', ' + ${totalCount} + ')'" aria-label="Previous"><</a>-->
 <!--                </li>-->
