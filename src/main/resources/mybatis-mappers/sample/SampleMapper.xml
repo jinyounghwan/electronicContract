@@ -6,7 +6,6 @@
     <select id="getSampleListTotal" parameterType="SearchVO" resultType="int">
         SELECT count(emp_no)   /*getSampleListTotal - 샘플 테스트용*/
           FROM users
-         LIMIT #{paging.displayRow} OFFSET #{paging.offset}
     </select>
 
     <select id="getSampleList" parameterType="SearchVO" resultType="java.util.Map">

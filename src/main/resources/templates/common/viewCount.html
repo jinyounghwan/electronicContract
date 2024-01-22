@@ -1,0 +1,16 @@
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+    <div class="datatable-top">
+        <div class="left"><p th:text="${totalCount} + ' items'" ></p></div>
+        <div class="right datatable-dropdown">
+            <label>
+                <select class="datatable-selector" th:onchange="viewCountSelect(this)">
+                    <option th:selected="${paging.getDisplayRow()} == '5'" value="5">5</option>
+                    <option th:selected="${paging.getDisplayRow()} == '10'" value="10" selected>10</option>
+                    <option th:selected="${paging.getDisplayRow()} == '15'" value="15">15</option>
+                    <option th:selected="${paging.getDisplayRow()} == '20'" value="20">20</option>
+                    <option th:selected="${paging.getDisplayRow()} == '25'" value="25">25</option>
+                </select>
+            </label>
+        </div>
+    </div>
+</html>
