@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="ko">
+<head>
+
+</head>
+<th:block layout:fragment="css">
+        <title>회원 계정</title>
+</th:block>
+<th:block layout:fragment="content">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--content-->
+            <div class="container-fluid">
+                <h1 class="page-title">관리자 계정</h1>
+                <!--search box-->
+               <div th:replace="~{common/defaultSearch}"></div>
+                <div class="card shadow mb-4">
+                   <!-- viewcount drop down box -->
+                   <div th:replace="~{common/viewCount}"></div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>Full Name</th>
+                                    <th>Employee ID</th>
+                                    <th>Last Log In</th>
+                                    <th>PW Changed</th>
+                                    <th>Created</th>
+                                    <th>Modified</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody id="employeeList">
+                                <input type="hidden" name="totalCount" id="totalCount" th:value="${totalCount}">
+                                <tr th:if="${not #lists.isEmpty(list)}" th:each="row, stat : ${list}">
+                                    <td th:text="${row.getName()}"></td>
+                                    <td th:text="${row.getEmpNo()}"></td>
+                                    <td th:text="${row.getLastLoginStr()}"></td>
+                                    <td>-</td>
+                                    <td th:text="${row.getCreatedAtStr()}"></td>
+                                    <td th:text="${row.getUpdatedAtStr()}"></td>
+                                    <td><a th:href="@{/account/employee/detail/{userId}(userId=${row.getEmpNo()})}">View Edit</a></td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(list)}">
+                                    <td th:text="|데이터가 없습니다.|"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--pagination-->
+                        <div th:replace="~{common/pagination}"></div>
+                    </div>
+                </div>
+            </div>
+            <!--contents-->
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(function(){
+            /*리스트 조회 호출 */
+            getList();
+        });
+
+        function getList(param){
+            let search;
+            if(typeof param == 'undefined'){
+                // 첫 호출 일 때
+                search = setData();
+            } else {
+                search = param;
+            }
+            $.ajax({
+                url: '/account/employee/getList',
+                type: 'post',
+                dataType:'text',
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(search)
+            })
+            .done(function(data){
+                $('#content-wrapper').replaceWith(data);
+            })
+            .fail(function(jqXHR){
+                console.log(jqXHR);
+            });
+        }
+    </script>
+</th:block>
+</html>
