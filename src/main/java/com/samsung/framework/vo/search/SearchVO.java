@@ -23,7 +23,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchVO {
-
+    /**
+     *  TO-DO : 임직원계정search 내용 추가
+     */
 
     /**
      * 검색 날짜 유형
@@ -75,6 +77,7 @@ public class SearchVO {
      */
     public List<SearchVO> getSearchDateRangeOptionList() {
         var list = new ArrayList<SearchVO>();
+        list.add(new SearchVO("ALL","전체"));
         list.add(new SearchVO("CREATED_AT","작성일"));
         list.add(new SearchVO("UPDATED", "수정일"));
         return list;

@@ -1,13 +1,16 @@
-<!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
     <div class="list-paging">
         <div class="dataTables_paginate paging_simple_numbers" >
             <ul class="pagination">
-               <div th:text="${paging.getCurrentPage()}"></div>
-<!--                <li class="paginate_button page-item previous" th:classappend=" 1 == ${paging.getCurrentPage()} ? 'disabled'">-->
-<!--                    <a href="javascript:void(0)" class="page-link" th:onclick="'searchList(' + ${paging.getPrevPage()} + ', ' + ${paging.getDisplayRow()} + ', ' + ${totalCount} + ')'" aria-label="Previous"><</a>-->
-<!--                </li>-->
-<!--                <li class="paginate_button page-item next"><a href="#" class="page-link">></a></li>-->
+                <li class="paginate_button page-item previous" th:classappend=" '1' == ${paging.getCurrentPage()} and '1'== ${paging.getPrevPage()} ? 'disabled'">
+                    <a href="javascript:void(0)" class="page-link" th:onclick="'searchList(' + ${paging.getPrevPage()} + ', ' + ${paging.getDisplayRow()} + ', ' + ${totalCount} + ')'" aria-label="Previous"><</a>
+                </li>
+                <li class="paginate_button page-item" th:classappend="${page == paging.getCurrentPage()} ? 'active'" th:each="page: ${#numbers.sequence(paging.getBeginPage(), paging.getEndPage())}">
+                    <a class="page-link" href="javascript:void(0)" th:text="${page}" th:onclick="'searchList(' + ${page} + ', ' + ${paging.getDisplayRow()} + ', ' + ${totalCount} + ')'">1</a>
+                </li>
+                <li class="paginate_button page-item next" th:classappend=" ${totalCount} == ${paging.getCurrentPage()} and  ${totalCount} == ${paging.getNextPage()} ? 'disabled'">
+                    <a href="javascript:void(0)" class="page-link"th:onclick="'searchList(' + ${paging.getTotalPage()} + ', ' + ${paging.getDisplayRow()} + ', ' + ${paging.getTotalCount()} + ')'">></a>
+                </li>
             </ul>
         </div>
     </div>
