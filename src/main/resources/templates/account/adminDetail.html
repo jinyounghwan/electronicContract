@@ -6,7 +6,7 @@
 
 </head>
 <th:block layout:fragment="css">
-    <title>관리자 계정 정보</title>
+    <title>관리자 계정</title>
 </th:block>
 <th:block layout:fragment="content">
     <!-- Content Wrapper -->
@@ -14,7 +14,7 @@
         <div id="content">
             <!--content-->
             <div class="container-fluid">
-                <h1 class="page-title">관리자 계정정보</h1>
+                <h1 class="page-title">관리자 계정</h1>
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -22,7 +22,7 @@
                                 <tbody>
                                     <tr>
                                         <th class="col-2">Last Name</th>
-                                        <td><input type="text" class="form-control form-control-user" th:placeholder="${account.getName()}"></td>
+                                        <td th:text="${account.getName()}"></td>
                                     </tr>
                                     <tr>
                                         <th>First Name</th>
@@ -30,11 +30,11 @@
                                     </tr>
                                     <tr>
                                         <th>Admin ID</th>
-                                        <td><input type="text" class="form-control form-control-user" th:placeholder="${account.getName()}"></td>
+                                        <td th:text="${account.getAdminId()}"></td>
                                     </tr>
                                     <tr>
                                         <th>Email</th>
-                                        <td><input type="text" class="form-control form-control-user" th:placeholder="${account.getEmail()}"></td>
+                                        <td th:text="${account.getEmail()}"></td>
                                     </tr>
                                     <tr>
                                         <th>Last Log In</th>

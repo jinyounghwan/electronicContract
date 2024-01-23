@@ -6,7 +6,7 @@
 
 </head>
 <th:block layout:fragment="css">
-    <title>관리자 계정 정보</title>
+    <title>임직원 계정</title>
 </th:block>
 <th:block layout:fragment="content">
     <!-- Content Wrapper -->
@@ -14,7 +14,7 @@
         <div id="content">
             <!--content-->
             <div class="container-fluid">
-                <h1 class="page-title">관리자 계정정보</h1>
+                <h1 class="page-title">임직원 계정</h1>
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -46,8 +46,8 @@
                     </div>
                 </div>
                 <div class="btn-area">
-                    <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/account/admin}'|">List</button>
-                    <button class="btn btn-primary" type="button" th:onclick="edit([[${account.adminId}]])">Edit</button>
+                    <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/account/employee}'|">List</button>
+                    <button class="btn btn-primary" type="button" th:onclick="edit([[${account.empNo}]])">Edit</button>
                 </div>
 
             </div>
@@ -85,7 +85,7 @@
                     alert(json.message);
                 } else{
                     alert(json.message);
-                    location.href = "/account/admin"
+                    location.href = "/account/employee"
                 }
             })
             .fail(function(jqXHR) {

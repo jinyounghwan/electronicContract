@@ -215,6 +215,8 @@ public class AccountController {
     @GetMapping("/employee/detail/{userId}")
     public ModelAndView getEmployeeDetail(ModelAndView mv, @PathVariable("userId")String userId){
         AccountVO account = accountService.getAccountDetail(userId);
+        mv.addObject("account", account);
+        mv.setViewName("account/employeeDetail");
         return mv;
     }
     @GetMapping("/admin/detail/{userId}")
@@ -233,9 +235,9 @@ public class AccountController {
         return mv;
     }
 
-    @PostMapping("/admin/api/update")
-    public ResponseEntity updAdminAcct(@RequestBody AccountVO account){
-        Map<String, Object> result = accountService.updAdminAcct(account);
+    @PostMapping("/api/update")
+    public ResponseEntity updAcct(@RequestBody AccountVO account){
+        Map<String, Object> result = accountService.updAcct(account);
 
         return ResponseEntity.ok(result);
     }
@@ -277,6 +279,7 @@ public class AccountController {
                 .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.ADMIN))
                 .build();
         accountSearchVO.setPaging(pagingVO);
+        accountSearchVO.setSearchVO(search);
 
         // total
         int totalCount = accountService.totalCount(accountSearchVO);
@@ -288,6 +291,15 @@ public class AccountController {
         model.addAttribute("list",list);
         model.addAttribute("search", accountSearchVO);
         return "account/adminList :: #content-wrapper";
+    }
+
+    @GetMapping("/employee/edit/{userId}")
+    public ModelAndView getEmployeeEdit(ModelAndView mv, @PathVariable("userId")String userId){
+        AccountVO account = accountService.getAccountDetail(userId);
+        mv.addObject("account",account);
+        mv.setViewName("account/employeeEdit");
+
+        return mv;
     }
 
 }

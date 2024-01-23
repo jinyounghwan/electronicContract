@@ -219,18 +219,18 @@ public class AccountService {
      * @param account
      * @return
      */
-    public Map<String, Object> updAdminAcct(@Valid AccountVO account){
+    public Map<String, Object> updAcct(@Valid AccountVO account){
         var result = new HashMap<String, Object>();
 
         if(validationUtil.parameterValidator(account, AccountVO.class)){
             AccountVO target = AccountVO.builder()
-                    .adminId(account.getUserId())
+                    .userId(account.getUserId())
                     .password(jasyptConfig.jasyptEncrypt(account.getPassword()))
                     .build();
 
             result.put("code", 200);
 
-            int update = accountMapper.updAdminAcct(target);
+            int update = accountMapper.updAcct(target);
             if(update<1){
                 result.put("code", 204);
                 result.put("message", "수정할 대상이 없습니다.");

@@ -20,5 +20,5 @@ public interface AccountMapper {
     AccountVO findMemberByUserName(String userName);
     AccountVO getLoginInfo(String userId);
     boolean existsByEmpNo(int empNo);
-    int updAdminAcct(AccountVO account);
+    int updAcct(AccountVO account);
 }

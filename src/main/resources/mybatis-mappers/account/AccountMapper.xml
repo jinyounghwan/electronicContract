@@ -169,10 +169,11 @@
         )
     </insert>
 
-    <update id="updAdminAcct">
+    <update id="updAcct">
         UPDATE USERS U
         SET USER_PW = #{password}
-        WHERE U.ADMIN_ID = #{adminId}
+        WHERE U.ADMIN_ID = #{userId}
+            OR U.EMP_NO = #{userId}
     </update>
 
 </mapper>
