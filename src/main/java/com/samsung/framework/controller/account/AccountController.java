@@ -56,7 +56,7 @@ public class AccountController {
     @ModelAttribute("keywordTypeSelect")
     public List<SearchVO> searchKeywordTypeOptionList() {
         SearchVO list = new SearchVO();
-        return list.getSearchKeywordTypeOptionList();
+        return list.getAcctSearchKeywordTypeOptionList();
     }
 
     /**
@@ -91,7 +91,7 @@ public class AccountController {
         searchVO.setPaging(new Paging());
 
         Paging paging = ObjectHandlingUtil.pagingOperatorBySearch(searchVO, totalCount);
-        log.info("paging CurrentPage : {}",paging.getCurrentPage());
+
         mv.addObject("paging", paging);
         mv.addObject("search", new AccountSearchVO());
         return mv;
@@ -251,6 +251,7 @@ public class AccountController {
                 .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.EMPLOYEE))
                 .build();
         accountSearchVO.setPaging(pagingVO);
+        accountSearchVO.setSearchVO(search);
 
         // total
         int totalCount = accountService.totalCount(accountSearchVO);

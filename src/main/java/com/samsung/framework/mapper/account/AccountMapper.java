@@ -19,7 +19,6 @@ public interface AccountMapper {
     int insertMember(AccountVO account);
     AccountVO findMemberByUserName(String userName);
     AccountVO getLoginInfo(String userId);
-    int updatePwd(Account member);
     boolean existsByEmpNo(int empNo);
     int updAdminAcct(AccountVO account);
 }

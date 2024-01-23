@@ -81,7 +81,16 @@
                 data: JSON.stringify(data)
             })
             .done(function(data){
-                console.log(data);
+                let json = JSON.parse(data);
+                if(json.code===400){
+                    alert(json.message);
+                } else{
+                    alert(json.message);
+                    location.href = "/account/admin"
+                }
+            })
+            .fail(function(jqXHR) {
+                console.log(jqXHR);
             });
         }
     </script>

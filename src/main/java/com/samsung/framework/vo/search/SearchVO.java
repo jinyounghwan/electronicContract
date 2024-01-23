@@ -79,7 +79,7 @@ public class SearchVO {
         var list = new ArrayList<SearchVO>();
         list.add(new SearchVO("ALL","전체"));
         list.add(new SearchVO("CREATED_AT","작성일"));
-        list.add(new SearchVO("UPDATED", "수정일"));
+        list.add(new SearchVO("UPDATED_AT", "수정일"));
         return list;
     }
 
@@ -95,6 +95,7 @@ public class SearchVO {
         list.add(new SearchVO( "NAME","이름"));
         return list;
     }
+
 
     /**
      * Doc.Status Dropdown리스트
@@ -119,5 +120,18 @@ public class SearchVO {
         list.add(new SearchVO("REJECTED", "거절"));
         return list;
     }
-    
+
+    /**
+     * 계정관리 DropdownList
+     * @return
+     */
+    public List<SearchVO> getAcctSearchKeywordTypeOptionList(){
+        var list = new ArrayList<SearchVO>();
+        list.add(new SearchVO("ALL", "전체"));
+        list.add(new SearchVO("EMPLOYEE_ID","사번"));
+        list.add(new SearchVO( "NAME","이름"));
+        return list;
+    }
+
+
 }
