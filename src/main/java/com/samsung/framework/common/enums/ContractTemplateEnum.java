@@ -2,6 +2,7 @@ package com.samsung.framework.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @AllArgsConstructor
 @Getter
@@ -17,11 +18,11 @@ public enum ContractTemplateEnum {
     private String templateTitle;
 
     /**
-     * 전체 메뉴 코드
+     * 템플릿코드
      * @param key
      * @return
      */
-    public static String menuCode(ContractTemplateEnum key) {
+    public static String getTemplateCode(ContractTemplateEnum key) {
         return key.getPrefix() + key.getParentCode();
     }
 

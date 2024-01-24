@@ -1,16 +1,20 @@
 package com.samsung.framework.controller.contract.template;
 
+import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.service.contract.template.ContractTemplateService;
-import com.samsung.framework.vo.common.ResultStatusVO;
+import com.samsung.framework.vo.contract.template.ContractTemplateVO;
 import com.samsung.framework.vo.search.SearchVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 계약서 템플릿 관련 컨트롤러
@@ -22,12 +26,82 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ContractTemplateController {
 
     private final ContractTemplateService contractTemplateService;
-
-    @ResponseBody
-    @GetMapping("/list")
-    public ResponseEntity getContractTemplateList(@RequestBody SearchVO searchVO) {
-        var result = contractTemplateService.getContractTemplateList(searchVO);
-
-        return ResponseEntity.ok(result);
+    /**
+     * Search keyword type option list .
+     * [검색옵션] 키워드
+     * @return the list
+     */
+    @ModelAttribute("keywordTypeSelect")
+    public List<SearchVO> searchKeywordTypeOptionList() {
+        return new SearchVO().getSearchKeywordTypeOptionList();
     }
+
+    /**
+     * Search date range option list .
+     * [검색옵션] 날짜
+     * @return the list
+     */
+    @ModelAttribute("dateRangeSelect")
+    public List<SearchVO> searchDateRangeOptionList() {
+        return new SearchVO().getSearchDateRangeOptionList();
+    }
+    @GetMapping(value = {"/",""})
+    public String getContractTemplate(Model model){
+        model.addAttribute("paging" , new Paging());
+        model.addAttribute("list" , new ArrayList<>());
+        model.addAttribute("search" , new SearchVO());
+        model.addAttribute("totalCount", contractTemplateService.getContractTemplateListCount(null));
+        return "contract/template/list";
+    }
+
+    @PostMapping(value = "/list")
+    public String getContractTemplateList (Model model , @RequestBody SearchVO searchVO){
+        Paging pagingVo =  Paging.builder()
+                .currentPage(searchVO.getPaging().getCurrentPage())
+                .displayRow(searchVO.getPaging().getDisplayRow())
+                .totalCount(searchVO.getPaging().getTotalCount())
+                .build();
+        searchVO.setPaging(pagingVo);
+        // total
+        int totalCount = contractTemplateService.getContractTemplateListCount(searchVO);
+        model.addAttribute("totalCount", totalCount);
+        // paging
+        model.addAttribute("paging",pagingVo);
+
+        // list
+        List<ContractTemplateVO> list = contractTemplateService.getContractTemplateList(searchVO);
+        model.addAttribute("list",list);
+        model.addAttribute("search" , searchVO);
+        return "contract/template/list :: #content";
+    }
+
+    @GetMapping(value="/info/{seq}")
+    public String getContractTemplateInfo(Model model ,@PathVariable String seq){
+        model.addAttribute("info",contractTemplateService.getContractTemplateInfo(seq));
+        return "contract/template/view";
+    }
+    @GetMapping(value="/edit/{seq}")
+    public String getContractTemplateInfoEdit(Model model ,@PathVariable String seq){
+        model.addAttribute("info",contractTemplateService.getContractTemplateInfo(seq));
+        return "contract/template/edit";
+    }
+
+    @PostMapping(value="/save")
+    @ResponseBody
+    public ResponseEntity saveContractTemplateInfo(ContractTemplateVO contractTemplateVO){
+        int result = contractTemplateService.saveContractTemplateInfo(contractTemplateVO);
+        return new ResponseEntity(result, HttpStatus.OK);
+
+    }
+    @PostMapping(value="/copy")
+    @ResponseBody
+    public ResponseEntity saveContractTemplateCopyInfo(@RequestBody ContractTemplateVO contractTemplateVO){
+        Map<String,Object> result = contractTemplateService.saveContractTemplateCopyInfo(contractTemplateVO);
+        return new ResponseEntity(result, HttpStatus.OK);
+
+    }
+
+
+
+
 }

@@ -195,7 +195,7 @@ public class SampleController {
         List<Map<String,Object>> list = sampleService.getSampleList(searchVO);
         model.addAttribute("list",list);
         model.addAttribute("search" , searchVO);
-        return "sample/sample :: #wrapper";
+        return "sample/sample :: #content";
     }
 
 }

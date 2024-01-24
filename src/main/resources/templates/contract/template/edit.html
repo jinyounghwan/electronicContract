@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="ko">
+    <th:block layout:fragment="content">
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <!--content-->
+                <div class="container-fluid">
+                    <form id="infoForm" name="infoForm" onsubmit="return false;">
+                    <input type="hidden" id="templateSeq" name="templateSeq" th:value="${info.getTemplateSeq()}">
+                    <h1 class="page-title">계약서 템플릿</h1>
+                    <div class="card mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table-list">
+                                    <tbody>
+                                        <tr>
+                                            <th class="col-2">Template Code</th>
+                                            <td th:text="${info.getTemplateSeq()}">
+                                                00000019
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Template Title</th>
+                                            <td><input name="templateTitle" th:value="${info.getTemplateTitle()}" class="form-control form-control-user" placeholder=""></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Template Type</th>
+                                            <td th:text="${info.getTemplateType}">무기계약직 계약서</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Memo</th>
+                                            <td><input  name="memo"  th:value="${info.getMemo()}" class="form-control form-control-user" placeholder=""></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Created</th>
+                                            <td th:text="${info.getCreatedAt()} +' , '+ ${info.getCreatedBy()}">2023-09-10  08:14:59 , admin12</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Modified</th>
+                                            <td th:if="${not #strings.isEmpty(info.getUpdatedAt())}" th:text="${info.getUpdatedAt()} + ' , '+ ${info.getUpdatedBy()}">2023-09-11  16:03:01 , admin34</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Contract details</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table-list">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Colomn 1</th>
+                                        <th>Colomn 2</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <th class="col-2">Contract Title</th>
+                                        <td><input name="contractTitleHu" th:value="${info.getContractTitleHu()}" class="form-control form-control-user" placeholder=""></td>
+                                        <td><input name="contractTitleEn" th:value="${info.getContractTitleEn()}" class="form-control form-control-user" placeholder=""></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Preamble</th>
+                                        <td><textarea name="preambleHu" th:text="${info.getPreambleHu()}" class="form-control form-control-user"></textarea></td>
+                                        <td><textarea name="preambleEn" th:text="${info.getPreambleEn()}" class="form-control form-control-user"></textarea></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Part 1</th>
+                                        <td>1. A munkaviszony idotartama</td>
+                                        <td>1. Duration</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                    <div class="btn-area">
+                        <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/contract/template}'|">Cancel</button>
+                        <button class="btn btn-primary" type="button" th:onclick="save()">Save</button>
+                    </div>
+                </div>
+                <!--contents-->
+            </div>
+        </div>
+    </th:block>
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+            let save = () =>{
+                $.ajax({
+                  url: '/contract/template/save',
+                  type: 'post',
+                  dataType:'json',
+                  data:$('#infoForm').serialize()
+                }).done(function(data) {
+                    if(data > 0){
+                        alert('저장이 완료 되었습니다.');
+                        location.href='/contract/template/info/' + $('#templateSeq').val();
+                    }else{
+                        alert('관리자에게 문의 바랍니다.');
+                        location.href='/contract/template';
+                    }
+                }).fail(function(jqXHR) {
+                    console.log(jqXHR);
+                });
+            }
+        </script>
+    </th:block>
+</html>

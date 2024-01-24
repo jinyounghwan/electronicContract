@@ -1,30 +1,32 @@
 package com.samsung.framework.vo.contract.template;
 
-import com.samsung.framework.common.enums.ContractTemplateEnum;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Getter
+@Setter
+@ToString
 @NoArgsConstructor
 public class ContractTemplateVO {
 
     private int templateSeq;
     private String templateTitle;
-    private String templateType;
-    @Setter
     private String templateTypeTitle;
+    private String templateType;
     private String useYn;
     private String memo;
     private String contractTitleEn;
     private String contractTitleHu;
+    private String preambleHu;
+    private String preambleEn;
     private String createdBy;
-    private LocalDateTime createdAt;
+    private String createdAt;
     private String updatedBy;
-    private LocalDateTime updatedAt;
+    private String updatedAt;
+    private int nextSeq;
 
     @Builder
-    public ContractTemplateVO(int templateSeq, String templateTitle, String templateType, String templateTypeTitle, String useYn, String memo, String contractTitleEn, String contractTitleHu, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt) {
+    public ContractTemplateVO(int templateSeq, String templateTitle, String templateType, String templateTypeTitle, String useYn, String memo, String contractTitleEn, String contractTitleHu, String createdBy,
+                                String createdAt, String updatedBy, String updatedAt , String preambleHu, String preambleEn) {
         this.templateSeq = templateSeq;
         this.templateTitle = templateTitle;
         this.templateType = templateType;
@@ -37,6 +39,7 @@ public class ContractTemplateVO {
         this.createdAt = createdAt;
         this.updatedBy = updatedBy;
         this.updatedAt = updatedAt;
+        this.preambleHu =  preambleHu;
+        this.preambleEn = preambleEn;
     }
-
 }
