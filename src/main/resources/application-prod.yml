@@ -6,7 +6,8 @@ spring:
     password: contract$@salary
     hikari:
       maximum-pool-size: 10
-      connection-test-query: SELECT NOW() FROM DUAL
+      connection-timeout: 10000
+      validation-timeout: 500
   security:
     user:
       password: 0000
@@ -46,6 +47,8 @@ logging:
           mapper: trace
 ## Log Level Setting(default info)
     root: error
+## Hikari Pool Log Level Setting
+    com.zaxxer.hikari: debug
 
 server:
   port: 3030

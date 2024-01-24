@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="ko">
+<head>
+
+</head>
+<th:block layout:fragment="css">
+    <title>임직원 계정 정보</title>
+</th:block>
+<th:block layout:fragment="content">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--content-->
+            <div class="container-fluid">
+                <h1 class="page-title">임직원 계정 정보</h1>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table-list">
+                                <tbody>
+                                <tr>
+                                    <th class="col-2">Last Name</th>
+                                    <td th:text="${account.getName()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>First Name</th>
+                                    <td th:text="${account.getName()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>Employee Id</th>
+                                    <td th:text="${account.getEmpNo()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>Last Log In</th>
+                                    <td th:text="${account.getLastLoginStr()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>Password changed</th>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <th>Created</th>
+                                    <td th:text="${account.getCreatedAtStr()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>Modified</th>
+                                    <td th:text="${account.getUpdatedAtStr()}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-area">
+                    <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/account/employee}'|">List</button>
+                    <button class="btn btn-primary" type="button" th:onclick="|location.href='@{/account/employee/edit/{userId}(userId=${account.getEmpNo()})}'|">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+    </script>
+</th:block>
+</html>

@@ -29,4 +29,12 @@ public class AccountSearchVO extends SearchVO {
     private LocalDateTime createdAt;
     private String updatedBy;
     private LocalDateTime updatedAt;
+
+    public void setSearchVO(SearchVO searchVO){
+       this.setSearchKeyword(searchVO.getSearchKeyword());
+       this.setSearchKeywordType(searchVO.getSearchKeywordType());
+       this.setSearchDateType(searchVO.getSearchDateType());
+       this.setStartDt(searchVO.getStartDt());
+       this.setEndDt(searchVO.getEndDt());
+    }
 }

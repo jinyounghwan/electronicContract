@@ -9,6 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface AccountMapper {
+    AccountVO getAccountDetail(String userId);
     List<AccountVO> getAccountList(SearchVO search);
     int findAllTotalCount(SearchVO search);
     int memberListCount();
@@ -18,7 +19,6 @@ public interface AccountMapper {
     int insertMember(AccountVO account);
     AccountVO findMemberByUserName(String userName);
     AccountVO getLoginInfo(String userId);
-    int updatePwd(Account member);
     boolean existsByEmpNo(int empNo);
-
+    int updAcct(AccountVO account);
 }

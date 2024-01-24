@@ -18,9 +18,10 @@ else
 fi
 
 echo ">> Deploying Electronic Contract Project..."
-
 # TODO: 서버 세팅 후 경로 변경
-cd /home/app-test
+cd /home/app
+
+echo ">> PWD: {$PWD}"
 
 nohup java -jar -Dspring.profiles.active=dev -Dproperties.jasypt.encryptor.password='dejay1234!@#$' $JAR_FILE >> ./logs/contract.log 2>&1 &
 

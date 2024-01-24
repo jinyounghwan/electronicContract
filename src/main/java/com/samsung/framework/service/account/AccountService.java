@@ -9,6 +9,7 @@ import com.samsung.framework.common.exception.CustomLoginException;
 import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
 import com.samsung.framework.common.utils.ValidationUtil;
+import com.samsung.framework.domain.account.Account;
 import com.samsung.framework.domain.account.LoginRequest;
 import com.samsung.framework.domain.account.SignUpRequest;
 import com.samsung.framework.domain.common.Paging;
@@ -16,7 +17,6 @@ import com.samsung.framework.domain.common.SearchObject;
 import com.samsung.framework.mapper.account.AccountMapper;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.common.CollectionPagingVO;
-import com.samsung.framework.vo.common.SelectOptionVO;
 import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.account.AccountSearchVO;
 import jakarta.validation.Valid;
@@ -45,6 +45,19 @@ public class AccountService {
      * @return {@link Integer}
      */
     public int totalCount(AccountSearchVO accountSearchVO) { return accountMapper.findAllTotalCount(accountSearchVO); }
+
+    /**
+     * Admin 사번 회원 상세 정보 조회
+     * @param userId
+     * @return
+     */
+    public AccountVO getAccountDetail(String userId){
+        AccountVO account = accountMapper.getAccountDetail(userId);
+        account.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(account.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
+        account.setUpdatedAtStr(DateUtil.convertLocalDateTimeToString(account.getUpdatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
+        account.setLastLoginStr(DateUtil.convertLocalDateTimeToString(account.getLastLogin(), DateUtil.DATETIME_YMDHM_PATTERN));
+        return account;
+    }
 
     /**
      * 회원 목록 조회
@@ -201,4 +214,34 @@ public class AccountService {
 
     }
 
+    /**
+     * Admin 계정 변경
+     * @param account
+     * @return
+     */
+    public Map<String, Object> updAcct(@Valid AccountVO account){
+        var result = new HashMap<String, Object>();
+
+        if(validationUtil.parameterValidator(account, AccountVO.class)){
+            AccountVO target = AccountVO.builder()
+                    .userId(account.getUserId())
+                    .password(jasyptConfig.jasyptEncrypt(account.getPassword()))
+                    .build();
+
+            result.put("code", 200);
+
+            int update = accountMapper.updAcct(target);
+            if(update<1){
+                result.put("code", 204);
+                result.put("message", "수정할 대상이 없습니다.");
+                return result;
+            }
+             result.put("message", "수정 되었습니다.");
+             return result;
+        }
+        result.put("code", 400);
+        result.put("message", "비밀번호는 영어와 숫자 포함해서 8~16자리 이내로 입력해주세요.");
+
+        return result;
+    }
 }

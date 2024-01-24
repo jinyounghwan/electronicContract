@@ -6,6 +6,7 @@ import com.samsung.framework.common.enums.LogTypeEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
 import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
+import com.samsung.framework.domain.account.Account;
 import com.samsung.framework.domain.account.LoginRequest;
 import com.samsung.framework.domain.account.SignUpRequest;
 import com.samsung.framework.domain.common.Paging;
@@ -13,7 +14,7 @@ import com.samsung.framework.domain.log.LogSaveRequest;
 import com.samsung.framework.service.account.AccountService;
 import com.samsung.framework.service.menu.MenuService;
 import com.samsung.framework.vo.account.AccountVO;
-import com.samsung.framework.vo.common.SelectOptionVO;
+import com.samsung.framework.vo.common.PagingVO;
 import com.samsung.framework.vo.log.LogSaveResponse;
 import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.account.AccountSearchVO;
@@ -24,9 +25,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,17 +46,17 @@ public class AccountController {
     private final LogUtil logUtil;
     
     // [검색옵션] 날짜
-    @ModelAttribute("searchDateRangeOptionList")
+    @ModelAttribute("dateRangeSelect")
     public List<SearchVO> searchDateRangeOptionList() {
         SearchVO list = new SearchVO();
         return list.getSearchDateRangeOptionList();
     }
 
     // [검색옵션] 키워드
-    @ModelAttribute("searchKeywordTypeOptionList")
+    @ModelAttribute("keywordTypeSelect")
     public List<SearchVO> searchKeywordTypeOptionList() {
         SearchVO list = new SearchVO();
-        return list.getSearchKeywordTypeOptionList();
+        return list.getAcctSearchKeywordTypeOptionList();
     }
 
     /**
@@ -79,28 +82,45 @@ public class AccountController {
         int totalCount = accountService.totalCount(accountSearchVO);
         mv.addObject("totalCount",totalCount);
 
-        BoardSearchVO boardSearchVO = new BoardSearchVO();
-        boardSearchVO.setPaging(Paging.builder()
-                .currentPage(1)
-                .displayRow(10)
-                .build());
+        accountSearchVO.setPaging(new Paging());
 
-        List<AccountVO> list = accountService.getAccountList(accountSearchVO);
-
-        mv.setViewName("account/employeeAccountManage");
-        mv.addObject("list",list);
+        mv.addObject("list",new ArrayList<>());
+        mv.setViewName("account/employeeList");
 
         SearchVO searchVO = new SearchVO();
-        searchVO.setPaging(Paging.builder()
-                .currentPage(1)
-                .displayRow(10)
-                .build()
-        );
+        searchVO.setPaging(new Paging());
+
         Paging paging = ObjectHandlingUtil.pagingOperatorBySearch(searchVO, totalCount);
+
         mv.addObject("paging", paging);
+        mv.addObject("search", new AccountSearchVO());
+        return mv;
+    }
+
+    @GetMapping("/admin")
+    public ModelAndView getAdminAccount(ModelAndView mv){
+        AccountSearchVO accountSearchVO = AccountSearchVO.builder()
+                    .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.ADMIN))
+                    .build();
+        int totalCount = accountService.totalCount(accountSearchVO);
+        mv.addObject("totalCount", totalCount);
+
+        accountSearchVO.setPaging(new Paging());
+
+        mv.addObject("list",new ArrayList<>());
+        mv.setViewName("account/adminList");
+
+        SearchVO searchVO = new SearchVO();
+        searchVO.setPaging(new Paging());
+
+        Paging paging = ObjectHandlingUtil.pagingOperatorBySearch(searchVO, totalCount);
+
+        mv.addObject("paging", paging);
+        mv.addObject("search", new AccountSearchVO());
 
         return mv;
     }
+
     /**
      * 아이디 정보 확인 view
      * @param mv
@@ -189,6 +209,96 @@ public class AccountController {
     public ModelAndView logout(ModelAndView mv, HttpSession session){
         session.invalidate();
         mv.setViewName("redirect:/account/login");
+        return mv;
+    }
+
+    @GetMapping("/employee/detail/{userId}")
+    public ModelAndView getEmployeeDetail(ModelAndView mv, @PathVariable("userId")String userId){
+        AccountVO account = accountService.getAccountDetail(userId);
+        mv.addObject("account", account);
+        mv.setViewName("account/employeeDetail");
+        return mv;
+    }
+    @GetMapping("/admin/detail/{userId}")
+    public ModelAndView getAdminDetail(ModelAndView mv, @PathVariable("userId")String userId){
+        AccountVO account = accountService.getAccountDetail(userId);
+        mv.addObject("account",account);
+        mv.setViewName("account/adminDetail");
+        return mv;
+    }
+
+    @GetMapping("/admin/edit/{userId}")
+    public ModelAndView getAdminEdit(ModelAndView mv, @PathVariable("userId")String userId){
+        AccountVO account = accountService.getAccountDetail(userId);
+        mv.addObject("account",account);
+        mv.setViewName("account/adminEdit");
+        return mv;
+    }
+
+    @PostMapping("/api/update")
+    public ResponseEntity updAcct(@RequestBody AccountVO account){
+        Map<String, Object> result = accountService.updAcct(account);
+
+        return ResponseEntity.ok(result);
+    }
+    @PostMapping("/employee/getList")
+    public String getEmployeeList(Model model, @RequestBody SearchVO search){
+        Paging pagingVO = Paging.builder()
+                .currentPage(search.getPaging().getCurrentPage())
+                .displayRow(search.getPaging().getDisplayRow())
+                .totalCount(search.getPaging().getTotalCount())
+                .build();
+
+        AccountSearchVO accountSearchVO =AccountSearchVO.builder()
+                .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.EMPLOYEE))
+                .build();
+        accountSearchVO.setPaging(pagingVO);
+        accountSearchVO.setSearchVO(search);
+
+        // total
+        int totalCount = accountService.totalCount(accountSearchVO);
+        model.addAttribute("totalCount", totalCount);
+        model.addAttribute("paging", pagingVO);
+
+        // list
+        List<AccountVO> list = accountService.getAccountList(accountSearchVO);
+        model.addAttribute("list",list);
+        model.addAttribute("search", accountSearchVO);
+        return "account/employeeList :: #content-wrapper";
+    }
+
+    @PostMapping("/admin/getList")
+    public String getAdminList(Model model, @RequestBody SearchVO search){
+        Paging pagingVO = Paging.builder()
+                .currentPage(search.getPaging().getCurrentPage())
+                .displayRow(search.getPaging().getDisplayRow())
+                .totalCount(search.getPaging().getTotalCount())
+                .build();
+
+        AccountSearchVO accountSearchVO =AccountSearchVO.builder()
+                .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.ADMIN))
+                .build();
+        accountSearchVO.setPaging(pagingVO);
+        accountSearchVO.setSearchVO(search);
+
+        // total
+        int totalCount = accountService.totalCount(accountSearchVO);
+        model.addAttribute("totalCount", totalCount);
+        model.addAttribute("paging", pagingVO);
+
+        // list
+        List<AccountVO> list = accountService.getAccountList(accountSearchVO);
+        model.addAttribute("list",list);
+        model.addAttribute("search", accountSearchVO);
+        return "account/adminList :: #content-wrapper";
+    }
+
+    @GetMapping("/employee/edit/{userId}")
+    public ModelAndView getEmployeeEdit(ModelAndView mv, @PathVariable("userId")String userId){
+        AccountVO account = accountService.getAccountDetail(userId);
+        mv.addObject("account",account);
+        mv.setViewName("account/employeeEdit");
+
         return mv;
     }
 

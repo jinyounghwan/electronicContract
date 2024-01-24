@@ -1,5 +1,6 @@
 package com.samsung.framework.vo.account;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -32,5 +33,8 @@ public class AccountVO {
     private String updatedAtStr;
     private String createdAtStr;
     private String lastLoginStr;
-
+    @Pattern(regexp="^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d~!@#$%^&*()+|=]{8,16}$"
+            , message="비밀번호는 영어와 숫자 포함해서 8~16자리 이내로 입력해주세요.")
+    private String password;
+    private String confirmPassword;
 }
