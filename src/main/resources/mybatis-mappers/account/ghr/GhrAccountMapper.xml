@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.account.ghr.GhrAccountMapper">
+    <select id="isExistsAccount">
+        SELECT EMP_NO, NAME,
+               TEAM, DEPARTMENT_CODE
+        FROM GHR_ACCOUNT_INFO
+        WHERE EMP_NO = #{empNo}
+    </select>
+
+
+</mapper>

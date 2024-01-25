@@ -9,14 +9,12 @@ import com.samsung.framework.mapper.account.AccountMapper;
 import com.samsung.framework.mapper.contract.documented.ContractCreationMapper;
 import com.samsung.framework.mapper.contract.template.ContractTemplateMapper;
 import com.samsung.framework.service.excel.ExcelPublicServiceImpl;
-import com.samsung.framework.service.file.FilePublicServiceImpl;
+import com.samsung.framework.service.file.FileService;
 import com.samsung.framework.vo.common.ResultStatusVO;
 import com.samsung.framework.vo.contract.creation.ContractVO;
-import com.samsung.framework.vo.file.FilePublicVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,7 +25,7 @@ public class ContractCreationService {
 
     private final ContractTemplateMapper contractTemplateMapper;
     private final AccountMapper accountMapper;
-    private final FilePublicServiceImpl fileService;
+    private final FileService fileService;
     private final ExcelPublicServiceImpl excelService;
     private final ContractCreationMapper contractCreationMapper;
 

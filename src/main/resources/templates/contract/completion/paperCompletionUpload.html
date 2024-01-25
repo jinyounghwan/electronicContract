@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="ko">
+<head>
+
+</head>
+<th:block layout:fragment="css">
+    <title>완료계약서_서면 계약서 업로드</title>
+</th:block>
+<th:block layout:fragment="content">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--content-->
+            <div class="container-fluid">
+                <h1 class="page-title">서면 계약서 업로드</h1>
+                <form id="form"  method="post" enctype="multipart/form-data">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table-list">
+                                    <tbody>
+                                    <tr>
+                                        <th class="col-2">Upload</th>
+                                        <td><div class="input-group">
+                                            <input type="file" id="file-input"  name="file" class="form-control form-control-user mr-2" onchange="addFile()" style="display:none" placeholder="" multiple>
+                                            <label for="file-input" class="form-control form-control-user mr-2" ></label>
+                                            <button class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04" onclick="onClickUpload()" >+ Upload File</button>
+                                        </div>
+                                            <div class="mt-2"><p class="mb-0">※ Please upload the PDF file</p></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Contract Subject</th>
+                                        <td><input type="text" name="subject" class="form-control form-control-user" placeholder=""></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Contract Title</th>
+                                        <td>
+                                            <div class="data-select datatable-dropdown">
+                                                <label>
+                                                    <select id="templateType" class="datatable-selector" th:field="*{templateTypeSelect}" data-select="keywordTypeSelect">
+                                                        <option th:each="e: ${templateTypeSelect}" th:value="${e.getCode()}" th:text="|${e.getDisplayName()}|"></option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Employee ID</th>
+                                        <td><input type="text" name="employeeId" class="form-control form-control-user" placeholder=""></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Sign Date/Time</th>
+                                        <td><div class="data-group"><input type="date" name="date" class="form-control form-control-user mr-2" id="date" placeholder="YYYY.MM.DD">
+                                            <input type="time" name="time" class="form-control form-control-user" id="time" placeholder="YYYY.MM.DD"></div></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-area">
+                        <input  class="btn btn-secondary" type="button" th:value="Cancel"/>
+                        <input class="btn btn-primary" type="button" th:onclick="registrationPaperContarct()" th:value="Save"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        let filesArr = [];
+        function onClickUpload() {
+            let fileInput = document.getElementById("file-input");
+            fileInput.click();
+        }
+        function addFile(){
+            const addFile = document.querySelector("#file-input");
+            const arrData = Array.from(addFile.files);
+            $("label[for='file-input']").text(arrData[0].name);
+            filesArr.push(arrData);
+        }
+
+
+        let registrationPaperContarct = () => {
+            const data = {
+                empNo : $('input[name=employeeId]').val(),
+                contractTitle : $('#templateType option:selected').val(),
+                contractSubject : $('input[name=subject]').val()
+            }
+
+            let form = $('#form')[0];
+            let formData = new FormData(form);
+            formData.append('data', new Blob([JSON.stringify(data)], {type: "application/json"}));
+            $.ajax({
+                type: 'post',
+                url: `/contract/sign/comp/api/registration`,
+                data: formData,
+                processData: false,
+                contentType: false,
+                cache: false
+            })
+                .done(function(data){
+                    console.log(data);
+                })
+        }
+
+
+    </script>
+</th:block>
+</html>
