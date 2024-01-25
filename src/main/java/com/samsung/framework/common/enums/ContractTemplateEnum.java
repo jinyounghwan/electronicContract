@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 public enum ContractTemplateEnum {
 
-      EMPLOYEEMENT("TMPL", "1000", "Employeement contract")
+      EMPLOYMENT("TMPL", "1000", "Employeement contract")
     , SALARY("TMPL", "2000", "Salary contract")
     , PRIVACY_AGREEMENT("TMPL", "3000", "Privacy agreement")
     ;
