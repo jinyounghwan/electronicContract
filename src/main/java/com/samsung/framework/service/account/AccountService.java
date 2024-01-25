@@ -9,7 +9,6 @@ import com.samsung.framework.common.exception.CustomLoginException;
 import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
 import com.samsung.framework.common.utils.ValidationUtil;
-import com.samsung.framework.domain.account.Account;
 import com.samsung.framework.domain.account.LoginRequest;
 import com.samsung.framework.domain.account.SignUpRequest;
 import com.samsung.framework.domain.common.Paging;
@@ -33,7 +32,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Service
 public class AccountService {
-    // TODO: IJ NPE 위험코드 Optional로 변경
     private final ValidationUtil validationUtil;
     private final JasyptConfig jasyptConfig;
     private final AccountMapper accountMapper;
