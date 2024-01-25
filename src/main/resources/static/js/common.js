@@ -6,7 +6,9 @@
 /*
    목록 조회를 위한
    기본 데이터 셋팅
+   기본 valid
 */
+const _toString = Object.prototype.toString;
 function setData(){
     let parameter = {
         paging :{
@@ -39,12 +41,114 @@ let searchList = (currentPage , displayRow, totalCount)=> {
     }
     getList(parameter);
 }
+/*
+*   목록에 보여 줄 개수 선택
+*/
 let viewCountSelect = (selected) => {
     console.log(selected.value);
     let displayRow = selected.value;
     let totalCount = $('#totalCount').val();
     searchList(1 , displayRow ,totalCount);
 }
+/*
+* form 아래에
+data-required true or false
+data-maxlength 최대 글자수
+data-minlength 최소 글자수
 
+: 
+속성이 포함 되어 있는 요소 validation
+*/
+let valid = (_$selector) =>{
+    let isValid = true;
+    if(isArray(_$selector)) {
+        $(_$selector).each(function() {
+            return isValid = privateValid.call(this, _$selector);
+        });
+    }
+    else {
+        _$selector.find('input,select,textarea').each(function() {
+            return isValid = privateValid.call(this, _$selector);
+        });
+    }
+    return isValid;
+}
 
+/**
+* 오브젝트가 Array인지 판단합니다.
+*/
+function isArray(O) {
+    return _toString.call(O) == "[object Array]";
+}
 
+function privateValid(_$selector) {
+    let $this = $(this);
+    let tag = $this.prop('tagName').toLowerCase();
+    let type = $this.prop('type').toLowerCase();
+    let v = $this.val();
+    if($this.is('[data-required="true"]')) {
+        if (tag === 'input' && (type === 'radio' || type === 'checkbox')) {
+            let name = $this.attr('name');
+            if(! _$selector.find('input[name="' + name + '"]').is(':checked')) {
+                alert(getValidMessage($this, 'required'));
+                $this.focus().select();
+                return false;
+            }
+        }
+        else {
+            if(! v) {
+                alert(getValidMessage($this, 'required'));
+                $this.focus().select();
+                return false;
+            }
+        }
+    }
+    if($this.is('[data-minlength]')) {
+        let minlength = parseInt($this.attr('data-minlength'));
+        if($this.val().length < minlength) {
+            alert(getValidMessage($this, 'minlength'));
+            $this.focus().select();
+            return false;
+        }
+    }
+    if($this.is('[data-maxlength]')) {
+        let maxlength = parseInt($this.attr('data-maxlength'));
+        if($this.val().length > maxlength) {
+            alert(getValidMessage($this, 'maxlength'));
+            $this.focus().select();
+            return false;
+        }
+    }
+    return true;
+}
+/**
+    alert 메시지
+*/
+function getValidMessage(_$, _type) {
+    let label = _$.attr('data-label'),
+        alertMessage = _$.attr('data-alert');
+    let tag = _$.prop('tagName').toLowerCase();
+    let type = _$.prop('type').toLowerCase();
+    if(_type === 'required') {
+        let s = '입력';
+        switch(tag) {
+            case 'select':
+                s = '선택';
+                break;
+            case 'input':
+                if(type == 'checkbox' || type == 'radio') {
+                    s = '선택';
+                }
+                break;
+        }
+        return alertMessage ? alertMessage : label + '을(를) ' + s + '해주세요.';
+    }
+    else if(_type === 'minlength') {
+        let minlength = parseInt(_$.attr('data-minlength'));
+        return alertMessage ? alertMessage : label + '을(를) ' + minlength + '자 이상 입력해주세요.';
+    }
+    else if(_type === 'maxlength') {
+        let maxlength = parseInt(_$.attr('data-maxlength'));
+        return alertMessage ? alertMessage : label + '은(는) ' + maxlength + '자를 초과할 수 없습니다.';
+    }
+}

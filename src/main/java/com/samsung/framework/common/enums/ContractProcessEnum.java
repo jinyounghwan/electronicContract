@@ -38,7 +38,7 @@ public enum ContractProcessEnum {
      * @param key
      * @return
      */
-    public static String menuCode(ContractProcessEnum key) {
+    public static String processCode(ContractProcessEnum key) {
         return key.getPrefix() + key.getParentCode() + key.getDepth1();
     }
 }

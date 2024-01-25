@@ -39,8 +39,8 @@
                  , CTD.CONTRACT_TITLE_EN
                  , CTD.CONTRACT_TITLE_HU
                  , CTD.CONTRACT_TITLE_EN
-                 , CTD.PREAMBLE_HU
-                 , CTD.PREAMBLE_EN
+                 , CTD.CONTENTS_EN
+                 , CTD.CONTENTS_HU
                  , CT.UPDATED_BY
                  , CT.CREATED_BY
               FROM CONTRACT_TEMPLATE CT
