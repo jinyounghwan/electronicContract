@@ -22,25 +22,21 @@ import java.util.List;
  */
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/contract/creation")
+@RequestMapping("/contract/create")
 @Controller
 public class ContractCreationController {
 
     private final ContractCreationService contractCreationService;
 
+    @GetMapping(value = {"/",""})
+    public String contractCreation(){
+        return "/contract/creation/contract-creation";
+    }
     @ResponseBody
-    @PostMapping("/save-contract")
+    @PostMapping("/save")
     public ResponseEntity saveContract(@Valid @RequestBody SaveContractRequest saveContractReq) {
         ResultStatusVO resultStatusVO = contractCreationService.saveContract(saveContractReq);
-
         return ResponseEntity.ok(resultStatusVO);
     }
 
-    @ResponseBody
-    @PostMapping("/bulk-upload")
-    public ResponseEntity bulkUpload(@RequestParam(value = "bulk") List<MultipartFile> multipartFiles) throws Exception {
-        ResultStatusVO resultStatusVO = contractCreationService.bulkUpload(multipartFiles);
-
-        return ResponseEntity.ok(resultStatusVO);
-    }
 }

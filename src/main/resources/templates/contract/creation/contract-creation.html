@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="ko">
+    <th:block layout:fragment="content">
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <!--content-->
+                <div class="container-fluid">
+                    <h1 class="page-title">계약서 생성</h1>
+
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <form id="contractForm" name="contractForm">
+                                    <table class="table-list">
+                                        <tbody>
+                                        <tr>
+                                            <th class="col-2">Date</th>
+                                            <td><input type="date" class="form-control form-control-user" id="date" placeholder="YYYY.MM.DD" data-required="true" data-alert="date 를 입력 해 주세요 "></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Template Code</th>
+                                            <td><input type="text" class="form-control form-control-user" name="templateSeq" placeholder="" data-required="true" data-alert="template code 를 입력 해 주세요" ></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Employee ID</th>
+                                            <td><input type="text" name="employeeId" class="form-control form-control-user" placeholder="" data-required="true" data-alert="employee id를 입렵 해 주세요 "></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-area">
+                        <button class="btn btn-primary" type="button" th:onclick="create()">Create</button>
+                    </div>
+                </div>
+                <!--contents-->
+            </div>
+        </div>
+    </th:block>
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+            let create = () =>{
+                if(valid($('#contractForm')){
+                    $.ajax({
+                      url: '/contract/template/save',
+                      type: 'post',
+                      dataType:'json',
+                      data:$('#infoForm').serialize()
+                    }).done(function(data) {
+                        if(data > 0){
+                            alert('저장이 완료 되었습니다.');
+                            location.href='/contract/template/info/' + $('#templateSeq').val();
+                        }else{
+                            alert('관리자에게 문의 바랍니다.');
+                            location.href='/contract/template';
+                        }
+                    }).fail(function(jqXHR) {
+                        console.log(jqXHR);
+                    });
+                }
+            }
+        </script>
+    </th:block>
+
+</html>

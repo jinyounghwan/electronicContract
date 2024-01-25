@@ -3,6 +3,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.samsung.framework.mapper.contract.documented.ContractCreationMapper">
+    <insert id="saveContract" parameterType="ContractVO">
+        INSERT INTO contracts (  emp_no
+                              , template_seq
+                              , dept_code
+                              , process_step
+                              , validation
+                              , created_by)
+                        VALUES( #{empNo}
+                              , #{templateSeq}
+                              , #{deptCode}
+                              , #{processStep}
+                              , #{validation}
+                              , #{createdBy}
+                               )
 
+    </insert>
 
 </mapper>
