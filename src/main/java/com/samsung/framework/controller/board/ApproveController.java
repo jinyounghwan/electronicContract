@@ -9,7 +9,7 @@ import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.service.authority.AuthorityServiceImpl;
 import com.samsung.framework.service.board.ApproveServiceImpl;
 import com.samsung.framework.service.board.BoardPublicServiceImpl;
-import com.samsung.framework.service.file.FilePublicServiceImpl;
+import com.samsung.framework.service.file.FileService;
 import com.samsung.framework.vo.board.BoardPublicVO;
 import com.samsung.framework.vo.board.BoardReplyVO;
 import com.samsung.framework.vo.code.CommonCodeVO;
@@ -39,7 +39,7 @@ public class ApproveController {
 
     private final BoardPublicServiceImpl boardService;
     private final ApproveServiceImpl approveService;
-    private final FilePublicServiceImpl fileService;
+    private final FileService fileService;
     private final AuthorityServiceImpl authorityService;
     private final FileUtil fileUtil;
 

@@ -9,7 +9,7 @@ import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.board.BoardPublic;
 import com.samsung.framework.mapper.board.BoardMapper;
 import com.samsung.framework.mapper.file.FileMapper;
-import com.samsung.framework.service.file.FilePublicServiceImpl;
+import com.samsung.framework.service.file.FileService;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.board.BoardPublicVO;
 import com.samsung.framework.vo.board.BoardReplyVO;
@@ -20,7 +20,6 @@ import com.samsung.framework.vo.file.FileVO;
 import com.samsung.framework.vo.search.board.BoardSearchVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -37,8 +36,7 @@ import java.util.Map;
 @Component
 public class BoardPublicServiceImpl implements BoardService {
 
-    @Autowired
-    FilePublicServiceImpl fileServiceImpl;
+    FileService fileService;
     private final BoardMapper boardMapper;
     private final FileMapper fileMapper;
     private final ValidationUtil validationUtil;
@@ -230,7 +228,7 @@ public class BoardPublicServiceImpl implements BoardService {
         List<String> attachList = new ArrayList<>();
         // board.getFiles가 빈배열이 아닐때,
         if(!ObjectUtils.isEmpty(board.getFiles()) && !ObjectUtils.isEmpty(originFiles.isEmpty())){
-            fileServiceImpl.updateFiles(board.getFiles(), originFiles, board.getLastId());
+            fileService.updateFiles(board.getFiles(), originFiles, board.getLastId());
             board.getFiles().forEach(file -> {
                 attachList.add(String.valueOf(file.getFileSeq()));
             });
@@ -239,10 +237,10 @@ public class BoardPublicServiceImpl implements BoardService {
 
         // 신규 파일 upload
         if(!ObjectUtils.isEmpty(files)){
-            List<FilePublicVO> targetFiles = fileServiceImpl.uploadFile(files);
+            List<FilePublicVO> targetFiles = fileService.uploadFile(files);
             // 공통 File에 신규 file 저장
 
-            fileServiceImpl.saveFile(targetFiles,board.getRegId()).forEach(value-> attachList.add(String.valueOf(value.getFileSeq())));
+            fileService.saveFile(targetFiles,board.getRegId()).forEach(value-> attachList.add(String.valueOf(value.getFileSeq())));
         }
 
         String attachId="";
@@ -303,9 +301,9 @@ public class BoardPublicServiceImpl implements BoardService {
 
         if(!StringUtil.isEmpty(files)){
             // 실제 directory에 저장한 파일 리스트
-            List<FilePublicVO> targetFiles = fileServiceImpl.uploadFile(files);
+            List<FilePublicVO> targetFiles = fileService.uploadFile(files);
             // DB에 저장한 파일 리스트
-            List<FilePublicVO> saveFileList = fileServiceImpl.saveFile(targetFiles, boardPublic.getRegId());
+            List<FilePublicVO> saveFileList = fileService.saveFile(targetFiles, boardPublic.getRegId());
 
             if(saveFileList.isEmpty()){
                 result.put("code",204);

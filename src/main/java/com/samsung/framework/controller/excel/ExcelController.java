@@ -1,7 +1,7 @@
 package com.samsung.framework.controller.excel;
 
 import com.samsung.framework.service.excel.ExcelPublicServiceImpl;
-import com.samsung.framework.service.file.FilePublicServiceImpl;
+import com.samsung.framework.service.file.FileService;
 import com.samsung.framework.vo.file.FilePublicVO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import java.util.Map;
 @RequestMapping("/excel")
 public class ExcelController {
 
-    private final FilePublicServiceImpl fileService;
+    private final FileService fileService;
     private final ExcelPublicServiceImpl excelService;
 
     /** TODO: 테이블 데이터 업로드

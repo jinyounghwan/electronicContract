@@ -1,9 +1,11 @@
 package com.samsung.framework.controller.file;
 
-import com.samsung.framework.service.file.FilePublicServiceImpl;
+import com.samsung.framework.service.file.FileService;
+import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +26,7 @@ import java.util.Map;
 @RequestMapping("/file")
 public class FileController {
 
-    private final FilePublicServiceImpl fileService;
+    private final FileService fileService;
 
     @GetMapping("/download/{fileSeq}")
     public ResponseEntity download(@PathVariable String fileSeq, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -36,11 +38,12 @@ public class FileController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity upload(@RequestBody List<MultipartFile> multipartFileList) throws Exception {
+    public ResponseEntity upload(@RequestBody List<MultipartFile> multipartFileList, HttpServletRequest request) throws Exception {
         Map<String,Object> result = new HashMap<>();
         List<FilePublicVO> fileList  = fileService.uploadFile(multipartFileList);
-
-        List<FilePublicVO> saveFileList = fileService.saveFile(fileList);
+        HttpSession session = request.getSession();
+        AccountVO account = (AccountVO) session.getAttribute("loginInfo");
+        List<FilePublicVO> saveFileList = fileService.saveFile(fileList, "hsk9839");
 
         if(saveFileList.isEmpty()) {
             result.put("code","204");
