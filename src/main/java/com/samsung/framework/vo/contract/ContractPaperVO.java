@@ -14,7 +14,8 @@ public class ContractPaperVO {
     private int empNo;
     private int templateSeq;
     private String deptCode;
-    private String processStep;
+    private String docStatus;
+    private String processStatus;
     private String contractBody;
     private String signatureDataNo;
     private String validation;
@@ -24,4 +25,5 @@ public class ContractPaperVO {
     private LocalDateTime createdAt;
     private String updatedBy;
     private LocalDateTime updatedAt;
+    private String templateType;
 }

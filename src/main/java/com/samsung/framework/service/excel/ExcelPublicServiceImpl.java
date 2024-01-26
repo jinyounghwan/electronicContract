@@ -3,12 +3,15 @@ package com.samsung.framework.service.excel;
 import com.samsung.framework.common.utils.ExcelUtil;
 import com.samsung.framework.common.utils.FileUtil;
 import com.samsung.framework.mapper.file.FileMapper;
+import com.samsung.framework.vo.contract.ContractExcelVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -55,12 +58,17 @@ public class ExcelPublicServiceImpl implements ExcelService {
         return file.getName();
     }
 
-    public void readExcelFile(List<FilePublicVO> fileList){
+    public void readExcelFile(List<FilePublicVO> fileList) {
         Iterator<FilePublicVO> iter = fileList.iterator();
         iter.forEachRemaining(value->{
             String filePath = value.getStoragePath() + "/" + value.getName();
-            excelUtil.readExcel(filePath);
+            try {
+                List<ContractExcelVO> list = ExcelUtil.readExcel(filePath,value.getName(), ContractExcelVO.class);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         });
+
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.samsung.framework.service.contract.documented;
 
 
+import com.samsung.framework.common.enums.ContractProcessEnum;
 import com.samsung.framework.domain.account.ghr.GhrAccount;
 import com.samsung.framework.mapper.contract.documented.ContractCompletionMapper;
 import com.samsung.framework.service.account.ghr.GhrAccountService;
@@ -24,16 +25,26 @@ public class ContractCompletionService {
     private final FileService fileService;
     public ContractPaperVO paperContractSave(ContractPaperVO contract, AccountVO account, List<MultipartFile> file) throws Exception {
         GhrAccount ghrAccount = ghrAccountService.isExistsAccount(contract.getEmpNo());
-
         if(contract.getEmpNo() == ghrAccount.getEmpNo()){
+            log.info("getEmpNo Equals");
             // 파일 업로드 (저장)
             List<FilePublicVO> list = fileService.uploadFile(file, "CONTRACT");
             List<FilePublicVO> targetList =fileService.saveFile(list, String.valueOf(account.getEmpNo()));
+            FilePublicVO filePublicVO = targetList.get(0);
 
+            //contractCompletionMapper.getTemplateSeq(contract); (임시 주석 처리)
             ContractPaperVO target = ContractPaperVO.builder()
                     .updatedBy(String.valueOf(account.getEmpNo()))
                     .createdBy(String.valueOf(account.getEmpNo()))
-                    .templateSeq(contract.getTemplateSeq())
+                    .deptCode(account.getDeptCode())
+                    .contractBody("Dummy Data")
+                    .signatureDataNo(String.valueOf(filePublicVO.getFileSeq()))
+                    .docStatus(ContractProcessEnum.processCode(ContractProcessEnum.PAPER_CONTRACT))
+                    .processStatus(ContractProcessEnum.processCode(ContractProcessEnum.PAPER_CONTRACT))
+                    .validation("Y")
+                    .agreeYn("N")
+                    .delYn("N")
+                    .templateSeq(1)
                     .empNo(ghrAccount.getEmpNo())
                     .build();
             contractCompletionMapper.paperContractSave(target);

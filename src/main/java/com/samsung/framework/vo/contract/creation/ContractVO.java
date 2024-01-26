@@ -25,7 +25,7 @@ public class ContractVO {
     private String updatedAt;
 
     @Builder
-    public ContractVO(int contractNo, int empNo, int templateSeq, String processStep, String ContractBody, String signatureDataNo, String validation
+    public ContractVO(int contractNo, int empNo, int templateSeq, String processStep, String contractBody, String signatureDataNo, String validation
                       ,String deptCode, String agreeYn, String delYn, String createdAt, String createdBy, String updatedAt, String updatedBy){
         this.contractNo = contractNo;
         this.empNo = empNo;

@@ -3,6 +3,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.samsung.framework.mapper.contract.documented.ContractCompletionMapper">
+    <insert id="paperContractSave" parameterType="ContractPaperVO">
+        INSERT INTO CONTRACTS (EMP_NO, TEMPLATE_SEQ,
+                               DEPT_CODE,PROCESS_STATUS,
+                               DOC_STATUS,CONTRACT_BODY,
+                               SIGNATURE_DATA_NO,VALIDATION,
+                               AGREE_YN,DEL_YN,
+                               CREATED_BY,CREATED_AT,
+                               UPDATED_BY,UPDATED_AT
+                               )
 
+        VALUES (#{empNo}, #{templateSeq},
+                #{deptCode}, #{processStatus},
+                #{docStatus}, #{contractBody},
+                #{signatureDataNo},#{validation},
+                #{agreeYn},#{delYn},
+                #{createdBy},sysdate(),
+                #{updatedBy},sysdate()
+                )
+    </insert>
 
+    <select id="getTemplateSeq" parameterType="ContractPaperVO" resultType="Integer">
+        SELECT TEMPLATE_SEQ
+        FROM CONTRACT_TEMPLATE
+        WHERE TEMPLATE_TYPE = #{processStatus}
+    </select>
 </mapper>

@@ -5,5 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface ContractCompletionMapper {
-    int paperContractSave(ContractPaperVO contractPaperCompVO);
+    int paperContractSave(ContractPaperVO contractPaperVO);
+    int getTemplateSeq(ContractPaperVO contractPaperVO);
 }
