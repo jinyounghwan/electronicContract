@@ -7,4 +7,8 @@
         SELECT count(contract_no)
           FROM contracts
     </select>
+
+    <select id="getContractProgressList" parameterType="SearchVO" resultType="ContractVO">
+
+    </select>
 </mapper>
