@@ -54,15 +54,8 @@ public class ExcelController {
             result.put("message", "엑셀 파일 저장 성공");
         }
         List<List<ContractExcelVO>> list =excelService.readExcelFile(fileList);
-        for(List<ContractExcelVO>targetList : list){
-            log.info("=======");
-            for(ContractExcelVO contractExcelVO : targetList) {
-                log.info("getName : {} ", contractExcelVO.getName());
-                log.info("getEmpNo : {} ", contractExcelVO.getEmpNo());
-                log.info("getHireDateEn : {}", contractExcelVO.getHireDateEn());
-            }
-            log.info("=======");
-        }
+        result.put("list",list);
+
 
         return ResponseEntity.ok(result);
     }
