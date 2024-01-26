@@ -13,7 +13,7 @@ sourceCompatibility = '17'
 
 bootJar {
 	archiveBaseName = 'framework'
-	archiveFileName = 'e-contract.jar'
+	archiveFileName = 'e-contract-1.0.0-RELEASE.jar'
 	archiveVersion = '0.0.1'
 }
 
