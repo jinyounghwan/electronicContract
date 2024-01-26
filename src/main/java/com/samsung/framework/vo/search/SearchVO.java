@@ -114,6 +114,7 @@ public class SearchVO {
 
     public List<SearchVO> getContractSearchStateTypeList() {
         var list = new ArrayList<SearchVO>();
+        list.add(new SearchVO("ALL","전체"));
         list.add(new SearchVO("UNSEEN","확인 전"));
         list.add(new SearchVO( "VIEW","확인 후"));
         list.add(new SearchVO("SIGNED", "서명 완료"));
