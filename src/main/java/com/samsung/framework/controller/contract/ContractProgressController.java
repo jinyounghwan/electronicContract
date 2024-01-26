@@ -2,14 +2,13 @@ package com.samsung.framework.controller.contract;
 
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.service.contract.ContractProgressService;
+import com.samsung.framework.vo.contract.creation.ContractVO;
 import com.samsung.framework.vo.search.SearchVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,18 +45,14 @@ public class ContractProgressController {
      * @return the list
      */
     @ModelAttribute("contractDocSearchStateTypeSelect")
-    public List<SearchVO>  searchContractDocSearchStateTypeSelect() {
-        return new SearchVO().getContractDocSearchStateTypeList();
-    }
+    public List<SearchVO>  searchContractDocSearchStateTypeSelect() {return new SearchVO().getContractDocSearchStateTypeList();}
     /**
      * Search keyword type option list list.
      * [contract status] 키워드
      * @return the list
      */
     @ModelAttribute("contractSearchStateTypeSelect")
-    public List<SearchVO>  searchContractSearchStateTypeList() {
-        return new SearchVO().getContractDocSearchStateTypeList();
-    }
+    public List<SearchVO>  searchContractSearchStateTypeList() {return new SearchVO().getContractDocSearchStateTypeList();}
 
     @GetMapping(value={"","/"})
     public String getContractProgress(Model model){
@@ -67,6 +62,28 @@ public class ContractProgressController {
         model.addAttribute("totalCount" ,contractProgressService.getContractProgressTotal(null));
         return "contract/contractProgress-list";
     }
+
+    @PostMapping(value = "/list")
+    public String getContractProgressList (Model model , @RequestBody SearchVO searchVO){
+        Paging pagingVo =  Paging.builder()
+                .currentPage(searchVO.getPaging().getCurrentPage())
+                .displayRow(searchVO.getPaging().getDisplayRow())
+                .totalCount(searchVO.getPaging().getTotalCount())
+                .build();
+        searchVO.setPaging(pagingVo);
+        // total
+        int totalCount = contractProgressService.getContractProgressTotal(searchVO);
+        model.addAttribute("totalCount", totalCount);
+        // paging
+        model.addAttribute("paging",pagingVo);
+
+        // list
+        List<ContractVO> list = contractProgressService.getContractProgresList(searchVO);
+        model.addAttribute("list",list);
+        model.addAttribute("search" , searchVO);
+        return "contract/template/list :: #content";
+    }
+
 
 
 

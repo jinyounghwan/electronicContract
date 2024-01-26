@@ -52,6 +52,14 @@ public class SearchVO {
      * 날짜 검색 종료일 YYYY-MM-DD
      */
     private String endDt = "";
+    /**
+     * 계약서  doc 상태 유형
+    * */
+    private String contractDocStatusType;
+    /**
+    *  계약서 상태 유형
+    * */
+    private String contractStatusType;
 
     /** paging 모델 [[ **/
 
