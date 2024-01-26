@@ -1,0 +1,49 @@
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<!--search box-->
+<div class="databox">
+    <div class="data-linebox">
+        <div class="data-line">
+            <div class="data-title">data</div>
+            <div class="data-select datatable-dropdown">
+                <label>
+                    <select class="datatable-selector" th:field="*{dateRangeSelect}" data-select="dateRangeSelect">
+                        <option th:each="e: ${dateRangeSelect}" th:value="${e.getCode()}" th:text="|${e.getDisplayName()}|" th:selected="${e.getCode} == 'ALL'">전체</option>
+                    </select>
+                </label>
+            </div>
+            <div class="data-group">
+                <input type="date" class="form-control form-control-user" id="startDt" placeholder="YYYY.MM.DD">
+                <span>-</span>
+                <input type="date" class="form-control form-control-user" id="endDt" placeholder="YYYY.MM.DD">
+            </div>
+        </div>
+        <div class="data-line">
+            <div class="data-title">Search</div>
+            <div class="data-select datatable-dropdown">
+                <label>
+                    <select class="datatable-selector" th:field="*{keywordTypeSelect}" data-select="keywordTypeSelect">
+                        <option th:each="e: ${keywordTypeSelect}" th:value="${e.getCode()}" th:text="|${e.getDisplayName()}|" th:selected="${e.getCode} == 'ALL'">전체</option>
+                    </select>
+                </label>
+            </div>
+            <div class="data-group">
+                <input type="" class="form-control form-control-user" placeholder="" name="searchKeyword" id="searchKeyword" th:value="${search.getSearchKeyword()}">
+            </div>
+        </div>
+        <div class="data-line-50">
+            <div class="data-title">Doc. Status</div>
+            <div class="data-select datatable-dropdown" style="width: 48%;">
+                <label>
+                    <select class="datatable-selector" th:field="*{contractDocSearchStateTypeSelect}" data-select="contractDocSearchStateTypeSelect">
+                        <option th:each="e: ${contractDocSearchStateTypeSelect}" th:value="${e.getCode()}" th:text="|${e.getDisplayName()}|" th:selected="${e.getCode} == 'ALL'">전체</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="data-btn"><button class="btn btn-primary" type="button" th:onclick="'searchList(1 , 0 , '+ ${totalCount} +')'">Search
+        <i class="fas fa-search fa-sm"></i>
+    </button></div>
+</div>
+<!--search box-->
+</html>
