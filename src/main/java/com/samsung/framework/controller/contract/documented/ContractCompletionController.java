@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 계약서 완료 Controller
@@ -70,11 +71,9 @@ public class ContractCompletionController {
     public ResponseEntity createPaperContract(HttpServletRequest request, @RequestPart(value="data", required = true) ContractPaperVO contract , @RequestPart(value="file", required = true)List<MultipartFile> file) throws Exception {
         HttpSession session = request.getSession();
         AccountVO account = (AccountVO) session.getAttribute("loginInfo");
+        Map<String, Object> result = contractCompletionService.paperContractSave(contract, account, file);
 
-        contractCompletionService.paperContractSave(contract, account, file);
-
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 

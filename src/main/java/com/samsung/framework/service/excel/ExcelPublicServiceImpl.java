@@ -58,17 +58,18 @@ public class ExcelPublicServiceImpl implements ExcelService {
         return file.getName();
     }
 
-    public void readExcelFile(List<FilePublicVO> fileList) {
+    public List<List<ContractExcelVO>> readExcelFile(List<FilePublicVO> fileList) {
         Iterator<FilePublicVO> iter = fileList.iterator();
+        List<List<ContractExcelVO>> list = new ArrayList<>();
         iter.forEachRemaining(value->{
             String filePath = value.getStoragePath() + "/" + value.getName();
             try {
-                List<ContractExcelVO> list = ExcelUtil.readExcel(filePath,value.getName(), ContractExcelVO.class);
+                 list.add(ExcelUtil.readExcel(filePath,value.getName(), ContractExcelVO.class));
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
         });
-
+        return list;
     }
 
     /**

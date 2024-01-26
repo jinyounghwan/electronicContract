@@ -14,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,7 +25,9 @@ public class ContractCompletionService {
     private final GhrAccountService ghrAccountService;
     private final ContractCompletionMapper contractCompletionMapper;
     private final FileService fileService;
-    public ContractPaperVO paperContractSave(ContractPaperVO contract, AccountVO account, List<MultipartFile> file) throws Exception {
+    public Map<String, Object> paperContractSave(ContractPaperVO contract, AccountVO account, List<MultipartFile> file) throws Exception {
+        var result = new HashMap<String, Object>();
+
         GhrAccount ghrAccount = ghrAccountService.isExistsAccount(contract.getEmpNo());
         if(contract.getEmpNo() == ghrAccount.getEmpNo()){
             log.info("getEmpNo Equals");
@@ -47,8 +51,18 @@ public class ContractCompletionService {
                     .templateSeq(1)
                     .empNo(ghrAccount.getEmpNo())
                     .build();
-            contractCompletionMapper.paperContractSave(target);
+            result.put("code", 200);
+            int insert = contractCompletionMapper.paperContractSave(target);
+            if(insert < 1) {
+                result.put("code", 204);
+                result.put("message", "계약서를 다시 저장해주세요.");
+                return result;
+            }
+            result.put("message", "계약서 저장 완료");
+            return result;
         }
-        return null;
+        result.put("code",400);
+        result.put("message", "GHR에 존재하지 않는 사번입니다.");
+        return result;
     }
 }
