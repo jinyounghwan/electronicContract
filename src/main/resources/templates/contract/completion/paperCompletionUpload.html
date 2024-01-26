@@ -91,7 +91,7 @@
             const data = {
                 empNo : $('input[name=employeeId]').val(),
                 processStatus : $('#templateType option:selected').val(),
-                contractSubject : $('input[name=subject]').val()
+                name : $('input[name=subject]').val()
             }
 
             let form = $('#form')[0];
@@ -99,7 +99,7 @@
             formData.append('data', new Blob([JSON.stringify(data)], {type: "application/json"}));
             $.ajax({
                 type: 'post',
-                url: `/contract/sign/comp/api/registration`,
+                url: `/contract/sign/comp/api/paper/registration`,
                 data: formData,
                 processData: false,
                 contentType: false,

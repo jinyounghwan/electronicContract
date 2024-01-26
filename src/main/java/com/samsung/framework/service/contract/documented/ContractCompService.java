@@ -7,8 +7,9 @@ import com.samsung.framework.mapper.contract.documented.ContractCompletionMapper
 import com.samsung.framework.service.account.ghr.GhrAccountService;
 import com.samsung.framework.service.file.FileService;
 import com.samsung.framework.vo.account.AccountVO;
-import com.samsung.framework.vo.contract.ContractPaperVO;
+import com.samsung.framework.vo.contract.completion.ContractCompVO;
 import com.samsung.framework.vo.file.FilePublicVO;
+import com.samsung.framework.vo.search.SearchVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,11 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class ContractCompletionService {
+public class ContractCompService {
     private final GhrAccountService ghrAccountService;
     private final ContractCompletionMapper contractCompletionMapper;
     private final FileService fileService;
-    public Map<String, Object> paperContractSave(ContractPaperVO contract, AccountVO account, List<MultipartFile> file) throws Exception {
+    public Map<String, Object> paperContractSave(ContractCompVO contract, AccountVO account, List<MultipartFile> file) throws Exception {
         var result = new HashMap<String, Object>();
 
         GhrAccount ghrAccount = ghrAccountService.isExistsAccount(contract.getEmpNo());
@@ -37,11 +38,11 @@ public class ContractCompletionService {
             FilePublicVO filePublicVO = targetList.get(0);
 
             //contractCompletionMapper.getTemplateSeq(contract); (임시 주석 처리)
-            ContractPaperVO target = ContractPaperVO.builder()
+            ContractCompVO target = ContractCompVO.builder()
                     .updatedBy(String.valueOf(account.getEmpNo()))
                     .createdBy(String.valueOf(account.getEmpNo()))
                     .deptCode(account.getDeptCode())
-                    .contractBody("Dummy Data")
+                    .name(contract.getName())
                     .signatureDataNo(String.valueOf(filePublicVO.getFileSeq()))
                     .docStatus(ContractProcessEnum.processCode(ContractProcessEnum.PAPER_CONTRACT))
                     .processStatus(ContractProcessEnum.processCode(ContractProcessEnum.PAPER_CONTRACT))
@@ -51,6 +52,7 @@ public class ContractCompletionService {
                     .templateSeq(1)
                     .empNo(ghrAccount.getEmpNo())
                     .build();
+
             result.put("code", 200);
             int insert = contractCompletionMapper.paperContractSave(target);
             if(insert < 1) {
@@ -64,5 +66,14 @@ public class ContractCompletionService {
         result.put("code",400);
         result.put("message", "GHR에 존재하지 않는 사번입니다.");
         return result;
+    }
+
+    public int getContractCompTotal(SearchVO searchVO) {
+        int count = contractCompletionMapper.getContractCompTotal(searchVO);
+        return count;
+    }
+
+    public List<ContractCompVO> getContractCompList(SearchVO searchVO){
+        return contractCompletionMapper.getContractCompList(searchVO);
     }
 }

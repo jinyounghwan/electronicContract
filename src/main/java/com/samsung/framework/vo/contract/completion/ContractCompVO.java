@@ -1,4 +1,4 @@
-package com.samsung.framework.vo.contract;
+package com.samsung.framework.vo.contract.completion;
 
 import lombok.*;
 
@@ -9,14 +9,23 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @Builder
-public class ContractPaperVO {
+public class ContractCompVO {
     private long contractNo;
     private int empNo;
     private int templateSeq;
     private String deptCode;
     private String docStatus;
     private String processStatus;
-    private String contractBody;
+    private String name;
+    private String hireDateHu;
+    private String hireDateEn;
+    private String jobTitleHu;
+    private String jobTitleEn;
+    private int salaryNo;
+    private String salaryHu;
+    private String salaryEn;
+    private String wageTypeHu;
+    private String wageTypeEn;
     private String signatureDataNo;
     private String validation;
     private String agreeYn;
@@ -26,4 +35,6 @@ public class ContractPaperVO {
     private String updatedBy;
     private LocalDateTime updatedAt;
     private String templateType;
+    private String templateTitle;
+    private String contractTitleEn;
 }

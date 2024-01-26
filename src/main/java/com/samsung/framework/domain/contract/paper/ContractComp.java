@@ -1,4 +1,4 @@
-package com.samsung.framework.domain.contract;
+package com.samsung.framework.domain.contract.paper;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class ContractPaper {
+public class ContractComp {
     private long contractNo;
     @NotNull(message = "사번은 필수 값 입니다.")
     private int empNo;
@@ -27,7 +27,7 @@ public class ContractPaper {
     private LocalDateTime updatedAt;
 
     @Builder
-    public ContractPaper(long contractNo, int empNo, int templateSeq, String deptCode, String processStep
+    public ContractComp(long contractNo, int empNo, int templateSeq, String deptCode, String processStep
             , String contractBody, String signatureDataNo, String validation, String agreeYn, String delYn, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt){
         this.contractNo = contractNo;
         this.empNo = empNo;
