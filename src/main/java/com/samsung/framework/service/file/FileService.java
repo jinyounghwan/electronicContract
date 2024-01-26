@@ -54,29 +54,7 @@ public class FileService{
         return fileUtil.uploadFiles(files, getRootDir + getRealDir + "/" +type);
     }
 
-    /**
-     * DB Table에 파일 관련 정보 저장
-     * @param files
-     * @return
-     * @throws Exception
-     */
-//    public List<FilePublicVO> saveFile(List<FilePublicVO> files) throws Exception {
-//        List<FilePublicVO> targetFiles = new ArrayList<>();
-//        for(FilePublicVO file : files){
-//            FilePublicVO target = FilePublicVO.builder()
-//                                .originalName(file.getOriginalName())
-//                                .name(file.getName())
-//                                .fileNo(1)
-//                                .extension(fileUtil.checkFileType(file.getOriginalName()))
-//                                .storagePath(FileUtil.seperateOs(file.getStoragePath()))
-//                                .size(file.getSize())
-//                                .createdBy("null")
-//                                .build();
-//            fileMapper.save(target);
-//            targetFiles.add(target);
-//        }
-//        return targetFiles;
-//    }
+
 
     /**
      * 파일 등록자를 regId로 넘겨받은 후, 해당 값을 테이블에 저장

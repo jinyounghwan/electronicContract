@@ -3,7 +3,7 @@ package com.samsung.framework.controller.auth;
 import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.authority.Authority;
 import com.samsung.framework.service.account.AccountService;
-import com.samsung.framework.service.file.FilePublicServiceImpl;
+import com.samsung.framework.service.file.FileService;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.service.authority.AuthorityServiceImpl;
 import com.samsung.framework.vo.code.CommonCodeVO;
@@ -34,7 +34,7 @@ public class AuthorityController {
 
     private final AuthorityServiceImpl authorityService;
     private final AccountService accountService;
-    private final FilePublicServiceImpl fileService;
+    private final FileService fileService;
 
     /**
      * 개인 권한 관리 화면
@@ -155,7 +155,7 @@ public class AuthorityController {
         }
         AccountVO member = accountService.findMemberByUserName(loginInfo.getUserId());
         FilePublicVO file = fileService.getFile(fileNm.replaceAll("\"",""));
-        result = (HashMap<String, Object>) authorityService.updAuthFile(file, member.getEmpNo());
+        //result = (HashMap<String, Object>) authorityService.updAuthFile(file, member.getEmpNo());
 
         return ResponseEntity.ok(result);
     }

@@ -5,6 +5,7 @@ import com.samsung.framework.domain.authority.Authority;
 import com.samsung.framework.mapper.authority.AuthorityMapper;
 import com.samsung.framework.mapper.menu.MenuMapper;
 import com.samsung.framework.vo.code.CommonCodeVO;
+import com.samsung.framework.vo.contract.ContractExcelVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -121,51 +122,51 @@ public class AuthorityServiceImpl implements AuthorityService {
      * 엑셀 권한 변경
      * @param file
      */
-    public Map<String,Object> updAuthFile(FilePublicVO file, int memberSeq) throws IOException {
-        List<Authority> userMenuList =authorityMapper.findUserMenuAuthority(memberSeq);
+//    public Map<String,Object> updAuthFile(FilePublicVO file, int memberSeq) throws IOException {
+//        List<Authority> userMenuList =authorityMapper.findUserMenuAuthority(memberSeq);
 
-        ArrayList<String> list = (ArrayList<String>) excelUtil.readExcel(file.getStoragePath());
-        ArrayList<String> menuOrgList = (ArrayList<String>) createMenuList(list);
-        int count = 1;
-        ArrayList<Authority> menuAuthList = new ArrayList<>();
-        Authority authority = null;
-        for(String menu : menuOrgList){
-            if(count==1) authority = new Authority();
-
-            if(menu.contains("MENU")){
-                authority.setMenuCd(menu);
-            }else if(menu.contains("노출")){
-                authority.setDisplayUseYn(menu.substring(0,1));
-            }else if(menu.contains("조회")){
-                authority.setAuthR(menu.substring(0,1));
-                authority.setAuthC(menu.substring(3,4));
-                authority.setAuthU(menu.substring(6,7));
-                authority.setAuthD(menu.substring(9,10));
-                authority.setAuthF(menu.substring(12,13));
-            }
-
-            if(count==5){
-                menuAuthList.add(authority);
-                count = 0;
-            }
-            count++;
-        }
-
-        int rowAffected = 0;
-        for(Authority auth : menuAuthList){
-            rowAffected= authorityMapper.updateExcelAuthority(auth);
-            if(rowAffected < 0) break;
-        }
-
-        HashMap<String,Object> map = new HashMap<>();
-        if(rowAffected < 0) {
-            map.put("result", "fail");
-        } else{
-            map.put("result", "success");
-        }
-
-        return map;
-    }
+//        ArrayList<ContractExcelVO> list = (ArrayList<ContractExcelVO>) excelUtil.readExcel(file.getStoragePath());
+//        ArrayList<String> menuOrgList = (ArrayList<String>) createMenuList(list);
+//        int count = 1;
+//        ArrayList<Authority> menuAuthList = new ArrayList<>();
+//        Authority authority = null;
+//        for(String menu : menuOrgList){
+//            if(count==1) authority = new Authority();
+//
+//            if(menu.contains("MENU")){
+//                authority.setMenuCd(menu);
+//            }else if(menu.contains("노출")){
+//                authority.setDisplayUseYn(menu.substring(0,1));
+//            }else if(menu.contains("조회")){
+//                authority.setAuthR(menu.substring(0,1));
+//                authority.setAuthC(menu.substring(3,4));
+//                authority.setAuthU(menu.substring(6,7));
+//                authority.setAuthD(menu.substring(9,10));
+//                authority.setAuthF(menu.substring(12,13));
+//            }
+//
+//            if(count==5){
+//                menuAuthList.add(authority);
+//                count = 0;
+//            }
+//            count++;
+//        }
+//
+//        int rowAffected = 0;
+//        for(Authority auth : menuAuthList){
+//            rowAffected= authorityMapper.updateExcelAuthority(auth);
+//            if(rowAffected < 0) break;
+//        }
+//
+//        HashMap<String,Object> map = new HashMap<>();
+//        if(rowAffected < 0) {
+//            map.put("result", "fail");
+//        } else{
+//            map.put("result", "success");
+//        }
+//
+//        return map;
+//    }
 
     /**
      * 엑셀 데이터에서 뽑아온 세부 메뉴 명 가져온다.
