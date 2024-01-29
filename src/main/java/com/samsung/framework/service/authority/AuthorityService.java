@@ -20,7 +20,4 @@ public interface AuthorityService {
 
     // 그룹 권한 저장
     Map<String, Object> saveGroupAuthority(List<Authority> list);
-    
-    // 엑셀 권한 변경
-    Map<String,Object> updAuthFile(FilePublicVO file, int memberSeq) throws IOException;
 }

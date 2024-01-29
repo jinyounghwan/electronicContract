@@ -8,7 +8,7 @@ import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.board.BoardPublic;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.service.board.BoardPublicServiceImpl;
-import com.samsung.framework.service.file.FilePublicServiceImpl;
+import com.samsung.framework.service.file.FileService;
 import com.samsung.framework.vo.board.BoardPublicVO;
 import com.samsung.framework.vo.board.BoardReplyVO;
 import com.samsung.framework.vo.common.SelectOptionVO;
@@ -34,7 +34,7 @@ import java.util.Map;
 public class BoardController {
 
     private final BoardPublicServiceImpl boardService;
-    private final FilePublicServiceImpl fileService;
+    private final FileService fileService;
     private final FileUtil fileUtil;
 
     // [검색옵션] 날짜

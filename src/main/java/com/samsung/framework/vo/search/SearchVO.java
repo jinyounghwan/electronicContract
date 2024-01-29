@@ -143,5 +143,16 @@ public class SearchVO {
         return list;
     }
 
+    /**
+     * 계약서 템플릿 관리 DropwdownList
+     * @return
+     */
+    public List<SearchVO> getTemplateSearchKeywordTypeOptionList() {
+        var list = new ArrayList<SearchVO>();
+        list.add(new SearchVO("TMPL1000","Employeement contract"));
+        list.add(new SearchVO("TMPL2000", "Salary contract"));
+        list.add(new SearchVO("TMPL3000","Privacy agreement"));
+        return list;
+    }
 
 }

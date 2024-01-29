@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.contract.documented.ContractCompletionMapper">
+    <sql id="search">
+        PROCESS_STATUS = 'PRCS1004'
+        OR PROCESS_STATUS = 'PRCS1005'
+        <if test="(startDt != null and startDt != '') and (endDt != null and endDt != '')">
+            <if test="searchDateType == 'ALL'">
+                AND (CREATED_AT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                OR UPDATED_AT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1)
+            </if>
+            <if test="searchDateType == 'CREATED_AT'">
+                AND CREATED_AT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+            </if>
+            <if test="searchDateType == 'UPDATED_AT'">
+                AND UPDATED_AT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+            </if>
+        </if>
+        <choose>
+            <when test="searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchKeywordType == 'NAME'">
+                        AND LOWER(NAME) LIKE LOWER(CONCAT('%', #{searchKeyword}, '%'))
+                    </when>
+                    <when test="searchKeywordType == 'EMPLOYEE_ID'">
+                        AND LOWER(EMP_NO) LIKE LOWER(CONCAT('%', #{searchKeyword}, '%')))
+                    </when>
+                    <when test="searchKeywordType == 'TITLE'">
+                        AND LOWER()
+                    </when>
+                    <when test="searchKeywordType == 'ALL'">
+                        AND
+                        (
+                                LOWER(NAME) LIKE LOWER(CONCAT('%', IFNULL(#{searchKeyword} , '%'))
+                            OR LOWER(EMP_NO) LIKE LOWER(CONCAT('%',IFNULL(#{searchKeyword}, '%'))
+                        )
+                    </when>
+                </choose>
+            </when>
+            <otherwise>
+                AND
+                (
+                        LOWER(NAME) LIKE LOWER(CONCAT('%', IFNULL(#{searchKeyword},'') , '%'))
+                    OR LOWER(EMP_NO) LIKE LOWER(CONCAT('%', IFNULL(#{searchKeyword},'') , '%'))
+                )
+            </otherwise>
+        </choose>
+    </sql>
+
+    <insert id="paperContractSave" parameterType="ContractCompVO">
+        INSERT INTO CONTRACTS (EMP_NO, TEMPLATE_SEQ,
+                               DEPT_CODE,PROCESS_STATUS,
+                               DOC_STATUS,CONTRACT_BODY,
+                               SIGNATURE_DATA_NO,VALIDATION,
+                               AGREE_YN,DEL_YN,
+                               CREATED_BY,CREATED_AT,
+                               UPDATED_BY,UPDATED_AT
+                               )
+
+        VALUES (#{empNo}, #{templateSeq},
+                #{deptCode}, #{processStatus},
+                #{docStatus}, #{contractBody},
+                #{signatureDataNo},#{validation},
+                #{agreeYn},#{delYn},
+                #{createdBy},sysdate(),
+                #{updatedBy},sysdate()
+                )
+    </insert>
+
+    <select id="getTemplateSeq" parameterType="ContractCompVO" resultType="Integer">
+        SELECT TEMPLATE_SEQ
+        FROM CONTRACT_TEMPLATE
+        WHERE TEMPLATE_TYPE = #{processStatus}
+    </select>
+
+    <select id="getContractCompTotal">
+        SELECT COUNT(1)
+        FROM CONTRACTS
+        WHERE
+        <include refid="search"/>
+    </select>
+
+    <select id="getContractCompList">
+        SELECT CT.TEMPLATE_TITLE AS TEMPLATE_TITLE, C.CONTRACT_NO AS CONTRACT_NO,
+               C.EMP_NO AS EMP_NO, C.TEMPLATE_SEQ AS TEMPLATE_SEQ,
+               C.PROCESS_STATUS AS PROCESS_STATUS, C.DOC_STATUS AS DOC_STATUS,
+               C.NAME AS NAME , C.CREATED_AT AS CREATED_AT
+        FROM CONTRACTS C
+        INNER JOIN  CONTRACT_TEMPLATE CT ON C.TEMPLATE_SEQ = CT.TEMPLATE_SEQ
+        WHERE
+        <include refid="search"/>
+    </select>
+</mapper>

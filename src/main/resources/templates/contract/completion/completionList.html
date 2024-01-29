@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="ko">
+<th:block layout:fragment="content">
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--content-->
+            <div class="container-fluid">
+                <h1 class="page-title">완료 계약서</h1>
+                <div th:replace="~{common/contractSignCompletedSearch}"></div>
+                <div class="card shadow mb-4">
+                    <!--<div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
+                    </div>-->
+                    <div class="datatable-top">
+                        <div class="left"><p th:text="${totalCount}+ 'items'"></p></div>
+                        <div class="left datatable-dropdown">
+                            <label>
+                                <select class="datatable-selector">
+                                    <option value="5">5</option>
+                                    <option value="10" selected="">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="25">25</option></select>
+                            </label>
+                        </div>
+                        <div class="right data-btn-area">
+                            <button class="btn btn-outline-primary" type="button">Paper Contract Upload</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th class="data-check"><input class="form-check-input" type="checkbox"></th>
+                                    <th>Contract<br>Issuance No.</th>
+                                    <th>Template Title</th>
+                                    <th>Contract Title (EN)</th>
+                                    <th>Name</th>
+                                    <th>employee ID</th>
+                                    <th>Created</th>
+                                    <th>Assigned</th>
+                                    <th>Doc. Status</th>
+                                    <th>Contract Status</th>
+                                    <th>Action</th>
+
+                                </tr>
+                                </thead>
+
+                                <tbody id="contractList">
+                                <input type="hidden" name="totalCount" id="totalCount" th:value="${totalCount}">
+                                <tr th:if="${not #lists.isEmpty(list)}" th:each="row, stat : ${list}">
+                                    <th class="data-check"><input class="form-check-input" type="checkbox"></th>
+                                    <td th:text="${row.getContractNo}"></td>
+                                    <td th:text="${row.getTemplateTitle}"></td>
+                                    <td th:text="${row.getContractTitleEn}"></td>
+                                    <td th:text="${row.getName}"</td>
+                                    <td th:text="${row.empNo}"</td>
+                                    <td th:text="${row.createdAt}"</td>
+                                    <td>-</td>
+                                    <td th:text="${row.docStatus}"></td>
+                                    <td th:text="${row.processStatus}"></td>
+                                    <td><a th:href="@{/contract/sign/comp/detail/{contractNo}(contractNo=${row.getContractNo()})}" >View</a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--pagination-->
+                        <div th:replace="~{common/pagination}"></div>
+                    </div>
+                </div>
+            </div>
+            <!--contents-->
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(function(){
+            /*리스트 조회 호출 */
+            getList();
+        });
+
+        function getList(param){
+            let search;
+            if(typeof param == 'undefined'){
+                // 첫 호출 일 때
+                search = setData();
+            } else {
+                search = param;
+            }
+            $.ajax({
+                url: '/contract/sign/comp/list',
+                type: 'post',
+                dataType:'text',
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(search)
+            })
+                .done(function(data){
+                    $('#content-wrapper').replaceWith(data);
+                })
+                .fail(function(jqXHR){
+                    console.log(jqXHR);
+                });
+        }
+    </script>
+</th:block>
+</html>

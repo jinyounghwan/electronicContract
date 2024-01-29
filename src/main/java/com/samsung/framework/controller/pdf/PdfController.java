@@ -2,11 +2,12 @@ package com.samsung.framework.controller.pdf;
 
 
 import com.samsung.framework.common.utils.StringUtil;
-import com.samsung.framework.service.file.FilePublicServiceImpl;
+import com.samsung.framework.service.file.FileService;
 import com.samsung.framework.service.pdf.PdfService;
 import com.samsung.framework.vo.file.FilePublicVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class PdfController {
     @Autowired
     PdfService pdfService;
     @Autowired
-    FilePublicServiceImpl fileService;
+    FileService fileService;
     @PostMapping("/upload")
     public ResponseEntity upload(@RequestBody Map<String,Object> param, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String html = StringUtil.getString(param.get("html"));
@@ -39,8 +40,8 @@ public class PdfController {
         fileList.add(file);
 
         // db에 save 저장
-        List<FilePublicVO> saveList = fileService.saveFile(fileList);
+//        List<FilePublicVO> saveList = fileService.saveFile(fileList);
 
-        return new ResponseEntity(saveList, HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

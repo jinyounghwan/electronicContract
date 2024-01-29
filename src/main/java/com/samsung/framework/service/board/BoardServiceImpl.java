@@ -6,9 +6,9 @@ import com.samsung.framework.common.utils.ObjectHandlingUtil;
 import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.board.Board;
 import com.samsung.framework.domain.common.Paging;
+import com.samsung.framework.service.file.FileService;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.mapper.board.BoardMapper;
-import com.samsung.framework.service.file.FilePublicServiceImpl;
 import com.samsung.framework.vo.board.BoardPublicVO;
 import com.samsung.framework.vo.board.BoardVO;
 import com.samsung.framework.vo.file.FilePublicVO;
@@ -25,7 +25,7 @@ import java.util.List;
 @Service
 public class BoardServiceImpl implements BoardService {
 
-    private final FilePublicServiceImpl fileService;
+    private final FileService fileService;
 
     private final BoardMapper boardMapper;
 
@@ -58,7 +58,7 @@ public class BoardServiceImpl implements BoardService {
 
         //파일 저장
         if(StringUtil.isNotEmpty(files)) {
-            fileService.saveFile(files);
+//            fileService.saveFile(files);
         }
 
         return iAffectedRows;

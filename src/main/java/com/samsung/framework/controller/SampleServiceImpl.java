@@ -2,9 +2,12 @@ package com.samsung.framework.controller;
 
 import com.samsung.framework.common.utils.FileUtil;
 import com.samsung.framework.mapper.sample.SampleMapper;
-import com.samsung.framework.service.file.FilePublicServiceImpl;
+import com.samsung.framework.service.file.FileService;
+import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.search.SearchVO;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +25,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SampleServiceImpl implements SampleService {
     private final SampleMapper sampleMapper;
-    @Autowired
-    private FilePublicServiceImpl filePublicService;
+
+    private FileService fileService;
 
     @Override
     public SampleVO getSample() {
@@ -39,8 +42,9 @@ public class SampleServiceImpl implements SampleService {
     @Override
     public Map<String, Object> saveSignatur(List<MultipartFile> files) {
         try {
-            List<FilePublicVO> filePublicVOList =  filePublicService.uploadFile(files);
-            filePublicService.saveFile(filePublicVOList);
+            List<FilePublicVO> filePublicVOList =  fileService.uploadFile(files);
+
+            fileService.saveFile(filePublicVOList, "");
              filePublicVOList.forEach(data ->log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+data+""));
         } catch (Exception e) {
             throw new RuntimeException(e);
