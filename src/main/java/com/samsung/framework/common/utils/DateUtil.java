@@ -6,15 +6,9 @@ import org.springframework.stereotype.Component;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * 날짜 유틸
@@ -334,6 +328,19 @@ public class DateUtil {
     }
 
     /**
+     * 문자열 날짜 변경 포맷
+     * @param str {@link String}
+     * @param pattern {@link String}
+     * @return LocalDateTime {@link LocalDateTime}
+     */
+    public static LocalDateTime convertStringToLocalDateTime(String str, String pattern){
+        if(str==null){
+            return null;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+        return LocalDateTime.parse(str, formatter);
+    }
+    /**
      * 초 => 분초 포맷으로 변경
      * @param target
      * @return String
@@ -366,5 +373,18 @@ public class DateUtil {
         long sec = (date1.getTime() - date2.getTime());
         log.info("second Time"+sec);
         return sec;
+    }
+
+    /**
+     * yyyy-mm-dd 형식 날짜 String -> En 날짜로 변경
+     * @param date {@link String}
+     * @return String
+     */
+    public static String getStrContractDateEn(String date){
+        StringTokenizer st =new StringTokenizer(date, "-");
+        String year = st.nextToken();
+        String month = st.nextToken();
+        String day = st.nextToken();
+        return month+'/'+day+'/'+year;
     }
 }
