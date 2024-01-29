@@ -3,6 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}" lang="ko">
 <th:block layout:fragment="content">
+    <div th:replace="~{common/alert}"></div>
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 <!--content-->
@@ -28,7 +29,7 @@
                             <div class="left"><p th:text="${totalCount} + ' items'" ></p></div>
                             <div class="right data-btn-area">
                                 <button class="btn btn-outline-secondary" type="button" onclick="recall()">Checked item as Recall</button>
-                                <button class="btn btn-outline-primary" type="button">Checked item as Assign</button>
+                                <button class="btn btn-outline-primary" type="button" onclick="assign()">Checked item as Assign</button>
                                 <button class="btn btn-outline-primary" type="button">Contract Create</button>
                             </div>
                         </div>
@@ -76,8 +77,8 @@
                                             <td th:text="${item.createdAt}"></td>
                                             <td th:text="${item.signatureDataNo}"></td>
                                             <td th:text="${item.docStatus}"></td>
-                                            <td th:text="${item.processStep}"></td>
-                                            <td><a href="#" >View</a></td>
+                                            <td th:text="${item.processStatus}"></td>
+                                            <td><a th:href="@{/contract/progress/info/{seq}(seq=${item.contractNo})}" >View</a></td>
                                         </tr>
                                         <tr th:if="${#lists.isEmpty(list)}">
                                             <td colspan="9" th:text="|데이터가 없습니다.|"></td>
@@ -123,13 +124,14 @@
 
             /*checked item as Recall */
             function recall(){
-                let checked = [];
-                $('[data-select="check"]:checked').each(function(index ,item ){
-                    let vo = {};
-                    let value = $(item).val();
-                    vo.contractNo = value;
-                    checked.push(vo);
-                });
+                let checked = checkedArr();
+                if(checked.length > 0){
+                    openAlert('Are you sure you want to Recall?' , 'updateRecall');
+                }
+            }
+            /*recall update*/
+            function updateRecall(){
+                let checked = checkedArr();
                 $.ajax({
                     url: '/contract/progress/recall',
                     type: 'post',
@@ -140,6 +142,34 @@
                     var result = JSON.parse(data);
                     if(result.code == 200){
                         //성공 할 때
+                        closeAlert(); // alert 닫기
+                        getList();
+                    }
+                }).fail(function(jqXHR) {
+                    console.log(jqXHR);
+                });
+            }
+            /* assign */
+            function assign(){
+                let checked = checkedArr();
+                if(checked.length > 0){
+                    openAlert('Are you sure you want to Assign?','updateAssign');
+                }
+            }
+            /*assign update*/
+            function updateAssign(){
+                let checked = checkedArr();
+                $.ajax({
+                    url: '/contract/progress/assign',
+                    type: 'post',
+                    dataType: 'text',
+                    contentType: 'application/json; charset=UTF-8',
+                    data: JSON.stringify(checked)
+                }).done(function(data) {
+                    var result = JSON.parse(data);
+                    if(result.code == 200){
+                        //성공 할 때
+                        closeAlert(); // alert 닫기
                         getList();
                     }
                 }).fail(function(jqXHR) {
@@ -147,6 +177,16 @@
                 });
             }
 
+            function checkedArr(){
+                let checked = [];
+                $('[data-select="check"]:checked').each(function(index ,item ){
+                    let vo = {};
+                    let value = $(item).val();
+                    vo.contractNo = value;
+                    checked.push(vo);
+                });
+                return checked;
+            }
         </script>
     </th:block>
 </html>

@@ -80,7 +80,12 @@ let valid = (_$selector) =>{
 function isArray(O) {
     return _toString.call(O) == "[object Array]";
 }
-
+/**
+* 오브젝트가  undefined , null , "" 인지 판단합니다.
+*/
+function isEmpty(O) {
+  return typeof O === "undefined" || O === null || O === "";
+}
 function privateValid(_$selector) {
     let $this = $(this);
     let tag = $this.prop('tagName').toLowerCase();
@@ -161,5 +166,28 @@ let allCheckBox = (_$) => {
         $('[data-select="check"]').prop('checked' , true);
     }else{
         $('[data-select="check"]').prop('checked' , false);
+    }
+}
+/*
+    alert call
+*/
+let type;
+let openAlert = (text, _type) => {
+    $('[data-target="modal"]').attr('style' , 'display:block');
+    $('[data-target="background"]').attr('class' , 'modal-backdrop');
+    $('[data-select="alertText"]').text(text);
+    type = _type;
+}
+let closeAlert = () => {
+    $('[data-target="modal"]').attr('style' , 'display:none');
+    $('[data-target="background"]').removeAttr('class');
+    $('[data-select="alertText"]').text('');
+    type = '';
+}
+let updateOk = () =>{
+    switch(type){
+        case 'updateAssign' : updateAssign(); break;
+        case 'updateRecall' :updateRecall(); break;
+        default: return false;
     }
 }

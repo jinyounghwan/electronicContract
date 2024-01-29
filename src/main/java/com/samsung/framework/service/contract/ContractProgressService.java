@@ -27,16 +27,30 @@ public class ContractProgressService {
     public List<ContractVO> getContractProgressList(SearchVO searchVO) {
         List<ContractVO> list = contractProgressMapper.getContractProgressList(searchVO);
         list.forEach(e -> {e.setDocStatus(ContractProcessEnum.getProcessStatus(e.getDocStatus()));
+            e.setProcessStatus(ContractProcessEnum.getProcessStatus(e.getProcessStatus()));
         });
         return list;
     }
 
     public ResultStatusVO updateContractRecall(List<ProgressRequest> progressRequest) {
         progressRequest.forEach(el -> el.setDocStatus(ContractProcessEnum.processCode(ContractProcessEnum.RECALLED)));
-        int result = contractProgressMapper.updateContractRecall(progressRequest);
+        int result = contractProgressMapper.updateContractDocStatus(progressRequest);
         if(result == 0 ){
             return new ResultStatusVO(ResultCodeMsgEnum.UPDATE_DATA_FAIL.getCode(), ResultCodeMsgEnum.UPDATE_DATA_FAIL.getMsg());
         }
         return new ResultStatusVO();
+    }
+
+    public ResultStatusVO updateContractAssign(List<ProgressRequest> list) {
+        list.forEach(el -> el.setDocStatus(ContractProcessEnum.processCode(ContractProcessEnum.ASSIGNED)));
+        int result = contractProgressMapper.updateContractDocStatus(list);
+        if(result == 0 ){
+            return new ResultStatusVO(ResultCodeMsgEnum.UPDATE_DATA_FAIL.getCode(), ResultCodeMsgEnum.UPDATE_DATA_FAIL.getMsg());
+        }
+        return new ResultStatusVO();
+    }
+
+    public ContractVO getContractProgressInfo(String seq) {
+        return contractProgressMapper.getContractProgressInfo(seq);
     }
 }

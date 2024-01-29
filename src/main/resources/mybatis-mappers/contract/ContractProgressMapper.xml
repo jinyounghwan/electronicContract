@@ -81,7 +81,7 @@
             <include refid="whereClause"/>
     </select>
 
-    <update id="updateContractRecall" parameterType="java.util.List">
+    <update id="updateContractDocStatus" parameterType="java.util.List">
         <if test="@com.samsung.framework.common.utils.StringUtil@isNotEmpty(list)">
             <foreach collection="list" item="item" separator=";" close=";">
                 update contracts
@@ -90,4 +90,29 @@
             </foreach>
         </if>
     </update>
+
+    <select id="getContractProgressInfo" parameterType="String" resultType="ContractVO">
+           SELECT c.contract_no
+                , c.emp_no
+                , c.template_seq
+                , c.doc_status
+                , c.process_status
+                , c.signature_data_no
+                , c.validation
+                , c.agree_yn
+                , c.del_yn
+                , c.created_by
+                , c.created_at
+                , c.updated_by
+                , c.updated_at
+                , ct.template_title
+                , u.name
+                , c.sign_date
+             from contracts c
+             join contract_template ct
+               on c.template_seq = ct.template_seq
+             join users u
+               on c.emp_no = u.emp_no
+            where c.contract_no = #{seq}
+    </select>
 </mapper>

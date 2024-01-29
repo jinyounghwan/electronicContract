@@ -63,7 +63,7 @@ public class ContractProgressController {
         model.addAttribute("list" , new ArrayList<>());
         model.addAttribute("search" , new SearchVO());
         model.addAttribute("totalCount" ,contractProgressService.getContractProgressTotal(null));
-        return "contract/contractProgress-list";
+        return "contract/progress/list";
     }
 
     @PostMapping(value = "/list")
@@ -74,7 +74,6 @@ public class ContractProgressController {
                 .totalCount(searchVO.getPaging().getTotalCount())
                 .build();
         searchVO.setPaging(pagingVo);
-        log.info("1==================================> :{}" ,searchVO.toString());
         // total
         int totalCount = contractProgressService.getContractProgressTotal(searchVO);
         model.addAttribute("totalCount", totalCount);
@@ -85,16 +84,25 @@ public class ContractProgressController {
         List<ContractVO> list = contractProgressService.getContractProgressList(searchVO);
         model.addAttribute("list",list);
         model.addAttribute("search" , searchVO);
-        log.info("==================================> :{}" ,searchVO.toString());
-        return "contract/contractProgress-list :: #content";
+        return "contract/progress/list :: #content";
     }
 
     @PostMapping(value="/recall")
     @ResponseBody
     public ResponseEntity updateContractRecall(@RequestBody List<ProgressRequest> list){
-        log.info("==============================> :{}" , list.toString());
         ResultStatusVO resultStatusVO = contractProgressService.updateContractRecall(list);
         return  ResponseEntity.ok(resultStatusVO);
+    }
+    @PostMapping(value="/assign")
+    @ResponseBody
+    public ResponseEntity updateContractAssign(@RequestBody List<ProgressRequest> list){
+        ResultStatusVO resultStatusVO = contractProgressService.updateContractAssign(list);
+        return  ResponseEntity.ok(resultStatusVO);
+    }
+    @GetMapping(value="/info/{seq}")
+    public String getContractProgressInfo(Model model ,@PathVariable String seq){
+        model.addAttribute("info",contractProgressService.getContractProgressInfo(seq));
+        return "contract/progress/view";
     }
 
 }

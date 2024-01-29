@@ -13,5 +13,7 @@ public interface ContractProgressMapper {
 
     List<ContractVO> getContractProgressList(SearchVO searchVO);
 
-    int updateContractRecall(List<ProgressRequest> progressRequest);
+    int updateContractDocStatus(List<ProgressRequest> progressRequest);
+
+    ContractVO getContractProgressInfo(String seq);
 }
