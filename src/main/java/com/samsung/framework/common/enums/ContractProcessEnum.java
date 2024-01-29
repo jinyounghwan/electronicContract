@@ -41,4 +41,12 @@ public enum ContractProcessEnum {
     public static String processCode(ContractProcessEnum key) {
         return key.getPrefix() + key.getParentCode() + key.getDepth1();
     }
+    public static String getProcessStatus(String target){
+        for (ContractProcessEnum item : ContractProcessEnum.values()){
+            if(target.equals(item.getPrefix()+item.getParentCode()+item.getDepth1())){
+                return item.toString();
+            }
+        }
+        return new String();
+    }
 }

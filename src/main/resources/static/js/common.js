@@ -152,3 +152,14 @@ function getValidMessage(_$, _type) {
         return alertMessage ? alertMessage : label + '은(는) ' + maxlength + '자를 초과할 수 없습니다.';
     }
 }
+/*
+    전체 체크
+*/
+let allCheckBox = (_$) => {
+    let checked = $(_$).is(':checked');
+    if(checked){
+        $('[data-select="check"]').prop('checked' , true);
+    }else{
+        $('[data-select="check"]').prop('checked' , false);
+    }
+}

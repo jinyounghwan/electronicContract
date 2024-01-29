@@ -4,10 +4,7 @@ import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.vo.search.board.BoardSearchVO;
 import com.samsung.framework.vo.search.code.CodeSearchVO;
 import com.samsung.framework.vo.search.menu.MenuSearchVO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,6 +17,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchVO {
@@ -119,7 +117,10 @@ public class SearchVO {
         list.add(new SearchVO("PAPER_CONTRACT","수기 계약서"));
         return list;
     }
-
+    /**
+     * contract Status Dropdown리스트
+     * @return
+     */
     public List<SearchVO> getContractSearchStateTypeList() {
         var list = new ArrayList<SearchVO>();
         list.add(new SearchVO("ALL","전체"));

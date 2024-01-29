@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}" lang="ko">
-    <th:block layout:fragment="content">
+<th:block layout:fragment="content">
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 <!--content-->
@@ -27,7 +27,7 @@
                             </div>
                             <div class="left"><p th:text="${totalCount} + ' items'" ></p></div>
                             <div class="right data-btn-area">
-                                <button class="btn btn-outline-secondary" type="button">Checked item as Recall</button>
+                                <button class="btn btn-outline-secondary" type="button" onclick="recall()">Checked item as Recall</button>
                                 <button class="btn btn-outline-primary" type="button">Checked item as Assign</button>
                                 <button class="btn btn-outline-primary" type="button">Contract Create</button>
                             </div>
@@ -37,7 +37,7 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                     <tr>
-                                        <th class="data-check"><input class="form-check-input" type="checkbox"></th>
+                                        <th class="data-check"><input class="form-check-input" type="checkbox" onclick="allCheckBox(this)"></th>
                                         <th>Contract<br>Issuance No.</th>
                                         <th>Template Title</th>
                                         <th>Contract Title (EN)</th>
@@ -52,7 +52,8 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
+                                        <input type="hidden" name="totalCount" id="totalCount" th:value="${totalCount}">
+                                   <!-- <tr>
                                         <td class="data-check"><input class="form-check-input" type="checkbox"></td>
                                         <td>00000022</td>
                                         <td>2024년 경력직 근로 계약서</td>
@@ -64,7 +65,23 @@
                                         <td>Created</td>
                                         <td>Unseen</td>
                                         <td><a href="#" >View</a></td>
-                                    </tr>
+                                    </tr>-->
+                                        <tr th:if="${not #lists.isEmpty(list)}" th:each="item, stat : ${list}">
+                                            <td class="data-check"><input class="form-check-input" type="checkbox" th:value="${item.contractNo}" data-select="check"></td>
+                                            <td th:text="${item.contractNo}"></td>
+                                            <td th:text="${item.templateTitle}"></td>
+                                            <td th:text="${item.templateTitle}"></td>
+                                            <td th:text="${item.name}"></td>
+                                            <td th:text="${item.empNo}"></td>
+                                            <td th:text="${item.createdAt}"></td>
+                                            <td th:text="${item.signatureDataNo}"></td>
+                                            <td th:text="${item.docStatus}"></td>
+                                            <td th:text="${item.processStep}"></td>
+                                            <td><a href="#" >View</a></td>
+                                        </tr>
+                                        <tr th:if="${#lists.isEmpty(list)}">
+                                            <td colspan="9" th:text="|데이터가 없습니다.|"></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -76,5 +93,60 @@
                 <!--contents-->
             </div>
         </div>
+    </th:block>
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+            $(function(){
+                /*리스트 조회 호출 */
+                getList();
+            });
+            function getList(param){
+                let search;
+                if(typeof param =='undefined' ){
+                    // 첫 호출 일 때
+                    search = setData();
+                }else{
+                    search = param;
+                }
+                $.ajax({
+                    url: '/contract/progress/list',
+                    type: 'post',
+                    dataType: 'text',
+                    contentType: 'application/json; charset=UTF-8',
+                    data: JSON.stringify(search)
+                }).done(function(data) {
+                   $('#content').replaceWith(data);
+                }).fail(function(jqXHR) {
+                    console.log(jqXHR);
+                });
+            }
+
+            /*checked item as Recall */
+            function recall(){
+                let checked = [];
+                $('[data-select="check"]:checked').each(function(index ,item ){
+                    let vo = {};
+                    let value = $(item).val();
+                    vo.contractNo = value;
+                    checked.push(vo);
+                });
+                $.ajax({
+                    url: '/contract/progress/recall',
+                    type: 'post',
+                    dataType: 'text',
+                    contentType: 'application/json; charset=UTF-8',
+                    data: JSON.stringify(checked)
+                }).done(function(data) {
+                    var result = JSON.parse(data);
+                    if(result.code == 200){
+                        //성공 할 때
+                        getList();
+                    }
+                }).fail(function(jqXHR) {
+                    console.log(jqXHR);
+                });
+            }
+
+        </script>
     </th:block>
 </html>

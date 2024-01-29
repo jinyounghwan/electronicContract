@@ -1,11 +1,14 @@
 package com.samsung.framework.controller.contract;
 
 import com.samsung.framework.domain.common.Paging;
+import com.samsung.framework.domain.contract.ProgressRequest;
 import com.samsung.framework.service.contract.ContractProgressService;
+import com.samsung.framework.vo.common.ResultStatusVO;
 import com.samsung.framework.vo.contract.creation.ContractVO;
 import com.samsung.framework.vo.search.SearchVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -71,6 +74,7 @@ public class ContractProgressController {
                 .totalCount(searchVO.getPaging().getTotalCount())
                 .build();
         searchVO.setPaging(pagingVo);
+        log.info("1==================================> :{}" ,searchVO.toString());
         // total
         int totalCount = contractProgressService.getContractProgressTotal(searchVO);
         model.addAttribute("totalCount", totalCount);
@@ -78,13 +82,19 @@ public class ContractProgressController {
         model.addAttribute("paging",pagingVo);
 
         // list
-        List<ContractVO> list = contractProgressService.getContractProgresList(searchVO);
+        List<ContractVO> list = contractProgressService.getContractProgressList(searchVO);
         model.addAttribute("list",list);
         model.addAttribute("search" , searchVO);
-        return "contract/template/list :: #content";
+        log.info("==================================> :{}" ,searchVO.toString());
+        return "contract/contractProgress-list :: #content";
     }
 
-
-
+    @PostMapping(value="/recall")
+    @ResponseBody
+    public ResponseEntity updateContractRecall(@RequestBody List<ProgressRequest> list){
+        log.info("==============================> :{}" , list.toString());
+        ResultStatusVO resultStatusVO = contractProgressService.updateContractRecall(list);
+        return  ResponseEntity.ok(resultStatusVO);
+    }
 
 }
