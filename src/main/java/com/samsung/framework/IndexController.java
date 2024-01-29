@@ -68,13 +68,6 @@ public class IndexController {
         return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
-    @PostMapping("/html-test")
-    @ResponseBody
-    public ResponseEntity htmlTest(@RequestBody Record record) {
-        log.info("record.getHtmlStr(): {}", record.getHtmlStr());
-        return ResponseEntity.ok(record.getHtmlStr());
-    }
-
     @PostMapping("/contract-variable-replacement-test")
     public ResponseEntity variableReplacement() {
 

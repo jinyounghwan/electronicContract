@@ -39,7 +39,7 @@ public class VariableHandlingUtil {
                 case SALARY_EN -> contents = contents.replaceAll(Pattern.quote(var.getKey()), target.getSalaryEn());
                 case WAGE_TYPE_EN -> contents = contents.replaceAll(Pattern.quote(var.getKey()), target.getWageTypeEn());
                 case WAGE_TYPE_HU -> contents = contents.replaceAll(Pattern.quote(var.getKey()), target.getWageTypeHu());
-            };
+            }
         }
 
 //        log.info("REPLACED ###### \n {}", contents);
