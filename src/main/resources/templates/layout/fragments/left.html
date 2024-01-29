@@ -75,7 +75,6 @@
                 let menuCode = data.pmenuCode.substr(4);
                 // 부모 ID
                 let parentId = codeMap.get(menuCode);
-                console.log(parentId);
                 let parentElement = document.getElementById(parentId);
                 let url = data.path;
                 parentElement.innerHTML +=`<a class="collapse-item" href='${url}' id= ${realCodeCd}>${data.name}</a>`;
