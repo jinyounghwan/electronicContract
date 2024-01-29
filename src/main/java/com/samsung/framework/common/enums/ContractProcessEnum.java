@@ -3,6 +3,10 @@ package com.samsung.framework.common.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @AllArgsConstructor
 @Getter
 public enum ContractProcessEnum {
@@ -41,6 +45,12 @@ public enum ContractProcessEnum {
     public static String processCode(ContractProcessEnum key) {
         return key.getPrefix() + key.getParentCode() + key.getDepth1();
     }
+
+    /**
+     * 계약서 진행 상태 문자 반환
+     * @param target
+     * @return
+     */
     public static String getProcessStatus(String target){
         for (ContractProcessEnum item : ContractProcessEnum.values()){
             if(target.equals(item.getPrefix()+item.getParentCode()+item.getDepth1())){

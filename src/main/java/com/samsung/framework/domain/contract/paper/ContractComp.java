@@ -1,23 +1,35 @@
 package com.samsung.framework.domain.contract.paper;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter
-@NoArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@Builder
 public class ContractComp {
     private long contractNo;
     @NotNull(message = "사번은 필수 값 입니다.")
     private int empNo;
     private int templateSeq;
     private String deptCode;
-    private String processStep;
-    private String contractBody;
+    private String docStatus;
+    private String processStatus;
+    private String name;
+    private String hireDateHu;
+    private String hireDateEn;
+    private String contractDateHu;
+    private String contractDateEn;
+    private String jobTitleHu;
+    private String jobTitleEn;
+    private int salaryNo;
+    private String salaryHu;
+    private String salaryEn;
+    private String wageTypeHu;
+    private String wageTypeEn;
     private String signatureDataNo;
+    private LocalDateTime signDate;
     private String validation;
     private String agreeYn;
     private String delYn;
@@ -25,24 +37,4 @@ public class ContractComp {
     private LocalDateTime createdAt;
     private String updatedBy;
     private LocalDateTime updatedAt;
-
-    @Builder
-    public ContractComp(long contractNo, int empNo, int templateSeq, String deptCode, String processStep
-            , String contractBody, String signatureDataNo, String validation, String agreeYn, String delYn, String createdBy, LocalDateTime createdAt, String updatedBy, LocalDateTime updatedAt){
-        this.contractNo = contractNo;
-        this.empNo = empNo;
-        this.templateSeq = templateSeq;
-        this.deptCode = deptCode;
-        this.processStep = processStep;
-        this.contractBody = contractBody;
-        this.signatureDataNo = signatureDataNo;
-        this.validation = validation;
-        this.agreeYn = agreeYn;
-        this.delYn = delYn;
-        this.createdBy = createdBy;
-        this.createdAt = createdAt;
-        this.updatedBy = updatedBy;
-        this.updatedAt = updatedAt;
-    }
-
 }

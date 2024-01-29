@@ -4,8 +4,8 @@
 
 <mapper namespace="com.samsung.framework.mapper.contract.documented.ContractCompletionMapper">
     <sql id="search">
-        PROCESS_STATUS = 'PRCS1004'
-        OR PROCESS_STATUS = 'PRCS1005'
+        DOC_STATUS = 'PRCS1004'
+        OR DOC_STATUS = 'PRCS1005'
         <if test="(startDt != null and startDt != '') and (endDt != null and endDt != '')">
             <if test="searchDateType == 'ALL'">
                 AND (CREATED_AT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
@@ -49,24 +49,50 @@
         </choose>
     </sql>
 
-    <insert id="paperContractSave" parameterType="ContractCompVO">
+    <insert id="paperContractSave">
         INSERT INTO CONTRACTS (EMP_NO, TEMPLATE_SEQ,
                                DEPT_CODE,PROCESS_STATUS,
-                               DOC_STATUS,CONTRACT_BODY,
-                               SIGNATURE_DATA_NO,VALIDATION,
-                               AGREE_YN,DEL_YN,
-                               CREATED_BY,CREATED_AT,
-                               UPDATED_BY,UPDATED_AT
+                               DOC_STATUS,SIGNATURE_DATA_NO,
+                               VALIDATION,AGREE_YN,
+                               DEL_YN,CREATED_BY,
+                               CREATED_AT,UPDATED_BY,
+                               UPDATED_AT,SIGN_DATE,
+                               NAME , HIRE_DATE_HU,
+                               HIRE_DATE_EN, CONTRACT_DATE_HU,
+                               CONTRACT_DATE_EN
                                )
-
         VALUES (#{empNo}, #{templateSeq},
                 #{deptCode}, #{processStatus},
-                #{docStatus}, #{contractBody},
-                #{signatureDataNo},#{validation},
-                #{agreeYn},#{delYn},
-                #{createdBy},sysdate(),
-                #{updatedBy},sysdate()
+                #{docStatus},#{signatureDataNo},
+                #{validation},#{agreeYn},
+                #{delYn},#{createdBy},
+                sysdate(),#{updatedBy},
+                sysdate(),sysdate(),
+                #{name}, #{hireDateHu},
+                #{hireDateEn}, #{contractDateHu},
+                #{contractDateEn}
                 )
+    </insert >
+
+    <insert id="contractCompSave">
+        INSERT INTO CONTRACTS(
+                              TEMPLATE_SEQ, CONTRACT_TITLE_EN,
+                              CONTRACT_TITLE_HU, CONTENTS_EN,
+                              CONTENTS_HU, EMPLOYER_INFO_EN,
+                              EMPLOYER_INFO_HU, EMPLOYEE_INFO_EN,
+                              EMPLOYEE_INFO_HU, CREATED_BY,
+                              CRETAED_AT,UPDATED_BY,
+                              UPDATED_AT
+                              )
+        VALUES(
+               #{templateSeq}, #{contractTitleEn},
+               #{contractTitleHu}, #{contentsEn},
+               #{contentsHu}, #{employerInfoEn},
+               #{employerInfoHu}, #{employeeInfoEn},
+               #{employeeInfoHu}, #{createdBy},
+               #{createdAt}, #{updatedBy},
+               #{updatedAt}
+               )
     </insert>
 
     <select id="getTemplateSeq" parameterType="ContractCompVO" resultType="Integer">
@@ -86,10 +112,27 @@
         SELECT CT.TEMPLATE_TITLE AS TEMPLATE_TITLE, C.CONTRACT_NO AS CONTRACT_NO,
                C.EMP_NO AS EMP_NO, C.TEMPLATE_SEQ AS TEMPLATE_SEQ,
                C.PROCESS_STATUS AS PROCESS_STATUS, C.DOC_STATUS AS DOC_STATUS,
-               C.NAME AS NAME , C.CREATED_AT AS CREATED_AT
+               C.NAME AS NAME , C.CREATED_AT AS CREATED_AT,
+               C.SIGN_DATE AS SIGN_DATE , CTD.CONTRACT_TITLE_EN AS CONTRACT_TITLE_EN
         FROM CONTRACTS C
         INNER JOIN  CONTRACT_TEMPLATE CT ON C.TEMPLATE_SEQ = CT.TEMPLATE_SEQ
+        INNER JOIN CONTRACT_TEMPLATE_DETAILS CTD ON C.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
         WHERE
         <include refid="search"/>
+        LIMIT #{paging.displayRow} OFFSET #{paging.offset}
+    </select>
+
+    <select id="getContractCompDetail">
+        SELECT C.CONTRACT_NO AS CONTRACT_NO, CT.TEMPLATE_SEQ AS TEMPLATE_SEQ,
+               C.CREATED_BY AS CREATED_BY, C.DOC_STATUS AS DOC_STATUS,
+               C.NAME AS NAME,(SELECT U.NAME FROM USERS U WHERE C.EMP_NO = U.EMP_NO) AS USER_NAME,
+               C.EMP_NO AS EMP_NO , CT.TEMPLATE_TITLE AS TEMPLATE_TITLE,
+               C.CREATED_AT AS CREATED_AT , C.PROCESS_STATUS AS PROCESS_STATUS,
+               C.SIGN_DATE AS SIGN_DATE , CTD.CONTRACT_TITLE_EN AS CONTRACT_TITLE_EN
+        FROM CONTRACTS C
+        INNER JOIN CONTRACT_TEMPLATE CT ON C.TEMPLATE_SEQ = CT.TEMPLATE_SEQ
+        INNER JOIN CONTRACT_TEMPLATE_DETAILS CTD ON C.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
+        WHERE
+            C.CONTRACT_NO = #{contractNo}
     </select>
 </mapper>

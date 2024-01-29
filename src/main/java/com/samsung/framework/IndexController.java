@@ -2,6 +2,8 @@ package com.samsung.framework;
 
 import com.samsung.framework.common.enums.LogTypeEnum;
 import com.samsung.framework.common.utils.LogUtil;
+import com.samsung.framework.common.utils.VariableHandlingUtil;
+import com.samsung.framework.domain.common.Variables;
 import com.samsung.framework.domain.log.LogSaveRequest;
 import com.samsung.framework.vo.log.LogSaveResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,9 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.Map;
@@ -25,6 +25,7 @@ import java.util.Map;
 public class IndexController {
 
     private final LogUtil logUtil;
+    private final VariableHandlingUtil variableHandlingUtil;
 
     @GetMapping({"", "/"})
     public String index() {
@@ -63,6 +64,48 @@ public class IndexController {
 
         return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
     }
+
+    @PostMapping("/contract-variable-replacement-test")
+    public ResponseEntity variableReplacement() {
+
+        Variables replacementTarget = Variables.builder()
+                .name("Ikjoo")
+                .employeeNo(String.valueOf(12345678))
+                .hireDateEn("01/03/2024")
+                .hireDateHu("2024.03.01.")
+                .jobTitleEn("Supervisor_EN")
+                .jobTitleHu("Supervisor_HU")
+                .salaryNo("458,900")
+                .salaryEn("four hundred fifty eight thousand nine hundred")
+                .wageTypeEn("month_EN")
+                .wageTypeHu("hó")
+                .build();
+
+        String text = """
+                the SAMSUNG SDI Magyarország Zrt. (registered seat: 2131 Göd Schenek István u. 1.;), as employer (hereinafter: „Employer”) and
+                {{name}} (employee No.: {{employee_no}}), as employee (hereinafter „ Employee”)
+                (hereinafter jointly referred to as „Contracting parties”) at the place and on the date below under the following conditions:
+                                
+                                
+                1. Contracting parties modify by mutual consent the employment contract concluded on {{hire_date_en}} made by and between them (hereinafter: “Employment contract”) with effect from {{hire_date_en}} under the following:
+                In addition:
+                                
+                a) The first sentence of Section 4. of the Employment contract is replaced by the following:
+                The Employer and the Employee agree on that the job function of the Employee is: {{job_title_en}}.
+                b) The first sentence of Section 6.1. of the Employment contract is replaced by the following:
+                “6.1. The Employer and the Employee agree that the gross monthly base wage of the Employee is {{salary_no}} HUF/{{wage_type_en}}, i.e. [(확정 전)계약서 생성 시 입력_eng] {{salary_en}} Hungarian HUF/{{wage_type_hu}}.”
+                                
+                                
+                2. Provisions of the Employment contract not affected by this amendment remain unchanged in force. To questions not regulated in this amendment of employment contract the provisions of the Labor Code shall apply.
+                                
+                3. This amendment of employment contract has been made in two (2) original samples in Hungarian and English, from which the Employee has received one sample. In the event of any inconsistency the Hungarian version shall apply.
+                """;
+
+        String replaced = variableHandlingUtil.replaceVariables(text, replacementTarget);
+
+        return ResponseEntity.ok(replaced);
+    }
+
 }
 
 

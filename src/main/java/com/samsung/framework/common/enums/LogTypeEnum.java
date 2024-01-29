@@ -16,7 +16,8 @@ public enum LogTypeEnum {
     , LOG_REJECT("PRCS3005")
     , LOG_DOWNLOAD("PRCS3006")
     , LOG_PAPER_SIGN("PRCS3007")
-    , LOG_VIEW("PRCS3008") ;
+    , LOG_VIEW("PRCS3008")
+    , COMPLETION("계약서 완료");
 
     private String description;
 

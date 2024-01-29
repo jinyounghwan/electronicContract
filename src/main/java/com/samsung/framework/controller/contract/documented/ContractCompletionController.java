@@ -1,10 +1,15 @@
 package com.samsung.framework.controller.contract.documented;
 
+import com.samsung.framework.common.enums.LogTypeEnum;
+import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.domain.common.Paging;
+import com.samsung.framework.domain.contract.paper.ContractComp;
+import com.samsung.framework.domain.log.LogSaveRequest;
 import com.samsung.framework.service.account.ghr.GhrAccountService;
 import com.samsung.framework.service.contract.documented.ContractCompService;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.contract.completion.ContractCompVO;
+import com.samsung.framework.vo.log.LogSaveResponse;
 import com.samsung.framework.vo.search.SearchVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -120,9 +125,18 @@ public class ContractCompletionController {
     public ResponseEntity createPaperContract(HttpServletRequest request, @RequestPart(value="data", required = true) ContractCompVO contract , @RequestPart(value="file", required = true)List<MultipartFile> file) throws Exception {
         HttpSession session = request.getSession();
         AccountVO account = (AccountVO) session.getAttribute("loginInfo");
-        Map<String, Object> result = contractCompletionService.paperContractSave(contract, account, file);
+        Map<String, Object> result = contractCompletionService.paperContractSave(request, contract, account, file);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @GetMapping("/detail/{contractNo}")
+    public ModelAndView getContractCompDetail(ModelAndView mv, @PathVariable long contractNo){
+        ContractCompVO contract = contractCompletionService.getContractCompDetail(contractNo);
+
+        mv.setViewName("contract/completion/contractCompletion-detail");
+        mv.addObject("contract", contract);
+
+        return mv;
+    }
 }
