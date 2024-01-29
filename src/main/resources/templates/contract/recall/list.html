@@ -8,8 +8,8 @@
             <div id="content">
                 <!--content-->
                 <div class="container-fluid">
-                    <h1 class="page-title">진행 중 계약서</h1>
-                    <div th:replace="~{common/contractProgressSearch}"></div>
+                    <h1 class="page-title">거절 계약서</h1>
+                    <div th:replace="~{common/defaultSearch}"></div>
                     <div class="card shadow mb-4">
                         <!--<div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
@@ -27,11 +27,6 @@
                                 </label>
                             </div>
                             <div class="left"><p th:text="${totalCount} + ' items'" ></p></div>
-                            <div class="right data-btn-area">
-                                <button class="btn btn-outline-secondary" type="button" onclick="recall()">Checked item as Recall</button>
-                                <button class="btn btn-outline-primary" type="button" onclick="assign()">Checked item as Assign</button>
-                                <button class="btn btn-outline-primary" type="button">Contract Create</button>
-                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -71,14 +66,14 @@
                                             <td class="data-check"><input class="form-check-input" type="checkbox" th:value="${item.contractNo}" data-select="check"></td>
                                             <td th:text="${item.contractNo}"></td>
                                             <td th:text="${item.templateTitle}"></td>
-                                            <td th:text="${item.contractTitleEn}"></td>
+                                            <td th:text="${item.templateTitle}"></td>
                                             <td th:text="${item.name}"></td>
                                             <td th:text="${item.empNo}"></td>
                                             <td th:text="${item.createdAt}"></td>
                                             <td th:text="${item.signatureDataNo}"></td>
                                             <td th:text="${item.docStatus}"></td>
                                             <td th:text="${item.processStatus}"></td>
-                                            <td><a th:href="@{/contract/progress/info/{seq}(seq=${item.contractNo})}" >View</a></td>
+                                            <td><a th:href="@{/contract/sign/reject/info/{seq}(seq=${item.contractNo})}" >View</a></td>
                                         </tr>
                                         <tr th:if="${#lists.isEmpty(list)}">
                                             <td colspan="11" th:text="|데이터가 없습니다.|"></td>
@@ -110,7 +105,7 @@
                     search = param;
                 }
                 $.ajax({
-                    url: '/contract/progress/list',
+                    url: '/contract/sign/recall/list',
                     type: 'post',
                     dataType: 'text',
                     contentType: 'application/json; charset=UTF-8',

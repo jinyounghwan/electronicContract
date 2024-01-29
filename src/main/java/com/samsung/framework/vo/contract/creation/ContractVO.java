@@ -27,6 +27,7 @@ public class ContractVO {
     private String name;
     private String templateTitle;
     private String signDate;
+    private String contractTitleEn;
 
     @Builder
     public ContractVO(int contractNo, int empNo, int templateSeq, String processStatus, String ContractBody, String signatureDataNo, String validation

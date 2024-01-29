@@ -2,9 +2,9 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.samsung.framework.mapper.contract.ContractProgressMapper">
+<mapper namespace="com.samsung.framework.mapper.contract.documented.ContractProgressMapper">
     <sql id="whereClause">
-        and doc_status not in ('PRCS1003' , 'PRCS1002')
+        and c.process_status not in ('PRCS2004' ,  'PRCS1004')
         <if test="(startDt != null and startDt != '') and (endDt != null and endDt != '')">
             <choose>
                 <when test="searchDateType == 'CREATED_AT'">
@@ -45,7 +45,7 @@
         </if>
     </sql>
     <select id="getContractProgressList" parameterType="SearchVO" resultType="ContractVO">
-               SELECT c.contract_no
+               SELECT c.contract_no /*getContractProgressList*/
                     , c.emp_no
                     , c.template_seq
                     , c.doc_status
@@ -60,12 +60,16 @@
                     , c.updated_at
                     , ct.template_title
                     , u.name
-                 from contracts c
+                    , ctd.contract_title_en
+                    , u.dept_code
+        from contracts c
                  join contract_template ct
                    on c.template_seq = ct.template_seq
                  join users u
                    on c.emp_no = u.emp_no
-                where c.del_yn = 'N'
+                 join contract_template_details ctd
+                   on ct.template_seq = ctd.template_seq
+        where c.del_yn = 'N'
         <include refid="whereClause"/>
                LIMIT #{paging.displayRow} OFFSET #{paging.offset}
     </select>
@@ -91,6 +95,14 @@
         </if>
     </update>
 
+    <update id="updateContractDocStatusInfo" parameterType="ContractVO">
+        <if test="@com.samsung.framework.common.utils.StringUtil@isNotEmpty(contractNo)">
+            update contracts
+               set doc_status = #{docStatus}
+             where contract_no = #{contractNo}
+        </if>
+    </update>
+
     <select id="getContractProgressInfo" parameterType="String" resultType="ContractVO">
            SELECT c.contract_no
                 , c.emp_no
@@ -108,11 +120,15 @@
                 , ct.template_title
                 , u.name
                 , c.sign_date
+                , ctd.contract_title_en
+                , u.dept_code
              from contracts c
              join contract_template ct
                on c.template_seq = ct.template_seq
              join users u
                on c.emp_no = u.emp_no
+             join contract_template_details ctd
+               on ct.template_seq = ctd.template_seq
             where c.contract_no = #{seq}
     </select>
 </mapper>

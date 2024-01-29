@@ -1,13 +1,15 @@
-package com.samsung.framework.controller.contract;
+package com.samsung.framework.controller.contract.documented;
 
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.domain.contract.ProgressRequest;
-import com.samsung.framework.service.contract.ContractProgressService;
+import com.samsung.framework.service.contract.documented.ContractProgressService;
 import com.samsung.framework.vo.common.ResultStatusVO;
 import com.samsung.framework.vo.contract.creation.ContractVO;
 import com.samsung.framework.vo.search.SearchVO;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -89,20 +91,34 @@ public class ContractProgressController {
 
     @PostMapping(value="/recall")
     @ResponseBody
-    public ResponseEntity updateContractRecall(@RequestBody List<ProgressRequest> list){
-        ResultStatusVO resultStatusVO = contractProgressService.updateContractRecall(list);
-        return  ResponseEntity.ok(resultStatusVO);
+    public ResponseEntity updateContractRecall(HttpServletRequest request ,@RequestBody List<ProgressRequest> list){
+        ResultStatusVO resultStatusVO = contractProgressService.updateContractRecall(list ,request);
+        return new ResponseEntity(resultStatusVO ,HttpStatus.OK);
     }
     @PostMapping(value="/assign")
     @ResponseBody
-    public ResponseEntity updateContractAssign(@RequestBody List<ProgressRequest> list){
-        ResultStatusVO resultStatusVO = contractProgressService.updateContractAssign(list);
-        return  ResponseEntity.ok(resultStatusVO);
+    public ResponseEntity updateContractAssign(HttpServletRequest request ,@RequestBody List<ProgressRequest> list){
+        ResultStatusVO resultStatusVO = contractProgressService.updateContractAssign(list , request);
+        return  new ResponseEntity(resultStatusVO ,HttpStatus.OK);
     }
     @GetMapping(value="/info/{seq}")
     public String getContractProgressInfo(Model model ,@PathVariable String seq){
         model.addAttribute("info",contractProgressService.getContractProgressInfo(seq));
         return "contract/progress/view";
+    }
+    @PostMapping(value="/recallInfo")
+    @ResponseBody
+    public ResponseEntity updateRecallInfo(HttpServletRequest request ,@RequestBody ProgressRequest progressRequest){
+        ResultStatusVO result = contractProgressService.updateRecallInfo(progressRequest ,request);
+        return new ResponseEntity(result, HttpStatus.OK);
+
+    }
+    @PostMapping(value="/assignInfo")
+    @ResponseBody
+    public ResponseEntity updateAssignInfo(HttpServletRequest request, @RequestBody ProgressRequest progressRequest){
+        ResultStatusVO result = contractProgressService.updateAssignInfo(progressRequest ,request);
+        return new ResponseEntity(result, HttpStatus.OK);
+
     }
 
 }
