@@ -1,15 +1,9 @@
 package com.samsung.framework.common.utils;
 
 import com.samsung.framework.common.enums.ContractVariableEnum;
-import com.samsung.framework.common.enums.ResultCodeMsgEnum;
 import com.samsung.framework.domain.common.Variables;
-import com.samsung.framework.vo.common.ResultStatusVO;
-import com.samsung.framework.vo.common.VariablesVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Pattern;
 
 @Slf4j
