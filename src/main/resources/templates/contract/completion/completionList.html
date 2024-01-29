@@ -26,7 +26,7 @@
                             </label>
                         </div>
                         <div class="right data-btn-area">
-                            <button class="btn btn-outline-primary" type="button">Paper Contract Upload</button>
+                            <button class="btn btn-outline-primary" type="button" th:onclick="|location.href='@{/contract/sign/comp/paper}'|" >Paper Contract Upload</button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -58,8 +58,8 @@
                                     <td th:text="${row.getContractTitleEn}"></td>
                                     <td th:text="${row.getName}"</td>
                                     <td th:text="${row.empNo}"</td>
-                                    <td th:text="${row.createdAt}"</td>
-                                    <td>-</td>
+                                    <td th:text="${row.createdAtStr}"</td>
+                                    <td th:text="${row.signDateStr}"></td>
                                     <td th:text="${row.docStatus}"></td>
                                     <td th:text="${row.processStatus}"></td>
                                     <td><a th:href="@{/contract/sign/comp/detail/{contractNo}(contractNo=${row.getContractNo()})}" >View</a></td>

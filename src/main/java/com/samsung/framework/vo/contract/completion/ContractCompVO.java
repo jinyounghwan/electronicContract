@@ -4,10 +4,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Setter
-@Getter
+@NoArgsConstructor @AllArgsConstructor
+@Setter @Getter
 @Builder
 public class ContractCompVO {
     private long contractNo;
@@ -19,6 +17,8 @@ public class ContractCompVO {
     private String name;
     private String hireDateHu;
     private String hireDateEn;
+    private String contractDateHu;
+    private String contractDateEn;
     private String jobTitleHu;
     private String jobTitleEn;
     private int salaryNo;
@@ -27,6 +27,7 @@ public class ContractCompVO {
     private String wageTypeHu;
     private String wageTypeEn;
     private String signatureDataNo;
+    private LocalDateTime signDate;
     private String validation;
     private String agreeYn;
     private String delYn;
@@ -37,4 +38,9 @@ public class ContractCompVO {
     private String templateType;
     private String templateTitle;
     private String contractTitleEn;
+    private String createdAtStr;
+    private String updatedAtStr;
+    private String signDateStr;
+    private String userName;
+    private String contractDate;
 }

@@ -63,7 +63,7 @@
                     </div>
 
                     <div class="btn-area">
-                        <input  class="btn btn-secondary" type="button" th:value="Cancel"/>
+                        <input  class="btn btn-secondary" type="button" th:onclick="|location.href = '@{/contract/sign/comp}'|" th:value="Cancel"/>
                         <input class="btn btn-primary" type="button" th:onclick="registrationPaperContarct()" th:value="Save"/>
                     </div>
                 </form>
@@ -91,7 +91,8 @@
             const data = {
                 empNo : $('input[name=employeeId]').val(),
                 processStatus : $('#templateType option:selected').val(),
-                name : $('input[name=subject]').val()
+                name : $('input[name=subject]').val(),
+                contractDate : $('input[name=date]').val()
             }
 
             let form = $('#form')[0];

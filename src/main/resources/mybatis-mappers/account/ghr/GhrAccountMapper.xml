@@ -5,7 +5,8 @@
 <mapper namespace="com.samsung.framework.mapper.account.ghr.GhrAccountMapper">
     <select id="isExistsAccount">
         SELECT EMP_NO, NAME,
-               TEAM, DEPARTMENT_CODE
+               TEAM, DEPARTMENT_CODE,
+               HIRE_DATE, DEPARTMENT_CODE
         FROM GHR_ACCOUNT_INFO
         WHERE EMP_NO = #{empNo}
     </select>
