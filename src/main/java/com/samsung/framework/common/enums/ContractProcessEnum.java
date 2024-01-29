@@ -47,7 +47,7 @@ public enum ContractProcessEnum {
     }
 
     /**
-     * 계약서 상태 문자 반환
+     * 계약서 진행 상태 문자 반환
      * @param target
      * @return
      */
