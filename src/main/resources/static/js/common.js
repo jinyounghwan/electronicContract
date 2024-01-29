@@ -191,3 +191,19 @@ let updateOk = () =>{
         default: return false;
     }
 }
+/*view contract*/
+let viewContract = (seq) =>{
+     let data = {'contractNo' : seq }
+     $.ajax({
+        url: '/contract/view',
+        type: 'post',
+        dataType:'json',
+        data:JSON.stringify(data),
+        contentType: 'application/json; charset=UTF-8',
+    }).done(function(data) {
+        console.log(data)
+    }).fail(function(jqXHR) {
+        console.log(jqXHR);
+    });
+
+}
