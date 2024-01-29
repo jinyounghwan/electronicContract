@@ -46,7 +46,7 @@ public class ContractCreationService {
 //        }
         ContractVO contractVO = ContractVO.builder()
                                 .empNo(target.getEmpNo()).templateSeq(StringUtil.getInt(target.getTemplateCode()))
-                                .processStep(ContractProcessEnum.processCode(ContractProcessEnum.CREATED))
+                                .processStatus(ContractProcessEnum.processCode(ContractProcessEnum.CREATED))
                                 .deptCode("dept00001").createdBy("admin")
                                 .build();
         int result = contractCreationMapper.saveContract(contractVO);

@@ -51,10 +51,12 @@ public enum ContractProcessEnum {
      * @param target
      * @return
      */
-    public static Optional<ContractProcessEnum> getContractStatusName(String target) {
-        return Arrays.stream(ContractProcessEnum.values()).filter(val -> {
-            String enumProcessCode = val.getPrefix() + val.getParentCode() + val.getDepth1();
-            return enumProcessCode.equals(target);
-        }).findFirst();
+    public static String getProcessStatus(String target){
+        for (ContractProcessEnum item : ContractProcessEnum.values()){
+            if(target.equals(item.getPrefix()+item.getParentCode()+item.getDepth1())){
+                return item.toString();
+            }
+        }
+        return new String();
     }
 }

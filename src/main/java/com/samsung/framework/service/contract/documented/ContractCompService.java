@@ -100,8 +100,8 @@ public class ContractCompService {
             data.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(data.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
             data.setUpdatedAtStr(DateUtil.convertLocalDateTimeToString(data.getUpdatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
             data.setSignDateStr(DateUtil.convertLocalDateTimeToString(data.getSignDate(), DateUtil.DATETIME_YMDHM_PATTERN));
-            data.setDocStatus(String.valueOf(ContractProcessEnum.getContractStatusName(data.getDocStatus()).get()));
-            data.setProcessStatus(String.valueOf(ContractProcessEnum.getContractStatusName(data.getProcessStatus()).get()));
+            data.setDocStatus(String.valueOf(ContractProcessEnum.getProcessStatus(data.getDocStatus())));
+            data.setProcessStatus(String.valueOf(ContractProcessEnum.getProcessStatus(data.getProcessStatus())));
         });
         return list;
     }
@@ -111,8 +111,8 @@ public class ContractCompService {
         contract.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(contract.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         contract.setUpdatedAtStr(DateUtil.convertLocalDateTimeToString(contract.getUpdatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         contract.setSignDateStr(DateUtil.convertLocalDateTimeToString(contract.getSignDate(), DateUtil.DATETIME_YMDHM_PATTERN));
-        contract.setDocStatus(String.valueOf(ContractProcessEnum.getContractStatusName(contract.getDocStatus()).get()));
-        contract.setProcessStatus(String.valueOf(ContractProcessEnum.getContractStatusName(contract.getProcessStatus()).get()));
+        contract.setDocStatus(String.valueOf(ContractProcessEnum.getProcessStatus(contract.getDocStatus())));
+        contract.setProcessStatus(String.valueOf(ContractProcessEnum.getProcessStatus(contract.getProcessStatus())));
         return contract;
    }
 

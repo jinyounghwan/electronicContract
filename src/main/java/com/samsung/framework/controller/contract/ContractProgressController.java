@@ -1,11 +1,14 @@
 package com.samsung.framework.controller.contract;
 
 import com.samsung.framework.domain.common.Paging;
+import com.samsung.framework.domain.contract.ProgressRequest;
 import com.samsung.framework.service.contract.ContractProgressService;
+import com.samsung.framework.vo.common.ResultStatusVO;
 import com.samsung.framework.vo.contract.creation.ContractVO;
 import com.samsung.framework.vo.search.SearchVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +63,7 @@ public class ContractProgressController {
         model.addAttribute("list" , new ArrayList<>());
         model.addAttribute("search" , new SearchVO());
         model.addAttribute("totalCount" ,contractProgressService.getContractProgressTotal(null));
-        return "contract/contractProgress-list";
+        return "contract/progress/list";
     }
 
     @PostMapping(value = "/list")
@@ -78,13 +81,28 @@ public class ContractProgressController {
         model.addAttribute("paging",pagingVo);
 
         // list
-        List<ContractVO> list = contractProgressService.getContractProgresList(searchVO);
+        List<ContractVO> list = contractProgressService.getContractProgressList(searchVO);
         model.addAttribute("list",list);
         model.addAttribute("search" , searchVO);
-        return "contract/template/list :: #content";
+        return "contract/progress/list :: #content";
     }
 
-
-
+    @PostMapping(value="/recall")
+    @ResponseBody
+    public ResponseEntity updateContractRecall(@RequestBody List<ProgressRequest> list){
+        ResultStatusVO resultStatusVO = contractProgressService.updateContractRecall(list);
+        return  ResponseEntity.ok(resultStatusVO);
+    }
+    @PostMapping(value="/assign")
+    @ResponseBody
+    public ResponseEntity updateContractAssign(@RequestBody List<ProgressRequest> list){
+        ResultStatusVO resultStatusVO = contractProgressService.updateContractAssign(list);
+        return  ResponseEntity.ok(resultStatusVO);
+    }
+    @GetMapping(value="/info/{seq}")
+    public String getContractProgressInfo(Model model ,@PathVariable String seq){
+        model.addAttribute("info",contractProgressService.getContractProgressInfo(seq));
+        return "contract/progress/view";
+    }
 
 }

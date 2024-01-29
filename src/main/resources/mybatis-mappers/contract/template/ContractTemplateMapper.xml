@@ -2,13 +2,116 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.samsung.framework.mapper.contract.ContractProgressMapper">
-    <select id="getContractProgressTotal" resultType="int">
-        SELECT count(contract_no)
-          FROM contracts
+<mapper namespace="com.samsung.framework.mapper.contract.template.ContractTemplateMapper">
+
+    <select id="getContractTemplateCode" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+          FROM CONTRACT_TEMPLATE
+         WHERE TEMPLATE_SEQ = #{VALUE}
     </select>
 
-    <select id="getContractProgressList" parameterType="SearchVO" resultType="ContractVO">
-
+    <select id="getContractTemplateListCount" resultType="java.lang.Integer">
+        SELECT COUNT(CT.TEMPLATE_SEQ) /* 계약서템플릿 관리 목록개수 조회*/
+          FROM CONTRACT_TEMPLATE CT
+          JOIN CONTRACT_TEMPLATE_DETAILS CTD
+            ON CT.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
     </select>
+
+    <select id="getContractTemplateList" resultType="ContractTemplateVO" parameterType="SearchVO">
+        SELECT CT.TEMPLATE_SEQ /*getContractTemplateList - 계약서템플릿 관리 목록조회 */
+            , CT.TEMPLATE_TITLE
+            , CT.TEMPLATE_TYPE
+            , CTD.CONTRACT_TITLE_EN
+            , date_format(ct.created_at , '%Y-%m-%d')as created_at
+            , date_format(ct.updated_at , '%Y-%m-%d')as updated_at
+         FROM CONTRACT_TEMPLATE CT
+         JOIN CONTRACT_TEMPLATE_DETAILS CTD
+           ON CT.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
+        LIMIT #{paging.displayRow} OFFSET #{paging.offset}
+    </select>
+
+    <select id="getContractTemplateInfo" resultType="ContractTemplateVO" parameterType="java.lang.String">
+           SELECT CT.TEMPLATE_SEQ /*getContractTemplateInfo - 계약서템플릿 관리 정보조회 */
+                , CT.TEMPLATE_TITLE
+                , CT.TEMPLATE_TYPE
+                , CT.MEMO
+                , date_format(ct.created_at , '%Y-%m-%d %T' )as created_at
+                , date_format(ct.updated_at , '%Y-%m-%d %T')as updated_at
+                , CTD.CONTRACT_TITLE_EN
+                , CTD.CONTRACT_TITLE_HU
+                , CTD.CONTRACT_TITLE_EN
+                , CTD.CONTENTS_EN
+                , CTD.CONTENTS_HU
+                , CT.UPDATED_BY
+                , CT.CREATED_BY
+             FROM CONTRACT_TEMPLATE CT
+             JOIN CONTRACT_TEMPLATE_DETAILS CTD
+               ON CT.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
+            WHERE CT.TEMPLATE_SEQ = #{seq}
+    </select>
+
+    <update id="saveContractTemplateInfo" parameterType="ContractTemplateVO">
+        UPDATE CONTRACT_TEMPLATE CT /*saveContractTemplateInfo*/
+        JOIN CONTRACT_TEMPLATE_DETAILS CTD
+        ON CT.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
+        SET CT.MEMO = #{memo}
+        , CTD.CONTRACT_TITLE_HU = #{contractTitleHu}
+        , CTD.CONTRACT_TITLE_EN = #{contractTitleEn}
+        , CTD.PREAMBLE_EN = #{preambleHu}
+        , CTD.PREAMBLE_EN = #{preambleEn}
+        WHERE CT.TEMPLATE_SEQ = #{templateSeq}
+    </update>
+    <insert id="saveContractTemplateCopyInfo" parameterType="ContractTemplateVo">
+        <selectKey keyProperty="nextSeq" resultType="int" order="BEFORE">
+            select COALESCE(max(template_seq), 1) + 1  as nextSeq
+            from contract_template
+        </selectKey>
+        insert into contract_template ( template_title
+        , template_seq
+        , template_type
+        , use_yn
+        , memo
+        , created_by
+        , created_at )
+        select concat(ct.template_title ,'_copy') as template_title
+        , #{nextSeq}
+        , ct.template_type
+        , ct.use_yn
+        , ct.memo
+        , 'admin' as created_by
+        , now() as created_at
+        from contract_template ct
+        where ct.template_seq = #{templateSeq}
+    </insert>
+    <insert id="saveContractTemplateCopyDetailsInfo" parameterType="ContractTemplateVo">
+        insert into contract_template_details ( template_seq
+        , contract_title_en
+        , contract_title_hu
+        , preamble_en
+        , preamble_hu
+        , contents_en
+        , contents_hu
+        , employer_info_en
+        , employer_info_hu
+        , employee_info_en
+        , employee_info_hu
+        , created_by
+        , created_at
+        )
+        select #{nextSeq} as template_seq
+        , contract_title_en
+        , contract_title_hu
+        , preamble_en
+        , preamble_hu
+        , contents_en
+        , contents_hu
+        , employer_info_en
+        , employer_info_hu
+        , employee_info_en
+        , employee_info_hu
+        , 'admin' as created_by
+        , now() as created_at
+        from contract_template_details ctd
+        where ctd.template_seq = #{templateSeq}
+    </insert>
 </mapper>

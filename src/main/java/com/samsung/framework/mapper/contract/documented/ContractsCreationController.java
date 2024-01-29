@@ -28,7 +28,6 @@ public class ContractsCreationController {
     @PostMapping("/bulk-upload")
     public ResponseEntity bulkUpload(@RequestParam(value = "bulk") List<MultipartFile> multipartFiles) throws Exception {
         ResultStatusVO resultStatusVO = contractsCreationService.bulkUpload(multipartFiles);
-
         return ResponseEntity.ok(resultStatusVO);
     }
 }
