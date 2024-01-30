@@ -38,4 +38,7 @@ public class ContractVO {
     private String createdAt;
     private String updatedBy;
     private String updatedAt;
+    private String templateTitle;
+    private String contractTitleEn;
+    private String contractTitleHu;
 }

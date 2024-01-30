@@ -24,7 +24,7 @@
                                             <td>
                                                 <div class="data-group datatable-dropdown">
                                                     <label style="width: 100%;">
-                                                        <select class="datatable-selector" th:field="*{templateCodeList}" name="templateCode">
+                                                        <select class="datatable-selector" th:field="*{templateCodeList}" data-select="templateCode">
                                                             <option th:each="e , i : ${templateCodeList}" th:value="${e.templateSeq}" th:text="|${e.templateTitle}|"  >전체</option>
                                                         </select>
                                                     </label>
@@ -59,11 +59,12 @@
                       url: '/contract/create/save',
                       type: 'post',
                       dataType:'json',
-                      data:$('#contractForm').serialize()
+                      data:$('#contractForm').serialize() + '&templateCode=' + $('[data-select="templateCode"] option:selected').val()
                     }).done(function(data) {
-                        if(data > 0){
+                        console.log(data);
+                        if(data.code == 200){
                             alert('저장이 완료 되었습니다.');
-                            location.href='/contract/create';
+                            location.href='contract/progress';
                         }else{
                             alert('관리자에게 문의 바랍니다.');
                             location.href='/contract/create';

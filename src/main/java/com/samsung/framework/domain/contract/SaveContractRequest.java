@@ -10,12 +10,10 @@ import lombok.*;
 import java.time.LocalDate;
 
 @ToString
+@Setter
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class SaveContractRequest {
-
     @NotNull(message = "계약일은 필수 값 입니다.")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

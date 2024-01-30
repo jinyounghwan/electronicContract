@@ -186,7 +186,7 @@
             , employed_at
          from users u
         where emp_no = #{empNo}
-           or admin_id #{adminId}
+           or admin_id =#{adminId}
     </select>
 
 </mapper>

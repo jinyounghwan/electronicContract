@@ -6,8 +6,14 @@
     <insert id="saveContract" parameterType="ContractVO">
         INSERT INTO contracts (  emp_no
                               , template_seq
+        , name
+        , validation
+        , created_at
+        , agree_yn
+        , del_yn
                               , dept_code
-                              , process_step
+                              , doc_status
+                              , process_status
                               , hire_date_hu
                               , hire_date_en
                               , created_by
@@ -16,13 +22,20 @@
                               )
                         VALUES( #{empNo}
                               , #{templateSeq}
+        , #{name}
+        , #{validation}
+        , now()
+        ,#{agreeYn}
+        ,#{delYn}
                               , #{deptCode}
-                              , #{processStep}
+                              , #{docStatus}
+                              , #{processStatus}
                               , #{hireDateHu}
                               , #{hireDateEn}
                               , #{createdBy}
                               , #{contractDateHu}
                               , #{contractDateEn}
+
                                )
 
     </insert>

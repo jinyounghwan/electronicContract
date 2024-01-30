@@ -37,10 +37,8 @@ public class ContractCreationController {
 
     @PostMapping("/save")
     @ResponseBody
-    public ResponseEntity saveContract(SaveContractRequest saveContractReq) {
-        log.info("=========================> :{}" ,saveContractReq);
-        //ResultStatusVO resultStatusVO = contractCreationService.saveContract(saveContractReq);
-        //return ResponseEntity.ok(resultStatusVO);
-        return ResponseEntity.ok(null);
+    public ResponseEntity saveContract(@Valid SaveContractRequest saveContractReq) {
+        ResultStatusVO resultStatusVO = contractCreationService.saveContract(saveContractReq);
+        return ResponseEntity.ok(resultStatusVO);
     }
 }

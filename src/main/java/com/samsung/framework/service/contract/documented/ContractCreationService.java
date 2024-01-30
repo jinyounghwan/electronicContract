@@ -53,8 +53,13 @@ public class ContractCreationService {
         // 계약서 생성을 위해 데이터 셋팅
         ContractVO contractVO = ContractVO.builder()
                                 .empNo(target.getEmpNo()).templateSeq(StringUtil.getInt(target.getTemplateCode()))
+                .name(user.getName())
+                .validation("Y")
+                .agreeYn("N")
+                .delYn("N")
                                 .hireDateEn(StringUtil.getString(user.getEmployedAt())) //  헝가리, 영어 날짜로 변경
                                 .hireDateHu(StringUtil.getString(user.getEmployedAt()))
+                                .docStatus(ContractProcessEnum.processCode(ContractProcessEnum.UNSEEN))
                                 .processStatus(ContractProcessEnum.processCode(ContractProcessEnum.CREATED))
                 .contractDateHu(StringUtil.getString(target.getDate())) // format 변경
                 .contractDateEn(StringUtil.getString(target.getDate()))
