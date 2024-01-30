@@ -12,9 +12,9 @@
                         <tr>
                             <th class="col-2">Upload</th>
                             <td><div class="input-group">
-                                <input type="file" id="file-input"  name="file" class="form-control form-control-user mr-2" onchange="addFile()" style="display:none" placeholder="" multiple>
-                                <label for="file-input" class="form-control form-control-user mr-2" ></label>
-                                <button class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04" onclick="onClickUpload()" >+ Upload File</button>
+                                <input type="file" id="file-input" data-select="fileInput" name="file" onchange="addFileText(this)" class="form-control form-control-user mr-2"  style="display:none" placeholder="" multiple>
+                                <label for="file-input" data-select="fileName" class="form-control form-control-user mr-2" ></label>
+                                <button class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04" onclick="openFile()" >+ Upload File</button>
                             </div>
                                 <div class="mt-2"><p class="mb-0">※ Please upload the Excel file</p></div>
                             </td>
@@ -49,7 +49,6 @@
 
             let form = $('#form')[0];
             let formData = new FormData(form);
-
             $.ajax({
                 type: 'post',
                 url: `/excel/write`,

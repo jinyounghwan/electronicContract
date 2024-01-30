@@ -7,7 +7,11 @@ import com.samsung.framework.vo.file.FilePublicVO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -16,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@RestController
+@Controller
 @AllArgsConstructor
 @RequestMapping("/excel")
 public class ExcelController {

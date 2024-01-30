@@ -207,3 +207,17 @@ let viewContract = (seq) =>{
     });
 
 }
+/*
+    button 클릭 시  input type=file 실행
+*/
+function openFile(){
+    $('[data-select="fileInput"]').trigger('click');
+}
+/*
+    file 명
+*/
+function addFileText(_this){
+    let $this = $(_this);
+    let fileName = $this[0].files[0].name;
+    $('[data-select="fileName"]').text(fileName);
+}
