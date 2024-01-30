@@ -7,7 +7,6 @@ import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.domain.common.SearchObject;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.common.ResultStatusVO;
-import com.samsung.framework.vo.common.TokenVO;
 import com.samsung.framework.vo.search.SearchVO;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -38,14 +37,6 @@ public class ObjectHandlingUtil {
     }
 
 
-    /**
-     * API 요청: HttpServletRequest 유효 토큰 정보 추출
-     * @param request {@link HttpServletRequest}
-     * @return {@link TokenVO}
-     */
-    public static TokenVO extractTokenInfo(HttpServletRequest request) {
-        return (TokenVO) request.getAttribute(MapKeyStringEnum.TOKEN_VO.getKeyString());
-    }
 
     /**
      * API 요청: HttpServletRequest 로그인 정보 추출

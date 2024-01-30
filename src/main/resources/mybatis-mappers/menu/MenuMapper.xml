@@ -190,45 +190,4 @@
     <!-- 저장/수정/삭제 [[ -->
 
 
-<!--##### DEJAY_COMMON #####-->
-    <select id="findCommonMenuCodeList">
-        /* [공통 코드] 메뉴 1 depth 조회 MenuMapper.findCommonMenuCodeList */
-        SELECT CODE_CD, CODE_NM
-          FROM INFO_COMMON_CD
-         WHERE CONCAT(SUBSTRING(CODE_CD FROM 1 FOR 4), SUBSTRING(CODE_CD, 7)) = 'MENU00'
-    </select>
-
-    <select id="findMenuList">
-        /* [공통 코드] 메뉴 조회 MenuMapper.findMenuList */
-        WITH PARENT_CD AS (
-            SELECT CODE_SEQ, CODE_CD, CODE_NM FROM info_common_cd
-            WHERE SUBSTRING(CODE_CD FROM 1 FOR 4) = 'MENU' AND CODE_ORD = 0 AND USE_YN = 'Y' AND DEL_YN = 'N'
-        )
-                 SELECT ROW_NUMBER() OVER(ORDER BY CD.CODE_CD) AS ROW_NUM
-                      , CD.CODE_SEQ, PC.CODE_CD AS PARENT_CODE_CD, PC.CODE_NM AS PARENT_CODE_NM
-                      , CD.CODE_CD, CD.CODE_NM, CD.CODE_DESC, CD.CODE_ETC, CD.CODE_ORD, CD.USE_YN, CD.DEL_YN, CD.REG_DT, CD.REG_ID, CD.LAST_DT, CD.LAST_ID
-                  <if test=" deptCd != null and deptCd != '' ">
-                      , (SELECT USER_ID FROM info_menu WHERE MENU_CD = CD.CODE_CD AND USER_ID = #{deptCd}) AS USER_ID
-                      , (SELECT DISPLAY_USE_YN FROM info_menu WHERE MENU_CD = CD.CODE_CD AND USER_ID = #{deptCd}) AS DISPLAY_USE_YN
-                      , (SELECT AUTH_C FROM info_menu WHERE MENU_CD = CD.CODE_CD AND USER_ID = #{deptCd}) AS AUTH_C
-                      , (SELECT AUTH_R FROM info_menu WHERE MENU_CD = CD.CODE_CD AND USER_ID = #{deptCd}) AS AUTH_R
-                      , (SELECT AUTH_U FROM info_menu WHERE MENU_CD = CD.CODE_CD AND USER_ID = #{deptCd}) AS AUTH_U
-                      , (SELECT AUTH_D FROM info_menu WHERE MENU_CD = CD.CODE_CD AND USER_ID = #{deptCd}) AS AUTH_D
-                      , (SELECT AUTH_F FROM info_menu WHERE MENU_CD = CD.CODE_CD AND USER_ID = #{deptCd}) AS AUTH_F
-                  </if>
-                   FROM INFO_COMMON_CD CD
-        LEFT OUTER JOIN PARENT_CD PC ON SUBSTRING(CD.CODE_CD FROM 1 FOR 6) = SUBSTRING(PC.CODE_CD FROM 1 FOR 6)
-                  WHERE SUBSTRING(CD.CODE_CD FROM 1 FOR 4) = 'MENU' AND CODE_ORD <![CDATA[>]]> 0
-                    AND CD.USE_YN = 'Y'
-                    AND CD.DEL_YN = 'N'
-               ORDER BY CD.CODE_CD
-    </select>
-
-    <select id="findMenuSeqByUserId">
-        /* 메뉴에 대한 권한 여부 조회 MenuMapper.findMenuSeqByUserId */
-        SELECT NVL(SUM(MENU_SEQ), 0)
-          FROM INFO_MENU
-         WHERE MENU_CD = #{menuCd}
-           AND USER_ID = #{userId}
-    </select>
 </mapper>
