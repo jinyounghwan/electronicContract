@@ -57,8 +57,6 @@
         SET CT.MEMO = #{memo}
         , CTD.CONTRACT_TITLE_HU = #{contractTitleHu}
         , CTD.CONTRACT_TITLE_EN = #{contractTitleEn}
-        , CTD.PREAMBLE_EN = #{preambleHu}
-        , CTD.PREAMBLE_EN = #{preambleEn}
         WHERE CT.TEMPLATE_SEQ = #{templateSeq}
     </update>
     <insert id="saveContractTemplateCopyInfo" parameterType="ContractTemplateVo">
@@ -114,4 +112,9 @@
         from contract_template_details ctd
         where ctd.template_seq = #{templateSeq}
     </insert>
+    <select id="getTemplateCode" resultType="Template">
+        select template_seq
+             , template_title
+          from contract_template ct
+    </select>
 </mapper>

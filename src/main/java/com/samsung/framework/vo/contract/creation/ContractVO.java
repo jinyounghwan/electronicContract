@@ -8,6 +8,8 @@ import javax.swing.text.StringContent;
 @Getter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ContractVO {
     private int contractNo;
     private int empNo;
@@ -15,8 +17,20 @@ public class ContractVO {
     private String deptCode;
     private String docStatus;
     private String processStatus;
-    private String contractBody;
+    private String name;
+    private String hireDateHu;
+    private String hireDateEn;
+    private String contractDateHu;
+    private String contractDateEn;
+    private String jobTitleHu;
+    private String jobTitleEn;
+    private String salaryNo;
+    private String salaryHu;
+    private String salaryEn;
+    private String wageTypeHu;
+    private String wageTypeEn;
     private String signatureDataNo;
+    private String signDate;
     private String validation;
     private String agreeYn;
     private String delYn;
@@ -24,34 +38,4 @@ public class ContractVO {
     private String createdAt;
     private String updatedBy;
     private String updatedAt;
-    private String name;
-    private String templateTitle;
-    private String signDate;
-
-    @Builder
-    public ContractVO(int contractNo, int empNo, int templateSeq, String processStatus, String ContractBody, String signatureDataNo, String validation
-                      ,String deptCode, String agreeYn, String delYn, String createdAt, String createdBy, String updatedAt, String updatedBy
-                      , String name , String templateTitle , String docStatus , String signDate){
-        this.contractNo = contractNo;
-        this.empNo = empNo;
-        this.templateSeq = templateSeq;
-        this.processStatus = processStatus;
-        this.contractBody = contractBody;
-        this.signatureDataNo = signatureDataNo;
-        this.validation = validation;
-        this.agreeYn = agreeYn;
-        this.delYn = delYn;
-        this.deptCode = deptCode;
-        this.createdAt = createdAt;
-        this.createdBy = createdBy;
-        this.updatedAt = updatedAt;
-        this.updatedBy = updatedBy;
-        this.templateTitle = templateTitle;
-        this.name = name;
-        this.docStatus = docStatus;
-        this.signDate = signDate;
-
-
-    }
-
 }

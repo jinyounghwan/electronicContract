@@ -89,6 +89,7 @@ public class ContractTemplateController {
     @PostMapping(value="/save")
     @ResponseBody
     public ResponseEntity saveContractTemplateInfo(ContractTemplateVO contractTemplateVO){
+        //parameter 이름변경
         int result = contractTemplateService.saveContractTemplateInfo(contractTemplateVO);
         return new ResponseEntity(result, HttpStatus.OK);
 

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.contract.documented.ContractSignRecallMapper">
+    <sql id="whereClause">
+        and process_status = 'PRCS1003'
+        <if test="(startDt != null and startDt != '') and (endDt != null and endDt != '')">
+            <choose>
+                <when test="searchDateType == 'CREATED_AT'">
+                    AND c.created_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                </when>
+                <when test="searchDateType == 'UPDATED_AT'">
+                    AND c.updated_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                </when>
+                <when test="searchDateType == 'ALL'">
+                    AND  c.updated_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                    AND c.created_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                </when>
+            </choose>
+        </if>
+        <if test="@com.samsung.framework.common.utils.StringUtil@isNotEmpty(searchKeyword)">
+            <choose>
+                <when test="searchStatusType == 'TITLE'">
+                    and ct.template_title like concat('%',#{searchKeyword},'%')
+                </when>
+                <when test="searchStatusType == 'EMPLOYEE_ID'">
+                    and ct.emp_no like concat('%',#{seacrchKeyword},'%')
+                </when>
+                <when test="searchStatusType == 'NAME'">
+                    and u.name like concat('%',#{searchKeyword},'%')
+                </when>
+                <when test="searchStatusType == 'ALL'">
+                    and ct.emp_no like concat('%',#{seacrchKeyword},'%')
+                    and ct.template_title like concat('%',#{searchKeyword},'%')
+                    and u.name like concat('%',#{searchKeyword},'%')
+                </when>
+            </choose>
+        </if>
+    </sql>
+    <select id="getContractSignRecallList" parameterType="SearchVO" resultType="ContractVO">
+           SELECT c.contract_no
+                , c.emp_no
+                , c.template_seq
+                , c.doc_status
+                , c.process_status
+                , c.signature_data_no
+                , c.validation
+                , c.agree_yn
+                , c.del_yn
+                , c.created_by
+                , c.created_at
+                , c.updated_by
+                , c.updated_at
+                , ct.template_title
+                , u.name
+                , ctd.contract_title_en
+                , u.dept_code
+            from contracts c
+            join contract_template ct
+              on c.template_seq = ct.template_seq
+            join users u
+              on c.emp_no = u.emp_no
+            join contract_template_details ctd
+              on ct.template_seq = ctd.template_seq
+        where c.del_yn = 'N'
+        <include refid="whereClause"/>
+        LIMIT #{paging.displayRow} OFFSET #{paging.offset}
+    </select>
+
+    <select id="getContractSignRecallCount" resultType="int" parameterType="SearchVO">
+        SELECT COUNT(c.CONTRACT_NO)
+        FROM CONTRACTS C
+        JOIN CONTRACT_TEMPLATE CT
+        ON C.TEMPLATE_SEQ = CT.TEMPLATE_SEQ
+        JOIN USERS U
+        ON C.EMP_NO = U.EMP_NO
+        where C.del_yn = 'N'
+        <include refid="whereClause"/>
+    </select>
+
+
+    <select id="getContractSignRecallInfo" parameterType="String" resultType="ContractVO">
+        SELECT c.contract_no
+        , c.emp_no
+        , c.template_seq
+        , c.doc_status
+        , c.process_status
+        , c.signature_data_no
+        , c.validation
+        , c.agree_yn
+        , c.del_yn
+        , c.created_by
+        , c.created_at
+        , c.updated_by
+        , c.updated_at
+        , ct.template_title
+        , u.name
+        , c.sign_date
+        , ctd.contract_title_en
+        , u.dept_code
+        from contracts c
+        join contract_template ct
+        on c.template_seq = ct.template_seq
+        join users u
+        on c.emp_no = u.emp_no
+        join contract_template_details ctd
+        on ct.template_seq = ctd.template_seq
+        where c.contract_no = #{seq}
+    </select>
+</mapper>

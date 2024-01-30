@@ -1,6 +1,7 @@
 package com.samsung.framework.mapper.contract.template;
 
 import com.samsung.framework.vo.contract.template.ContractTemplateVO;
+import com.samsung.framework.vo.contract.template.Template;
 import com.samsung.framework.vo.search.SearchVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -35,4 +36,6 @@ public interface ContractTemplateMapper {
     int saveContractTemplateCopyInfo(ContractTemplateVO contractTemplateVO);
 
     int saveContractTemplateCopyDetailsInfo(ContractTemplateVO contractTemplateVO);
+
+    List<Template> getTemplateCode();
 }

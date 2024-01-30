@@ -125,6 +125,7 @@
             OR EMP_NO = #{userId}
     </select>
 
+
     <!--#################### DEJAY_COMMON ####################-->
     <select id="findMemberByUserName" resultType="AccountVO">
         SELECT U.EMP_NO, U.DEPT_CODE, U.USER_ID, U.USER_PW, U.NAME, U.POSITION, U.EMAIL
@@ -175,5 +176,17 @@
         WHERE U.ADMIN_ID = #{userId}
             OR U.EMP_NO = #{userId}
     </update>
+    <select id="myInfo" parameterType="AccountVO" resultType="AccountVo">
+        select emp_no
+            , admin_id
+            , dept_code
+            , name
+            , account_type
+            , email
+            , employed_at
+         from users u
+        where emp_no = #{empNo}
+           or admin_id #{adminId}
+    </select>
 
 </mapper>

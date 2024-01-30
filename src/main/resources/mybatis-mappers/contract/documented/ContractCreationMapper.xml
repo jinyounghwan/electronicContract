@@ -8,14 +8,21 @@
                               , template_seq
                               , dept_code
                               , process_step
-                              , validation
-                              , created_by)
+                              , hire_date_hu
+                              , hire_date_en
+                              , created_by
+                              , contract_date_hu
+                              , contract_date_en
+                              )
                         VALUES( #{empNo}
                               , #{templateSeq}
                               , #{deptCode}
                               , #{processStep}
-                              , #{validation}
+                              , #{hireDateHu}
+                              , #{hireDateEn}
                               , #{createdBy}
+                              , #{contractDateHu}
+                              , #{contractDateEn}
                                )
 
     </insert>

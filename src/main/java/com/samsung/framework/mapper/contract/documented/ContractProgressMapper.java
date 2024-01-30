@@ -1,4 +1,4 @@
-package com.samsung.framework.mapper.contract;
+package com.samsung.framework.mapper.contract.documented;
 
 import com.samsung.framework.domain.contract.ProgressRequest;
 import com.samsung.framework.vo.contract.creation.ContractVO;
@@ -16,4 +16,6 @@ public interface ContractProgressMapper {
     int updateContractDocStatus(List<ProgressRequest> progressRequest);
 
     ContractVO getContractProgressInfo(String seq);
+
+    int updateContractDocStatusInfo(ContractVO contractVO);
 }
