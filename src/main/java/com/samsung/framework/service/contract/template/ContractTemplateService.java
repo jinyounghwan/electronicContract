@@ -3,6 +3,7 @@ package com.samsung.framework.service.contract.template;
 import com.samsung.framework.common.enums.ContractTemplateEnum;
 import com.samsung.framework.mapper.contract.template.ContractTemplateMapper;
 import com.samsung.framework.vo.contract.template.ContractTemplateVO;
+import com.samsung.framework.vo.contract.template.Template;
 import com.samsung.framework.vo.search.SearchVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,4 +54,5 @@ public class ContractTemplateService {
         resultMap.put("templateSeq",contractTemplateVO.getNextSeq());
         return resultMap;
     }
+
 }

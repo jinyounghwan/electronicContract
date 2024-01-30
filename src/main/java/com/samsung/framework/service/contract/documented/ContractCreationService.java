@@ -10,8 +10,11 @@ import com.samsung.framework.mapper.contract.documented.ContractCreationMapper;
 import com.samsung.framework.mapper.contract.template.ContractTemplateMapper;
 import com.samsung.framework.service.excel.ExcelPublicServiceImpl;
 import com.samsung.framework.service.file.FileService;
+import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.common.ResultStatusVO;
 import com.samsung.framework.vo.contract.creation.ContractVO;
+import com.samsung.framework.vo.contract.template.Template;
+import com.samsung.framework.vo.user.UserVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,13 +44,21 @@ public class ContractCreationService {
         // TODO: 임직원 번호 검증
         //  TODO: 임직원 부서코드 조회
         //  NOTE:매퍼 파일 변경 가능성 있음.
-//        if (!accountMapper.existsByEmpNo(target.getEmpNo())) {
-//            return ObjectHandlingUtil.setSingleObjResultStatusVO(null, ResultCodeMsgEnum.INVALID_EMP_NO);
-//        }
+        if (!accountMapper.existsByEmpNo(target.getEmpNo())) {
+            return ObjectHandlingUtil.setSingleObjResultStatusVO(null, ResultCodeMsgEnum.INVALID_EMP_NO);
+        }
+        AccountVO o = AccountVO.builder().empNo(target.getEmpNo()).build();
+        // user 정보 조회
+        AccountVO user = accountMapper.myInfo(o);
+        // 계약서 생성을 위해 데이터 셋팅
         ContractVO contractVO = ContractVO.builder()
                                 .empNo(target.getEmpNo()).templateSeq(StringUtil.getInt(target.getTemplateCode()))
+                                .hireDateEn(StringUtil.getString(user.getEmployedAt())) //  헝가리, 영어 날짜로 변경
+                                .hireDateHu(StringUtil.getString(user.getEmployedAt()))
                                 .processStatus(ContractProcessEnum.processCode(ContractProcessEnum.CREATED))
-                                .deptCode("dept00001").createdBy("admin")
+                .contractDateHu(StringUtil.getString(target.getDate())) // format 변경
+                .contractDateEn(StringUtil.getString(target.getDate()))
+                                .deptCode(user.getDeptCode()).createdBy("admin")
                                 .build();
         int result = contractCreationMapper.saveContract(contractVO);
         if(result == 0){
@@ -61,5 +72,9 @@ public class ContractCreationService {
             return false;
         }
         return true;
+    }
+
+    public List<Template> getTemplateCode() {
+        return contractTemplateMapper.getTemplateCode();
     }
 }
