@@ -4,8 +4,8 @@
 
 <mapper namespace="com.samsung.framework.mapper.log.LogMapper">
     <insert id="saveLog" useGeneratedKeys="true">
-        INSERT INTO PROCESS_LOG(LOG_SEQ, LOG_TYPE, PROCESS_STEP, IP_ADDRESS, MAC_ADDRESS, CREATED_BY, CREATED_AT)
-             VALUES (#{logSeq}, #{logType}, #{processStep}, #{ipAddress}, #{macAddress}, #{createdBy}, sysdate())
+        INSERT INTO PROCESS_LOG(LOG_SEQ, LOG_TYPE, CONTRACT_NO, PROCESS_STEP, IP_ADDRESS, MAC_ADDRESS, CREATED_BY, CREATED_AT)
+             VALUES (#{logSeq}, #{logType}, #{contractNo}, #{processStep}, #{ipAddress}, #{macAddress}, #{createdBy}, sysdate())
         <selectKey keyProperty="logSeq" resultType="long">
             SELECT LAST_INSERT_ID()
         </selectKey>

@@ -106,9 +106,12 @@
                 contentType: false,
                 cache: false
             })
-                .done(function(data){
-                    console.log(data);
-                })
+            .done(function(data) {
+                console.log(data)
+            })
+            .fail(function(jqXHR) {
+                console.log(jqXHR);
+            });
         }
 
 

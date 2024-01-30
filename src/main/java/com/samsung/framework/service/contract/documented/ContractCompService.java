@@ -68,6 +68,7 @@ public class ContractCompService {
             result.put("code", 200);
 
             int insert = contractCompletionMapper.paperContractSave(target);
+
             if(insert < 1) {
                 result.put("code", 204);
                 result.put("message", "계약서를 다시 저장해주세요.");
@@ -75,15 +76,17 @@ public class ContractCompService {
             }
 
             var logSaveRequest = LogSaveRequest.builder()
-                    .logType(LogTypeEnum.COMPLETION)
+                    .logType(ContractProcessEnum.getProcessStatus(ContractProcessEnum.processCode(ContractProcessEnum.LOG_SIGN_N_COMPLETE)))
                     .ipAddress(request.getRemoteAddr() + ":" + request.getRemoteAddr())
                     .createdBy(String.valueOf(account.getEmpNo()))
+                    .contractNo(String.valueOf(target.getContractNo()))
                     .build();
             logUtil.saveLog(logSaveRequest);
 
             result.put("message", "계약서 저장 완료");
             return result;
         }
+
         result.put("code",400);
         result.put("message", "GHR에 존재하지 않는 사번입니다.");
         return result;

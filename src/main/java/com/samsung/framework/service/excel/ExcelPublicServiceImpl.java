@@ -74,7 +74,7 @@ public class ExcelPublicServiceImpl implements ExcelService {
         for(List<ContractExcelVO> targetList : list){
             targetList.stream().iterator().forEachRemaining(data->{
                 if(data.getTemplateCode().equals(ContractTemplateEnum.getTemplateCode(ContractTemplateEnum.SALARY))){
-                    if(StringUtil.isEmpty(data.getSalaryHu()) || StringUtil.isEmpty(data.getSalaryHu())) throw new RuntimeException("일괄 업로드를 실패하였습니다.");
+                    if(StringUtil.isEmpty(data.getSalaryEn()) || StringUtil.isEmpty(data.getSalaryHu())) throw new RuntimeException("일괄 업로드를 실패하였습니다.");
                 }
             });
         }
