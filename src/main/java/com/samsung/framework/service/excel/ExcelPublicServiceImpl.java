@@ -1,19 +1,20 @@
 package com.samsung.framework.service.excel;
 
+import com.samsung.framework.common.enums.ContractTemplateEnum;
 import com.samsung.framework.common.utils.ExcelUtil;
 import com.samsung.framework.common.utils.FileUtil;
+import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.mapper.file.FileMapper;
 import com.samsung.framework.vo.contract.ContractExcelVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -69,6 +70,14 @@ public class ExcelPublicServiceImpl implements ExcelService {
                 throw new RuntimeException(e);
             }
         });
+
+        for(List<ContractExcelVO> targetList : list){
+            targetList.stream().iterator().forEachRemaining(data->{
+                if(data.getTemplateCode().equals(ContractTemplateEnum.getTemplateCode(ContractTemplateEnum.SALARY))){
+                    if(StringUtil.isEmpty(data.getSalaryHu()) || StringUtil.isEmpty(data.getSalaryHu())) throw new RuntimeException("일괄 업로드를 실패하였습니다.");
+                }
+            });
+        }
         return list;
     }
 

@@ -75,7 +75,7 @@ public class ExcelUtil {
            Map<String, Integer> finder = createFinder(firstRow, voClass);
 
            sheet.rowIterator().forEachRemaining(row-> {
-               if(row.getRowNum() != firstRowNum) {
+               if(row.getRowNum() != firstRowNum && row.getRowNum() != 1) {
                    T t = rowToVO(finder, row, voClass);
                    if(t!= null) {
                        voList.add(t);
@@ -130,8 +130,6 @@ public class ExcelUtil {
             t = noArgsConstructor.newInstance();
             Field[] fields = voClass.getDeclaredFields();
             for(Field field: fields){
-                log.info("field : {}", field);
-
                 String name;
                 try{
                     ExcelColumn annotation = field.getAnnotation(ExcelColumn.class);
@@ -139,7 +137,6 @@ public class ExcelUtil {
                 } catch (Exception e){
                     name = field.getName();
                 }
-                log.info("name :: {}", name);
                 Integer index = finder.get(name);
 
                 if(index == -1) continue;
@@ -171,12 +168,14 @@ public class ExcelUtil {
             case NUMERIC:
                 if(field.getType().getSimpleName().equals("Long")){
                     result = Double.valueOf(cell.getNumericCellValue()).longValue();
-                } else{
+                } else if(org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(cell)){
+                   result = String.valueOf(cell.getDateCellValue());
+                }else{
                     result = (int)cell.getNumericCellValue();
                 }
                 break;
         }
-        log.info("result :: {}", result);
+        log.info("mathchFields :: {}", result);
         return result;
     }
 }

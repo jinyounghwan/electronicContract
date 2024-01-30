@@ -55,8 +55,7 @@ public class ExcelController {
         }
         List<List<ContractExcelVO>> list =excelService.readExcelFile(fileList);
         result.put("list",list);
-
-
+        
         return ResponseEntity.ok(result);
     }
 }

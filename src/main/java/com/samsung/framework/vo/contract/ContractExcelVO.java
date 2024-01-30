@@ -11,7 +11,7 @@ public class ContractExcelVO {
     @ExcelColumn(headerName = "name")
     String name;
     @ExcelColumn(headerName = "empNo")
-    int empNo;
+    String empNo;
     @ExcelColumn(headerName = "hireDateHu")
     String hireDateHu;
     @ExcelColumn(headerName = "hireDateEn")
@@ -32,4 +32,6 @@ public class ContractExcelVO {
     String wageTypeHu;
     @ExcelColumn(headerName = "contractDateHu")
     String contractDateHu;
+    @ExcelColumn(headerName = "templateCode")
+    String templateCode;
 }
