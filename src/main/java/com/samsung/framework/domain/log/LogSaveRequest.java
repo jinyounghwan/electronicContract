@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.lang.reflect.Type;
+
 @ToString
 @AllArgsConstructor
 @Builder
@@ -18,7 +20,7 @@ public class LogSaveRequest {
     private long logSeq;
 
     @NotNull(message = "로그 유형은 필수 값 입니다.")
-    private LogTypeEnum logType;
+    private Object logType;
 
     private String processStep;
 
@@ -31,4 +33,6 @@ public class LogSaveRequest {
     private String createdBy;
 
     private String createdAt;
+
+    private String contractNo;
 }
