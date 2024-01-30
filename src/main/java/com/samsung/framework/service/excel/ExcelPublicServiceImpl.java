@@ -1,5 +1,6 @@
 package com.samsung.framework.service.excel;
 
+import com.samsung.framework.common.enums.ContractTemplateEnum;
 import com.samsung.framework.common.utils.ExcelUtil;
 import com.samsung.framework.common.utils.FileUtil;
 import com.samsung.framework.common.utils.StringUtil;
@@ -72,7 +73,7 @@ public class ExcelPublicServiceImpl implements ExcelService {
 
         for(List<ContractExcelVO> targetList : list){
             targetList.stream().iterator().forEachRemaining(data->{
-                if(data.getTemplateCode().equals("TEMP2000")){
+                if(data.getTemplateCode().equals(ContractTemplateEnum.getTemplateCode(ContractTemplateEnum.SALARY))){
                     if(StringUtil.isEmpty(data.getSalaryHu()) || StringUtil.isEmpty(data.getSalaryHu())) throw new RuntimeException("일괄 업로드를 실패하였습니다.");
                 }
             });
