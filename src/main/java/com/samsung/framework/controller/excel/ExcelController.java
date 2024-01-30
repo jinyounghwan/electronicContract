@@ -7,11 +7,9 @@ import com.samsung.framework.vo.file.FilePublicVO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +40,7 @@ public class ExcelController {
      * excel 파일 읽기
      */
     @PostMapping("/write")
-    public ResponseEntity readExcel(@RequestBody List<MultipartFile> multipartFiles) throws Exception {
+    public ResponseEntity readExcel(@RequestPart(value="file", required = true) List<MultipartFile> multipartFiles) throws Exception {
         Map<String, Object> result = new HashMap<>();
         List<FilePublicVO> fileList = fileService.uploadFile(multipartFiles, "Contract/Excel");
         if(fileList.isEmpty()) {
@@ -57,5 +55,11 @@ public class ExcelController {
         result.put("list",list);
         
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/sample2")
+    public ModelAndView sample2(ModelAndView mv){
+        mv.setViewName("sample/sample2");
+        return mv;
     }
 }
