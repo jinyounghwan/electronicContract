@@ -72,6 +72,9 @@
                 #{hireDateEn}, #{contractDateHu},
                 #{contractDateEn}
                 )
+        <selectKey resultType="long" keyProperty="contractNo" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
     </insert >
 
     <insert id="contractCompSave">
