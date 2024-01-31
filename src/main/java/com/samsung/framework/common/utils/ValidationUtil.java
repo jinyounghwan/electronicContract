@@ -1,6 +1,7 @@
 package com.samsung.framework.common.utils;
 
 import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
+import com.samsung.framework.vo.common.BulkExcelVO;
 import com.samsung.framework.vo.contract.ContractExcelVO;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -85,7 +86,7 @@ public class ValidationUtil {
      * @return validated {@link ContractExcelVO}
      * @param <T>
      */
-    public <T extends ContractExcelVO> T excelBulkDataValidator(List<T> bulkList, Class<T> clazz) {
+    public <T extends ContractExcelVO> BulkExcelVO excelBulkDataValidator(List<T> bulkList, Class<T> clazz) {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
 
@@ -97,14 +98,13 @@ public class ValidationUtil {
                 for (ConstraintViolation<T> violation : validate) {
                     log.error("[excelBulkDataValidator] {}(empNo) / {}", obj.getEmpNo(), violation.getMessage());
                 }
-                return obj;
+
+                return new BulkExcelVO(obj.getEmpNo());
             }else {
                 // TODO: IJ 유저정보 등록 여부 조회 및 검증 필요
             }
         }
-        ContractExcelVO validated = new ContractExcelVO();
-        validated.setEmpNo("00000000");
 
-        return clazz.cast(validated);
+        return new BulkExcelVO("00000000");
     }
 }
