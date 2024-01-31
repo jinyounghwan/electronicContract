@@ -67,4 +67,12 @@ public class GhtAccountVO {
     String shiftName;
     // 출생지
     String birthPlace;
+    // 계약일 헝가리어
+    String hireDateHu;
+    // 계약일 영어
+    String hireDateEn;
+    // 급여 형태
+    String wageType;
+    // 급여(숫자)
+    int salaryNo;
 }

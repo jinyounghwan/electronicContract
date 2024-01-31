@@ -22,23 +22,23 @@
                                 <tbody>
                                 <tr>
                                     <th class="col-2">Last Name</th>
-                                    <td th:text="${account.getName()}"></td>
+                                    <td><input type="text" name="lastName" class="form-control form-control-user" th:placeholder="${account.getLastName()}"></td>
                                 </tr>
                                 <tr>
                                     <th>First Name</th>
-                                    <td th:text="${account.getName()}"></td>
+                                    <td><input type="text" name="firstName" class="form-control form-control-user" th:placeholder="${account.getFirstName()}"></td>
                                 </tr>
                                 <tr>
                                     <th>Email</th>
-                                    <td th:text="${account.getEmail()}"></td>
+                                    <td><input type="text" name="email" class="form-control form-control-user" th:placeholder="${account.getEmail()}"></td>
                                 </tr>
                                 <tr>
                                     <th>password</th>
-                                    <td><input type="password" id="password" class="form-control form-control-user" placeholder=""></td>
+                                    <td><input type="password" name="password" id="password" class="form-control form-control-user" placeholder=""></td>
                                 </tr>
                                 <tr>
                                     <th>Confirm Password</th>
-                                    <td><input type="password" id="confirmPassword" class="form-control form-control-user" placeholder=""></td>
+                                    <td><input type="password" name="confirmPassword" id="confirmPassword" class="form-control form-control-user" placeholder=""></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -58,22 +58,29 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         function edit(adminId){
+            let lastName = $('input[name=lastName]').val();
+            let firstName = $('input[name=firstName]').val();
+
+            if( (lastName!=='' && firstName==='') && (lastName==='' && firstName!=='') ){
+                alert("lastName 또는 FirstName이 비어있습니다.");
+                return false;
+            }
+
             const data = {
-                password: $('#password').val(),
-                confirmPassword: $('#confirmPassword').val(),
+                name:  lastName +' '+ firstName,
+                password: $('input[name=password]').val(),
+                email: $('input[name=email]').val(),
+                confirmPassword: $('input[name=confirmPassword]').val(),
                 userId: adminId
             };
+
             if(data.password !== data.confirmPassword){
                 alert("패스워드가 일치하지 않습니다.");
                 return false;
             }
 
-            if(data.password==='' && data.confirmPassword===''){
-                alert("패스워드를 입력해주세요.");
-                return false;
-            }
             $.ajax({
-                url : '/api/admin/update',
+                url : '/account/api/admin/update',
                 type : 'post',
                 dataType: 'text',
                 contentType: 'application/json',

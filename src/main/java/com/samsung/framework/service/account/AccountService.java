@@ -4,10 +4,7 @@ package com.samsung.framework.service.account;
 import com.samsung.framework.common.config.JasyptConfig;
 import com.samsung.framework.common.enums.*;
 import com.samsung.framework.common.exception.CustomLoginException;
-import com.samsung.framework.common.utils.DateUtil;
-import com.samsung.framework.common.utils.LogUtil;
-import com.samsung.framework.common.utils.ObjectHandlingUtil;
-import com.samsung.framework.common.utils.ValidationUtil;
+import com.samsung.framework.common.utils.*;
 import com.samsung.framework.domain.account.Account;
 import com.samsung.framework.domain.account.LoginRequest;
 import com.samsung.framework.domain.account.PwdChangeRequest;
@@ -27,10 +24,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -53,11 +48,19 @@ public class AccountService {
      * @param userId
      * @return
      */
-    public AccountVO getAccountDetail(String userId){
+    public AccountVO getAccountDetail(String userId) throws UnsupportedEncodingException {
         AccountVO account = accountMapper.getAccountDetail(userId);
         account.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(account.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         account.setUpdatedAtStr(DateUtil.convertLocalDateTimeToString(account.getUpdatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         account.setLastLoginStr(DateUtil.convertLocalDateTimeToString(account.getLastLogin(), DateUtil.DATETIME_YMDHM_PATTERN));
+
+        int index =account.getName().indexOf(" ");
+        if(index > 0){
+            String lastName = StringUtil.getSubstring(account.getName(),0,index);
+            String firstName = StringUtil.getSubstring(account.getName(), index);
+            account.setFirstName(firstName);
+            account.setLastName(lastName);
+        }
         return account;
     }
 
@@ -221,7 +224,7 @@ public class AccountService {
      * @param account
      * @return
      */
-    public Map<String, Object> updEmployeeAcct(@Valid AccountVO account){
+    public Map<String, Object> updEmployeeAcct(HttpServletRequest request, @Valid AccountVO account){
         var result = new HashMap<String, Object>();
 
         if(validationUtil.parameterValidator(account, AccountVO.class)){
@@ -239,6 +242,14 @@ public class AccountService {
                 return result;
             }
              result.put("message", "수정 되었습니다.");
+            //로그 저장
+             var logSaveRequest = LogSaveRequest.builder()
+                    .logType(LogTypeEnum.PASSWORD_CHANGE)
+                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemoteAddr())
+                    .createdBy(String.valueOf(account.getUserId()))
+                    .build();
+
+             logUtil.saveLog(logSaveRequest);
              return result;
         }
         result.put("code", 400);
@@ -252,7 +263,7 @@ public class AccountService {
      * @param account
      * @return
      */
-    public Map<String, Object> updAdminAcct(@Valid AccountVO account){
+    public Map<String, Object> updAdminAcct(HttpServletRequest request, @Valid AccountVO account){
         var result = new HashMap<String, Object>();
 
         if(validationUtil.parameterValidator(account, AccountVO.class)){
@@ -270,7 +281,16 @@ public class AccountService {
                 result.put("message", "수정할 대상이 없습니다.");
                 return result;
             }
+            //로그 저장
+            var logSaveRequest = LogSaveRequest.builder()
+                    .logType(LogTypeEnum.PASSWORD_CHANGE)
+                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemoteAddr())
+                    .createdBy(String.valueOf(account.getUserId()))
+                    .build();
+            logUtil.saveLog(logSaveRequest);
+
             result.put("message", "수정 되었습니다.");
+
             return result;
         }
         result.put("code", 400);
@@ -294,7 +314,7 @@ public class AccountService {
                 result.put("message", "수정할 대상이 없습니다.");
             }
             result.put("message", "수정 되었습니다.");
-
+            //로그 저장
             var logSaveRequest = LogSaveRequest.builder()
                     .logType(LogTypeEnum.PASSWORD_CHANGE)
                     .ipAddress(request.getRemoteAddr() + ":" + request.getRemoteAddr())

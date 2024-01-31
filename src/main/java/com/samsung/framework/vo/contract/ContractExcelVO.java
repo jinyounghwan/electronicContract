@@ -8,34 +8,31 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ContractExcelVO {
-    @ExcelColumn(headerName = "name")
-    String name;
-    @ExcelColumn(headerName = "empNo")
+    @ExcelColumn(headerName = "EmpNo")
     String empNo;
     @ExcelColumn(headerName = "hireDateHu")
     String hireDateHu;
     @ExcelColumn(headerName = "hireDateEn")
     String hireDateEn;
-    @ExcelColumn(headerName = "jobTitleHu")
-    String jobTitleHu;
-    @ExcelColumn(headerName = "jobTitleEn")
-    String jobTitleEn;
-    @ExcelColumn(headerName = "salaryNo")
+    @ExcelColumn(headerName = "SalaryNo")
     String salaryNo;
-    @ExcelColumn(headerName = "salaryHu")
+    @ExcelColumn(headerName = "SalaryHu")
     String salaryHu;
-    @ExcelColumn(headerName = "salaryEn")
+    @ExcelColumn(headerName = "SalaryEn")
     String salaryEn;
-    @ExcelColumn(headerName = "wageTypeEn")
-    String wageTypeEn;
-    @ExcelColumn(headerName = "wageTypeHu")
-    String wageTypeHu;
-    @ExcelColumn(headerName = "contractDateHu")
-    String contractDateHu;
-    @ExcelColumn(headerName = "templateCode")
+    @ExcelColumn(headerName = "TemplateCode")
     String templateCode;
-    @ExcelColumn(headerName = "contractDateEn")
+    @ExcelColumn(headerName = "TemplateSeq")
+    String templateSeq;
+    @ExcelColumn(headerName = "ContractDate")
+    String contractDate;
+    String jobTitleHu;
+    String jobTitleEn;
+    String wageTypeEn;
+    String wageTypeHu;
+    String contractDateHu;
     String contractDateEn;
+    String name;
 
     /*
     *   통과여부

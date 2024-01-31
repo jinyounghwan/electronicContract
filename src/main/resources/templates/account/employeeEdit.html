@@ -22,11 +22,11 @@
                                 <tbody>
                                 <tr>
                                     <th class="col-2">Last Name</th>
-                                    <td th:text="${account.getName()}"></td>
+                                    <td th:text="${account.getLastName()}"></td>
                                 </tr>
                                 <tr>
                                     <th>First Name</th>
-                                    <td th:text="${account.getName()}"></td>
+                                    <td th:text="${account.getFirstName()}"></td>
                                 </tr>
                                 <tr>
                                     <th>Email</th>
@@ -73,7 +73,7 @@
                 return false;
             }
             $.ajax({
-                url : '/api/employee/update',
+                url : '/account/api/employee/update',
                 type : 'post',
                 dataType: 'text',
                 contentType: 'application/json',

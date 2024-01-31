@@ -381,6 +381,10 @@ public class DateUtil {
      * @return String
      */
     public static String getStrContractDateEn(String date){
+        int index = date.indexOf(" ");
+        if(index >0){
+            date = date.substring(0, index);
+        }
         StringTokenizer st =new StringTokenizer(date, "-");
         String year = st.nextToken();
         String month = st.nextToken();

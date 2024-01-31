@@ -37,4 +37,6 @@ public class AccountVO {
             , message="비밀번호는 영어와 숫자 포함해서 8~16자리 이내로 입력해주세요.")
     private String password;
     private String confirmPassword;
+    private String firstName;
+    private String lastName;
 }
