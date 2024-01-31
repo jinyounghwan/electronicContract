@@ -12,9 +12,13 @@ sourceCompatibility = '17'
 //apply plugin: 'war'
 
 bootJar {
-	archiveBaseName = 'framework'
+	archiveBaseName = 'e-contract'
 	archiveFileName = 'e-contract-1.0.0-RELEASE.jar'
-	archiveVersion = '0.0.1'
+	archiveVersion = '1.0.0'
+}
+
+jar {
+	enabled = false
 }
 
 sourceSets {
@@ -35,7 +39,7 @@ repositories {
 	mavenCentral()
 }
 
-ext['spring-security.version']='6.1.1'
+//ext['spring-security.version']='6.1.1'
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
