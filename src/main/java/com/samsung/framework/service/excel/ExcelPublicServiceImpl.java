@@ -1,10 +1,13 @@
 package com.samsung.framework.service.excel;
 
 import com.samsung.framework.common.enums.ContractTemplateEnum;
+import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.ExcelUtil;
 import com.samsung.framework.common.utils.FileUtil;
 import com.samsung.framework.common.utils.StringUtil;
+import com.samsung.framework.mapper.account.ghr.GhrAccountMapper;
 import com.samsung.framework.mapper.file.FileMapper;
+import com.samsung.framework.vo.account.ghr.GhtAccountVO;
 import com.samsung.framework.vo.contract.ContractExcelVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +27,7 @@ public class ExcelPublicServiceImpl implements ExcelService {
     private final ExcelUtil excelUtil;
     private final FileUtil fileUtil;
     private final FileMapper fileMapper;
-
+    private final GhrAccountMapper ghrAccountMapper;
     @Value("${properties.file.rootDir}")
     private String getRootDir;
     @Value("${properties.file.realDir}")
@@ -59,7 +62,7 @@ public class ExcelPublicServiceImpl implements ExcelService {
         return file.getName();
     }
 
-    public List<List<ContractExcelVO>> readExcelFile(List<FilePublicVO> fileList) {
+    public List<List<ContractExcelVO>> readExcelFile(List<FilePublicVO> fileList) throws Exception {
         Iterator<FilePublicVO> iter = fileList.iterator();
         List<List<ContractExcelVO>> list = new ArrayList<>();
         iter.forEachRemaining(value->{
@@ -72,6 +75,7 @@ public class ExcelPublicServiceImpl implements ExcelService {
         });
         AtomicInteger rowNum = new AtomicInteger();
         for(List<ContractExcelVO> targetList : list){
+            getGhrAccountInfo(targetList);
             targetList.stream().iterator().forEachRemaining(data->{
                 if(data.getTemplateCode().equals(ContractTemplateEnum.getTemplateCode(ContractTemplateEnum.SALARY))){
                     if(StringUtil.isEmpty(data.getSalaryEn()) || StringUtil.isEmpty(data.getSalaryHu())){
@@ -96,4 +100,23 @@ public class ExcelPublicServiceImpl implements ExcelService {
         return fileMapper.saveExcelFile(file);
     }
 
+    /**
+     * TODO: WAGE_TYPE Setting 필요
+     * @param list
+     */
+    public void getGhrAccountInfo(List<ContractExcelVO> list) throws Exception{
+        list.stream().iterator().forEachRemaining(data->{
+            GhtAccountVO ghrAccount = ghrAccountMapper.getGhrInfo(Integer.parseInt(data.getEmpNo()));
+            data.setName(ghrAccount.getName());
+            data.setJobTitleEn(ghrAccount.getJob());
+            data.setJobTitleHu(ghrAccount.getJob());
+            data.setHireDateHu(DateUtil.convertLocalDateTimeToString(ghrAccount.getHireDate(),"YYYY-MM-dd"));
+            data.setHireDateEn(DateUtil.getStrContractDateEn(data.getHireDateHu()));
+            data.setContractDateHu(data.getContractDate());
+            data.setContractDateEn(DateUtil.getStrContractDateEn(data.getContractDate()));
+            data.setWageTypeEn(ghrAccount.getWageType());
+            data.setWageTypeHu(ghrAccount.getWageType());
+            data.setSalaryNo(String.valueOf(ghrAccount.getSalaryNo()));
+        });
+    }
 }

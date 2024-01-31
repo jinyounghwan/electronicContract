@@ -10,6 +10,11 @@
         FROM GHR_ACCOUNT_INFO
         WHERE EMP_NO = #{empNo}
     </select>
-
+    <select id="getGhrInfo" parameterType="Integer">
+        SELECT JOB AS JOB, HIRE_DATE AS HIRE_DATE,
+               NAME AS NAME
+        FROM GHR_ACCOUNT_INFO
+        WHERE EMP_NO = #{empNo}
+    </select>
 
 </mapper>
