@@ -3,7 +3,7 @@
 
     <!-- Properties -->
     <property name="LOG_DIR" value="logs" />
-    <property name="LOG_FILE_NAME" value="electronic-contract" />
+    <property name="LOG_FILE_NAME" value="electronic-contract-app" />
     <property name="CONSOLE_ENCODING_PATTERN" value="[ %d{yyyy-MM-dd HH:mm:ss.SSS} ] %highlight(%-5level) %magenta(%-4relative) --- [ %thread{10} ] %cyan(%logger{20}) : %msg%n" />
     <property name="FILE_ENCODING_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-4relative --- [ %thread{10} ] %logger{35} - %msg%n" />
 
