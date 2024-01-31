@@ -36,7 +36,8 @@ public class ContractExcelVO {
     String templateCode;
     @ExcelColumn(headerName = "contractDateEn")
     String contractDateEn;
-
+    @ExcelColumn(headerName = "templateSeq")
+    String templateSeq;
     /*
     *   통과여부
     * */
