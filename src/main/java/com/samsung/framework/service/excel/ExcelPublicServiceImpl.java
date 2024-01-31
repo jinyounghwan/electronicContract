@@ -10,11 +10,11 @@ import com.samsung.framework.vo.file.FilePublicVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 @RequiredArgsConstructor
@@ -70,11 +70,17 @@ public class ExcelPublicServiceImpl implements ExcelService {
                 throw new RuntimeException(e);
             }
         });
-
+        AtomicInteger rowNum = new AtomicInteger();
         for(List<ContractExcelVO> targetList : list){
             targetList.stream().iterator().forEachRemaining(data->{
                 if(data.getTemplateCode().equals(ContractTemplateEnum.getTemplateCode(ContractTemplateEnum.SALARY))){
-                    if(StringUtil.isEmpty(data.getSalaryEn()) || StringUtil.isEmpty(data.getSalaryHu())) throw new RuntimeException("일괄 업로드를 실패하였습니다.");
+                    if(StringUtil.isEmpty(data.getSalaryEn()) || StringUtil.isEmpty(data.getSalaryHu())){
+                        data.setValidation(false);
+                        //throw new RuntimeException("일괄 업로드를 실패하였습니다.");
+                    }
+                    rowNum.getAndIncrement();
+                    data.setValidation(true);
+                    data.setRowNum(rowNum.intValue());
                 }
             });
         }

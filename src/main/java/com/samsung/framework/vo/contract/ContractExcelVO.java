@@ -34,4 +34,12 @@ public class ContractExcelVO {
     String contractDateHu;
     @ExcelColumn(headerName = "templateCode")
     String templateCode;
+
+    /*
+    *   통과여부
+    * */
+    boolean validation;
+    int rowNum;
+
+
 }
