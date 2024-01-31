@@ -34,4 +34,6 @@ public class ContractExcelVO {
     String contractDateHu;
     @ExcelColumn(headerName = "templateCode")
     String templateCode;
+    @ExcelColumn(headerName = "contractDateEn")
+    String contractDateEn;
 }
