@@ -206,6 +206,6 @@
                 NAME = #{name}
             </if>
         WHERE
-            U.ADMIN_ID = #{admindId}
+            U.ADMIN_ID = #{adminId}
     </update>
 </mapper>

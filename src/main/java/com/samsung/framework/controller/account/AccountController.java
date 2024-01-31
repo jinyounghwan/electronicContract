@@ -6,7 +6,6 @@ import com.samsung.framework.common.enums.LogTypeEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
 import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
-import com.samsung.framework.domain.account.Account;
 import com.samsung.framework.domain.account.LoginRequest;
 import com.samsung.framework.domain.account.PwdChangeRequest;
 import com.samsung.framework.domain.account.SignUpRequest;
@@ -29,6 +28,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -215,14 +215,14 @@ public class AccountController {
     }
 
     @GetMapping("/employee/detail/{userId}")
-    public ModelAndView getEmployeeDetail(ModelAndView mv, @PathVariable("userId")String userId){
+    public ModelAndView getEmployeeDetail(ModelAndView mv, @PathVariable("userId")String userId) throws UnsupportedEncodingException {
         AccountVO account = accountService.getAccountDetail(userId);
         mv.addObject("account", account);
         mv.setViewName("account/employeeDetail");
         return mv;
     }
     @GetMapping("/admin/detail/{userId}")
-    public ModelAndView getAdminDetail(ModelAndView mv, @PathVariable("userId")String userId){
+    public ModelAndView getAdminDetail(ModelAndView mv, @PathVariable("userId")String userId) throws UnsupportedEncodingException {
         AccountVO account = accountService.getAccountDetail(userId);
         mv.addObject("account",account);
         mv.setViewName("account/adminDetail");
@@ -230,21 +230,22 @@ public class AccountController {
     }
 
     @GetMapping("/admin/edit/{userId}")
-    public ModelAndView getAdminEdit(ModelAndView mv, @PathVariable("userId")String userId){
+    public ModelAndView getAdminEdit(ModelAndView mv, @PathVariable("userId")String userId) throws UnsupportedEncodingException {
         AccountVO account = accountService.getAccountDetail(userId);
         mv.addObject("account",account);
         mv.setViewName("account/adminEdit");
         return mv;
     }
     @PostMapping("/api/employee/update")
-    public ResponseEntity updEmployeeAcct(@RequestBody AccountVO account){
-        Map<String, Object> result = accountService.updEmployeeAcct(account);
+    public ResponseEntity updEmployeeAcct(HttpServletRequest request, @RequestBody AccountVO account){
+        Map<String, Object> result = accountService.updEmployeeAcct(request, account);
 
         return ResponseEntity.ok(result);
     }
     @PostMapping("/api/admin/update")
-    public ResponseEntity updAdminAcct(@RequestBody AccountVO account){
-        Map<String, Object> result = accountService.updAdminAcct(account);
+    public ResponseEntity updAdminAcct(HttpServletRequest request, @RequestBody AccountVO account){
+        log.info("updAdminAcct");
+        Map<String, Object> result = accountService.updAdminAcct(request, account);
 
         return ResponseEntity.ok(result);
     }
@@ -301,7 +302,7 @@ public class AccountController {
     }
 
     @GetMapping("/employee/edit/{userId}")
-    public ModelAndView getEmployeeEdit(ModelAndView mv, @PathVariable("userId")String userId){
+    public ModelAndView getEmployeeEdit(ModelAndView mv, @PathVariable("userId")String userId) throws UnsupportedEncodingException {
         AccountVO account = accountService.getAccountDetail(userId);
         mv.addObject("account",account);
         mv.setViewName("account/employeeEdit");
