@@ -10,4 +10,9 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
     </insert>
+
+    <select id="isExistsPasswordChangeLog" resultType="boolean">
+        SELECT
+            EXISTS(SELECT 1 FROM PROCESS_LOG WHERE LOG_TYPE='PASSWORD_CHANGE' AND CREATED_BY = #{userId})
+    </select>
 </mapper>

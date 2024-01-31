@@ -2,22 +2,26 @@ package com.samsung.framework.service.account;
 
 
 import com.samsung.framework.common.config.JasyptConfig;
-import com.samsung.framework.common.enums.AccountTypeEnum;
-import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
-import com.samsung.framework.common.enums.PositionEnum;
+import com.samsung.framework.common.enums.*;
 import com.samsung.framework.common.exception.CustomLoginException;
 import com.samsung.framework.common.utils.DateUtil;
+import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
 import com.samsung.framework.common.utils.ValidationUtil;
+import com.samsung.framework.domain.account.Account;
 import com.samsung.framework.domain.account.LoginRequest;
+import com.samsung.framework.domain.account.PwdChangeRequest;
 import com.samsung.framework.domain.account.SignUpRequest;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.domain.common.SearchObject;
+import com.samsung.framework.domain.log.LogSaveRequest;
 import com.samsung.framework.mapper.account.AccountMapper;
+import com.samsung.framework.mapper.log.LogMapper;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.common.CollectionPagingVO;
 import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.account.AccountSearchVO;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,8 +39,8 @@ public class AccountService {
     private final ValidationUtil validationUtil;
     private final JasyptConfig jasyptConfig;
     private final AccountMapper accountMapper;
-
-
+    private final LogMapper logMapper;
+    private final LogUtil logUtil;
     /**
      * 회원 총 개수 (임직원, 관리자)
      * @param accountSearchVO {@link AccountSearchVO}
@@ -180,7 +184,6 @@ public class AccountService {
      * @return {@link AccountVO}
      */
     public AccountVO getLoginInfo(@Valid LoginRequest loginRequest) throws CustomLoginException {
-        log.info("UserId : {}", loginRequest.getUserId());
         AccountVO target = accountMapper.getLoginInfo(loginRequest.getUserId());
 
         if(target == null) {
@@ -193,6 +196,7 @@ public class AccountService {
 
         if (loginRequest.getPassword().equals(jasyptConfig.jasyptDecrypt(target.getUserPw()))) {
             return AccountVO.builder()
+                    .userId(loginRequest.getUserId())
                     .empNo(target.getEmpNo())
                     .deptCode(target.getDeptCode())
                     .adminId(target.getAdminId())
@@ -213,22 +217,22 @@ public class AccountService {
     }
 
     /**
-     * Admin 계정 변경
+     * 임직원 계정 변경
      * @param account
      * @return
      */
-    public Map<String, Object> updAcct(@Valid AccountVO account){
+    public Map<String, Object> updEmployeeAcct(@Valid AccountVO account){
         var result = new HashMap<String, Object>();
 
         if(validationUtil.parameterValidator(account, AccountVO.class)){
             AccountVO target = AccountVO.builder()
-                    .userId(account.getUserId())
-                    .password(jasyptConfig.jasyptEncrypt(account.getPassword()))
+                    .empNo(Integer.parseInt(account.getUserId()))
+                    .userPw(jasyptConfig.jasyptEncrypt(account.getPassword()))
                     .build();
 
             result.put("code", 200);
 
-            int update = accountMapper.updAcct(target);
+            int update = accountMapper.updEmployeeAcct(target);
             if(update<1){
                 result.put("code", 204);
                 result.put("message", "수정할 대상이 없습니다.");
@@ -240,6 +244,68 @@ public class AccountService {
         result.put("code", 400);
         result.put("message", "비밀번호는 영어와 숫자 포함해서 8~16자리 이내로 입력해주세요.");
 
+        return result;
+    }
+
+    /**
+     * 관리자 계정 변경
+     * @param account
+     * @return
+     */
+    public Map<String, Object> updAdminAcct(@Valid AccountVO account){
+        var result = new HashMap<String, Object>();
+
+        if(validationUtil.parameterValidator(account, AccountVO.class)){
+            AccountVO target = AccountVO.builder()
+                    .name(account.getName())
+                    .adminId(account.getUserId())
+                    .userPw(jasyptConfig.jasyptEncrypt(account.getPassword()))
+                    .build();
+
+            result.put("code", 200);
+
+            int update = accountMapper.updAdminAcct(target);
+            if(update<1){
+                result.put("code", 204);
+                result.put("message", "수정할 대상이 없습니다.");
+                return result;
+            }
+            result.put("message", "수정 되었습니다.");
+            return result;
+        }
+        result.put("code", 400);
+        result.put("message", "비밀번호는 영어와 숫자 포함해서 8~16자리 이내로 입력해주세요.");
+
+        return result;
+    }
+
+    public Map<String, Object> updPwd(HttpServletRequest request,@Valid PwdChangeRequest pwdChangeRequest, AccountVO accountVO){
+        var result = new HashMap<String, Object>();
+        if(validationUtil.parameterValidator(pwdChangeRequest, PwdChangeRequest.class)){
+            AccountVO account = AccountVO.builder()
+                    .userPw(jasyptConfig.jasyptEncrypt(pwdChangeRequest.getPassword()))
+                    .userId(accountVO.getUserId())
+                    .empNo(accountVO.getEmpNo())
+                    .build();
+
+            int update = accountMapper.updPwd(account);
+            if(update < 1){
+                result.put("code", 204);
+                result.put("message", "수정할 대상이 없습니다.");
+            }
+            result.put("message", "수정 되었습니다.");
+
+            var logSaveRequest = LogSaveRequest.builder()
+                    .logType(LogTypeEnum.PASSWORD_CHANGE)
+                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemoteAddr())
+                    .createdBy(String.valueOf(account.getUserId()))
+                    .build();
+            logUtil.saveLog(logSaveRequest);
+
+            return result;
+        }
+        result.put("code",400);
+        result.put("message", "비밀번호는 영어와 숫자 포함해서 8~16자리 이내로 입력해주세요.");
         return result;
     }
 }

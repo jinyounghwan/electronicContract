@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum LogTypeEnum {
 
+
     LOGIN("로그인")
     , CONTRACT_PROCESS("계약서 진행상황")
     , LOG_CREATE("PRCS3001")
@@ -17,7 +18,8 @@ public enum LogTypeEnum {
     , LOG_DOWNLOAD("PRCS3006")
     , LOG_PAPER_SIGN("PRCS3007")
     , LOG_VIEW("PRCS3008")
-    , COMPLETION("계약서 완료");
+    ,PASSWORD_CHANGE("패스워드 변경");
+
 
     private String description;
 

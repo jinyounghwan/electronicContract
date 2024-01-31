@@ -170,12 +170,13 @@
         )
     </insert>
 
-    <update id="updAcct">
+    <update id="updPwd" parameterType="AccountVO">
         UPDATE USERS U
-        SET USER_PW = #{password}
+        SET USER_PW = #{userPw}
         WHERE U.ADMIN_ID = #{userId}
-            OR U.EMP_NO = #{userId}
+            OR U.EMP_NO = #{empNo}
     </update>
+    
     <select id="myInfo" parameterType="AccountVO" resultType="AccountVo">
         select emp_no
             , admin_id
@@ -188,5 +189,23 @@
         where emp_no = #{empNo}
            or admin_id =#{adminId}
     </select>
+    
+    <update id="updEmployeeAcct" parameterType="AccountVO">
+        UPDATE USERS U
+        SET USER_PW = #{userPw}
+        WHERE U.EMP_NO = #{empNo}
+    </update>
 
+    <update id="updAdminAcct" parameterType="AccountVO">
+        UPDATE USERS U
+        SET
+            <if test="(userPw != null and userPw != '')">
+                USER_PW = #{userPw} ,
+            </if>
+            <if test="(name != null and name != '')">
+                NAME = #{name}
+            </if>
+        WHERE
+            U.ADMIN_ID = #{admindId}
+    </update>
 </mapper>

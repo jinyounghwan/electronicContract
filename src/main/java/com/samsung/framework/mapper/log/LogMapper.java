@@ -7,4 +7,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface LogMapper {
 
     int saveLog(LogSaveRequest logSaveRequest);
+    boolean isExistsPasswordChangeLog(String createdBy);
 }

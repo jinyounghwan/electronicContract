@@ -8,17 +8,17 @@ import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
 import com.samsung.framework.domain.account.Account;
 import com.samsung.framework.domain.account.LoginRequest;
+import com.samsung.framework.domain.account.PwdChangeRequest;
 import com.samsung.framework.domain.account.SignUpRequest;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.domain.log.LogSaveRequest;
+import com.samsung.framework.mapper.log.LogMapper;
 import com.samsung.framework.service.account.AccountService;
 import com.samsung.framework.service.menu.MenuService;
 import com.samsung.framework.vo.account.AccountVO;
-import com.samsung.framework.vo.common.PagingVO;
 import com.samsung.framework.vo.log.LogSaveResponse;
 import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.account.AccountSearchVO;
-import com.samsung.framework.vo.search.board.BoardSearchVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class AccountController {
     private final AccountService accountService;
     private final MenuService menuService;
     private final LogUtil logUtil;
-    
+    private final LogMapper logMapper;
     // [검색옵션] 날짜
     @ModelAttribute("dateRangeSelect")
     public List<SearchVO> searchDateRangeOptionList() {
@@ -168,7 +169,7 @@ public class AccountController {
     @GetMapping({"", "/login"})
     public ModelAndView login(ModelAndView mv) {
         mv.addObject("member", new AccountVO());
-        mv.setViewName("login/view-login");
+        mv.setViewName("account/login");
         return mv;
     }
 
@@ -191,10 +192,11 @@ public class AccountController {
             var logSaveRequest = LogSaveRequest.builder()
                     .logType(LogTypeEnum.LOGIN)
                     .ipAddress(request.getRemoteAddr() + ":" + request.getRemoteAddr())
-                    .createdBy(String.valueOf(loginInfo.getEmpNo()))
+                    .createdBy(String.valueOf(loginRequest.getUserId()))
                     .build();
 
             Map<String, LogSaveResponse> resultMap = logUtil.saveLog(logSaveRequest);
+
             return ResponseEntity.ok().body(resultMap);
         }else {
             session.setAttribute("loginInfo", null);
@@ -234,10 +236,15 @@ public class AccountController {
         mv.setViewName("account/adminEdit");
         return mv;
     }
+    @PostMapping("/api/employee/update")
+    public ResponseEntity updEmployeeAcct(@RequestBody AccountVO account){
+        Map<String, Object> result = accountService.updEmployeeAcct(account);
 
-    @PostMapping("/api/update")
-    public ResponseEntity updAcct(@RequestBody AccountVO account){
-        Map<String, Object> result = accountService.updAcct(account);
+        return ResponseEntity.ok(result);
+    }
+    @PostMapping("/api/admin/update")
+    public ResponseEntity updAdminAcct(@RequestBody AccountVO account){
+        Map<String, Object> result = accountService.updAdminAcct(account);
 
         return ResponseEntity.ok(result);
     }
@@ -301,5 +308,30 @@ public class AccountController {
 
         return mv;
     }
+    @PostMapping("/api/pwdChange/isExist")
+    @ResponseBody
+    public Map<String, Object> isExistsPwdChange(@RequestBody LoginRequest loginRequest){
+        Map<String, Object> result = new HashMap<>();
+        log.info("loginRequest :: {}",loginRequest.getUserId());
+        boolean exists = logMapper.isExistsPasswordChangeLog(loginRequest.getUserId());
+        result.put("exists", exists);
 
+        return result;
+    }
+
+    @GetMapping("/pwdChange")
+    public ModelAndView getPwdChange(ModelAndView mv){
+        mv.setViewName("account/passwordEdit");
+        return mv;
+    }
+
+    @PostMapping("/api/pwdChange")
+    @ResponseBody
+    public ResponseEntity updPwd(HttpServletRequest request, @RequestBody PwdChangeRequest pwdChangeRequest){
+        HttpSession session = request.getSession();
+        AccountVO loginInfo = (AccountVO) session.getAttribute("loginInfo");
+        Map<String, Object> result = accountService.updPwd(request, pwdChangeRequest, loginInfo);
+        return ResponseEntity.ok(result);
+    }
 }
+
