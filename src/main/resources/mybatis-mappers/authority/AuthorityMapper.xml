@@ -4,46 +4,6 @@
 
 <mapper namespace="com.samsung.framework.mapper.authority.AuthorityMapper">
 
-<!--    <select id="selectMenuAuthority">-->
-<!--            SELECT MEMBER.MEMBER_ID, MEMBER.DEPT_CODE, AUTH.AUTH_LEVEL, MENU.MENU_SEQ-->
-<!--              FROM MEMBER MEMBER-->
-<!--        INNER JOIN AUTH AUTH-->
-<!--                ON MEMBER.DEPT_CODE = AUTH.DEPT_CODE-->
-<!--        INNER JOIN CODE CD-->
-<!--                ON AUTH.DEPT_CODE = CD.CODE-->
-<!--        INNER JOIN MENU MENU-->
-<!--                ON AUTH.MENU_SEQ = MENU.MENU_SEQ-->
-<!--             WHERE MEMBER.USE_YN = 'Y'-->
-<!--               AND CD.USE_YN = 'Y'-->
-<!--               AND MENU.USE_YN = 'Y'-->
-<!--               AND MEMBER.MEMBER_ID = #{memberId}-->
-<!--               AND MENU.MENU_ID = #{menuId}-->
-<!--    </select>-->
-
-<!--    <select id="findDepartmentList">-->
-<!--          SELECT CODE_SEQ, CODE_CD, CODE_NM-->
-<!--            FROM INFO_COMMON_CD-->
-<!--           WHERE SUBSTRING(CODE_CD FROM 1 FOR 6) = 'DEPT01'-->
-<!--             AND USE_YN = 'Y'-->
-<!--             AND DEL_YN = 'N'-->
-<!--        ORDER BY CODE_CD-->
-<!--    </select>-->
-
-<!--    <select id="findMenuAuthority">-->
-<!--        SELECT CODE_CD, CODE_NM-->
-<!--            FROM INFO_COMMON_CD-->
-<!--        WHERE CODE_NM IN-->
-<!--            <foreach item="item" index="index" collection="list" open="(" separator="," close=")">-->
-<!--                #{item}-->
-<!--            </foreach>-->
-<!--    </select>-->
-
-<!--    <select id="findUserMenuAuthority">-->
-<!--        SELECT *-->
-<!--        FROM INFO_MENU-->
-<!--        WHERE USER_ID = #{memberSeq}-->
-<!--    </select>-->
-
     <insert id="saveMenuAuthList" parameterType="MenuAuthorityVO">
         INSERT INTO MENU_AUTHORIZATION
         (
@@ -55,45 +15,4 @@
         </foreach>
     </insert>
 
-    <insert id="saveIndividualAuthority">
-
-
-        /* 개인 권한 저장 - BoardMapper.saveIndividualAuthority */
-        INSERT INTO INFO_MENU
-        (
-            MENU_CD, MENU_ORD, AUTH_C, AUTH_R, AUTH_U, AUTH_D, AUTH_F, USER_ID, DISPLAY_USE_YN, REG_DT, REG_ID
-        )
-        VALUES
-        (
-            #{menuCd}, #{menuOrd}, #{authC}, #{authR}, #{authU}, #{authD}, #{authF}, #{userId}, #{displayUseYn}, NOW(), 'ADMIN'
-        )
-    </insert>
-
-    <update id="updateIndividualAuthority">
-        /* 개인 권한 수정 - BoardMapper.updateIndividualAuthority */
-        UPDATE INFO_MENU
-           SET MENU_ORD = #{menuOrd}
-             , AUTH_C = #{authC}
-             , AUTH_R = #{authR}
-             , AUTH_U = #{authU}
-             , AUTH_D = #{authD}
-             , AUTH_F = #{authF}
-             , DISPLAY_USE_YN = #{displayUseYn}
-             , LAST_DT = NOW()
-             , LAST_ID = 'ADMIN'
-         WHERE MENU_SEQ = #{menuSeq} AND MENU_CD = #{menuCd}
-    </update>
-
-    <update id="updateExcelAuthority">
-        UPDATE INFO_MENU
-            SET AUTH_C = #{authC}
-                , AUTH_R = #{authR}
-                , AUTH_U = #{authU}
-                , AUTH_D = #{authD}
-                , AUTH_F = #{authF}
-                , DISPLAY_USE_YN = #{displayUseYn}
-                , LAST_DT = NOW()
-                , LAST_ID = 'ADMIN'
-            WHERE MENU_CD = #{menuCd}
-    </update>
 </mapper>
