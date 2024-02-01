@@ -26,7 +26,7 @@ public class ContractsViewController {
     @ResponseBody
     public ResponseEntity getContractView(HttpServletRequest request , @RequestBody ProgressRequest param){
         ViewInfo o = contractsViewService.getContractView(request , param);
-        return new ResponseEntity(o, HttpStatus.OK);
+        return ResponseEntity.ok(o);
     }
 
 }

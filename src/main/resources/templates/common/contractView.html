@@ -1,6 +1,6 @@
 <html lang="kr" xmlns:th="http://www.thymeleaf.org">
 <!--poppup-->
-<div class="modal" style="display: block;">
+<div class="modal" style="display:none;" data-target="view">
     <div class="modal-dialog modal-l modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,7 +10,7 @@
             <div class="modal-body document-box">
                 <div class="document">
                     <div class="document-cont">
-                        <div class="modal-img"><img src="img/SDIHU CI.jpg"></div>
+                        <div class="modal-img"><img th:src="@{/static/img/SDIHUCI.jpg}"></div>
                         <table class="table-list">
                             <thead>
                             <tr>
@@ -18,13 +18,7 @@
                                 <th class="col-6" data-select="contractTitleEn">AMENDMENT OF EMPLOYMENT CONTRACT</th>
                             </tr>
                             </thead>
-
                             <tbody>
-                            <tr>
-                                <td class="col-6" data-select="contractTitleHu">amely létrejött</td>
-                                <td class="col-6" data-select="contractTitleEn">entered between</td>
-                            </tr>
-
                             <tr>
                                 <td class="col-6" data-select="contentsHu" >
 <!--                                    <p>a <strong>SAMSUNG SDI Magyarország Zrt.</strong> (székhely: 2131 Göd, Schenek István utca 1.;), mint munkáltató (a továbbiakban: „Munkáltató”) és</p>-->
@@ -40,43 +34,6 @@
                                     <p>1. Contracting parties modify by mutual consent the employment contract concluded on 21/08/2018 made by and between them (hereinafter: “Employment contract”) with effect from 2023.12.01. under the following:</p>
                                     <p>In addition:</p>-->
                                 </td>
-                            </tr>
-                            <tr>
-                                <td class="col-6">
-                                    <p>a) A Munkaszerződés 4. pont első mondata helyébe az alábbi rendelkezés lép:</p>
-                                    <p>A Munkáltató és a Munkavállaló megállapodnak abban, hogy a Munkavállaló munkaköre: Staff.</p>
-                                    <p>b) A Munkaszerződés 6.1. pont első mondata helyébe az alábbi rendelkezés lép:</p>
-                                    <p>„6.1. A Munkáltató és a Munkavállaló megállapodnak abban, hogy a Munkavállaló alapbére bruttó 458 900 Ft/hó, azaz négyszázötvennyolcezer- kilencszáz Ft/hó.”
-                                    </p></td>
-                                <td class="col-6">
-                                    <p>a) The first sentence of Section 4. of the Employment contract is replaced by the following:</p>
-                                    <p>The Employer and the Employee agree on that the job function of the Employee is: Staff.</p>
-                                    <p>b) The first sentence of Section 6.1. of the Employment contract is replaced by the following:</p>
-                                    <p>“6.1. The Employer and the Employee agree that the gross monthly base wage of the Employee is 458 900 HUF/month, i.e. four hundred fifty  thousand nine hundred Hungarian HUF/month.”
-                                    </p></td>
-                            </tr>
-                            <tr>
-                                <td class="col-6"><p>2. A Munkaszerződés jelen módosítással nem érintett részei változatlanul hatályban maradnak. A jelen munkaszerződés módosításban nem szabályozott kérdésekben az Mt. rendelkezései irányadóak.</p></td>
-                                <td class="col-6"><p>2. Provisions of the Employment contract not affected by this amendment remain unchanged in force. To questions not regulated in this amendment of employment contract the provisions of the Labor Code shall apply.</p></td>
-                            </tr>
-                            <tr>
-                                <td class="col-6"><p>3. Jelen munkaszerződés módosítás kettő (2) eredeti példányban magyar és angol nyelven készült, amelyből egy eredeti példányt a Munkavállaló átvett. Eltérés esetén a magyar nyelvű szöveg irányadó.</p></td>
-                                <td class="col-6"><p>3. This amendment of employment contract has been made in two (2) original samples in Hungarian and English, from which the Employee has received one sample. In the event of any inconsistency the Hungarian version shall apply.</p></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="page-num">1/2</div>
-                </div>
-                <div class="document">
-                    <div class="document-cont">
-                        <div class="modal-img"><img src="img/SDIHU CI.jpg"></div>
-                        <table class="table-list">
-                            <tbody>
-
-                            <tr>
-                                <td class="col-6"><p>Szerződő Felek a jelen munkaszerződésmódosítást elolvasás és értelmezés után, mint akaratukkal mindenben megegyezőt, jóváhagyólag írták alá.</p></td>
-                                <td class="col-6"><p>After having read and interpreted this amendment of employment contract, the Contracting parties have signed it as being in full compliance with their will.</p></td>
                             </tr>
                             </tbody>
                         </table>
@@ -97,128 +54,19 @@
                             </div>
                         </div>
                     </div>
-
-
-                    <div class="page-num">2/2</div>
                 </div>
-
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" >Close</button>
-                <button type="button" class="btn btn-primary">Reject</button>
-                <button type="button" class="btn btn-primary">Complete</button>
+                <button type="button" class="btn btn-secondary"  >Close</button>
+                <!--${session.loginInfo == null}-->
+                <button type="button" class="btn btn-primary" >Reject</button>
+                <button type="button" class="btn btn-primary" >Complete</button>
             </div>
         </div>
     </div>
 </div>
-<div class="modal-backdrop"></div>
+<!--<div class="modal-backdrop"></div>-->
+<div data-target="viewBackground"></div>
 <!--poppup end-->
 
-<nav class="navbar navbar-expand navbar-light topbar static-top">
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#"><div class="sidebar-brand-text">Inc.HU 연봉계약시스템</div></a>
-    <ul class="navbar-nav ml-auto">
-        <li class="nav-item no-arrow">
-            <a class="nav-link " href="#" >
-                <span class="nav-text"><i class="fas fa-user-circle nav-icon"></i>홍길동</span>
-            </a>
-        </li>
-        <div class="topbar-divider d-none d-sm-block"></div>
-        <li class="nav-item no-arrow">
-            <a class="nav-link " href="#" >
-                <span class="nav-text"><i class="fas fa-sign-out-alt nav-icon"></i>로그아웃</span>
-            </a>
-        </li>
-    </ul>
-</nav>
-
-
-<div id="top-wrapper">
-    <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-        <li class="nav-item active">
-            <a class="nav-link " href="#" ><i class="fas fa-fw fa-copy"></i><span>서명 대기 계약서</span></a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link " href="#" ><i class="fas fa-fw fa-file-alt"></i><span>서명 완료 계약서</span></a>
-        </li>
-    </ul>
-    <!-- End of Sidebar -->
-
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
-        <div id="content">
-            <!--content-->
-            <div class="container-fluid">
-                <h1 class="page-title">서명 대기 계약서</h1>
-                <!--search box-->
-
-                <!--search box-->
-                <div class="card shadow mb-4">
-                    <!--<div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
-                    </div>-->
-                    <div class="datatable-top">
-                        <div class="left datatable-dropdown">
-                            <label>
-                                <select class="datatable-selector">
-                                    <option value="5">5</option>
-                                    <option value="10" selected="">10</option>
-                                    <option value="15">15</option>
-                                    <option value="20">20</option>
-                                    <option value="25">25</option></select>
-                            </label>
-                        </div>
-                        <div class="left"><p>1 items</p></div>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                <tr>
-                                    <th>Contract Title (EN)</th>
-                                    <th>Name</th>
-                                    <th>employee ID</th>
-                                    <th>Assigned</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td><a href="#" >Employment contract</a>
-                                    <td>Hong gildong</td>
-                                    <td>08015741</td>
-                                    <td>2023-09-12</td>
-                                    <td><a href="#" >View</a></td>
-                                </tr>
-
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="list-paging">
-                            <div class="dataTables_paginate paging_simple_numbers" >
-                                <ul class="pagination">
-                                    <li class="paginate_button page-item previous disabled"><a href="#" class="page-link"><</a></li>
-                                    <li class="paginate_button page-item active"><a href="#" class="page-link">1</a></li>
-                                    <li class="paginate_button page-item "><a href="#" class="page-link">2</a></li>
-                                    <li class="paginate_button page-item "><a href="#" class="page-link">3</a></li>
-                                    <li class="paginate_button page-item "><a href="#" class="page-link">4</a></li>
-                                    <li class="paginate_button page-item "><a href="#" class="page-link">5</a></li>
-                                    <li class="paginate_button page-item "><a href="#" class="page-link">6</a></li>
-                                    <li class="paginate_button page-item next"><a href="#" class="page-link">></a></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <!--contents-->
-        </div>
-    </div>
-    <!--Content Wrapper -->
-</div>
-<!-- End of Page Wrapper -->
 </html>

@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,12 +45,15 @@ public class ContractCreationService {
         // TODO: 임직원 번호 검증
         //  TODO: 임직원 부서코드 조회
         //  NOTE:매퍼 파일 변경 가능성 있음.
-        if (!accountMapper.existsByEmpNo(target.getEmpNo())) {
-            return ObjectHandlingUtil.setSingleObjResultStatusVO(null, ResultCodeMsgEnum.INVALID_EMP_NO);
-        }
+//        if (!accountMapper.existsByEmpNo(target.getEmpNo())) {
+//            return ObjectHandlingUtil.setSingleObjResultStatusVO(null, ResultCodeMsgEnum.INVALID_EMP_NO);
+//        }
         AccountVO o = AccountVO.builder().empNo(target.getEmpNo()).build();
         // user 정보 조회
         AccountVO user = accountMapper.myInfo(o);
+        if(Objects.isNull(user)){
+            return ObjectHandlingUtil.setSingleObjResultStatusVO(null, ResultCodeMsgEnum.INVALID_EMP_NO);
+        }
         // 계약서 생성을 위해 데이터 셋팅
         ContractVO contractVO = ContractVO.builder()
                                 .empNo(target.getEmpNo()).templateSeq(StringUtil.getInt(target.getTemplateCode()))

@@ -193,6 +193,8 @@ let updateOk = () =>{
 }
 /*view contract*/
 let viewContract = (seq) =>{
+     // 팝업창 열기
+     $('[data-target="view"]').removeAttr('style');
      let data = {'contractNo' : seq }
      $.ajax({
         url: '/contract/view',
@@ -201,7 +203,17 @@ let viewContract = (seq) =>{
         data:JSON.stringify(data),
         contentType: 'application/json; charset=UTF-8',
     }).done(function(data) {
-        console.log(data)
+        console.log(data['contractTitleHu']);
+        console.log(!isEmpty(data));
+        if(!isEmpty(data)){
+            $('[data-select]').each(function(index, item){
+                var $this = $(item);
+                var key = $this.data('select');
+                $this.text(data[key]);
+            });
+            $('[data-target="view"]').attr('style' , 'display:block');
+            $('[data-target="viewBackground"]').attr('class' , 'modal-backdrop');
+        }
     }).fail(function(jqXHR) {
         console.log(jqXHR);
     });
