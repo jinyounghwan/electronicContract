@@ -53,17 +53,19 @@
     <select id="getLgMenuList" resultType="MenuVO">
         /* 대메뉴 조회 - MenuMapper.getLgMenuList */
         SELECT
-                MN.MENU_CODE AS MENU_CODE, MN.NAME AS NAME
-               , MN.PATH AS PATH, MN.MENU_SEQ AS MENU_SEQ
+            MN.MENU_CODE AS MENU_CODE, MN.NAME AS NAME
+             , MN.PATH AS PATH, MN.MENU_SEQ AS MENU_SEQ
         FROM
             MENU MN
+                INNER JOIN MENU_AUTHORIZATION MA ON MN.MENU_SEQ = MA.MENU_SEQ
         WHERE
             SUBSTRING(MN.MENU_CODE FROM 7 FOR 4) = '0000'
             AND SUBSTRING(MN.MENU_CODE FROM 5 FOR 6) NOT IN ('000000')
             AND USE_YN = 'Y'
             AND DEL_YN = 'N'
             AND display_yn = 'Y'
-        ORDER BY ORD ASC
+        ORDER BY ORD ASC;
+
     </select>
 
     <select id="getMidMenuList" resultType="MenuVO">
@@ -82,9 +84,6 @@
         FROM MENU MN
         INNER JOIN SRCH_MENU SMN ON SUBSTRING(MN.MENU_CODE FROM 5 FOR 2) = SUBSTRING(SMN.PARENT_CODE FROM 5 FOR 2)
         WHERE SUBSTRING(MN.MENU_CODE FROM 9 FOR 2) IN ('00') AND SUBSTRING(MN.MENU_CODE FROM 7 FOR 4) NOT IN ('0000')
-            AND USE_YN = 'Y'
-            AND DEL_YN = 'N'
-            AND display_yn = 'Y'
         ORDER BY ORD ASC
     </select>
 
@@ -98,14 +97,11 @@
                 SUBSTRING (MN.MENU_CODE FROM 9 FOR 2) IN ('00') AND SUBSTRING(MN.MENU_CODE FROM 7 FOR 4) NOT IN ('0000')
         )
         SELECT   MN.MENU_CODE AS MENU_CODE, MN.NAME AS NAME
-                ,MN.PATH AS PATH , SMN.PARENT_CODE AS P_MENU_CODE
-                ,MN.MENU_SEQ AS MENU_SEQ
+             ,MN.PATH AS PATH , SMN.PARENT_CODE AS P_MENU_CODE
+             ,MN.MENU_SEQ AS MENU_SEQ
         FROM MENU MN
-        INNER JOIN SRCH_MENU SMN ON SUBSTRING(MN.MENU_CODE FROM 5 FOR 4) = SUBSTRING(SMN.PARENT_CODE FROM 5 FOR 4)
+                 INNER JOIN SRCH_MENU SMN ON SUBSTRING(MN.MENU_CODE FROM 5 FOR 4) = SUBSTRING(SMN.PARENT_CODE FROM 5 FOR 4)
         WHERE SUBSTRING(MN.MENU_CODE FROM 9 FOR 2) NOT IN('00')
-            AND USE_YN = 'Y'
-            AND DEL_YN = 'N'
-            AND display_yn = 'Y'
         ORDER BY ORD ASC
         </select>
 
