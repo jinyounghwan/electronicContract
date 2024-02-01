@@ -1,16 +1,19 @@
 package com.samsung.framework.service.contract.documented;
 
-import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.common.utils.VariableHandlingUtil;
 import com.samsung.framework.domain.common.Variables;
 import com.samsung.framework.domain.contract.ProgressRequest;
 import com.samsung.framework.mapper.contract.documented.ContractsViewMapper;
+import com.samsung.framework.mapper.log.LogMapper;
 import com.samsung.framework.vo.contract.view.ContractView;
+import com.samsung.framework.vo.contract.view.HistoryVO;
 import com.samsung.framework.vo.contract.view.ViewInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class ContractsViewService {
     private final ContractsViewMapper contractsViewMapper;
     private final VariableHandlingUtil variableHandlingUtil;
+    private final LogMapper logMapper;
     public ViewInfo getContractView(HttpServletRequest request, ProgressRequest param) {
         ContractView o = ContractView.builder().contractNo(param.getContractNo()).build();
         log.info("=============================> :{}" ,param.getContractNo() );
@@ -102,5 +106,9 @@ public class ContractsViewService {
             }
         }
         return replaceType;
+    }
+
+    public List<HistoryVO> getContractHistoryView(HttpServletRequest request, ProgressRequest param) {
+        return  logMapper.getContractLogList(param.getContractNo());
     }
 }

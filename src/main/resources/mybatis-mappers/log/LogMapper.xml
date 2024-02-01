@@ -15,4 +15,16 @@
         SELECT
             EXISTS(SELECT 1 FROM PROCESS_LOG WHERE LOG_TYPE='PASSWORD_CHANGE' AND CREATED_BY = #{userId})
     </select>
+
+    <select id="getContractLogList" parameterType="Integer" resultType="HistoryVO">
+        select log_type
+            , process_step
+            , ip_address
+            , mac_address
+            , created_by
+            , created_at
+         from process_log pl
+        where contract_no = #{contractNo}
+
+    </select>
 </mapper>

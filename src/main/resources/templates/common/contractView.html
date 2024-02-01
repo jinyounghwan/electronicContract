@@ -5,7 +5,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Contract View</h5>
-                <button type="button" class="btn-close" ></button>
+                <button type="button" class="btn-close" th:onclick="closeContractView()"></button>
             </div>
             <div class="modal-body document-box">
                 <div class="document">
@@ -57,9 +57,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"  >Close</button>
+                <button type="button" class="btn btn-secondary" th:onclick="closeContractView()">Close</button>
                 <!--${session.loginInfo == null}-->
-                <button type="button" class="btn btn-primary" >Reject</button>
+                <button type="button" class="btn btn-primary"  >Reject</button>
                 <button type="button" class="btn btn-primary" >Complete</button>
             </div>
         </div>

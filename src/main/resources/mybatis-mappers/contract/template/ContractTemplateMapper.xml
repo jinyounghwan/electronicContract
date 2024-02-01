@@ -117,7 +117,7 @@
              , template_title
           from contract_template ct
     </select>
-    <select id="getTemplateSeq" parameterType="java.lang.String" resultType="java.lang.Integer">
+    <select id="getTemplateSeq" parameterType="java.lang.String" resultType="Integer">
         select template_seq from contract_template ct where template_type = #{templateCode}
     </select>
 </mapper>

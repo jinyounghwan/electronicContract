@@ -82,7 +82,6 @@ public class ValidationUtil {
     /**
      * 일괄업로드 엑셀 필수 데이터 검증
      * @param bulkList
-     * @param result
      * @return
      */
     public BulkExcelVO excelBulkDataValidator(List<ContractExcelVO> bulkList) {
