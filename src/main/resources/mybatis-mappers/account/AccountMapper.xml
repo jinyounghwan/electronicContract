@@ -146,7 +146,7 @@
             AND USE_YN = 'Y'
     </select>
 
-    <insert id="insertMember" useGeneratedKeys="true">
+    <insert id="insertMember" parameterType="AccountVO">
         INSERT INTO USERS
         (
         EMP_NO, DEPT_CODE
@@ -163,8 +163,8 @@
         , #{userPw}, #{name}
         , #{accountType}, #{position}
         , #{email}, #{phone}
-        ,'Y', #{employedAt}
-        , #{resignedAt}, 'admin'
+        ,'Y', #{employedAtStr}
+        , #{resignedAtStr}, 'admin'
         , sysdate(),'admin'
         , sysdate()
         )

@@ -1,11 +1,9 @@
 package com.samsung.framework.service.account;
 
 
-import com.samsung.framework.common.config.JasyptConfig;
 import com.samsung.framework.common.enums.*;
 import com.samsung.framework.common.exception.CustomLoginException;
 import com.samsung.framework.common.utils.*;
-import com.samsung.framework.domain.account.Account;
 import com.samsung.framework.domain.account.LoginRequest;
 import com.samsung.framework.domain.account.PwdChangeRequest;
 import com.samsung.framework.domain.account.SignUpRequest;
@@ -13,18 +11,22 @@ import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.domain.common.SearchObject;
 import com.samsung.framework.domain.log.LogSaveRequest;
 import com.samsung.framework.mapper.account.AccountMapper;
+import com.samsung.framework.mapper.account.ghr.GhrAccountMapper;
 import com.samsung.framework.mapper.log.LogMapper;
 import com.samsung.framework.vo.account.AccountVO;
+import com.samsung.framework.vo.account.ghr.GhtAccountVO;
 import com.samsung.framework.vo.common.CollectionPagingVO;
 import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.account.AccountSearchVO;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Slf4j
@@ -32,9 +34,10 @@ import java.util.*;
 @Service
 public class AccountService {
     private final ValidationUtil validationUtil;
-    private final JasyptConfig jasyptConfig;
+    private final EncryptionUtil encryptionUtil;
     private final AccountMapper accountMapper;
     private final LogMapper logMapper;
+    private final GhrAccountMapper ghrAccountMapper;
     private final LogUtil logUtil;
     /**
      * 회원 총 개수 (임직원, 관리자)
@@ -53,14 +56,8 @@ public class AccountService {
         account.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(account.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         account.setUpdatedAtStr(DateUtil.convertLocalDateTimeToString(account.getUpdatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         account.setLastLoginStr(DateUtil.convertLocalDateTimeToString(account.getLastLogin(), DateUtil.DATETIME_YMDHM_PATTERN));
+        getFirstNameLastName(account);
 
-        int index =account.getName().indexOf(" ");
-        if(index > 0){
-            String lastName = StringUtil.getSubstring(account.getName(),0,index);
-            String firstName = StringUtil.getSubstring(account.getName(), index);
-            account.setFirstName(firstName);
-            account.setLastName(lastName);
-        }
         return account;
     }
 
@@ -146,7 +143,7 @@ public class AccountService {
      * @param signUpRequest {@link SignUpRequest}
      * @return {@link Map <String,Object> }
      */
-    public Map<String,Object> signUp(@Valid SignUpRequest signUpRequest) {
+    public Map<String,Object> signUp(@Valid SignUpRequest signUpRequest) throws NoSuchAlgorithmException {
         Map<String, Object> resultMap = new HashMap<>();
 
         if(validationUtil.parameterValidator(signUpRequest, SignUpRequest.class)){
@@ -159,7 +156,7 @@ public class AccountService {
             var target = AccountVO.builder()
                     .empNo(signUpRequest.getEmpNo())
                     .deptCode(signUpRequest.getDeptCode())
-                    .userPw(jasyptConfig.jasyptEncrypt(signUpRequest.getUserPw()))
+                    .userPw(encryptionUtil.encrypt(signUpRequest.getUserPw()))
                     .name(signUpRequest.getName())
                     .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.EMPLOYEE))
                     .position(PositionEnum.menuCode(PositionEnum.STAFF))
@@ -186,18 +183,36 @@ public class AccountService {
      * @param loginRequest {@link LoginRequest}
      * @return {@link AccountVO}
      */
-    public AccountVO getLoginInfo(@Valid LoginRequest loginRequest) throws CustomLoginException {
+    public AccountVO getLoginInfo(@Valid LoginRequest loginRequest) throws CustomLoginException, NoSuchAlgorithmException {
         AccountVO target = accountMapper.getLoginInfo(loginRequest.getUserId());
-
-        if(target == null) {
-            try {
+        if(StringUtil.isEmpty(target)) {
+            GhtAccountVO ghrAccount = ghrAccountMapper.getGhrInfo(Integer.parseInt(loginRequest.getUserId()));
+            
+            // ghrAccount 체크
+            if(StringUtil.isEmpty(ghrAccount)){
                 throw new CustomLoginException(ExceptionCodeMsgEnum.ACCOUNT_NOT_EXISTS.getCode(), ExceptionCodeMsgEnum.ACCOUNT_NOT_EXISTS.getMsg());
-            } catch (CustomLoginException e) {
-                throw new RuntimeException(e);
+            }
+
+             target = AccountVO.builder()
+                    .empNo(ghrAccount.getEmpNo())
+                    .userPw(encryptionUtil.encrypt(String.valueOf(ghrAccount.getEmpNo()))) // 초기 비밀번호 세팅은 사번으로
+                    .deptCode(ghrAccount.getDepartmentCode())
+                    .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.EMPLOYEE))
+                    .email("Test@samsung.com")
+                    .name(ghrAccount.getName())
+                    .position(PositionEnum.menuCode(PositionEnum.valueOf(ghrAccount.getLevel().toUpperCase().replace(" ","_"))))
+                    .resignedAt(ghrAccount.getResignationDate())
+                    .phone("0100000000")
+                    .employedAt(ghrAccount.getHireDate())
+                    .build();
+            getAccountConverDate(target);
+            int inserted = accountMapper.insertMember(target);
+            if(inserted < 1){
+                throw new CustomLoginException(ExceptionCodeMsgEnum.ACCOUNT_NOT_EXISTS.getCode(), ExceptionCodeMsgEnum.ACCOUNT_NOT_EXISTS.getMsg());
             }
         }
 
-        if (loginRequest.getPassword().equals(jasyptConfig.jasyptDecrypt(target.getUserPw()))) {
+        if (encryptionUtil.encrypt(loginRequest.getPassword()).equals(target.getUserPw())) {
             return AccountVO.builder()
                     .userId(loginRequest.getUserId())
                     .empNo(target.getEmpNo())
@@ -224,13 +239,13 @@ public class AccountService {
      * @param account
      * @return
      */
-    public Map<String, Object> updEmployeeAcct(HttpServletRequest request, @Valid AccountVO account){
+    public Map<String, Object> updEmployeeAcct(HttpServletRequest request, @Valid AccountVO account) throws NoSuchAlgorithmException {
         var result = new HashMap<String, Object>();
 
         if(validationUtil.parameterValidator(account, AccountVO.class)){
             AccountVO target = AccountVO.builder()
                     .empNo(Integer.parseInt(account.getUserId()))
-                    .userPw(jasyptConfig.jasyptEncrypt(account.getPassword()))
+                    .userPw(encryptionUtil.encrypt(account.getPassword()))
                     .build();
 
             result.put("code", 200);
@@ -263,14 +278,14 @@ public class AccountService {
      * @param account
      * @return
      */
-    public Map<String, Object> updAdminAcct(HttpServletRequest request, @Valid AccountVO account){
+    public Map<String, Object> updAdminAcct(HttpServletRequest request, @Valid AccountVO account) throws NoSuchAlgorithmException {
         var result = new HashMap<String, Object>();
 
         if(validationUtil.parameterValidator(account, AccountVO.class)){
             AccountVO target = AccountVO.builder()
                     .name(account.getName())
                     .adminId(account.getUserId())
-                    .userPw(jasyptConfig.jasyptEncrypt(account.getPassword()))
+                    .userPw(encryptionUtil.encrypt(account.getPassword()))
                     .build();
 
             result.put("code", 200);
@@ -299,11 +314,11 @@ public class AccountService {
         return result;
     }
 
-    public Map<String, Object> updPwd(HttpServletRequest request,@Valid PwdChangeRequest pwdChangeRequest, AccountVO accountVO){
+    public Map<String, Object> updPwd(HttpServletRequest request,@Valid PwdChangeRequest pwdChangeRequest, AccountVO accountVO) throws NoSuchAlgorithmException {
         var result = new HashMap<String, Object>();
         if(validationUtil.parameterValidator(pwdChangeRequest, PwdChangeRequest.class)){
             AccountVO account = AccountVO.builder()
-                    .userPw(jasyptConfig.jasyptEncrypt(pwdChangeRequest.getPassword()))
+                    .userPw(encryptionUtil.encrypt(pwdChangeRequest.getPassword()))
                     .userId(accountVO.getUserId())
                     .empNo(accountVO.getEmpNo())
                     .build();
@@ -327,5 +342,26 @@ public class AccountService {
         result.put("code",400);
         result.put("message", "비밀번호는 영어와 숫자 포함해서 8~16자리 이내로 입력해주세요.");
         return result;
+    }
+
+    public void getAccountConverDate(AccountVO account){
+        account.setEmployedAtStr(DateUtil.convertLocalDateTimeToString(account.getEmployedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
+        account.setResignedAtStr(DateUtil.convertLocalDateTimeToString(account.getResignedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
+    }
+    public void getFirstNameLastName(AccountVO account) throws UnsupportedEncodingException {
+        int index =account.getName().indexOf(" ");
+        if(index > 0){
+            String lastName = StringUtil.getSubstring(account.getName(),0,index);
+            String firstName = StringUtil.getSubstring(account.getName(), index);
+            account.setFirstName(firstName);
+            account.setLastName(lastName);
+        }
+    }
+
+    public AccountVO getSessionAccount(HttpServletRequest request) throws UnsupportedEncodingException {
+        HttpSession session = request.getSession();
+        AccountVO account = (AccountVO) session.getAttribute("loginInfo");
+        getFirstNameLastName(account);
+        return account;
     }
 }

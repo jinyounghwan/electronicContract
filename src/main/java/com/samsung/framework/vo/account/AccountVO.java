@@ -39,4 +39,6 @@ public class AccountVO {
     private String confirmPassword;
     private String firstName;
     private String lastName;
+    private String employedAtStr;
+    private String resignedAtStr;
 }

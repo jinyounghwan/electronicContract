@@ -6,13 +6,15 @@
     <select id="isExistsAccount">
         SELECT EMP_NO, NAME,
                TEAM, DEPARTMENT_CODE,
-               HIRE_DATE, DEPARTMENT_CODE
+               HIRE_DATE
         FROM GHR_ACCOUNT_INFO
         WHERE EMP_NO = #{empNo}
     </select>
     <select id="getGhrInfo" parameterType="Integer">
         SELECT JOB AS JOB, HIRE_DATE AS HIRE_DATE,
-               NAME AS NAME
+               NAME AS NAME, EMP_NO AS EMP_NO,
+               DEPARTMENT_CODE AS DEPART_MENT_CODE, LEVEL AS LEVEL,
+               RESIGNATION_DATE AS RESIGNATION_DATE
         FROM GHR_ACCOUNT_INFO
         WHERE EMP_NO = #{empNo}
     </select>

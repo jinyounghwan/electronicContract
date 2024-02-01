@@ -4,8 +4,10 @@ import com.samsung.framework.common.enums.AccountTypeEnum;
 import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
 import com.samsung.framework.common.enums.LogTypeEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
+import com.samsung.framework.common.utils.EncryptionUtil;
 import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
+import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.account.LoginRequest;
 import com.samsung.framework.domain.account.PwdChangeRequest;
 import com.samsung.framework.domain.account.SignUpRequest;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -155,9 +158,9 @@ public class AccountController {
      * @throws CustomLoginException
      */
     @PostMapping("/sign-up")
-    public ResponseEntity signUp(@RequestBody SignUpRequest signUpRequest) throws CustomLoginException {
+    public ResponseEntity signUp(HttpServletRequest request, @RequestBody SignUpRequest signUpRequest) throws CustomLoginException, NoSuchAlgorithmException {
         Map<String, Object> resultMap = accountService.signUp(signUpRequest);
-        menuService.saveAuthMenu(signUpRequest);
+        menuService.saveAuthMenu(request, signUpRequest);
 
         return ResponseEntity.ok(resultMap);
     }
@@ -181,7 +184,7 @@ public class AccountController {
      * @throws CustomLoginException
      */
     @PostMapping({"", "/login"})
-    public ResponseEntity login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) throws CustomLoginException{
+    public ResponseEntity login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) throws CustomLoginException, NoSuchAlgorithmException {
         // 유저 이름에 해당하는 유저 정보를 가져온다.
         AccountVO loginInfo = accountService.getLoginInfo(loginRequest);
         HttpSession session = request.getSession();
@@ -237,13 +240,13 @@ public class AccountController {
         return mv;
     }
     @PostMapping("/api/employee/update")
-    public ResponseEntity updEmployeeAcct(HttpServletRequest request, @RequestBody AccountVO account){
+    public ResponseEntity updEmployeeAcct(HttpServletRequest request, @RequestBody AccountVO account) throws NoSuchAlgorithmException {
         Map<String, Object> result = accountService.updEmployeeAcct(request, account);
 
         return ResponseEntity.ok(result);
     }
     @PostMapping("/api/admin/update")
-    public ResponseEntity updAdminAcct(HttpServletRequest request, @RequestBody AccountVO account){
+    public ResponseEntity updAdminAcct(HttpServletRequest request, @RequestBody AccountVO account) throws NoSuchAlgorithmException {
         log.info("updAdminAcct");
         Map<String, Object> result = accountService.updAdminAcct(request, account);
 
@@ -328,11 +331,26 @@ public class AccountController {
 
     @PostMapping("/api/pwdChange")
     @ResponseBody
-    public ResponseEntity updPwd(HttpServletRequest request, @RequestBody PwdChangeRequest pwdChangeRequest){
+    public ResponseEntity updPwd(HttpServletRequest request, @RequestBody PwdChangeRequest pwdChangeRequest) throws NoSuchAlgorithmException {
         HttpSession session = request.getSession();
         AccountVO loginInfo = (AccountVO) session.getAttribute("loginInfo");
         Map<String, Object> result = accountService.updPwd(request, pwdChangeRequest, loginInfo);
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/myInfo")
+    public ModelAndView getMyInfo(HttpServletRequest request, ModelAndView mv) throws UnsupportedEncodingException {
+        mv.setViewName("/account/myInfo");
+        mv.addObject("account",accountService.getSessionAccount(request));
+        return mv;
+    }
+
+    @GetMapping("/myInfo/edit")
+    public ModelAndView getChangeMyInfo(HttpServletRequest request, ModelAndView mv) throws UnsupportedEncodingException {
+        mv.setViewName("/account/myInfoEdit");
+        mv.addObject("account", accountService.getSessionAccount(request));
+        return mv;
+    }
+
 }
 

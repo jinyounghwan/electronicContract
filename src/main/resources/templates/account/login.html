@@ -48,6 +48,16 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        $("#password").on("keyup", function(key){
+            if(key.keyCode==13){
+                login();
+            }
+        })
+        $("#userId").on("keyup", function(key){
+            if(key.keyCode==13){
+                login();
+            }
+        })
         // 로그인 function
         function login() {
             let userId = document.getElementById("userId").value;
@@ -63,6 +73,7 @@
                 userId: userId,
                 password: password
             }
+
             $.ajax({
                 type : "POST",
                 url  : "/account/login",
@@ -76,7 +87,6 @@
                         contentType: "application/json",
                         data: JSON.stringify(member)
                     }).done(function(data){
-                        console.log(data.exists);
                         if(data.exists){
                            location.href="/contract/progress";
                         } else {
