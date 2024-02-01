@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:fragment="sidebarFragment">
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul th:if= "${session.loginInfo != null}" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     </ul>
     <script src="/static/js/common.js"></script>
@@ -12,54 +12,55 @@
         /*]]*/
         let codeMap = new Map();
 
-        $.ajax({
-            type: "POST",
-            url: "/menu/midList",
-            contentType: "application/json",
-            async: false,
-            success: function (result) {
-                let dataList = Array.from(result);
-                menuMidDraw(dataList);
-                getMenuSmList()
-            }
-        });
-
-        function getMenuSmList(){
+        if(!isEmpty(session)){
             $.ajax({
-                type:"POST",
-                url:"/menu/smList",
+                type: "POST",
+                url: "/menu/midList",
                 contentType: "application/json",
                 async: false,
-                success: function(result){
+                success: function (result) {
                     let dataList = Array.from(result);
-                    menuSmDraw(dataList);
+                    menuMidDraw(dataList);
+                    getMenuSmList()
                 }
             });
-        }
 
-        // 소메뉴 생성
-        function menuMidDraw(dataList){
-            for(let data of dataList){
-                let realCodeCd = data.menuCode;
-                let menuCode = data.pmenuCode.substr(4);
-                // 부모ID
-                // let parentId = codeMap.get(menuCode);
-                let parentElement = $("#accordionSidebar");
-                let url = data.path;
-                if(realCodeCd==='MENU104000' || realCodeCd==='MENU105000'){ // MENU 104000, 105000은 제외
-                    parentElement.append(`<li class="nav-item"> <a class="nav-link collapsed" href='${url}'><span>${data.name}</span></a>
+            function getMenuSmList(){
+                $.ajax({
+                    type:"POST",
+                    url:"/menu/smList",
+                    contentType: "application/json",
+                    async: false,
+                    success: function(result){
+                        let dataList = Array.from(result);
+                        menuSmDraw(dataList);
+                    }
+                });
+            }
+
+            // 소메뉴 생성
+            function menuMidDraw(dataList){
+                for(let data of dataList){
+                    let realCodeCd = data.menuCode;
+                    let menuCode = data.pmenuCode.substr(4);
+                    // 부모ID
+                    // let parentId = codeMap.get(menuCode);
+                    let parentElement = $("#accordionSidebar");
+                    let url = data.path;
+                    if(realCodeCd==='MENU104000' || realCodeCd==='MENU105000'){ // MENU 104000, 105000은 제외
+                        parentElement.append(`<li class="nav-item"> <a class="nav-link collapsed" href='${url}'><span>${data.name}</span></a>
                    <div class="collapse">
                    </div></li>`);
-                }
-                else{
-                parentElement.append(`<li class="nav-item"> <a class="nav-link collapsed" href=''><span>${data.name}</span></a>
+                    }
+                    else{
+                        parentElement.append(`<li class="nav-item"> <a class="nav-link collapsed" href=''><span>${data.name}</span></a>
                    <div class="collapse">
                        <div class="collapse-inner" id= '${realCodeCd}'>
 
                        </div>
                    </div></li>`);
+                    }
                 }
-            }
 
                 codeMap = new Map();
                 for(let data of dataList){
@@ -69,17 +70,19 @@
                 }
             }
 
-        function menuSmDraw(dataList){
-            for(let data of dataList){
-                let realCodeCd = data.menuCode;
-                let menuCode = data.pmenuCode.substr(4);
-                // 부모 ID
-                let parentId = codeMap.get(menuCode);
-                let parentElement = document.getElementById(parentId);
-                let url = data.path;
-                parentElement.innerHTML +=`<a class="collapse-item" href='${url}' id= ${realCodeCd}>${data.name}</a>`;
+            function menuSmDraw(dataList){
+                for(let data of dataList){
+                    let realCodeCd = data.menuCode;
+                    let menuCode = data.pmenuCode.substr(4);
+                    // 부모 ID
+                    let parentId = codeMap.get(menuCode);
+                    let parentElement = document.getElementById(parentId);
+                    let url = data.path;
+                    parentElement.innerHTML +=`<a class="collapse-item" href='${url}' id= ${realCodeCd}>${data.name}</a>`;
+                }
             }
         }
+
     </script>
 </th:block>
 
