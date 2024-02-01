@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="ko">
+<head>
+
+</head>
+<th:block layout:fragment="css">
+    <title>내정보 확인</title>
+</th:block>
+<th:block layout:fragment="content">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--content-->
+            <div class="container-fluid">
+                <h1 class="page-title">내정보 확인</h1>
+                <!--search box-->
+
+                <!--search box-->
+                <div class="card shadow mb-4">
+
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table-list">
+
+                                <tbody>
+                                <tr>
+                                    <th class="col-2">Last Name</th>
+                                    <td id="lastName" th:text="${account.getLastName()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>First Name</th>
+                                    <td th:text="${account.getFirstName()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>Employee ID</th>
+                                    <td th:text="${account.getEmpNo()}"></td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-area">
+                    <button class="btn btn-secondary" type="button" th:onclick="|location.href=='@{/contract/progress}'|">Cancel</button>
+                    <button class="btn btn-primary" type="button" th:onclick="|location.href=='@{/account/myInfo/edit/{userId}(userId=${account.getUserId()})}}'|">Edit</button>
+                </div>
+            </div>
+            <!--contents-->
+        </div>
+    </div>
+    <!--Content Wrapper -->
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $('.btn-secondary')
+    </script>
+</th:block>
+</html>
