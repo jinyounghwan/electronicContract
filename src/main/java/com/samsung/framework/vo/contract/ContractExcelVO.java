@@ -2,6 +2,7 @@ package com.samsung.framework.vo.contract;
 
 
 import com.samsung.framework.common.annotation.ExcelColumn;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,6 +1,8 @@
 package com.samsung.framework.common.utils;
 
 import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
+import com.samsung.framework.vo.common.BulkExcelVO;
+import com.samsung.framework.vo.contract.ContractExcelVO;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -9,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -74,5 +77,34 @@ public class ValidationUtil {
         }
 
         return resultMap;
+    }
+
+    /**
+     * 일괄업로드 엑셀 필수 데이터 검증
+     * @param bulkList {@link List}
+     * @param clazz {@link Class}
+     * @return validated {@link ContractExcelVO}
+     * @param <T>
+     */
+    public <T extends ContractExcelVO> BulkExcelVO excelBulkDataValidator(List<T> bulkList, Class<T> clazz) {
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
+
+        for (T obj : bulkList) {
+            Set<ConstraintViolation<T>> validate = validator.validate((clazz.cast(obj)));
+
+            if(validate.size() > 0) {
+                log.error(validate.toString());
+                for (ConstraintViolation<T> violation : validate) {
+                    log.error("[excelBulkDataValidator] {}(empNo) / {}", obj.getEmpNo(), violation.getMessage());
+                }
+
+                return new BulkExcelVO(obj.getEmpNo());
+            }else {
+                // TODO: IJ 유저정보 등록 여부 조회 및 검증 필요
+            }
+        }
+
+        return new BulkExcelVO("00000000");
     }
 }
