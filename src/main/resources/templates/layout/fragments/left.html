@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:fragment="sidebarFragment">
-    <ul th:if= "${session.loginInfo != null}" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     </ul>
     <script src="/static/js/common.js"></script>
@@ -12,7 +12,7 @@
         /*]]*/
         let codeMap = new Map();
 
-        if(!isEmpty(session)){
+
             $.ajax({
                 type: "POST",
                 url: "/menu/midList",
@@ -81,8 +81,6 @@
                     parentElement.innerHTML +=`<a class="collapse-item" href='${url}' id= ${realCodeCd}>${data.name}</a>`;
                 }
             }
-        }
-
     </script>
 </th:block>
 

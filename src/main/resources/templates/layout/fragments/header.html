@@ -7,7 +7,7 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item no-arrow">
                 <a th:if= "${session.loginInfo == null}" class="nav-link" href="/account/login"><span class="nav-text">LOG-IN</span></a>
-                <a th:if= "${session.loginInfo != null}" class="nav-link " th:href="@{/account/myInfo}">
+                <a th:if= "${session.loginInfo != null}" class="nav-link " href="">
                     <span class="nav-text" th:text="${session.loginInfo.name}"><i class="fas fa-user-circle nav-icon"></i></span>
                 </a>
             </li>

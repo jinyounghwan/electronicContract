@@ -6,7 +6,6 @@ import com.samsung.framework.common.enums.LogTypeEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
 import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
-import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.account.LoginRequest;
 import com.samsung.framework.domain.account.PwdChangeRequest;
 import com.samsung.framework.domain.account.SignUpRequest;
@@ -156,9 +155,9 @@ public class AccountController {
      * @throws CustomLoginException
      */
     @PostMapping("/sign-up")
-    public ResponseEntity signUp(HttpServletRequest request, @RequestBody SignUpRequest signUpRequest) throws CustomLoginException {
+    public ResponseEntity signUp(@RequestBody SignUpRequest signUpRequest) throws CustomLoginException {
         Map<String, Object> resultMap = accountService.signUp(signUpRequest);
-        menuService.saveAuthMenu(request, signUpRequest);
+        menuService.saveAuthMenu(signUpRequest);
 
         return ResponseEntity.ok(resultMap);
     }
@@ -335,16 +334,5 @@ public class AccountController {
         Map<String, Object> result = accountService.updPwd(request, pwdChangeRequest, loginInfo);
         return ResponseEntity.ok(result);
     }
-
-    @GetMapping("/myInfo")
-    public ModelAndView getMyInfo(HttpServletRequest request, ModelAndView mv) throws UnsupportedEncodingException {
-        HttpSession session = request.getSession();
-        AccountVO account = (AccountVO) session.getAttribute("loginInfo");
-        accountService.getFirstNameLastName(account);
-        mv.setViewName("/account/myInfo");
-        mv.addObject("account",account);
-        return mv;
-    }
-
 }
 

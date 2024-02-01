@@ -53,8 +53,14 @@ public class AccountService {
         account.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(account.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         account.setUpdatedAtStr(DateUtil.convertLocalDateTimeToString(account.getUpdatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         account.setLastLoginStr(DateUtil.convertLocalDateTimeToString(account.getLastLogin(), DateUtil.DATETIME_YMDHM_PATTERN));
-        getFirstNameLastName(account);
 
+        int index =account.getName().indexOf(" ");
+        if(index > 0){
+            String lastName = StringUtil.getSubstring(account.getName(),0,index);
+            String firstName = StringUtil.getSubstring(account.getName(), index);
+            account.setFirstName(firstName);
+            account.setLastName(lastName);
+        }
         return account;
     }
 
@@ -321,15 +327,5 @@ public class AccountService {
         result.put("code",400);
         result.put("message", "비밀번호는 영어와 숫자 포함해서 8~16자리 이내로 입력해주세요.");
         return result;
-    }
-
-    public void getFirstNameLastName(AccountVO account) throws UnsupportedEncodingException {
-        int index =account.getName().indexOf(" ");
-        if(index > 0){
-            String lastName = StringUtil.getSubstring(account.getName(),0,index);
-            String firstName = StringUtil.getSubstring(account.getName(), index);
-            account.setFirstName(firstName);
-            account.setLastName(lastName);
-        }
     }
 }
