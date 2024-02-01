@@ -64,6 +64,12 @@
             AND USE_YN = 'Y'
             AND DEL_YN = 'N'
             AND display_yn = 'Y'
+            AND MA.AUTH_C = 'Y'
+            AND MA.AUTH_R = 'Y'
+            AND MA.AUTH_U = 'Y'
+            AND MA.AUTH_D='Y'
+            AND MA.AUTH_F='Y'
+            AND MA.GRANT_TO = #{userId}
         ORDER BY ORD ASC;
 
     </select>
@@ -83,10 +89,17 @@
              , MN.MENU_SEQ AS MENU_SEQ
         FROM MENU MN
                  INNER JOIN SRCH_MENU SMN ON SUBSTRING(MN.MENU_CODE FROM 5 FOR 2) = SUBSTRING(SMN.PARENT_CODE FROM 5 FOR 2)
+                 INNER JOIN MENU_AUTHORIZATION MA ON MN.MENU_SEQ = MA.MENU_SEQ
         WHERE SUBSTRING(MN.MENU_CODE FROM 9 FOR 2) IN ('00') AND SUBSTRING(MN.MENU_CODE FROM 7 FOR 4) NOT IN ('0000')
           AND MN.USE_YN = 'Y'
           AND MN.DEL_YN = 'N'
           AND MN.DISPLAY_YN = 'Y'
+          AND MA.AUTH_C = 'Y'
+          AND MA.AUTH_R = 'Y'
+          AND MA.AUTH_U = 'Y'
+          AND MA.AUTH_D='Y'
+          AND MA.AUTH_F='Y'
+          AND MA.GRANT_TO = #{userId}
         ORDER BY ORD ASC
     </select>
 
@@ -104,10 +117,17 @@
              ,MN.MENU_SEQ AS MENU_SEQ
         FROM MENU MN
                  INNER JOIN SRCH_MENU SMN ON SUBSTRING(MN.MENU_CODE FROM 5 FOR 4) = SUBSTRING(SMN.PARENT_CODE FROM 5 FOR 4)
+                 INNER JOIN MENU_AUTHORIZATION MA ON MN.MENU_SEQ = MA.MENU_SEQ
         WHERE SUBSTRING(MN.MENU_CODE FROM 9 FOR 2) NOT IN('00')
           AND MN.USE_YN = 'Y'
           AND MN.DEL_YN = 'N'
           AND MN.DISPLAY_YN = 'Y'
+          AND MA.AUTH_C = 'Y'
+          AND MA.AUTH_R = 'Y'
+          AND MA.AUTH_U = 'Y'
+          AND MA.AUTH_D='Y'
+          AND MA.AUTH_F='Y'
+          AND MA.GRANT_TO =  #{userId}
         ORDER BY ORD ASC
         </select>
 
@@ -119,18 +139,6 @@
             <include refid="whereClauseId"><property name="alias" value="MN."/></include>
         </where>
     </select>
-
-    <!--<select id = "rowBySearch" resultType="MenuVO" parameterType="MenuSearchVO">
-        /* 메뉴 단 건 조회 */
-        SELECT MN.MENU_SEQ
-            <include refid="menuColumn"><property name="alias" value="MN."/></include>
-            ,(SELECT TMN.MENU_TITLE FROM MENU TMN WHERE MN.P_MENU_SEQ = TMN.MENU_SEQ) AS P_TITLE
-        FROM MENU MN
-        <where>
-            <include refid="whereClause"><property name="alias" value="MN."/></include>
-        </where>
-    </select>-->
-    <!-- 조회 ]] -->
 
     <!-- 저장/수정/삭제 [[ -->
 
@@ -163,33 +171,5 @@
                 SELECT LAST_INSERT_ID()
             </selectKey>
     </insert>
-
-
-  <!--  <update id="update">
-        /* 메뉴 업데이트 MenuMapper.update*/
-        UPDATE MENU MN
-        <set>
-            <if test="menuTitle != null and menuTitle != '' ">MN.MENU_TITLE = #{menuTitle},</if>
-            <if test="menuUrl != null and menuUrl != '' ">MN.MENU_URL = #{menuUrl},</if>
-            <if test="displayYn != null and displayYn != '' ">MN.DISPLAY_YN = #{displayYn}</if>
-        </set>
-        <where>
-            <include refid="whereClauseId"><property name="alias" value="MN."/></include>
-        </where>
-    </update>-->
-
-   <!-- <update id="updateOrd">
-        /* 메뉴 순서 업데이트 MenuMapper.updateOrd */
-        UPDATE MENU MN
-        <set>
-            <if test="menuOrd != null and menuOrd != '' "> MN.MENU_ORD = #{menuOrd} </if>
-        </set>
-        WHERE
-            <include refid="whereClausePSeq"><property name="alias" value="MN."/></include>
-            AND MN.MENU_ID = #{menuId}
-    </update>-->
-
-    <!-- 저장/수정/삭제 [[ -->
-
 
 </mapper>

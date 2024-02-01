@@ -1,7 +1,10 @@
 package com.samsung.framework.controller.menu;
 
 import com.samsung.framework.service.menu.MenuService;
+import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.menu.MenuVO;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +25,10 @@ public class MenuController{
      * @return 대메뉴 리스트
      */
     @PostMapping("/lgList")
-    public List<MenuVO> getMenuList(){
-        return menuService.getLgMenuList();
+    public List<MenuVO> getMenuList(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        AccountVO account = (AccountVO) session.getAttribute("loginInfo");
+        return menuService.getLgMenuList(account);
     }
 
     /**
@@ -31,13 +36,17 @@ public class MenuController{
      * @return
      */
     @PostMapping("/midList")
-    public List<MenuVO> getMenuMidList(){
-        return menuService.getMidMenuList();
+    public List<MenuVO> getMenuMidList(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        AccountVO account = (AccountVO) session.getAttribute("loginInfo");
+        return menuService.getMidMenuList(account);
     }
 
     @PostMapping("/smList")
-    public List<MenuVO> getMenuSmList(){
-        return menuService.getSmMenuList();
+    public List<MenuVO> getMenuSmList(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        AccountVO account = (AccountVO) session.getAttribute("loginInfo");
+        return menuService.getSmMenuList(account);
     }
 
 }
