@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -53,9 +54,8 @@ public class MenuService{
         return menuMapper.getSmMenuList(account);
     }
 
-    public Map<String, Object> saveAuthMenu(HttpServletRequest request, SignUpRequest signUpRequest){
-        HttpSession session = request.getSession();
-        AccountVO account = (AccountVO) session.getAttribute("loginInfo");
+    @Transactional
+    public Map<String, Object> saveAuthMenu(AccountVO account){
         Map<String, Object> resultMap = new HashMap<>();
         List<MenuVO> menuList = new ArrayList<>(new ArrayList<>(getLgMenuList(account)).stream().toList());
 
@@ -81,7 +81,7 @@ public class MenuService{
                         .authU("Y")
                         .authD("Y")
                         .authF("Y")
-                        .grantTo(String.valueOf(signUpRequest.getEmpNo()))
+                        .grantTo(String.valueOf(account.getEmpNo()))
                         .displayYn("Y")
                         .build();
             } else{
@@ -92,12 +92,13 @@ public class MenuService{
                         .authU("N")
                         .authD("N")
                         .authF("N")
-                        .grantTo(String.valueOf(signUpRequest.getEmpNo()))
+                        .grantTo(String.valueOf(account.getEmpNo()))
                         .displayYn("Y")
                         .build();
             }
             menuAuthorityList.add(menuAuthorityVO);
         });
+
         int bulkInserted = authorityMapper.saveMenuAuthList(menuAuthorityList);
         if(bulkInserted < 0){
             throw new IllegalArgumentException("권한 메뉴 저장에 실패하였습니다.");

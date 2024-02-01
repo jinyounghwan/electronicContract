@@ -4,18 +4,14 @@ import com.samsung.framework.common.enums.AccountTypeEnum;
 import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
 import com.samsung.framework.common.enums.LogTypeEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
-import com.samsung.framework.common.utils.EncryptionUtil;
 import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
-import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.account.LoginRequest;
 import com.samsung.framework.domain.account.PwdChangeRequest;
-import com.samsung.framework.domain.account.SignUpRequest;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.domain.log.LogSaveRequest;
 import com.samsung.framework.mapper.log.LogMapper;
 import com.samsung.framework.service.account.AccountService;
-import com.samsung.framework.service.menu.MenuService;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.log.LogSaveResponse;
 import com.samsung.framework.vo.search.SearchVO;
@@ -46,7 +42,6 @@ import java.util.Map;
 @Controller
 public class AccountController {
     private final AccountService accountService;
-    private final MenuService menuService;
     private final LogUtil logUtil;
     private final LogMapper logMapper;
     // [검색옵션] 날짜
@@ -149,20 +144,6 @@ public class AccountController {
         mv.addObject("member",new AccountVO());
         mv.setViewName("member/member-find-id");
         return mv;
-    }
-
-    /**
-     * 회원가입
-     * @param signUpRequest
-     * @return
-     * @throws CustomLoginException
-     */
-    @PostMapping("/sign-up")
-    public ResponseEntity signUp(HttpServletRequest request, @RequestBody SignUpRequest signUpRequest) throws CustomLoginException, NoSuchAlgorithmException {
-        Map<String, Object> resultMap = accountService.signUp(signUpRequest);
-        menuService.saveAuthMenu(request, signUpRequest);
-
-        return ResponseEntity.ok(resultMap);
     }
 
     /**

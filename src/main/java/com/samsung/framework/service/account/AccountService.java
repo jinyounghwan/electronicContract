@@ -6,13 +6,13 @@ import com.samsung.framework.common.exception.CustomLoginException;
 import com.samsung.framework.common.utils.*;
 import com.samsung.framework.domain.account.LoginRequest;
 import com.samsung.framework.domain.account.PwdChangeRequest;
-import com.samsung.framework.domain.account.SignUpRequest;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.domain.common.SearchObject;
 import com.samsung.framework.domain.log.LogSaveRequest;
 import com.samsung.framework.mapper.account.AccountMapper;
 import com.samsung.framework.mapper.account.ghr.GhrAccountMapper;
 import com.samsung.framework.mapper.log.LogMapper;
+import com.samsung.framework.service.menu.MenuService;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.account.ghr.GhtAccountVO;
 import com.samsung.framework.vo.common.CollectionPagingVO;
@@ -38,7 +38,9 @@ public class AccountService {
     private final AccountMapper accountMapper;
     private final LogMapper logMapper;
     private final GhrAccountMapper ghrAccountMapper;
+    private final MenuService menuService;
     private final LogUtil logUtil;
+
     /**
      * 회원 총 개수 (임직원, 관리자)
      * @param accountSearchVO {@link AccountSearchVO}
@@ -139,46 +141,6 @@ public class AccountService {
     }
 
     /**
-     * 사용자 등록
-     * @param signUpRequest {@link SignUpRequest}
-     * @return {@link Map <String,Object> }
-     */
-    public Map<String,Object> signUp(@Valid SignUpRequest signUpRequest) throws NoSuchAlgorithmException {
-        Map<String, Object> resultMap = new HashMap<>();
-
-        if(validationUtil.parameterValidator(signUpRequest, SignUpRequest.class)){
-            // (임시코드) 추후 수정
-            if(accountMapper.existsByEmpNo(signUpRequest.getEmpNo())) {
-                resultMap.put("result", "이미 존재하는 사번입니다.");
-                return resultMap;
-            }
-
-            var target = AccountVO.builder()
-                    .empNo(signUpRequest.getEmpNo())
-                    .deptCode(signUpRequest.getDeptCode())
-                    .userPw(encryptionUtil.encrypt(signUpRequest.getUserPw()))
-                    .name(signUpRequest.getName())
-                    .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.EMPLOYEE))
-                    .position(PositionEnum.menuCode(PositionEnum.STAFF))
-                    .email(signUpRequest.getEmail())
-                    .phone(signUpRequest.getPhone())
-                    .employedAt(signUpRequest.getEmployedAt())
-                    .resignedAt(signUpRequest.getResignedAt())
-                    .updatedAt(signUpRequest.getUpdatedAt())
-                    .build();
-            int inserted = accountMapper.insertMember(target);
-
-            // 정상 insert
-            if(inserted > 0) { // TOKEN 추후 제거
-                resultMap.put("result", target);
-                return resultMap;
-            }
-        }
-        resultMap.put("result", "사용자 등록 오류");
-        return resultMap;
-    }
-
-    /**
      * 로그인 정보 조회
      * @param loginRequest {@link LoginRequest}
      * @return {@link AccountVO}
@@ -207,6 +169,8 @@ public class AccountService {
                     .build();
             getAccountConverDate(target);
             int inserted = accountMapper.insertMember(target);
+            menuService.saveAuthMenu(target);
+
             if(inserted < 1){
                 throw new CustomLoginException(ExceptionCodeMsgEnum.ACCOUNT_NOT_EXISTS.getCode(), ExceptionCodeMsgEnum.ACCOUNT_NOT_EXISTS.getMsg());
             }
