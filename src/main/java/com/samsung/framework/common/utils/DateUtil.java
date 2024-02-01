@@ -389,6 +389,6 @@ public class DateUtil {
         String year = st.nextToken();
         String month = st.nextToken();
         String day = st.nextToken();
-        return month+'/'+day+'/'+year;
+        return day+'/'+month+'/'+year;
     }
 }
