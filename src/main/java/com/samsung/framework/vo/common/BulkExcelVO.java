@@ -3,9 +3,13 @@ package com.samsung.framework.vo.common;
 
 import com.samsung.framework.common.annotation.ExcelColumn;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+@Builder
+@AllArgsConstructor
 @Getter
 public class BulkExcelVO {
 

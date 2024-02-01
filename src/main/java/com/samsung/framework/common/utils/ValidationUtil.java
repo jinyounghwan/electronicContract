@@ -81,21 +81,29 @@ public class ValidationUtil {
 
     /**
      * 일괄업로드 엑셀 필수 데이터 검증
-     * @param bulkList {@link List}
-     * @param clazz {@link Class}
-     * @return validated {@link ContractExcelVO}
-     * @param <T>
+     * @param bulkList
+     * @param result
+     * @return
      */
-    public <T extends ContractExcelVO> BulkExcelVO excelBulkDataValidator(List<T> bulkList, Class<T> clazz) {
+    public BulkExcelVO excelBulkDataValidator(List<ContractExcelVO> bulkList) {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
 
-        for (T obj : bulkList) {
-            Set<ConstraintViolation<T>> validate = validator.validate((clazz.cast(obj)));
+        for (ContractExcelVO obj : bulkList) {
+            BulkExcelVO target = BulkExcelVO.builder()
+                    .empNo(obj.getEmpNo())
+                    .contractDate(obj.getContractDate())
+                    .templateCode(obj.getTemplateCode())
+                    .templateSeq(obj.getTemplateSeq())
+                    .salaryHu(obj.getSalaryHu())
+                    .salaryEn(obj.getSalaryEn())
+                    .build();
+
+            Set<ConstraintViolation<BulkExcelVO>> validate = validator.validate(target);
 
             if(validate.size() > 0) {
                 log.error(validate.toString());
-                for (ConstraintViolation<T> violation : validate) {
+                for (ConstraintViolation<BulkExcelVO> violation : validate) {
                     log.error("[excelBulkDataValidator] {}(empNo) / {}", obj.getEmpNo(), violation.getMessage());
                 }
 

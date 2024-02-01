@@ -1,6 +1,7 @@
 package com.samsung.framework;
 
 import com.samsung.framework.common.enums.LogTypeEnum;
+import com.samsung.framework.common.utils.EncryptionUtil;
 import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.common.utils.VariableHandlingUtil;
 import com.samsung.framework.domain.common.Variables;
@@ -15,7 +16,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.URI;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Base64;
 import java.util.Map;
 
 @Slf4j
@@ -26,6 +34,7 @@ public class IndexController {
 
     private final LogUtil logUtil;
     private final VariableHandlingUtil variableHandlingUtil;
+    private final EncryptionUtil encryptionUtil;
 
     @GetMapping({"", "/"})
     public String index() {
@@ -106,6 +115,14 @@ public class IndexController {
         return ResponseEntity.ok(replaced);
     }
 
+
+
+    @GetMapping("/encryption")
+    @ResponseBody
+    public ResponseEntity test() throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeySpecException {
+        String password = "qwer1234";
+        return ResponseEntity.ok(encryptionUtil.encrypt(password));
+    }
 }
 
 
