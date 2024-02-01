@@ -2,7 +2,7 @@ package com.samsung.framework.controller.contract.documented;
 
 import com.samsung.framework.domain.contract.ProgressRequest;
 import com.samsung.framework.service.contract.documented.ContractsViewService;
-import com.samsung.framework.vo.contract.view.ContractView;
+import com.samsung.framework.vo.contract.view.HistoryVO;
 import com.samsung.framework.vo.contract.view.ViewInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 @RequestMapping(value="/contract/view")
 @RequiredArgsConstructor
@@ -26,7 +28,13 @@ public class ContractsViewController {
     @ResponseBody
     public ResponseEntity getContractView(HttpServletRequest request , @RequestBody ProgressRequest param){
         ViewInfo o = contractsViewService.getContractView(request , param);
-        return new ResponseEntity(o, HttpStatus.OK);
+        return ResponseEntity.ok(o);
+    }
+    @PostMapping(value="/history")
+    @ResponseBody
+    public ResponseEntity getContractHistoryView(HttpServletRequest request , @RequestBody ProgressRequest param){
+        List<HistoryVO> list = contractsViewService.getContractHistoryView(request , param);
+        return new ResponseEntity(list , HttpStatus.OK);
     }
 
 }

@@ -3,12 +3,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}" lang="ko">
 <th:block layout:fragment="content">
+  <div th:replace="~{common/alert}"></div>
   <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
       <!--content-->
       <div class="container-fluid">
-        <h1 class="page-title">계약서 조회</h1>
-
+        <h1 class="page-title" >계약서 조회</h1>
         <div class="card mb-4">
           <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
@@ -80,16 +80,18 @@
         <div class="btn-area-box">
           <div class="btn-area-left">
             <button class="btn btn-primary" type="button" th:onclick="'viewContract('+${info.contractNo}+')'">View Contract</button>
-            <button class="btn btn-primary" type="button">View History</button>
+            <button class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
           </div>
           <div class="btn-area-right">
             <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/contract/progress}'|" >List</button>
-            <button class="btn btn-primary" type="button" onclick="recall()">Recall</button>
-            <button class="btn btn-primary" type="button">Assign</button>
+            <button class="btn btn-primary" type="button" th:onclick="openAlert('Are you sure you want to Recall?', 'recall')">Recall</button>
+            <button class="btn btn-primary" type="button" th:onclick="openAlert('Are you sure you want to Assign?', 'assign')">Assign</button>
           </div>
         </div>
       </div>
       <!--contents-->
+      <div th:replace="~{common/contractView}"></div>
+      <div th:replace="~{common/contractProgressHistory}"></div>
     </div>
   </div>
 </th:block>

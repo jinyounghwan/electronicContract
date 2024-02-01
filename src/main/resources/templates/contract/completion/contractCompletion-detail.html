@@ -79,8 +79,8 @@
                     </div>
                     <div class="btn-area-box">
                         <div class="btn-area-left">
-                            <button class="btn btn-primary" type="button">View Contract</button>
-                            <button class="btn btn-primary" type="button">View History</button>
+                            <button class="btn btn-primary" type="button" th:onclick="'viewContract('+${contract.getContractNo()}+')'">View Contract</button>
+                            <button class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
                         </div>
                         <div class="btn-area-right">
                             <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/contract/sign/comp}'|">List</button>
@@ -88,6 +88,8 @@
                     </div>
                 </div>
                 <!--contents-->
+                <div th:replace="~{common/contractView}"></div>
+                <div th:replace="~{common/contractProgressHistory}"></div>
             </div>
         </div>
 </th:block>

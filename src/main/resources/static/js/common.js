@@ -188,11 +188,58 @@ let updateOk = () =>{
     switch(type){
         case 'updateAssign' : updateAssign(); break;
         case 'updateRecall' :updateRecall(); break;
+        case 'recall' :recall(); break;
+        case 'assign' :assign(); break;
         default: return false;
     }
 }
+let viewHistory = (seq) =>{
+     // 팝업창 열기
+     $('[data-target="history"]').removeAttr('style');
+     let data = {'contractNo' : seq }
+     $.ajax({
+        url: '/contract/view/history',
+        type: 'post',
+        dataType:'json',
+        data:JSON.stringify(data),
+        contentType: 'application/json; charset=UTF-8',
+    }).done(function(data) {
+        $('[data-target="historyBody"]').empty();
+        if(data.length > 0){
+            data.forEach((value)=> {
+                var $tr  = $('<tr>');
+                var $td1 = $('<td>' +value.processStep+ '</td>');
+                var $td2= $('<td>' +value.createdBy+ '</td>');
+                var $td3 = $('<td>' +value.createdAt+ '</td>');
+                var $td4 = $('<td>' +value.ipAddress+ '</td>');
+                $tr.append($td1);
+                $tr.append($td2);
+                $tr.append($td3);
+                $tr.append($td4);
+                $('[data-target="historyBody"]').append($tr);
+
+            });
+        }else{
+             var $tr  = $('<tr>');
+             var $td = $('<td colspan="4">데이터 가 없습니다. </td>');
+             $tr.append($td);
+             $('[data-target="historyBody"]').append($tr);
+        }
+        $('[data-target="history"]').attr('style' , 'display:block');
+        $('[data-target="historyBackground"]').attr('class' , 'modal-backdrop');
+    }).fail(function(jqXHR) {
+        console.log(jqXHR);
+    });
+
+}
+let closeHistoryView = () =>{
+    $('[data-target="history"]').attr('style' , 'display:none');
+    $('[data-target="historyBackground"]').removeAttr('class');
+}
 /*view contract*/
 let viewContract = (seq) =>{
+     // 팝업창 열기
+     $('[data-target="view"]').removeAttr('style');
      let data = {'contractNo' : seq }
      $.ajax({
         url: '/contract/view',
@@ -201,11 +248,28 @@ let viewContract = (seq) =>{
         data:JSON.stringify(data),
         contentType: 'application/json; charset=UTF-8',
     }).done(function(data) {
-        console.log(data)
+        console.log(data['contractTitleHu']);
+        console.log(!isEmpty(data));
+        if(!isEmpty(data)){
+            $('[data-select]').each(function(index, item){
+                var $this = $(item);
+                var key = $this.data('select');
+                $this.text(data[key]);
+            });
+            $('[data-target="view"]').attr('style' , 'display:block');
+            $('[data-target="viewBackground"]').attr('class' , 'modal-backdrop');
+        }
     }).fail(function(jqXHR) {
         console.log(jqXHR);
     });
 
+}
+/*
+    contract viewer close
+*/
+let closeContractView = () =>{
+    $('[data-target="view"]').attr('style' , 'display:none');
+    $('[data-target="viewBackground"]').removeAttr('class');
 }
 /*
     button 클릭 시  input type=file 실행

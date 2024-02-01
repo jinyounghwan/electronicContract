@@ -5782,7 +5782,7 @@ a.close.disabled {
 }
 .modal-body.alert-pop {
     text-align: center;
-    height: 120px;
+    height: 180px;
     line-height: 70px;
 }
 .modal-img {/* padding-left: 1rem; *//* padding-bottom: 0.5rem; */}

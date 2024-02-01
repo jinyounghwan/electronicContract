@@ -5,6 +5,7 @@ import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.ExcelUtil;
 import com.samsung.framework.common.utils.FileUtil;
 import com.samsung.framework.common.utils.StringUtil;
+import com.samsung.framework.mapper.account.AccountMapper;
 import com.samsung.framework.mapper.account.ghr.GhrAccountMapper;
 import com.samsung.framework.mapper.file.FileMapper;
 import com.samsung.framework.vo.account.ghr.GhtAccountVO;
@@ -28,6 +29,7 @@ public class ExcelPublicServiceImpl implements ExcelService {
     private final FileUtil fileUtil;
     private final FileMapper fileMapper;
     private final GhrAccountMapper ghrAccountMapper;
+    private final AccountMapper accountMapper;
     @Value("${properties.file.rootDir}")
     private String getRootDir;
     @Value("${properties.file.realDir}")
@@ -76,17 +78,6 @@ public class ExcelPublicServiceImpl implements ExcelService {
         AtomicInteger rowNum = new AtomicInteger();
         for(List<ContractExcelVO> targetList : list){
             getGhrAccountInfo(targetList);
-            targetList.stream().iterator().forEachRemaining(data->{
-                if(data.getTemplateCode().equals(ContractTemplateEnum.getTemplateCode(ContractTemplateEnum.SALARY))){
-                    if(StringUtil.isEmpty(data.getSalaryEn()) || StringUtil.isEmpty(data.getSalaryHu())){
-                        data.setValidation(false);
-                        //throw new RuntimeException("일괄 업로드를 실패하였습니다.");
-                    }
-                    rowNum.getAndIncrement();
-                    data.setValidation(true);
-                    data.setRowNum(rowNum.intValue());
-                }
-            });
         }
         return list;
     }
@@ -106,6 +97,9 @@ public class ExcelPublicServiceImpl implements ExcelService {
      */
     public void getGhrAccountInfo(List<ContractExcelVO> list) throws Exception{
         list.stream().iterator().forEachRemaining(data->{
+            if(!accountMapper.existsByEmpNo(StringUtil.getInt(data.getEmpNo()))){
+                return;
+            }
             GhtAccountVO ghrAccount = ghrAccountMapper.getGhrInfo(Integer.parseInt(data.getEmpNo()));
             data.setName(ghrAccount.getName());
             data.setJobTitleEn(ghrAccount.getJob());

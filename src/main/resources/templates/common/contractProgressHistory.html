@@ -1,0 +1,33 @@
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<!--poppup-->
+<div class="modal" style="display: none;" data-target="history">
+    <div class="modal-dialog modal-l modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Contract Progress History</h5>
+                <button type="button" class="btn-close" th:onclick="closeHistoryView()"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Actor</th>
+                            <th>Date/Time</th>
+                            <th>IP</th>
+                        </tr>
+                        </thead>
+                        <tbody data-target="historyBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" th:onclick="closeHistoryView()" >Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div data-target="historyBackground"></div>
+</html>
