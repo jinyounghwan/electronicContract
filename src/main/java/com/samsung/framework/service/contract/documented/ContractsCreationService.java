@@ -80,8 +80,8 @@ public class ContractsCreationService {
                         .delYn("N")
                         .hireDateEn(data.getHireDateEn())
                         .hireDateHu(data.getHireDateHu())
-                        .docStatus(ContractProcessEnum.processCode(ContractProcessEnum.UNSEEN))
-                        .processStatus(ContractProcessEnum.processCode(ContractProcessEnum.CREATED))
+                        .docStatus(ContractProcessEnum.processCode(ContractProcessEnum.CREATED))
+                        .processStatus(ContractProcessEnum.processCode(ContractProcessEnum.UNSEEN))
                         .contractDateHu(StringUtil.getString(data.getContractDateHu())) // format 변경
                         .contractDateEn(StringUtil.getString(data.getContractDate()))
                         .deptCode(user.getDeptCode()).createdBy("admin")
