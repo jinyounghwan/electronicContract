@@ -3,7 +3,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.samsung.framework.mapper.contract.template.ContractTemplateMapper">
-
+    <sql id="whereClause">
+        <if test="(startDt != null and startDt != '') and (endDt != null and endDt != '')">
+            <choose>
+                <when test="searchDateType == 'CREATED_AT'">
+                    AND CT.created_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                </when>
+                <when test="searchDateType == 'UPDATED_AT'">
+                    AND CT.updated_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                </when>
+                <when test="searchDateType == 'ALL'">
+                    AND  CT.updated_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                    AND CT.created_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                </when>
+            </choose>
+        </if>
+        <if test="@com.samsung.framework.common.utils.StringUtil@isNotEmpty(searchKeyword)">
+            <choose>
+                <when test="searchKeywordType == 'TITLE'">
+                    and CT.template_title like concat('%',#{searchKeyword},'%')
+                </when>
+            </choose>
+        </if>
+    </sql>
     <select id="getContractTemplateCode" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(1)
           FROM CONTRACT_TEMPLATE
@@ -15,6 +37,8 @@
           FROM CONTRACT_TEMPLATE CT
           JOIN CONTRACT_TEMPLATE_DETAILS CTD
             ON CT.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
+        where 1 = 1
+        <include refid="whereClause"/>
     </select>
 
     <select id="getContractTemplateList" resultType="ContractTemplateVO" parameterType="SearchVO">
@@ -27,6 +51,8 @@
          FROM CONTRACT_TEMPLATE CT
          JOIN CONTRACT_TEMPLATE_DETAILS CTD
            ON CT.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
+        where 1 = 1
+        <include refid="whereClause"/>
         LIMIT #{paging.displayRow} OFFSET #{paging.offset}
     </select>
 

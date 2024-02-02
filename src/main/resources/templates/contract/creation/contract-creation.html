@@ -8,7 +8,6 @@
                 <!--content-->
                 <div class="container-fluid">
                     <h1 class="page-title">계약서 생성</h1>
-
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
@@ -37,6 +36,9 @@
                                             <th>Employee ID</th>
                                             <td><input type="text" name="empNo" class="form-control form-control-user" placeholder="" data-required="true" data-alert="employee id를 입렵 해 주세요 "></td>
                                         </tr>
+                                        <tr>
+                                            <td><input type="text" name="SalaryHu" class="form-control form-control-user" placeholder="" ></td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </form>
@@ -53,27 +55,31 @@
     </th:block>
     <th:block layout:fragment="script">
         <script th:inline="javascript">
-            let create = () =>{
-                if(valid($('#contractForm'))){
-                    $.ajax({
-                      url: '/contract/create/save1',
-                      type: 'post',
-                      dataType:'json',
-                      data:$('#contractForm').serialize() + '&templateCode=' + $('[data-select="templateCode"] option:selected').val()
-                    }).done(function(data) {
-                        console.log(data);
-                        if(data.code == 200){
-                            alert('저장이 완료 되었습니다.');
-                            location.href='contract/progress';
-                        }else{
-                            alert('관리자에게 문의 바랍니다.');
-                            location.href='/contract/create';
-                        }
-                    }).fail(function(jqXHR) {
-                        console.log(jqXHR);
-                    });
-                }
-            }
+            $(function(){
+
+           });
+
+           let create = () =>{
+               if(valid($('#contractForm'))){
+                   $.ajax({
+                     url: '/contract/create/save1',
+                     type: 'post',
+                     dataType:'json',
+                     data:$('#contractForm').serialize() + '&templateCode=' + $('[data-select="templateCode"] option:selected').val()
+                   }).done(function(data) {
+                       console.log(data);
+                       if(data.code == 200){
+                           alert('저장이 완료 되었습니다.');
+                           location.href='contract/progress';
+                       }else{
+                           alert('관리자에게 문의 바랍니다.');
+                           location.href='/contract/create';
+                       }
+                   }).fail(function(jqXHR) {
+                       console.log(jqXHR);
+                   });
+               }
+           }
         </script>
     </th:block>
 

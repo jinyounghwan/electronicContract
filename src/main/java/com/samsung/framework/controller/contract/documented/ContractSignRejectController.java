@@ -50,16 +50,17 @@ public class ContractSignRejectController {
 
     @PostMapping(value = "/list")
     public String getContractSignRejectList (Model model , @RequestBody SearchVO searchVO){
-        Paging pagingVo =  Paging.builder()
-                .currentPage(searchVO.getPaging().getCurrentPage())
-                .displayRow(searchVO.getPaging().getDisplayRow())
-                .totalCount(searchVO.getPaging().getTotalCount())
-                .build();
-        searchVO.setPaging(pagingVo);
+
         // total
         int totalCount = contractSignRejectService.getContractSignRejectCount(searchVO);
         model.addAttribute("totalCount", totalCount);
         // paging
+        Paging pagingVo =  Paging.builder()
+                .currentPage(searchVO.getPaging().getCurrentPage())
+                .displayRow(searchVO.getPaging().getDisplayRow())
+                .totalCount(totalCount)
+                .build();
+        searchVO.setPaging(pagingVo);
         model.addAttribute("paging",pagingVo);
 
         // list
