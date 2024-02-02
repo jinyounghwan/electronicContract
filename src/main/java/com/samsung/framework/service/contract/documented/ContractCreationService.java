@@ -63,6 +63,8 @@ public class ContractCreationService {
                 .delYn("N")
                                 .hireDateEn(StringUtil.getString(user.getEmployedAt())) //  헝가리, 영어 날짜로 변경
                                 .hireDateHu(StringUtil.getString(user.getEmployedAt()))
+                .salaryEn(target.getSalaryEn())
+                .salaryHu(target.getSalaryHu())
                                 .docStatus(ContractProcessEnum.processCode(ContractProcessEnum.UNSEEN))
                                 .processStatus(ContractProcessEnum.processCode(ContractProcessEnum.CREATED))
                 .contractDateHu(StringUtil.getString(target.getDate())) // format 변경

@@ -24,7 +24,7 @@
                                                 <div class="data-group datatable-dropdown">
                                                     <label style="width: 100%;">
                                                         <select class="datatable-selector" th:field="*{templateCodeList}" data-select="templateCode">
-                                                            <option th:each="e , i : ${templateCodeList}" th:value="${e.templateSeq}" th:text="|${e.templateTitle}|"  >전체</option>
+                                                            <option th:each="e , i : ${templateCodeList}" th:value="${e.templateSeq}" th:text="|${e.templateTitle}|" th:attr = "data-value=${e.templateType}" >전체</option>
                                                         </select>
                                                     </label>
                                                 </div>
@@ -36,8 +36,13 @@
                                             <th>Employee ID</th>
                                             <td><input type="text" name="empNo" class="form-control form-control-user" placeholder="" data-required="true" data-alert="employee id를 입렵 해 주세요 "></td>
                                         </tr>
-                                        <tr>
+                                        <tr data-target="hidden-tr">
+                                            <th>Salary_hu</th>
                                             <td><input type="text" name="SalaryHu" class="form-control form-control-user" placeholder="" ></td>
+                                        </tr>
+                                        <tr data-target="hidden-tr">
+                                            <th>Salary_en</th>
+                                            <td><input type="text" name="SalaryEn" class="form-control form-control-user" placeholder="" ></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -56,13 +61,25 @@
     <th:block layout:fragment="script">
         <script th:inline="javascript">
             $(function(){
-
-           });
+                let value = $('[data-select="templateCode"] option:selected').val();
+                if( value != 'TMPL2000'){
+                    // 연봉 관련 template가 아니라면..
+                    $('[data-target="hidden-tr"]').css('display', 'none');
+                }
+                $('[data-select="templateCode"]').on('change' , function(){
+                    let selected =  $('[data-select="templateCode"] option:selected').data('value');
+                    if(selected == 'TMPL2000'){
+                        $('[data-target="hidden-tr"]').css('display', 'table-row');
+                    }else{
+                        $('[data-target="hidden-tr"]').css('display', 'none');
+                    }
+                });
+            });
 
            let create = () =>{
                if(valid($('#contractForm'))){
                    $.ajax({
-                     url: '/contract/create/save1',
+                     url: '/contract/create/save',
                      type: 'post',
                      dataType:'json',
                      data:$('#contractForm').serialize() + '&templateCode=' + $('[data-select="templateCode"] option:selected').val()
@@ -70,7 +87,7 @@
                        console.log(data);
                        if(data.code == 200){
                            alert('저장이 완료 되었습니다.');
-                           location.href='contract/progress';
+                           location.href='/contract/progress';
                        }else{
                            alert('관리자에게 문의 바랍니다.');
                            location.href='/contract/create';
