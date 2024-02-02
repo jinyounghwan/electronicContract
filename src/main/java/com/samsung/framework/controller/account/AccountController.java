@@ -147,7 +147,7 @@ public class AccountController {
     }
 
     /**
-     * login view를 가져와 준다.
+     * login view
      * @return
      */
     @GetMapping({"", "/login"})
@@ -158,7 +158,7 @@ public class AccountController {
     }
 
     /**
-     * login
+     * TODO: login시 회원가입 값 세팅 수정 필요
      * @param loginRequest
      * @param request
      * @return
