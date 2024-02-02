@@ -56,7 +56,7 @@
             let create = () =>{
                 if(valid($('#contractForm'))){
                     $.ajax({
-                      url: '/contract/create/save',
+                      url: '/contract/create/save1',
                       type: 'post',
                       dataType:'json',
                       data:$('#contractForm').serialize() + '&templateCode=' + $('[data-select="templateCode"] option:selected').val()
