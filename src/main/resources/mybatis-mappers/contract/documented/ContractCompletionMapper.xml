@@ -6,14 +6,14 @@
     <sql id="search">
         <if test="(startDt != null and startDt != '') and (endDt != null and endDt != '')">
             <if test="searchDateType == 'ALL'">
-                AND (C.CREATED_AT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
-                OR C.UPDATED_AT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1)
+                AND C.CREATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
+                AND C.UPDATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
             </if>
             <if test="searchDateType == 'CREATED_AT'">
-                AND C.CREATED_AT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                AND C.CREATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
             </if>
             <if test="searchDateType == 'UPDATED_AT'">
-                AND C.UPDATED_AT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                AND C.UPDATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
             </if>
         </if>
         <choose>
@@ -31,9 +31,9 @@
                     <when test="searchKeywordType == 'ALL'">
                         AND
                         (
-                        LOWER(C.NAME) LIKE LOWER(CONCAT('%', IFNULL(#{searchKeyword}, ' '), '%'))
-                        OR LOWER(C.EMP_NO) LIKE LOWER(CONCAT('%',IFNULL(#{searchKeyword},' '), '%'))
-                        OR LOWER(CTD.CONTRACT_TITLE_EN) LIKE LOWER(CONCAT('%',IFNULL(#{searchKeyword},' '), '%'))
+                            LOWER(C.NAME) LIKE LOWER(CONCAT('%', #{searchKeyword}, '%'))
+                        OR LOWER(C.EMP_NO) LIKE LOWER(CONCAT('%', #{searchKeyword}, '%'))
+                        OR LOWER(CTD.CONTRACT_TITLE_EN) LIKE LOWER(CONCAT('%',#{searchKeyword}, '%'))
                         )
                     </when>
                 </choose>
@@ -41,9 +41,9 @@
             <otherwise>
                 AND
                 (
-                LOWER(C.NAME) LIKE LOWER(CONCAT('%', IFNULL(#{searchKeyword}, ' '), '%'))
-                OR LOWER(C.EMP_NO) LIKE LOWER(CONCAT('%',IFNULL(#{searchKeyword},' '), '%'))
-                OR LOWER(CTD.CONTRACT_TITLE_EN) LIKE LOWER(CONCAT('%',IFNULL(#{searchKeyword},' '), '%'))
+                LOWER(C.NAME) LIKE LOWER(CONCAT('%', #{searchKeyword}, '%'))
+                OR LOWER(C.EMP_NO) LIKE LOWER(CONCAT('%',#{searchKeyword}, '%'))
+                OR LOWER(CTD.CONTRACT_TITLE_EN) LIKE LOWER(CONCAT('%',#{searchKeyword}, '%'))
                 )
             </otherwise>
         </choose>

@@ -6,14 +6,14 @@
     <sql id="search">
         <if test="(startDt != null and startDt != '') and (endDt != null and endDt != '')">
             <if test="searchDateType == 'ALL'">
-                AND (CREATED_AT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
-                OR UPDATED_AT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1)
+                AND C.CREATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
+                AND C.UPDATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
             </if>
             <if test="searchDateType == 'CREATED_AT'">
-                AND CREATED_AT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                AND C.CREATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
             </if>
             <if test="searchDateType == 'UPDATED_AT'">
-                AND UPDATED_AT BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                AND C.UPDATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
             </if>
         </if>
         <choose>

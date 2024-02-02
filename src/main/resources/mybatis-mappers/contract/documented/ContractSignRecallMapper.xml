@@ -8,14 +8,14 @@
         <if test="(startDt != null and startDt != '') and (endDt != null and endDt != '')">
             <choose>
                 <when test="searchDateType == 'CREATED_AT'">
-                    AND c.created_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                    AND c.created_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
                 </when>
                 <when test="searchDateType == 'UPDATED_AT'">
-                    AND c.updated_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                    AND c.updated_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
                 </when>
                 <when test="searchDateType == 'ALL'">
-                    AND  c.updated_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
-                    AND c.created_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                    AND c.created_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
+                    AND c.updated_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
                 </when>
             </choose>
         </if>
