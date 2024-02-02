@@ -29,12 +29,12 @@
                     and ct.emp_no like concat('%',#{seacrchKeyword},'%')
                 </when>
                 <when test="searchStatusType == 'NAME'">
-                    and u.name like concat('%',#{searchKeyword},'%')
+                    and c.name like concat('%',#{searchKeyword},'%')
                 </when>
                 <when test="searchStatusType == 'ALL'">
                     and ct.emp_no like concat('%',#{seacrchKeyword},'%')
-                    and ct.template_title like concat('%',#{searchKeyword},'%')
-                    and u.name like concat('%',#{searchKeyword},'%')
+                    or ct.template_title like concat('%',#{searchKeyword},'%')
+                    or c.name like concat('%',#{searchKeyword},'%')
                 </when>
             </choose>
         </if>
@@ -60,14 +60,12 @@
                     , c.updated_by
                     , c.updated_at
                     , ct.template_title
-                    , u.name
+                    , c.name
                     , ctd.contract_title_en
-                    , u.dept_code
+                    , c.dept_code
                  from contracts c
                  join contract_template ct
                    on c.template_seq = ct.template_seq
-                 join users u
-                   on c.emp_no = u.emp_no
                  join contract_template_details ctd
                    on ct.template_seq = ctd.template_seq
         where c.del_yn = 'N'
@@ -80,9 +78,9 @@
               FROM CONTRACTS C
               JOIN CONTRACT_TEMPLATE CT
                 ON C.TEMPLATE_SEQ = CT.TEMPLATE_SEQ
-              JOIN USERS U
-                ON C.EMP_NO = U.EMP_NO
-             where C.del_yn = 'N'
+              JOIN CONTRACT_TEMPLATE_DETAILS CTD
+                ON CT.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
+             WHERE C.DEL_YN = 'N'
             <include refid="whereClause"/>
     </select>
 

@@ -28,12 +28,12 @@
                     and ct.emp_no like concat('%',#{seacrchKeyword},'%')
                 </when>
                 <when test="searchStatusType == 'NAME'">
-                    and u.name like concat('%',#{searchKeyword},'%')
+                    and c.name like concat('%',#{searchKeyword},'%')
                 </when>
                 <when test="searchStatusType == 'ALL'">
                     and ct.emp_no like concat('%',#{seacrchKeyword},'%')
-                    and ct.template_title like concat('%',#{searchKeyword},'%')
-                    and u.name like concat('%',#{searchKeyword},'%')
+                    or ct.template_title like concat('%',#{searchKeyword},'%')
+                    or c.name like concat('%',#{searchKeyword},'%')
                 </when>
             </choose>
         </if>
@@ -53,14 +53,12 @@
                 , c.updated_by
                 , c.updated_at
                 , ct.template_title
-                , u.name
+                , c.name
                 , ctd.contract_title_en
-                , u.dept_code
+                , c.dept_code
             from contracts c
             join contract_template ct
               on c.template_seq = ct.template_seq
-            join users u
-              on c.emp_no = u.emp_no
             join contract_template_details ctd
               on ct.template_seq = ctd.template_seq
         where c.del_yn = 'N'
@@ -82,28 +80,26 @@
 
     <select id="getContractSignRejectInfo" parameterType="String" resultType="ContractVO">
         SELECT c.contract_no
-        , c.emp_no
-        , c.template_seq
-        , c.doc_status
-        , c.process_status
-        , c.signature_data_no
-        , c.validation
-        , c.agree_yn
-        , c.del_yn
-        , c.created_by
-        , c.created_at
-        , c.updated_by
-        , c.updated_at
-        , ct.template_title
-        , u.name
-        , c.sign_date
-        , ctd.contract_title_en
-        , u.dept_code
+            , c.emp_no
+            , c.template_seq
+            , c.doc_status
+            , c.process_status
+            , c.signature_data_no
+            , c.validation
+            , c.agree_yn
+            , c.del_yn
+            , c.created_by
+            , c.created_at
+            , c.updated_by
+            , c.updated_at
+            , ct.template_title
+            , c.name
+            , c.sign_date
+            , ctd.contract_title_en
+            , c.dept_code
         from contracts c
         join contract_template ct
         on c.template_seq = ct.template_seq
-        join users u
-        on c.emp_no = u.emp_no
         join contract_template_details ctd
         on ct.template_seq = ctd.template_seq
         where c.contract_no = #{seq}
