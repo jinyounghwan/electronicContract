@@ -2,7 +2,6 @@ package com.samsung.framework.service.contract.documented;
 
 
 import com.samsung.framework.common.enums.ContractProcessEnum;
-import com.samsung.framework.common.enums.LogTypeEnum;
 import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.domain.account.ghr.GhrAccount;
@@ -20,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,11 +94,15 @@ public class ContractCompService {
     }
 
     public int getContractCompTotal(SearchVO searchVO) {
+        List<String> docStatusList = Arrays.asList(ContractProcessEnum.processCode(ContractProcessEnum.COMPLETED), ContractProcessEnum.processCode(ContractProcessEnum.PAPER_CONTRACT));
+        searchVO.setContractDocStatusTypeList(docStatusList);
         int count = contractCompletionMapper.getContractCompTotal(searchVO);
         return count;
     }
 
     public List<ContractCompVO> getContractCompList(SearchVO searchVO){
+        List<String> docStatusList = Arrays.asList(ContractProcessEnum.processCode(ContractProcessEnum.COMPLETED), ContractProcessEnum.processCode(ContractProcessEnum.PAPER_CONTRACT));
+        searchVO.setContractDocStatusTypeList(docStatusList);
         List<ContractCompVO> list = contractCompletionMapper.getContractCompList(searchVO);
         list.forEach(data->{
             data.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(data.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
