@@ -32,15 +32,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/static/img/");
     }
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//
-//        registry.addInterceptor(loginInterceptor)
-//                .addPathPatterns("/**")
-//                .excludePathPatterns(loginExcludePattern)
-//                .order(1);
-//
-//
-//    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+
+        registry.addInterceptor(loginInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns(loginExcludePattern)
+                .order(1);
+
+
+    }
 
 }

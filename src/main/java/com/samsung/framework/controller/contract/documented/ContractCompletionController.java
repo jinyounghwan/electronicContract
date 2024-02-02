@@ -1,5 +1,6 @@
 package com.samsung.framework.controller.contract.documented;
 
+import com.samsung.framework.common.enums.ContractProcessEnum;
 import com.samsung.framework.common.enums.LogTypeEnum;
 import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.domain.common.Paging;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -89,7 +91,7 @@ public class ContractCompletionController {
         model.addAttribute("paging" , new Paging());
         model.addAttribute("list" , new ArrayList<>());
         model.addAttribute("search" , new SearchVO());
-        model.addAttribute("totalCount" ,contractCompletionService.getContractCompTotal(null));
+        model.addAttribute("totalCount" ,contractCompletionService.getContractCompTotal(new SearchVO()));
         return "contract/completion/completionList";
     }
 
@@ -133,9 +135,8 @@ public class ContractCompletionController {
     @GetMapping("/detail/{contractNo}")
     public ModelAndView getContractCompDetail(ModelAndView mv, @PathVariable long contractNo){
         ContractCompVO contract = contractCompletionService.getContractCompDetail(contractNo);
-
         mv.setViewName("contract/completion/contractCompletion-detail");
-        mv.addObject("contract", contract);
+        mv.addObject("info", contract);
 
         return mv;
     }
