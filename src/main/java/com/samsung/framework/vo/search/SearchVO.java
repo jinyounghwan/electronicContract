@@ -72,6 +72,7 @@ public class SearchVO {
      */
     private String displayName;
 
+
     public SearchVO( String code, String displayName) {
         this.code = code;
         this.displayName = displayName;

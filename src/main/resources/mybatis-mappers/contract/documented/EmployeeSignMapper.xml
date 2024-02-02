@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.contract.documented.EmployeeSignMapper">
+    <select id="getTotal" parameterType="AccountSearchVO" resultType="Integer">
+        select count(contract_no)
+          from contracts c
+          join contract_template ct
+            on c.template_seq = ct.template_seq
+          join contract_template_details ctd
+            on ct.template_seq = ctd.template_seq
+         where doc_status ='PRCS1001'
+           and process_status in ('PRCS2001','PRCS2002')
+           and del_yn ='N'
+           and emp_no =#{empNo}
+    </select>
+    <select id="getContractWaitsList" parameterType="AccountSearchVO" resultType="ContractVO" >
+           SELECT c.contract_no /*getContractWaitsList*/
+                , c.emp_no
+                , c.template_seq
+                , c.doc_status
+                , c.process_status
+                , c.signature_data_no
+                , c.validation
+                , c.agree_yn
+                , c.del_yn
+                , c.created_by
+                , c.created_at
+                , c.updated_by
+                , c.updated_at
+                , c.name
+                ,ctd.contract_title_en
+             from contracts c
+             join contract_template ct
+               on c.template_seq = ct.template_seq
+             join contract_template_details ctd
+               on ct.template_seq = ctd.template_seq
+            where c.del_yn = 'N'
+              and doc_status ='PRCS1001'
+              and process_status in ('PRCS2001','PRCS2002')
+              and emp_no = #{empNo}
+            LIMIT #{paging.displayRow} OFFSET #{paging.offset}
+    </select>
+    <select id="getContractWaitInfo" parameterType="ContractVO" resultType="ContractVO">
+           SELECT c.contract_no /*getContractWaitInfo*/
+                , c.emp_no
+                , c.template_seq
+                , c.doc_status
+                , c.process_status
+                , c.signature_data_no
+                , c.validation
+                , c.agree_yn
+                , c.del_yn
+                , c.created_by
+                , c.created_at
+                , c.updated_by
+                , c.updated_at
+                , c.name
+                ,ctd.contract_title_en
+             from contracts c
+             join contract_template ct
+               on c.template_seq = ct.template_seq
+             join contract_template_details ctd
+               on ct.template_seq = ctd.template_seq
+            where c.del_yn = 'N'
+              and doc_status ='PRCS1001'
+              and process_status in ('PRCS2001','PRCS2002')
+              and emp_no = #{empNo}
+              and c.contract_no = #{contractNo}
+    </select>
+
+</mapper>

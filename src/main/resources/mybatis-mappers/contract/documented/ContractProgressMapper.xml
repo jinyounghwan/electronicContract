@@ -63,7 +63,7 @@
                     , u.name
                     , ctd.contract_title_en
                     , u.dept_code
-        from contracts c
+                 from contracts c
                  join contract_template ct
                    on c.template_seq = ct.template_seq
                  join users u
