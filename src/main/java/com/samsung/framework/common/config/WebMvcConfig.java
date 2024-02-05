@@ -23,7 +23,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     // Login
     private final List<String> loginIncludePattern = Arrays.asList("/login/**", "/member/**", "/token/authentication-info");
-    private final List<String> loginExcludePattern = Arrays.asList("/account/login", "/error", "/resources/**", "/static/**" ,"/menu/**", "/img/**");
+    private final List<String> loginExcludePattern = Arrays.asList("/static/js/**","/static/lib/**/**", "/static/css/**","/account/login", "/error", "/resources/**", "/static/**" ,"/menu/**", "/img/**");
 
 
     @Override
