@@ -13,4 +13,6 @@ public interface LogMapper {
     int saveLog(LogSaveRequest logSaveRequest);
     boolean isExistsPasswordChangeLog(String createdBy);
     List<HistoryVO> getContractLogList(@Param(value="contractNo") int contractNo);
+
+    boolean getLogType(@Param(value="contractNo")String contractNo, @Param(value="type") String type);
 }

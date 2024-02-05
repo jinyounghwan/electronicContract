@@ -31,7 +31,7 @@
                                 </tr>
                                 <tr>
                                     <th>Assigned</th>
-                                    <td th:text="${info.signDate}">2023-09-10  08:14:59 , admin12</td>
+                                    <td th:text="${info.assignedAt}">2023-09-10  08:14:59 , admin12</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -48,6 +48,7 @@
             <!--contents-->
             <div th:replace="~{common/contractView}"></div>
             <div th:replace="~{common/contractProgressHistory}"></div>
+            <div th:replace="~{common/rejectPopup}"></div>
         </div>
     </div>
 </th:block>

@@ -25,6 +25,9 @@
             , created_at
          from process_log pl
         where contract_no = #{contractNo}
+    </select>
 
+    <select id="getLogType" parameterType="String">
+        select exists(select log_seq from process_log pl where contract_no = #{contractNo} and log_type =#{type})
     </select>
 </mapper>

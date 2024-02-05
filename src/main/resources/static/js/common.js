@@ -348,3 +348,60 @@ function addFileText(_this){
     let fileName = $this[0].files[0].name;
     $('[data-select="fileName"]').text(fileName);
 }
+
+// reject
+let rejectConfirm = () =>{
+    $('[data-target="reject"]').attr('style' , 'display:block');
+    $('[data-select="rejectReason"]').val('');
+    $('[data-target="rejectBackground"]').attr('class' , 'modal-backdrop');
+}
+// reject ok call
+let rejectConfirmCheck = () =>{
+    if(valid($('#rejectForm'))){
+        // reject 확인 시
+        console.log($('#contractNo').val())
+        let data = {'contractNo' : $('#contractNo').val()
+                    ,'rejectReason' : $("#rejectReason").text()
+        };
+        $.ajax({
+            url: '/contract/sign/wait/reject/update',
+            type: 'post',
+            dataType:'json',
+            data:JSON.stringify(data),
+            contentType: 'application/json; charset=UTF-8',
+        }).done(function(data) {
+           $('[data-target="view"]').removeAttr('style');
+           $('[data-target="reject"]').removeAttr('style');
+           $('[data-target="rejectBackground"]').removeAttr('class');
+           location.href= '/contract/sign/wait';
+        }).fail(function(jqXHR) {
+            console.log(jqXHR);
+        });
+    }
+}
+
+let rejectConfirmClose = () =>{
+    $('[data-target="reject"]').attr('style' , 'display:none');
+    $('[data-select="rejectReason"]').val('');
+    $('[data-target="rejectBackground"]').removeAttr('class');
+}
+
+let contractComplete = () =>{
+    // complete 확인 시
+    console.log($('#contractNo').val())
+    let data = {'contractNo' : $('#contractNo').val()};
+    $.ajax({
+        url: '/contract/sign/wait/complete/update',
+        type: 'post',
+        dataType:'json',
+        data:JSON.stringify(data),
+        contentType: 'application/json; charset=UTF-8',
+    }).done(function(data) {
+       $('[data-target="view"]').removeAttr('style');
+       $('[data-target="reject"]').removeAttr('style');
+       $('[data-target="rejectBackground"]').removeAttr('class');
+       location.href= '/contract/sign/wait';
+    }).fail(function(jqXHR) {
+        console.log(jqXHR);
+    });
+}
