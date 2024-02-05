@@ -21,7 +21,7 @@ public class ContractsCreationController {
 
     @GetMapping(value={"/",""})
     public String contractBulkCreation(){
-        return "/contract/creation/bulk-contract-creation";
+        return "contract/creation/bulk-contract-creation";
     }
 
     @ResponseBody

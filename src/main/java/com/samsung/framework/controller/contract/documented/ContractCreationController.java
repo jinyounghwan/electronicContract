@@ -33,7 +33,7 @@ public class ContractCreationController {
     }
     @GetMapping(value = {"/",""})
     public String contractCreation(){
-        return "/contract/creation/contract-creation";
+        return "contract/creation/contract-creation";
     }
 
     @PostMapping("/save")
