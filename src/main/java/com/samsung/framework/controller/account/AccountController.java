@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,7 +153,14 @@ public class AccountController {
      * @return
      */
     @GetMapping({"", "/login"})
-    public ModelAndView login(ModelAndView mv) {
+    public ModelAndView login(HttpServletRequest request, ModelAndView mv) {
+        HttpSession session = request.getSession();
+        AccountVO account = (AccountVO) session.getAttribute("loginInfo");
+        if (account != null) {
+            mv.setViewName("redirect:/contract/progress");
+            return mv;
+        }
+
         mv.addObject("member", new AccountVO());
         mv.setViewName("account/login");
         return mv;

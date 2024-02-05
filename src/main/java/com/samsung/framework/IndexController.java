@@ -6,8 +6,10 @@ import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.common.utils.VariableHandlingUtil;
 import com.samsung.framework.domain.common.Variables;
 import com.samsung.framework.domain.log.LogSaveRequest;
+import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.log.LogSaveResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -28,7 +30,6 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/index")
 @Controller
 public class IndexController {
 
@@ -36,13 +37,25 @@ public class IndexController {
     private final VariableHandlingUtil variableHandlingUtil;
     private final EncryptionUtil encryptionUtil;
 
+    /**
+     * Index Page Handler
+     * @param request
+     * @return
+     */
     @GetMapping({"", "/"})
-    public String index() {
-        return "sample/index";
+    public String index(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        AccountVO account = (AccountVO) session.getAttribute("loginInfo");
+        if (account == null) {return "redirect:/account/login";}
+
+        return "redirect:/contract/progress";
     }
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * TEST CODE LIVES BEYOND HERE
+ * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  */
     /**
-     * 로그 저장 테스트
+     * 로그 저장 Test
      * @param request
      * @return
      */
@@ -61,7 +74,7 @@ public class IndexController {
     }
 
     /**
-     * 리다이렉션 샘플
+     * 리다이렉션 Test
      * @param request
      * @return
      */
@@ -74,6 +87,10 @@ public class IndexController {
         return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
+    /**
+     * Contract Variable Replcement Test
+     * @return
+     */
     @PostMapping("/contract-variable-replacement-test")
     public ResponseEntity variableReplacement() {
 
@@ -116,7 +133,13 @@ public class IndexController {
     }
 
 
-
+    /**
+     * Encryption Test
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws UnsupportedEncodingException
+     * @throws InvalidKeySpecException
+     */
     @GetMapping("/encryption")
     @ResponseBody
     public ResponseEntity test() throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeySpecException {
