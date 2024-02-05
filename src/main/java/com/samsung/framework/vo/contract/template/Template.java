@@ -10,4 +10,5 @@ import lombok.ToString;
 public class Template {
     private String templateSeq;
     private String templateTitle;
+    private String templateType;
 }

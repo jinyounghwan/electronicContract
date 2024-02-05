@@ -21,17 +21,17 @@
         </if>
         <if test="@com.samsung.framework.common.utils.StringUtil@isNotEmpty(searchKeyword)">
             <choose>
-                <when test="searchStatusType == 'TITLE'">
+                <when test="searchKeywordType == 'TITLE'">
                     and ct.template_title like concat('%',#{searchKeyword},'%')
                 </when>
-                <when test="searchStatusType == 'EMPLOYEE_ID'">
-                    and ct.emp_no like concat('%',#{seacrchKeyword},'%')
+                <when test="searchKeywordType == 'EMPLOYEE_ID'">
+                    and c.emp_no like concat('%',#{searchKeyword},'%')
                 </when>
-                <when test="searchStatusType == 'NAME'">
+                <when test="searchKeywordType == 'NAME'">
                     and c.name like concat('%',#{searchKeyword},'%')
                 </when>
-                <when test="searchStatusType == 'ALL'">
-                    and ct.emp_no like concat('%',#{seacrchKeyword},'%')
+                <when test="searchKeywordType == 'ALL'">
+                    and c.emp_no like concat('%',#{searchKeyword},'%')
                     or ct.template_title like concat('%',#{searchKeyword},'%')
                     or c.name like concat('%',#{searchKeyword},'%')
                 </when>

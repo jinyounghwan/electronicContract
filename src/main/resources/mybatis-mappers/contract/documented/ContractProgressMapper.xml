@@ -22,17 +22,17 @@
         </if>
         <if test="@com.samsung.framework.common.utils.StringUtil@isNotEmpty(searchKeyword)">
             <choose>
-                <when test="searchStatusType == 'TITLE'">
+                <when test="searchKeywordType == 'TITLE'">
                     and ct.template_title like concat('%',#{searchKeyword},'%')
                 </when>
-                <when test="searchStatusType == 'EMPLOYEE_ID'">
-                    and ct.emp_no like concat('%',#{seacrchKeyword},'%')
+                <when test="searchKeywordType == 'EMPLOYEE_ID'">
+                    and ct.emp_no like concat('%',#{searchKeyword},'%')
                 </when>
-                <when test="searchStatusType == 'NAME'">
+                <when test="searchKeywordType == 'NAME'">
                     and c.name like concat('%',#{searchKeyword},'%')
                 </when>
-                <when test="searchStatusType == 'ALL'">
-                    and ct.emp_no like concat('%',#{seacrchKeyword},'%')
+                <when test="searchKeywordType == 'ALL'">
+                    and c.emp_no like concat('%',#{searchKeyword},'%')
                     or ct.template_title like concat('%',#{searchKeyword},'%')
                     or c.name like concat('%',#{searchKeyword},'%')
                 </when>
@@ -74,13 +74,13 @@
     </select>
 
     <select id="getContractProgressTotal" resultType="int" parameterType="SearchVO">
-            SELECT COUNT(c.CONTRACT_NO)
-              FROM CONTRACTS C
-              JOIN CONTRACT_TEMPLATE CT
-                ON C.TEMPLATE_SEQ = CT.TEMPLATE_SEQ
-              JOIN CONTRACT_TEMPLATE_DETAILS CTD
-                ON CT.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
-             WHERE C.DEL_YN = 'N'
+            select count(c.contract_no)
+              from contracts c
+              join contract_template ct
+                on c.template_seq = ct.template_seq
+              join contract_template_details ctd
+                on ct.template_seq = ctd.template_seq
+             where c.del_yn = 'N'
             <include refid="whereClause"/>
     </select>
 

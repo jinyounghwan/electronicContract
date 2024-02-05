@@ -16,6 +16,8 @@
                               , process_status
                               , hire_date_hu
                               , hire_date_en
+                              , salary_hu
+                              , salary_en
                               , created_by
                               , contract_date_hu
                               , contract_date_en
@@ -32,6 +34,8 @@
                               , #{processStatus}
                               , #{hireDateHu}
                               , #{hireDateEn}
+                              , #{salaryHu}
+                              , #{salaryEn}
                               , #{createdBy}
                               , #{contractDateHu}
                               , #{contractDateEn}

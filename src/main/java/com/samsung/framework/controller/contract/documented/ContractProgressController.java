@@ -70,22 +70,24 @@ public class ContractProgressController {
 
     @PostMapping(value = "/list")
     public String getContractProgressList (Model model , @RequestBody SearchVO searchVO){
-        Paging pagingVo =  Paging.builder()
-                .currentPage(searchVO.getPaging().getCurrentPage())
-                .displayRow(searchVO.getPaging().getDisplayRow())
-                .totalCount(searchVO.getPaging().getTotalCount())
-                .build();
-        searchVO.setPaging(pagingVo);
         // total
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> : {}", searchVO.toString() );
         int totalCount = contractProgressService.getContractProgressTotal(searchVO);
         model.addAttribute("totalCount", totalCount);
         // paging
+        Paging pagingVo =  Paging.builder()
+                .currentPage(searchVO.getPaging().getCurrentPage())
+                .displayRow(searchVO.getPaging().getDisplayRow())
+                .totalCount(totalCount)
+                .build();
+        searchVO.setPaging(pagingVo);
         model.addAttribute("paging",pagingVo);
 
         // list
         List<ContractVO> list = contractProgressService.getContractProgressList(searchVO);
         model.addAttribute("list",list);
         model.addAttribute("search" , searchVO);
+
         return "contract/progress/list :: #content";
     }
 
