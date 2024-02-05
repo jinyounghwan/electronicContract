@@ -24,4 +24,7 @@ public class SaveContractRequest {
 
     @Min(value = 1, message = "임직원 번호는 필수 값 입니다.")
     private int empNo;
+
+    private String salaryHu;
+    private String salaryEn;
 }
