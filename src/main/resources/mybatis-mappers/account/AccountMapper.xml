@@ -6,14 +6,14 @@
     <sql id="search">
         <if test="(startDt != null and startDt != '') and (endDt != null and endDt != '')">
             <if test="searchDateType == 'ALL'">
-                AND C.CREATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
-                AND C.UPDATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
+                AND U.CREATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
+                AND U.UPDATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
             </if>
             <if test="searchDateType == 'CREATED_AT'">
-                AND C.CREATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
+                AND U.CREATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
             </if>
             <if test="searchDateType == 'UPDATED_AT'">
-                AND C.UPDATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
+                AND U.UPDATED_AT BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
             </if>
         </if>
         <choose>
@@ -60,7 +60,7 @@
 
     <select id="findAllTotalCount">
         SELECT COUNT(1)
-        FROM USERS
+        FROM USERS U
         WHERE
             USE_YN = 'Y'
         <if test="accountType != null and accountType != '' ">
