@@ -45,7 +45,7 @@ public class ContractSignRecallController {
         model.addAttribute("list" , new ArrayList<>());
         model.addAttribute("search" , new SearchVO());
         model.addAttribute("totalCount", contractSignRecallService.getContractSignRecallCount(null));
-        return "contract/Recall/list";
+        return "contract/recall/list";
     }
 
     @PostMapping(value = "/list")
@@ -67,11 +67,11 @@ public class ContractSignRecallController {
         List<ContractVO> list = contractSignRecallService.getContractSignRecallList(searchVO);
         model.addAttribute("list",list);
         model.addAttribute("search" , searchVO);
-        return "contract/Recall/list :: #content";
+        return "contract/recall/list :: #content";
     }
     @GetMapping(value="/info/{seq}")
     public String getContractSignRecallInfo(Model model ,@PathVariable String seq){
         model.addAttribute("info",contractSignRecallService.getContractSignRecallInfo(seq));
-        return "contract/Recall/view";
+        return "contract/recall/view";
     }
 }

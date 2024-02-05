@@ -5,6 +5,7 @@ import com.samsung.framework.service.contract.documented.ContractCreationService
 import com.samsung.framework.vo.common.ResultStatusVO;
 import com.samsung.framework.vo.contract.template.Template;
 import com.samsung.framework.vo.search.SearchVO;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +38,8 @@ public class ContractCreationController {
 
     @PostMapping("/save")
     @ResponseBody
-    public ResponseEntity saveContract(@Valid SaveContractRequest saveContractReq) {
-        ResultStatusVO resultStatusVO = contractCreationService.saveContract(saveContractReq);
+    public ResponseEntity saveContract(@Valid SaveContractRequest saveContractReq , HttpServletRequest request) {
+        ResultStatusVO resultStatusVO = contractCreationService.saveContract(saveContractReq , request);
         return ResponseEntity.ok(resultStatusVO);
     }
 }

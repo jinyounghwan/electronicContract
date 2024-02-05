@@ -63,6 +63,7 @@
                     , c.name
                     , ctd.contract_title_en
                     , c.dept_code
+                    , c.sign_date
                  from contracts c
                  join contract_template ct
                    on c.template_seq = ct.template_seq
@@ -94,16 +95,18 @@
         </if>
     </update>
 
-    <update id="updateContractDocStatusInfo" parameterType="ContractVO">
+    <update id="updateContractDocStatusInfo">
         <if test="@com.samsung.framework.common.utils.StringUtil@isNotEmpty(contractNo)">
             update contracts
                set doc_status = #{docStatus}
+                 , updated_by = #{updatedBy}
+                 , updated_at = now()
              where contract_no = #{contractNo}
         </if>
     </update>
 
     <select id="getContractProgressInfo" parameterType="String" resultType="ContractVO">
-           SELECT c.contract_no
+           select  c.contract_no /*getContractProgressInfo - 진행 중인 계약서 view*/
                 , c.emp_no
                 , c.template_seq
                 , c.doc_status

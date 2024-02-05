@@ -4,13 +4,18 @@
 
 <mapper namespace="com.samsung.framework.mapper.contract.documented.ContractCreationMapper">
     <insert id="saveContract" parameterType="ContractVO">
-        INSERT INTO contracts (  emp_no
+        <selectKey keyProperty = "contractNo" resultType="int" order="BEFORE">
+            select COALESCE(max(contract_no), 1) + 1  as contractNo
+            from contracts
+        </selectKey>
+        INSERT INTO contracts (  contract_no
+                              , emp_no
                               , template_seq
-        , name
-        , validation
-        , created_at
-        , agree_yn
-        , del_yn
+                            , name
+                            , validation
+                            , created_at
+                            , agree_yn
+                            , del_yn
                               , dept_code
                               , doc_status
                               , process_status
@@ -22,13 +27,14 @@
                               , contract_date_hu
                               , contract_date_en
                               )
-                        VALUES( #{empNo}
+                        VALUES( #{contractNo}
+                              , #{empNo}
                               , #{templateSeq}
-        , #{name}
-        , #{validation}
-        , now()
-        ,#{agreeYn}
-        ,#{delYn}
+                            , #{name}
+                            , #{validation}
+                            , now()
+                            ,#{agreeYn}
+                            ,#{delYn}
                               , #{deptCode}
                               , #{docStatus}
                               , #{processStatus}

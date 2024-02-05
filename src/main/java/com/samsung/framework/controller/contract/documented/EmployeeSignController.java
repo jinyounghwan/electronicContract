@@ -1,13 +1,16 @@
 package com.samsung.framework.controller.contract.documented;
 
+import com.samsung.framework.common.enums.ContractProcessEnum;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.service.contract.documented.EmployeeSignService;
+import com.samsung.framework.vo.common.ResultStatusVO;
 import com.samsung.framework.vo.contract.creation.ContractVO;
 import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.account.AccountSearchVO;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -54,5 +57,20 @@ public class EmployeeSignController {
     public String getContractWaitInfo(Model model ,@PathVariable String seq ,HttpServletRequest request){
         model.addAttribute("info",signWaitService.getContractWaitInfo(seq , request));
         return "contract/signwait/view";
+    }
+
+    @PostMapping(value="/wait/reject/update")
+    @ResponseBody
+    public ResponseEntity updateRejectProcessStatus(@RequestBody ContractVO contractVO , HttpServletRequest request){
+        contractVO.setProcessStatus(ContractProcessEnum.processCode(ContractProcessEnum.REJECTED));
+        ResultStatusVO resultStatusVO = signWaitService.updateProcessStatus(contractVO , request);
+        return ResponseEntity.ok(resultStatusVO);
+    }
+    @PostMapping(value="/wait/complete/update")
+    @ResponseBody
+    public ResponseEntity updateCompleteProcessStatus(@RequestBody ContractVO contractVO , HttpServletRequest request){
+        contractVO.setProcessStatus(ContractProcessEnum.processCode(ContractProcessEnum.SIGNED));
+        ResultStatusVO resultStatusVO = signWaitService.updateProcessStatus(contractVO , request);
+        return ResponseEntity.ok(resultStatusVO);
     }
 }

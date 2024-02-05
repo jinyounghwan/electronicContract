@@ -57,4 +57,13 @@ public class LogUtil {
 
         return resultMap;
     }
+    /**
+    *   임직원 계약서 타입 확인
+    * */
+    
+    public boolean getLogType (String contractNo , String type){
+        return logMapper.getLogType(contractNo , type);
+    }
+
+
 }
