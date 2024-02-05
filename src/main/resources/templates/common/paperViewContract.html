@@ -1,0 +1,37 @@
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<!--poppup-->
+<div class="modal" style="display:none;" data-target="paper-view">
+    <div class="modal-dialog modal-l modal-dialog-centered">
+        <form class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Contract View</h5>
+                <button type="button" class="btn-close" th:onclick="closePaperContract()"></button>
+            </div>
+            <div class="modal-body document-box">
+                <div class="document">
+                    <div class="document-cont">
+                        <table class="table-list">
+                            <tbody>
+                            <tr>
+                                <td class="col-6">
+                                    The contract entered through paper upload can't be viewed.
+                                    <br/>Please download and view.
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" th:onclick="'closePaperContract()'">Close</button>
+                <button type="button" id="download" class="btn btn-primary" >Download</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!--<div class="modal-backdrop"></div>-->
+<div data-target="paperViewBackground"></div>
+<!--poppup end-->
+
+</html>

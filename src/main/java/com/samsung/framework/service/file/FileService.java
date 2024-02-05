@@ -10,9 +10,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -139,25 +141,13 @@ public class FileService{
         return delete > 0 ? 1 : 0;
     }
 
-    /**
-     * file이름 기준으로 파일 정보 가져오기
-     * @param fileNm
-     * @return
-     */
-    public FilePublicVO getFile(String fileNm) {
-        FilePublicVO target = FilePublicVO.builder()
-                                            .name(fileNm)
-                                            .build();
-
-        return fileMapper.getFile(target);
-    }
 
     /**
      * fileSeq 기준으로 파일 정보 가져오기
      * @param fileSeq
      * @return FilePublicVO
      */
-    public FilePublicVO getFile(Long fileSeq){
+    public FilePublicVO getFile(long fileSeq){
         FilePublicVO target = FilePublicVO.builder()
                                             .fileSeq(fileSeq)
                                             .build();
@@ -179,10 +169,10 @@ public class FileService{
      * @param response
      * @throws IOException
      */
-    public void downloadFile(FilePublicVO file, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String realPath = FileUtil.getOsRootDir() + file.getStoragePath();
+    public ResponseEntity downloadFile(FilePublicVO file, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String realPath = FileUtil.getOsRootDir() + file.getStoragePath() + File.separator + file.getName();
         String fileNmOrg = file.getOriginalName();
-        fileUtil.downloadFile(fileNmOrg ,realPath, request, response);
+        return fileUtil.downloadFile(fileNmOrg ,realPath, request, response);
     }
 
     /**

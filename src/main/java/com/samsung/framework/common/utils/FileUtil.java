@@ -7,7 +7,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -239,7 +242,7 @@ public class FileUtil {
      * @return
      * @throws IOException
      */
-    public static void downloadFile(String originFileName, String filePath, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public static ResponseEntity downloadFile(String originFileName, String filePath, HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             File file = new File(filePath);
 
@@ -258,22 +261,26 @@ public class FileUtil {
 
             log.info("다운로드 파일명 : {} ", fileName);
 
-
+            HttpHeaders header = new HttpHeaders();
+            header.add(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s\";", fileName));
+            header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+            header.add("Pragma", "no-cache");
+            header.add("Expires", "0");
             response.setHeader("Content-Type", String.valueOf(getMediaType(filePath)));
-            response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\";", fileName));
+
             //response.setHeader("Content-Disposition", "attachment; filename*=utf-8''" + fileName + ";");
 
-            InputStream is = new FileInputStream(file);
-            OutputStream out = response.getOutputStream();
+            InputStreamResource is = new InputStreamResource(new FileInputStream(file));
 
-            FileCopyUtils.copy(is, out);
-
-            is.close();
-            response.getOutputStream().flush();
-            response.getOutputStream().close();
+            return ResponseEntity.ok()
+                    .headers(header)
+                    .contentLength(file.length())
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(is);
         } catch (Exception e){
             e.printStackTrace();
         }
+        return (ResponseEntity) ResponseEntity.ok();
     }
 
     /**
@@ -324,10 +331,10 @@ public class FileUtil {
     public static String createDownloadFileName(String userAgent, String originFileName){
         String encodedFileName = null;
 
-        if (userAgent != null && userAgent.contains("MSIE")) {
+        if (userAgent != null && userAgent.contains("MSIE") || userAgent.contains("Trident")) {
             // Internet Explorer에서는 URLEncoder로 한글 파일 이름을 인코딩
             encodedFileName = UriUtils.encode(originFileName, StandardCharsets.UTF_8).replace("\\+", "%20");
-        } else if (userAgent != null && (userAgent.contains("Chrome") || userAgent.contains("Opera"))) {
+        } else if (userAgent != null && userAgent.contains("Chrome") || userAgent.contains("Opera") || userAgent.contains("Firefox")) {
             // Chrome 또는 Opera에서는 파일 이름을 그대로 사용하고 한글 부분을 UTF-8로 인코딩
             encodedFileName = new String(originFileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
         } else {

@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class FilePublicVO {
     // 파일 SEQ
     private Long fileSeq;
