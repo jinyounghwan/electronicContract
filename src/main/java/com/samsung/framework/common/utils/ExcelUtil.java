@@ -51,15 +51,15 @@ public class ExcelUtil {
             }
         }
         workBook.setCompressTempFiles(true);
-        filePath = FileUtil.getOsRootDir() + filePath + "/" + DateUtil.getUtcNowDateFormat("yyMM");
+        filePath = FileUtil.getOsRootDir() + filePath + File.separator + DateUtil.getUtcNowDateFormat("yyMM");
         FileUtil.makeDirectories(filePath);
         String fileName = FileUtil.createFileName("text.xlsx");
-        FileOutputStream fos = new FileOutputStream(filePath+"/"+ fileName);
+        FileOutputStream fos = new FileOutputStream(filePath+ File.separator + fileName);
         workBook.write(fos);
         workBook.close();
         fos.close();
 
-        return filePath+"/"+fileName;
+        return filePath+ File.separator +fileName;
     }
 
     /**

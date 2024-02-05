@@ -53,7 +53,7 @@ public class FileService{
      * @throws Exception
      */
     public List<FilePublicVO> uploadFile(List<MultipartFile> files, String type) throws Exception {
-        return fileUtil.uploadFiles(files, getRootDir + getRealDir + "/" +type);
+        return fileUtil.uploadFiles(files, getRootDir + getRealDir + File.separator +type);
     }
 
 

@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -44,7 +45,7 @@ public class ExcelPublicServiceImpl implements ExcelService {
     public String createExcelFile(String[][] tableData) throws Exception {
         String path = excelUtil.createExcel(tableData, getRootDir + getRealDir);
 
-        int lastIndex =path.lastIndexOf("/");
+        int lastIndex =path.lastIndexOf(File.separator);
         int index = path.indexOf(":");
 
         String fileName = path.substring(lastIndex+1);
@@ -68,7 +69,7 @@ public class ExcelPublicServiceImpl implements ExcelService {
         Iterator<FilePublicVO> iter = fileList.iterator();
         List<List<ContractExcelVO>> list = new ArrayList<>();
         iter.forEachRemaining(value->{
-            String filePath = value.getStoragePath() + "/" + value.getName();
+            String filePath = value.getStoragePath() + File.separator + value.getName();
             try {
                  list.add(ExcelUtil.readExcel(filePath,value.getName(), ContractExcelVO.class));
             } catch (FileNotFoundException e) {
