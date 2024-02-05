@@ -28,6 +28,8 @@ public class LoginInterceptor implements HandlerInterceptor {
             if(session != null && session.getAttribute("loginInfo") != null){
                 return true;
             } else {
+                if(request.getRequestURI().equals("/")) return true;
+
                 ModelAndView modelAndView = new ModelAndView();
                 modelAndView.setViewName("common/messageRedirect");
                 modelAndView.addObject("msgCode", "로그인 후 사용해 주세요.");
