@@ -30,7 +30,9 @@
                 , c.updated_by
                 , c.updated_at
                 , c.name
+        , c.sign_date
                 ,ctd.contract_title_en
+        ,date_format(c.assigned_at , '%Y-%m-%d %T')as assigned_at
              from contracts c
              join contract_template ct
                on c.template_seq = ct.template_seq
@@ -57,6 +59,8 @@
                 , c.updated_by
                 , c.updated_at
                 , c.name
+         , c.sign_date
+        , date_format(c.assigned_at , '%Y-%m-%d %T')as assigned_at
                 ,ctd.contract_title_en
              from contracts c
              join contract_template ct
@@ -69,5 +73,18 @@
               and emp_no = #{empNo}
               and c.contract_no = #{contractNo}
     </select>
+    <update id="updateProcessStatus">
+            update contracts
+            set reject_reason = #{rejectReason}
+              , updated_by = #{updatedBy}
+              , process_status = #{processStatus}
+              , updated_at = now()
+            <if test="processStatus == 'PRCS2003' ">
+                , sign_date = now()
+            </if>
+
+         where contract_no = #{contractNo}
+    </update>
+
 
 </mapper>

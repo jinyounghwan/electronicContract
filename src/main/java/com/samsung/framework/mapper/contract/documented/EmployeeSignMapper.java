@@ -13,4 +13,6 @@ public interface EmployeeSignMapper {
     List<ContractVO> getContractWaitsList(AccountSearchVO searchVO);
 
     ContractVO getContractWaitInfo(ContractVO vo);
+
+    int updateProcessStatus(ContractVO contractVO);
 }

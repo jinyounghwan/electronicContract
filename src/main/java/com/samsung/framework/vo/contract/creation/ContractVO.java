@@ -41,4 +41,7 @@ public class ContractVO {
     private String templateTitle;
     private String contractTitleEn;
     private String contractTitleHu;
+    private String assignedBy;
+    private String assignedAt;
+    private String rejectReason;
 }

@@ -23,4 +23,21 @@ public enum LogTypeEnum {
 
     private String description;
 
+    public static LogTypeEnum getLogTypeEnum (String target){
+        if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.REJECTED))){
+            return LogTypeEnum.LOG_REJECT;
+        }else if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.SIGNED))){
+            return LogTypeEnum.LOG_ASSIGN;
+        }
+        return null;
+    }
+    public static String getLogDescription (String target){
+        if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.REJECTED))){
+            return LogTypeEnum.LOG_REJECT.getDescription();
+        }else if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.SIGNED))){
+            return LogTypeEnum.LOG_ASSIGN.getDescription();
+        }
+        return null;
+    }
+
 }

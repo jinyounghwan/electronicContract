@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--poppup-->
+<div class="modal" style="display: none;" data-target="reject">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reject</h5>
+                <button type="button" class="btn-close"  onclick="rejectConfirmClose()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-textbox" >
+                    <p>Please provide the reason for rejecting the contract.</p>
+                </div>
+                <div class="modal-textarea">
+                    <form id="rejectForm">
+                        <textarea  data-select="rejectReason" name="reason" class="form-control form-control-user" data-required="true" data-alert="Please provide the reason for rejecting the contract"></textarea>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="rejectConfirmClose()" >Close</button>
+                <button type="button" class="btn btn-primary" onclick="rejectConfirmCheck()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="modal-backdrop"></div>-->
+<div data-target="rejectBackground"></div>
+</html>

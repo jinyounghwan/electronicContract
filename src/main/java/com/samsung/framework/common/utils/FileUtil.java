@@ -56,7 +56,7 @@ public class FileUtil {
     public FilePublicVO uploadFile(MultipartFile multipartFile, String fileDir) throws Exception {
        String fileName = createFileName(multipartFile.getOriginalFilename());
        String nowDay = DateUtil.getUtcNowDateFormat("yyMM");
-       String uploadPath = getUploadPath(getOsRootDir()+fileDir,nowDay) + "/" + fileName;
+       String uploadPath = getUploadPath(getOsRootDir()+fileDir,nowDay) + File.separator + fileName;
        File uploadFile = new File(uploadPath);
 
        try{
@@ -66,7 +66,7 @@ public class FileUtil {
        }
 
        return FilePublicVO.builder()
-                    .storagePath(fileDir+ "/"+nowDay)
+                    .storagePath(fileDir+ File.separator +nowDay)
                     .name(fileName)
                     .size(String.valueOf(multipartFile.getSize()))
                     .originalName(multipartFile.getOriginalFilename())
@@ -95,7 +95,7 @@ public class FileUtil {
      * @return 업로드 경로
      */
     private String getUploadPath(String filePath,final String addPath ){
-        return makeDirectories(filePath+ "/" + addPath);
+        return makeDirectories(filePath+ File.separator + addPath);
     }
 
     /**
@@ -161,8 +161,8 @@ public class FileUtil {
      */
     public void moveFile(final String fileName, String fromFilePath, String toFilePath) throws Exception {
         String nowDay = DateUtil.getUtcNowDateFormat("yyMM");
-        String beforeFilePath = getUploadPath(getOsRootDir()+ fromFilePath,nowDay)+ "/" + fileName;
-        String afterFilePath = makeDirectories(getOsRootDir() + toFilePath)+ "/" + fileName;
+        String beforeFilePath = getUploadPath(getOsRootDir()+ fromFilePath,nowDay)+ File.separator + fileName;
+        String afterFilePath = makeDirectories(getOsRootDir() + toFilePath)+ File.separator + fileName;
 
         Path file = Paths.get(beforeFilePath);
         Path moveFile = Paths.get(afterFilePath);
@@ -227,7 +227,7 @@ public class FileUtil {
         if(os.contains("win")) {
             fileRootPath = "C:" ;
         }else if(os.contains("nix") || os.contains("nux") || os.contains("aix")){
-            fileRootPath = "/home";
+            fileRootPath = File.separator+"home";
         }
 
         return fileRootPath;

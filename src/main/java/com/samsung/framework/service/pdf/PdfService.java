@@ -32,7 +32,7 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 @Service
 public class PdfService {
-    private final String PDF_STORAGE_PATH= "/Contract/PDF/";
+    private final String PDF_STORAGE_PATH= File.separator+ "Contract" + File.separator + "PDF" +File.separator;
 
     @Value("${properties.file.rootDir}")
     private String getRootDir;
