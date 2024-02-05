@@ -11,9 +11,9 @@
                     <span class="nav-text" th:text="${session.loginInfo.name}"><i class="fas fa-user-circle nav-icon"></i></span>
                 </a>
             </li>
-            <div class="topbar-divider d-none d-sm-block"></div>
+            <div th:if= "${session.loginInfo != null}" class="topbar-divider d-none d-sm-block"></div>
             <li class="nav-item no-arrow">
-                <a class="nav-link " href="/account/logout" >
+                <a th:if= "${session.loginInfo != null}" class="nav-link " href="/account/logout" >
                     <span class="nav-text"><i class="fas fa-sign-out-alt nav-icon"></i>로그아웃</span>
                 </a>
             </li>
