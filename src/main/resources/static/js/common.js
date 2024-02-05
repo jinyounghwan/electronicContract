@@ -272,6 +272,69 @@ let closeContractView = () =>{
     $('[data-target="viewBackground"]').removeAttr('class');
 }
 /*
+    ViewPaperContract
+ */
+let viewPaperContract = (fileDataNo) =>{
+    $('[data-target="paper-view"]').removeAttr('style');
+    if(!isEmpty(fileDataNo)){
+        $('[data-target="paper-view"]').attr('style','display:block');
+        $('[data-target="paperViewBackground"]').attr('class' , 'modal-backdrop');
+        // 파일 다운로드 시
+        $('#download').on("click", function(){
+            $.ajax({
+                url: "/file/download/"+fileDataNo,
+                type: "GET",
+                xhrFields: {
+                    responseType: 'blob' // 응답을 Blob 객체로 받음
+                }
+            }).done(function(blob, status, xhr) {
+                // check for a filename
+                let fileName = "";
+                let disposition = xhr.getResponseHeader("Content-Disposition");
+                if(disposition && disposition.indexOf("attachment") !== -1) {
+                    let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    let matches = filenameRegex.exec(disposition);
+                    if(matches != null && matches[1]){
+                        fileName = decodeURI(matches[1].replace(/['"]/g, ""));
+                        console.log(fileName);
+                    }
+
+                }
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveOrOpenBlob(blob, fileName);
+                } else {
+                    let URL = window.URL || window.webkitURL;
+                    let downloadUrl = URL.createObjectURL(blob);
+
+                    if (fileName) {
+                        let a = document.createElement("a");
+
+                        // for safari
+                        if (a.download === undefined) {
+                            window.location.href = downloadUrl;
+                        } else {
+                            a.href = downloadUrl;
+                            a.download = fileName;
+                            document.body.appendChild(a);
+                            a.click();
+                        }
+                    } else {
+                        window.location.href = downloadUrl;
+                    }
+                }
+            })
+            .fail(function(jqXHR) {
+                console.log(jqXHR);
+            });
+        });
+    }
+}
+
+let closePaperContract = () => {
+    $('[data-target="paper-view"]').attr('style', 'display:none');
+    $('[data-target="paperViewBackground"]').removeAttr('class');
+}
+/*
     button 클릭 시  input type=file 실행
 */
 function openFile(){

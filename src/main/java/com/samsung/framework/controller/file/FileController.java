@@ -31,10 +31,8 @@ public class FileController {
     @GetMapping("/download/{fileSeq}")
     public ResponseEntity download(@PathVariable String fileSeq, HttpServletRequest request, HttpServletResponse response) throws IOException {
       FilePublicVO file = fileService.getFile(Long.parseLong(fileSeq));
-      fileService.downloadFile(file, request, response);
-      HttpHeaders headers = new HttpHeaders();
-      headers.setLocation(URI.create("/board/detail/"+fileSeq));
-      return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
+
+      return fileService.downloadFile(file, request, response);
     }
 
     @PostMapping("/upload")

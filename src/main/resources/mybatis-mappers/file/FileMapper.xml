@@ -56,11 +56,14 @@
 
     <select id="getFile" resultType="FilePublicVO">
         SELECT
-            <include refid="fileColumn"><property name="alias" value="FE."/></include>
+            FE.FILE_SEQ AS FILE_SEQ, FE.ORIGINAL_NAME AS ORIGINAL_NAME,
+            FE.NAME AS NAME, FE.FILE_NO AS FILE_NO,
+            FE.EXTENSION AS EXTENSION, FE.STORAGE_PATH AS STORAGE_PATH,
+            FE.SIZE AS SIZE
         FROM FILE_INTEGRATION FE
-        <where>
-            <include refid="whereClause"><property name="alias" value="FE."/></include>
-        </where>
+        WHERE
+                FILE_SEQ = #{fileSeq}
+            AND DEL_YN = 'N'
     </select>
 
 <!--    <select id="getTempFile" parameterType="String" resultType="FilePublicVO">-->

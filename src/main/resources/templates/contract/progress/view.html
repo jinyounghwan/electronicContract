@@ -79,7 +79,8 @@
         </div>
         <div class="btn-area-box">
           <div class="btn-area-left">
-            <button class="btn btn-primary" type="button" th:onclick="'viewContract('+${info.contractNo}+')'">View Contract</button>
+            <button class="btn btn-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract</button>
+            <button class="btn btn-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" type="button" th:onclick="'viewContract('+${info.contractNo}+')'">View Contract</button>
             <button class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
           </div>
           <div class="btn-area-right">
@@ -90,6 +91,7 @@
         </div>
       </div>
       <!--contents-->
+      <div th:replace="~{common/paperViewContract}"></div>
       <div th:replace="~{common/contractView}"></div>
       <div th:replace="~{common/contractProgressHistory}"></div>
     </div>
