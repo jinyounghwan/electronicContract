@@ -33,6 +33,7 @@ public class ContractProgressService {
     }
 
     public List<ContractVO> getContractProgressList(SearchVO searchVO) {
+
         List<ContractVO> list = contractProgressMapper.getContractProgressList(searchVO);
         list.forEach(e -> {e.setDocStatus(ContractProcessEnum.getProcessStatus(e.getDocStatus()));
             e.setProcessStatus(ContractProcessEnum.getProcessStatus(e.getProcessStatus()));

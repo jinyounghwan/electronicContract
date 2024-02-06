@@ -4,7 +4,7 @@
 
 <mapper namespace="com.samsung.framework.mapper.contract.documented.ContractSignRecallMapper">
     <sql id="whereClause">
-        and process_status = 'PRCS1003'
+        and c.doc_status = 'PRCS1003'
         <if test="(startDt != null and startDt != '') and (endDt != null and endDt != '')">
             <choose>
                 <when test="searchDateType == 'CREATED_AT'">
@@ -63,6 +63,7 @@
               on ct.template_seq = ctd.template_seq
         where c.del_yn = 'N'
         <include refid="whereClause"/>
+        order by c.created_at desc
         LIMIT #{paging.displayRow} OFFSET #{paging.offset}
     </select>
 
