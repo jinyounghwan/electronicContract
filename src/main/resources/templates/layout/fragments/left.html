@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:fragment="sidebarFragment">
-    <ul th:if= "${session.loginInfo != null}" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul th:if= "${session.loginInfo != null}" class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
     </ul>
     <script src="/static/js/common.js"></script>
@@ -48,12 +48,12 @@
                     let parentElement = $("#accordionSidebar");
                     let url = data.path;
                     if(realCodeCd==='MENU104000' || realCodeCd==='MENU105000'){ // MENU 104000, 105000은 제외
-                        parentElement.append(`<li class="nav-item"> <a class="nav-link collapsed" href='${url}'><span>${data.name}</span></a>
+                        parentElement.append(`<li class="nav-item"> <a class="nav-link arrow collapsed" href='${url}'><span>${data.name}</span></a>
                    <div class="collapse">
                    </div></li>`);
                     }
                     else{
-                        parentElement.append(`<li class="nav-item"> <a class="nav-link collapsed" href=''><span>${data.name}</span></a>
+                        parentElement.append(`<li class="nav-item"> <a class="nav-link arrow" href=''><span>${data.name}</span></a>
                    <div class="collapse">
                        <div class="collapse-inner" id= '${realCodeCd}'>
 
@@ -78,7 +78,7 @@
                     let parentId = codeMap.get(menuCode);
                     let parentElement = document.getElementById(parentId);
                     let url = data.path;
-                    parentElement.innerHTML +=`<a class="collapse-item" href='${url}' id= ${realCodeCd}>${data.name}</a>`;
+                    parentElement.innerHTML +=`<a class="collapse-item" href='${url}' id= ${realCodeCd}><span>${data.name}</span></a>`;
                 }
             }
         }
