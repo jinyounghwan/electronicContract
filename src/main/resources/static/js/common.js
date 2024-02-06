@@ -405,3 +405,13 @@ let contractComplete = () =>{
         console.log(jqXHR);
     });
 }
+
+/**
+ * Redirect to Error Page
+ * @param jqXHR
+ */
+let sendToErrorPage = (jqXHR) => {
+    let ex = JSON.parse(jqXHR.responseText);
+    console.log('redirectToErrorPage :: ' + ex);
+    window.location.href='/error/common?message=' + ex.message;
+}

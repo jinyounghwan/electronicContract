@@ -5,7 +5,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @ToString
-@EqualsAndHashCode(of = {"menuSeq", "memberId"})
+@EqualsAndHashCode(of = {"menuSeq"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
