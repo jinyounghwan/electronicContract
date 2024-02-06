@@ -6,6 +6,7 @@ import com.samsung.framework.common.enums.LogTypeEnum;
 import com.samsung.framework.common.exception.CustomLoginException;
 import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.common.utils.ObjectHandlingUtil;
+import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.account.LoginRequest;
 import com.samsung.framework.domain.account.PwdChangeRequest;
 import com.samsung.framework.domain.common.Paging;
@@ -300,12 +301,18 @@ public class AccountController {
     }
     @PostMapping("/api/pwdChange/isExist")
     @ResponseBody
-    public Map<String, Object> isExistsPwdChange(@RequestBody LoginRequest loginRequest){
+    public Map<String, Object> isExistsPwdChange(@RequestBody LoginRequest loginRequest, HttpServletRequest request) throws UnsupportedEncodingException {
         Map<String, Object> result = new HashMap<>();
         log.info("loginRequest :: {}",loginRequest.getUserId());
         boolean exists = logMapper.isExistsPasswordChangeLog(loginRequest.getUserId());
-        result.put("exists", exists);
 
+        // 관리자 계정, 임직원 계정 체크 로직
+        AccountVO accountVO = accountService.getSessionAccount(request);
+        boolean adminIdCheck = StringUtil.isEmpty(accountVO.getAdminId());
+
+        result.put("exists", exists);
+        result.put("adminIdCheck", adminIdCheck);
+        
         return result;
     }
 
