@@ -13,7 +13,7 @@
                     AND CT.updated_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
                 </when>
                 <when test="searchDateType == 'ALL'">
-                    AND  CT.updated_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                    AND CT.updated_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
                     AND CT.created_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
                 </when>
             </choose>
@@ -86,6 +86,7 @@
             ON CT.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
            SET CT.MEMO = #{memo}
              , CTD.CONTRACT_TITLE_HU = #{contractTitleHu}
+             , CT.TEMPLATE_TITLE = #{templateTitle}
              , CTD.CONTRACT_TITLE_EN = #{contractTitleEn}
              , CTD.CONTENTS_EN = #{contentsEn}
              , CTD.CONTENTS_HU = #{contentsHu}
