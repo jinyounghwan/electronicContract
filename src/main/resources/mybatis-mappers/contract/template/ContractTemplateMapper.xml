@@ -13,7 +13,7 @@
                     AND CT.updated_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
                 </when>
                 <when test="searchDateType == 'ALL'">
-                    AND  CT.updated_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
+                    AND CT.updated_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
                     AND CT.created_at BETWEEN DATE(#{startDt}) AND DATE(#{endDt})+1
                 </when>
             </choose>

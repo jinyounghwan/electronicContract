@@ -97,6 +97,7 @@
             , c.sign_date
             , ctd.contract_title_en
             , c.dept_code
+            , c.reject_reason
         from contracts c
         join contract_template ct
         on c.template_seq = ct.template_seq
