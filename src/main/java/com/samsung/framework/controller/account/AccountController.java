@@ -73,7 +73,7 @@ public class AccountController {
     }
 
     /**
-     * 임직원 계정 관리 View(임시)
+     * 임직원 계정 관리 View
      */
     @GetMapping("/employee")
     public ModelAndView getEmployeeAccountList(ModelAndView mv){
@@ -243,16 +243,17 @@ public class AccountController {
         return ResponseEntity.ok(result);
     }
     @PostMapping("/employee/getList")
-    public String getEmployeeList(Model model, @RequestBody SearchVO search){
+    public String getEmployeeList(Model model, @RequestBody AccountSearchVO search){
         Paging pagingVO = Paging.builder()
                 .currentPage(search.getPaging().getCurrentPage())
                 .displayRow(search.getPaging().getDisplayRow())
-                .totalCount(search.getPaging().getTotalCount())
+                .totalCount(accountService.totalCount(search))
                 .build();
 
         AccountSearchVO accountSearchVO =AccountSearchVO.builder()
                 .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.EMPLOYEE))
                 .build();
+
         accountSearchVO.setPaging(pagingVO);
         accountSearchVO.setSearchVO(search);
 
@@ -269,28 +270,23 @@ public class AccountController {
     }
 
     @PostMapping("/admin/getList")
-    public String getAdminList(Model model, @RequestBody SearchVO search){
+    public String getAdminList(Model model, @RequestBody AccountSearchVO search){
+        search.setAccountType(AccountTypeEnum.menuCode(AccountTypeEnum.ADMIN));
         Paging pagingVO = Paging.builder()
                 .currentPage(search.getPaging().getCurrentPage())
                 .displayRow(search.getPaging().getDisplayRow())
-                .totalCount(search.getPaging().getTotalCount())
+                .totalCount(accountService.totalCount(search))
                 .build();
-
-        AccountSearchVO accountSearchVO =AccountSearchVO.builder()
-                .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.ADMIN))
-                .build();
-        accountSearchVO.setPaging(pagingVO);
-        accountSearchVO.setSearchVO(search);
 
         // total
-        int totalCount = accountService.totalCount(accountSearchVO);
-        model.addAttribute("totalCount", totalCount);
+        model.addAttribute("totalCount", pagingVO.getTotalCount());
         model.addAttribute("paging", pagingVO);
 
         // list
-        List<AccountVO> list = accountService.getAccountList(accountSearchVO);
+        List<AccountVO> list = accountService.getAccountList(search);
         model.addAttribute("list",list);
-        model.addAttribute("search", accountSearchVO);
+        model.addAttribute("search", search);
+
         return "account/adminList :: #content-wrapper";
     }
 
