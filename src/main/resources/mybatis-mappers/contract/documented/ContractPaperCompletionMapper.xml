@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.contract.documented.ContractPaperCompletionMapper">
+    <select id="getContractPaperCompTotal" parameterType="AccountSearchVO" resultType="Integer">
+        SELECT COUNT(1)
+        FROM CONTRACTS C
+        INNER JOIN  CONTRACT_TEMPLATE CT ON C.TEMPLATE_SEQ = CT.TEMPLATE_SEQ
+        INNER JOIN CONTRACT_TEMPLATE_DETAILS CTD ON C.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
+        WHERE
+        DOC_STATUS IN
+        <foreach collection="contractDocStatusTypeList" item="item" open="(" close=")" separator=", ">
+            #{item}
+        </foreach>
+        AND C.EMP_NO = #{empNo}
+    </select>
+
+    <select id="getContractPaperCompList" parameterType="AccountSearchVO">
+        SELECT CTD.CONTRACT_TITLE_EN AS CONTRACT_TITLE_EN, C.EMP_NO AS EMP_NO,
+               C.SIGN_DATE AS SIGN_DATE, C.NAME AS NAME,
+               C.CONTRACT_NO AS CONTRACT_NO, C.CREATED_AT AS CREATED_AT
+        FROM CONTRACTS C
+            INNER JOIN  CONTRACT_TEMPLATE CT ON C.TEMPLATE_SEQ = CT.TEMPLATE_SEQ
+            INNER JOIN CONTRACT_TEMPLATE_DETAILS CTD ON C.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
+        WHERE
+            DOC_STATUS IN
+            <foreach collection="contractDocStatusTypeList" item="item" open="(" close=")" separator=", ">
+                #{item}
+            </foreach>
+            AND C.EMP_NO = #{empNo}
+    </select>
+
+    <select id="getPaperCompInfo" parameterType="long" resultType="ContractCompVO">
+        SELECT C.EMP_NO AS EMP_NO, C.NAME AS NAME,
+               C.SIGN_DATE AS SIGN_DATE, CTD.CONTRACT_TITLE_EN AS CONTRACT_TITLE_EN,
+               C.CONTRACT_NO AS CONTRACT_NO , C.CREATED_AT AS CREATED_AT
+        FROM CONTRACTS C
+            INNER JOIN  CONTRACT_TEMPLATE CT ON C.TEMPLATE_SEQ = CT.TEMPLATE_SEQ
+            INNER JOIN CONTRACT_TEMPLATE_DETAILS CTD ON C.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
+        WHERE
+            C.CONTRACT_NO = #{contractNo}
+    </select>
+</mapper>
