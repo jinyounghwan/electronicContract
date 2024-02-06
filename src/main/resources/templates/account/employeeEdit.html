@@ -82,9 +82,9 @@
             .done(function(data){
                 let json = JSON.parse(data);
                 if(json.code===400){
-                    alert(json.message);
+                    openAlert(json.message);
                 } else{
-                    alert(json.message);
+                    openAlert(json.message);
                     location.href = "/account/employee"
                 }
             })
