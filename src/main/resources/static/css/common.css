@@ -5781,9 +5781,9 @@ a.close.disabled {
   padding: 1.5rem;
 }
 .modal-body.alert-pop {
-    text-align: center;
-    height: 180px;
-    line-height: 70px;
+  text-align: center;
+  height: 120px;
+  line-height: 70px;
 }
 .modal-img {/* padding-left: 1rem; *//* padding-bottom: 0.5rem; */}
 .modal-img img{width: 9rem;}
@@ -5795,18 +5795,18 @@ a.close.disabled {
 .modal-sig {border-bottom: 1px dotted #3a3b45;display: block;height: 70px;}
 .modal-sig span {font-size: 0.8rem;display: inline-block;bottom: 5px;position: absolute;float: left;}
 .modal-signimg {
-    background: #fff4df;
-    width: 235px;
-    height: 65px;
-    text-align: center;
-    line-height: 65px;
+  background: #fff4df;
+  width: 235px;
+  height: 65px;
+  text-align: center;
+  line-height: 65px;
 }
 .modal-signtxt{font-size: 0.8rem;}
 .modal-comimg {background: #fff;
-    width: 235px;
-    height: 65px;
-    text-align: center;
-    line-height: 65px;}
+  width: 235px;
+  height: 65px;
+  text-align: center;
+  line-height: 65px;}
 .modal-l .modal-body{max-height: 650px; overflow-y: scroll;}
 .modal-footer {
   display: flex;
@@ -11045,7 +11045,7 @@ body.sidebar-toggled footer.sticky-footer {
 .datatable-top .left p{margin: 0 0 0 0.8rem!important;line-height: 2.5rem;color: #212529;font-size: 0.85rem;}
 .datatable-top .datatable-selector{height: 2.5rem;}
 .datatable-top .btn{height: 2.5rem;line-height: 2.5rem;font-size: 0.9rem;}
- .datatable-selector {
+.datatable-selector {
   display: block;
   width: 100%;
   padding: 0.375rem 2.25rem 0.375rem 0.75rem;
@@ -11072,18 +11072,18 @@ body.sidebar-toggled footer.sticky-footer {
 .sidebar-brand-text img {width: 50%;}
 .sidebar-brand-text span{font-size: 1rem;margin-left: 10px;vertical-align: -1px;}
 .databox {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 1px solid #e3e6f0;
-    border-radius: 0.35rem;
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid #e3e6f0;
+  border-radius: 0.35rem;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
 }
 .data-linebox{width: 90%;}
 .data-line {display: flex;flex-direction: row;justify-content: flex-start;margin-bottom: 5px;}
@@ -11112,90 +11112,90 @@ body.sidebar-toggled footer.sticky-footer {
 .error-box p{font-weight: 600;}
 
 .btn-close {
-    -webkit-box-sizing: content-box;
-    box-sizing: content-box;
-    width: 1em;
-    height: 1em;
-    padding: .25em .25em;
-    color: #000;
-    background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
-    border: 0;
-    border-radius: .25rem;
-    /* opacity: .5; */
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+  width: 1em;
+  height: 1em;
+  padding: .25em .25em;
+  color: #000;
+  background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+  border: 0;
+  border-radius: .25rem;
+  /* opacity: .5; */
 }
 
 .btn-close:hover {
-    color: #000;
-    text-decoration: none;
-    opacity: .75
+  color: #000;
+  text-decoration: none;
+  opacity: .75
 }
 
 .btn-close:focus {
-    outline: 0;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    opacity: 1
+  outline: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  opacity: 1
 }
 
 .btn-close.disabled,.btn-close:disabled {
-    pointer-events: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    opacity: .25
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  opacity: .25
 }
 
 .btn-close-white {
-    -webkit-filter: invert(1) grayscale(100%) brightness(200%);
-    filter: invert(1) grayscale(100%) brightness(200%)
+  -webkit-filter: invert(1) grayscale(100%) brightness(200%);
+  filter: invert(1) grayscale(100%) brightness(200%)
 }
 .Signature-box {
-    min-width: 350px;
-    min-height: 250px;
-    background: #f5f5f5;
+  min-width: 350px;
+  min-height: 250px;
+  background: #f5f5f5;
 }
 .modal-body.document-box {
-    background: #ddd;
-    /* padding: 4rem 5rem; */
+  background: #ddd;
+  /* padding: 4rem 5rem; */
 }
 
 @media (max-width: 1150px) {
-	.modal-body.document-box {
+  .modal-body.document-box {
     background: #ddd;
-		padding: 3rem;}
+    padding: 3rem;}
 }
 .document {
-    background: #fff;
-    padding: 5rem 6rem;
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
-    width: 840px;
-    height: 1188px;
-    font-family: "times";
-    font-size: 11pt;
-    margin: 30px auto;
+  background: #fff;
+  padding: 5rem 6rem;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+  width: 840px;
+  height: 1188px;
+  font-family: "times";
+  font-size: 11pt;
+  margin: 30px auto;
 }
 .page-num {
-    text-align: center;
-    margin-top: 1.5rem;
-    font-size: 0.8rem;
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
 }
 
 .document-cont {
-    overflow: hidden;
-    width: 650px;
-    height: 1025px;
+  overflow: hidden;
+  width: 650px;
+  height: 1025px;
 }
 .document-sig {
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
-    /* background: red; */
-    height: 160px;
-    margin-top: 1rem;
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  /* background: red; */
+  height: 160px;
+  margin-top: 1rem;
 }
 .document-sigbox {
-    color: #3a3b45;
+  color: #3a3b45;
 }
 
 .document-sigbox p{margin-bottom:0;}
