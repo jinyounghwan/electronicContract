@@ -155,8 +155,7 @@
         ,EMAIL, PHONE
         , USE_YN, EMPLOYED_AT
         , RESIGNED_AT, CREATED_BY
-        , CREATED_AT, UPDATED_BY
-        , UPDATED_AT
+        , CREATED_AT
         )
         VALUES(
         #{empNo}, #{deptCode}
@@ -165,14 +164,13 @@
         , #{email}, #{phone}
         ,'Y', #{employedAtStr}
         , #{resignedAtStr}, 'admin'
-        , sysdate(),'admin'
         , sysdate()
         )
     </insert>
 
     <update id="updPwd" parameterType="AccountVO">
         UPDATE USERS U
-        SET USER_PW = #{userPw}
+        SET USER_PW = #{userPw}, UPDATED_AT = sysdate(), UPDATED_BY = #{userId}
         WHERE U.ADMIN_ID = #{userId}
             OR U.EMP_NO = #{empNo}
     </update>
@@ -192,13 +190,15 @@
     
     <update id="updEmployeeAcct" parameterType="AccountVO">
         UPDATE USERS U
-        SET USER_PW = #{userPw}
+        SET U.USER_PW = #{userPw}, U.UPDATED_AT = sysdate() , U.UPDATED_BY = #{empNo}
         WHERE U.EMP_NO = #{empNo}
     </update>
 
     <update id="updAdminAcct" parameterType="AccountVO">
         UPDATE USERS U
         SET
+            U.UPDATED_AT = sysdate() ,
+            U.UPDATED_BY = #{adminId}
             <if test="(userPw != null and userPw != '')">
                 USER_PW = #{userPw} ,
             </if>
