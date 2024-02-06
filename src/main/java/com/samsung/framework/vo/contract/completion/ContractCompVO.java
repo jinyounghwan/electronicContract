@@ -40,7 +40,7 @@ public class ContractCompVO {
     private String contractTitleEn;
     private String createdAtStr;
     private String updatedAtStr;
-    private String signDateStr;
+    private String signDateAtStr;
     private String userName;
     private String contractDate;
 }
