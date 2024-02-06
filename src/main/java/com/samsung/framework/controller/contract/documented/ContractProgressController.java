@@ -71,7 +71,6 @@ public class ContractProgressController {
     @PostMapping(value = "/list")
     public String getContractProgressList (Model model , @RequestBody SearchVO searchVO){
         // total
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> : {}", searchVO.toString() );
         int totalCount = contractProgressService.getContractProgressTotal(searchVO);
         model.addAttribute("totalCount", totalCount);
         // paging

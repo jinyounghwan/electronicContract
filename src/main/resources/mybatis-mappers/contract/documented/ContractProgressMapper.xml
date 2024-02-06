@@ -64,6 +64,7 @@
                     , ctd.contract_title_en
                     , c.dept_code
                     , c.sign_date
+                    , date_format(c.assigned_at ,'%Y-%m-%d') as assigned_at
                  from contracts c
                  join contract_template ct
                    on c.template_seq = ct.template_seq
@@ -71,7 +72,8 @@
                    on ct.template_seq = ctd.template_seq
         where c.del_yn = 'N'
         <include refid="whereClause"/>
-               LIMIT #{paging.displayRow} OFFSET #{paging.offset}
+          order by c.created_at desc
+        LIMIT #{paging.displayRow} OFFSET #{paging.offset}
     </select>
 
     <select id="getContractProgressTotal" resultType="int" parameterType="SearchVO">
@@ -101,6 +103,8 @@
                set doc_status = #{docStatus}
                  , updated_by = #{updatedBy}
                  , updated_at = now()
+                 , assigned_at = now()
+                 , assigned_by = #{updatedBy}
              where contract_no = #{contractNo}
         </if>
     </update>
@@ -124,6 +128,7 @@
                 , c.sign_date
                 , ctd.contract_title_en
                 , u.dept_code
+                , date_format(c.assigned_at ,'%Y-%m-%d') as assigned_at
              from contracts c
              join contract_template ct
                on c.template_seq = ct.template_seq

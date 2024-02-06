@@ -59,26 +59,31 @@
                                     <thead>
                                     <tr>
                                         <th></th>
-                                        <th>Colomn 1</th>
-                                        <th>Colomn 2</th>
+                                        <th>Hungarian</th>
+                                        <th>English</th>
                                     </tr>
                                     </thead>
 
                                     <tbody>
                                     <tr>
                                         <th class="col-2">Contract Title</th>
-                                        <td><input name="contractTitleHu" th:value="${info.getContractTitleHu()}" class="form-control form-control-user" placeholder=""></td>
-                                        <td><input name="contractTitleEn" th:value="${info.getContractTitleEn()}" class="form-control form-control-user" placeholder=""></td>
+                                        <td><input name="contractTitleHu" th:value="${info.contractTitleHu}" class="form-control form-control-user" placeholder=""></td>
+                                        <td><input name="contractTitleEn" th:value="${info.contractTitleEn}" class="form-control form-control-user" placeholder=""></td>
                                     </tr>
                                     <tr>
-                                        <th>Preamble</th>
-                                        <td><textarea name="preambleHu" th:text="${info.getPreambleHu()}" class="form-control form-control-user"></textarea></td>
-                                        <td><textarea name="preambleEn" th:text="${info.getPreambleEn()}" class="form-control form-control-user"></textarea></td>
+                                        <th>Contract Detail</th>
+                                        <td><textarea name="contentsHu" th:text="${info.contentsHu}" class="form-control form-control-user"></textarea></td>
+                                        <td><textarea name="contentsEn" th:text="${info.contentsEn}" class="form-control form-control-user"></textarea></td>
                                     </tr>
                                     <tr>
-                                        <th>Part 1</th>
-                                        <td>1. A munkaviszony idotartama</td>
-                                        <td>1. Duration</td>
+                                        <th>Contract Info</th>
+                                        <td><input name="employerInfoHu" th:value="${info.employerInfoHu}" class="form-control form-control-user" placeholder=""></td>
+                                        <td><input name="employerInfoEn" th:value="${info.employerInfoEn}" class="form-control form-control-user" placeholder=""></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Signature Area</th>
+                                        <td><textarea name="employeeInfoHu" th:text="${info.employeeInfoHu}" class="form-control form-control-user"></textarea></td>
+                                        <td><textarea name="employeeInfoEn" th:text="${info.employeeInfoEn}" class="form-control form-control-user"></textarea></td>
                                     </tr>
                                     </tbody>
                                 </table>
