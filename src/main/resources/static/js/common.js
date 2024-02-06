@@ -29,6 +29,8 @@ let searchList = (currentPage , displayRow, totalCount)=> {
     let parameter = {
         searchDateType : $('[data-select="dateRangeSelect"] option:selected').val(),
         searchKeywordType : $('[data-select="keywordTypeSelect"] option:selected').val(),
+        contractDocStatusType : $('[data-select="contractDocSearchStateTypeSelect"] option:selected').val(),
+        contractStatusType : $('[data-select="contractSearchStateTypeSelect"] option:selected').val(),
         startDt: $('#startDt').val(),
         endDt: $('#endDt').val(),
         searchKeyword :$('#searchKeyword').val(),

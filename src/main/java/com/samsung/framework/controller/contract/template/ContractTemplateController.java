@@ -34,7 +34,7 @@ public class ContractTemplateController {
      */
     @ModelAttribute("keywordTypeSelect")
     public List<SearchVO> searchKeywordTypeOptionList() {
-        return new SearchVO().getSearchKeywordTypeOptionList();
+        return new SearchVO().getSearcTempletehKeywordTypeOptionList();
     }
 
     /**

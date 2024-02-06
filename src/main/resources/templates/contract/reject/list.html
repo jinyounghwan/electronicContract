@@ -9,7 +9,7 @@
                 <!--content-->
                 <div class="container-fluid">
                     <h1 class="page-title">거절 계약서</h1>
-                    <div th:replace="~{common/defaultSearch}"></div>
+                    <div th:replace="~{common/defaultSearch :: searchBox(${dateRangeSelect} ,${keywordTypeSelect}) }" ></div>
                     <div class="card shadow mb-4">
                         <!--<div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
@@ -73,7 +73,7 @@
                                             <td th:text="${item.signatureDataNo}"></td>
                                             <td th:text="${item.docStatus}"></td>
                                             <td th:text="${item.processStatus}"></td>
-                                            <td><a th:href="@{/contract/sign/recall/info/{seq}(seq=${item.contractNo})}" >View</a></td>
+                                            <td><a th:href="@{/contract/sign/reject/info/{seq}(seq=${item.contractNo})}" >View</a></td>
                                         </tr>
                                         <tr th:if="${#lists.isEmpty(list)}">
                                             <td colspan="11" th:text="|데이터가 없습니다.|"></td>

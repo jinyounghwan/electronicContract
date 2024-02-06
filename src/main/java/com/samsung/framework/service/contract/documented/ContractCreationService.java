@@ -71,8 +71,8 @@ public class ContractCreationService {
                                 .hireDateHu(StringUtil.getString(user.getEmployedAt()))
                 .salaryEn(target.getSalaryEn())
                 .salaryHu(target.getSalaryHu())
-                                .docStatus(ContractProcessEnum.processCode(ContractProcessEnum.UNSEEN))
-                                .processStatus(ContractProcessEnum.processCode(ContractProcessEnum.CREATED))
+                                .docStatus(ContractProcessEnum.processCode(ContractProcessEnum.CREATED))
+                                .processStatus(ContractProcessEnum.processCode(ContractProcessEnum.UNSEEN))
                 .contractDateHu(StringUtil.getString(target.getDate())) // format 변경
                 .contractDateEn(StringUtil.getString(target.getDate()))
                                 .deptCode(user.getDeptCode()).createdBy(account.getAdminId())

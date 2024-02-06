@@ -11,7 +11,7 @@
             <div class="container-fluid">
                 <h1 class="page-title">계약서 템플릿</h1>
                 <!--search box-->
-                <div th:replace="~{common/defaultSearch}"></div>
+                <div th:replace="~{common/defaultSearch :: searchBox(${dateRangeSelect} ,${keywordTypeSelect}) }" ></div>
                 <div class="card shadow mb-4">
                     <!--viewcount drop down box-->
                     <div th:replace="~{common/viewCount}"></div>

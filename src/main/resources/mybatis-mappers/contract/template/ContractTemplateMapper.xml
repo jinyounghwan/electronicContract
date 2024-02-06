@@ -23,6 +23,13 @@
                 <when test="searchKeywordType == 'TITLE'">
                     and CT.template_title like concat('%',#{searchKeyword},'%')
                 </when>
+                <when test="searchKeywordType == 'TYPE'">
+                    and CT.TEMPLATE_TYPE like concat('%',#{searchKeyword},'%')
+                </when>
+                <when test="searchKeywordType == 'ALL'">
+                    and CT.TEMPLATE_TITLE like concat('%',#{searchKeyword},'%')
+                    or CT.TEMPLATE_TYPE like concat('%',#{searchKeyword},'%')
+                </when>
             </choose>
         </if>
     </sql>
@@ -53,6 +60,7 @@
            ON CT.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
         where 1 = 1
         <include refid="whereClause"/>
+        order by CT.CREATED_AT desc
         LIMIT #{paging.displayRow} OFFSET #{paging.offset}
     </select>
 
@@ -153,6 +161,7 @@
              , template_title
              , template_type
         from contract_template ct
+        order by ct.created_at  desc
     </select>
     <select id="getTemplateSeq" parameterType="java.lang.String" resultType="Integer">
         select template_seq from contract_template ct where template_type = #{templateCode}
