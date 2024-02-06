@@ -8,7 +8,9 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class BasicErrorController implements ErrorController {
@@ -25,5 +27,11 @@ public class BasicErrorController implements ErrorController {
             model.addAttribute("status", result);
         }
         return errorPath +"/error";
+    }
+
+    @GetMapping("${server.error.path:${error.path:/common}}")
+    public String displayCommonErrorPage(Model model, @RequestParam("message") String message) {
+        model.addAttribute("status", new ResultStatusVO(message));
+        return "error/error";
     }
 }

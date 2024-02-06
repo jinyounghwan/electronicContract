@@ -24,6 +24,10 @@ public class ResultStatusVO {
         this.message = ResultCodeMsgEnum.REQUEST_SUCCESS.getMsg();
     }
 
+    public ResultStatusVO(String message) {
+        this.message = message;
+    }
+
     public ResultStatusVO(int code, String message) {
         this.code = code;
         this.message = message;
