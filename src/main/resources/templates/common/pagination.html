@@ -6,7 +6,8 @@
                     <a href="javascript:void(0)" class="page-link" th:onclick="'searchList(' + ${paging.getPrevPage()} + ', ' + ${paging.getDisplayRow()} + ', ' + ${totalCount} + ')'" aria-label="Previous"><</a>
                 </li>
                 <li class="paginate_button page-item" th:classappend="${page == paging.getCurrentPage()} ? 'active'" th:each="page: ${#numbers.sequence(paging.getBeginPage(), paging.getEndPage())}">
-                    <a class="page-link" href="javascript:void(0)" th:text="${page}" th:onclick="'searchList(' + ${page} + ', ' + ${paging.getDisplayRow()} + ', ' + ${totalCount} + ')'">1</a>
+                    <a class="page-link" href="javascript:void(0)" th:text="${page}" th:if="${totalCount>1}" th:onclick="'searchList(' + ${page} + ', ' + ${paging.getDisplayRow()} + ', ' + ${totalCount} + ')'">1</a>
+                    <a class="page-link" href="javascript:void(0)" th:text="1" th:if="${totalCount<1}"></a>
                 </li>
                 <li class="paginate_button page-item next" th:classappend=" ${totalCount} == ${paging.getCurrentPage()} and  ${totalCount} == ${paging.getNextPage()} ? 'disabled'">
                     <a href="javascript:void(0)" class="page-link"th:onclick="'searchList(' + ${paging.getTotalPage()} + ', ' + ${paging.getDisplayRow()} + ', ' + ${paging.getTotalCount()} + ')'">></a>
