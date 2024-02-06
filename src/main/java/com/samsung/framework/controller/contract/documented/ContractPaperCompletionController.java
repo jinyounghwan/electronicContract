@@ -31,14 +31,16 @@ public class ContractPaperCompletionController {
 
     @PostMapping("/list")
     public String getContractProgressList (Model model , @RequestBody AccountSearchVO searchVO, HttpServletRequest request){
+        // total
+        int totalCount = contractPaperCompService.getContractPaperCompTotal(searchVO , request);
+
         Paging pagingVo =  Paging.builder()
                 .currentPage(searchVO.getPaging().getCurrentPage())
                 .displayRow(searchVO.getPaging().getDisplayRow())
-                .totalCount(searchVO.getPaging().getTotalCount())
+                .totalCount(totalCount)
                 .build();
         searchVO.setPaging(pagingVo);
-        // total
-        int totalCount = contractPaperCompService.getContractPaperCompTotal(searchVO , request);
+
         model.addAttribute("totalCount", totalCount);
         // paging
         model.addAttribute("paging",pagingVo);

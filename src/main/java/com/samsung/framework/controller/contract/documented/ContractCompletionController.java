@@ -97,14 +97,16 @@ public class ContractCompletionController {
 
     @PostMapping("/list")
     public String getContractCompList(Model model, @RequestBody SearchVO searchVO){
+        // total
+        int totalCount = contractCompletionService.getContractCompTotal(searchVO);
+
         Paging pagingVO =  Paging.builder()
                 .currentPage(searchVO.getPaging().getCurrentPage())
                 .displayRow(searchVO.getPaging().getDisplayRow())
-                .totalCount(searchVO.getPaging().getTotalCount())
+                .totalCount(totalCount)
                 .build();
         searchVO.setPaging(pagingVO);
-        // total
-        int totalCount = contractCompletionService.getContractCompTotal(searchVO);
+
         model.addAttribute("totalCount", totalCount);
         // paging
         model.addAttribute("paging", pagingVO);
@@ -113,6 +115,7 @@ public class ContractCompletionController {
         List<ContractCompVO> list = contractCompletionService.getContractCompList(searchVO);
         model.addAttribute("list",list);
         model.addAttribute("search", searchVO);
+
         return "contract/completion/completionList :: #content-wrapper";
     }
 
