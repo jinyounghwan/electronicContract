@@ -30,7 +30,7 @@
                             <div class="right data-btn-area">
                                 <button class="btn btn-outline-secondary" type="button" onclick="recall()">Checked item as Recall</button>
                                 <button class="btn btn-outline-primary" type="button" onclick="assign()">Checked item as Assign</button>
-                                <button class="btn btn-outline-primary" type="button" th:onclick="|location.href='@{contract/create}'|">Contract Create</button>
+                                <button class="btn btn-outline-primary" type="button" th:onclick="|location.href='@{/contract/create}'|">Contract Create</button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -75,7 +75,7 @@
                                             <td th:text="${item.name}"></td>
                                             <td th:text="${item.empNo}"></td>
                                             <td th:text="${item.createdAt}"></td>
-                                            <td th:text="${item.signatureDataNo}"></td>
+                                            <td th:text="${item.assignedAt}"></td>
                                             <td th:text="${item.docStatus}"></td>
                                             <td th:text="${item.processStatus}"></td>
                                             <td><a th:href="@{/contract/progress/info/{seq}(seq=${item.contractNo})}" >View</a></td>

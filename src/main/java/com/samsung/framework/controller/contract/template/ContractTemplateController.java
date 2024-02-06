@@ -4,6 +4,7 @@ import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.service.contract.template.ContractTemplateService;
 import com.samsung.framework.vo.contract.template.ContractTemplateVO;
 import com.samsung.framework.vo.search.SearchVO;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -89,16 +90,16 @@ public class ContractTemplateController {
 
     @PostMapping(value="/save")
     @ResponseBody
-    public ResponseEntity saveContractTemplateInfo(ContractTemplateVO contractTemplateVO){
+    public ResponseEntity saveContractTemplateInfo(ContractTemplateVO contractTemplateVO , HttpServletRequest request){
         //parameter 이름변경
-        int result = contractTemplateService.saveContractTemplateInfo(contractTemplateVO);
+        int result = contractTemplateService.saveContractTemplateInfo(contractTemplateVO , request);
         return new ResponseEntity(result, HttpStatus.OK);
 
     }
     @PostMapping(value="/copy")
     @ResponseBody
-    public ResponseEntity saveContractTemplateCopyInfo(@RequestBody ContractTemplateVO contractTemplateVO){
-        Map<String,Object> result = contractTemplateService.saveContractTemplateCopyInfo(contractTemplateVO);
+    public ResponseEntity saveContractTemplateCopyInfo(@RequestBody ContractTemplateVO contractTemplateVO , HttpServletRequest request){
+        Map<String,Object> result = contractTemplateService.saveContractTemplateCopyInfo(contractTemplateVO , request);
         return new ResponseEntity(result, HttpStatus.OK);
 
     }

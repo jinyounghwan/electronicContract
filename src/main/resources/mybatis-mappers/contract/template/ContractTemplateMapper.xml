@@ -68,6 +68,10 @@
                 , CTD.CONTRACT_TITLE_EN
                 , CTD.CONTENTS_EN
                 , CTD.CONTENTS_HU
+                , CTD.EMPLOYER_INFO_HU
+                , CTD.EMPLOYER_INFO_EN
+                , CTD.EMPLOYEE_INFO_HU
+                , CTD.EMPLOYEE_INFO_EN
                 , CT.UPDATED_BY
                 , CT.CREATED_BY
              FROM CONTRACT_TEMPLATE CT
@@ -78,11 +82,19 @@
 
     <update id="saveContractTemplateInfo" parameterType="ContractTemplateVO">
         UPDATE CONTRACT_TEMPLATE CT /*saveContractTemplateInfo*/
-        JOIN CONTRACT_TEMPLATE_DETAILS CTD
-        ON CT.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
-        SET CT.MEMO = #{memo}
-        , CTD.CONTRACT_TITLE_HU = #{contractTitleHu}
-        , CTD.CONTRACT_TITLE_EN = #{contractTitleEn}
+          JOIN CONTRACT_TEMPLATE_DETAILS CTD
+            ON CT.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
+           SET CT.MEMO = #{memo}
+             , CTD.CONTRACT_TITLE_HU = #{contractTitleHu}
+             , CTD.CONTRACT_TITLE_EN = #{contractTitleEn}
+             , CTD.CONTENTS_EN = #{contentsEn}
+             , CTD.CONTENTS_HU = #{contentsHu}
+             , CTD.EMPLOYER_INFO_HU = #{employerInfoHu}
+             , CTD.EMPLOYER_INFO_EN = #{employerInfoEn}
+             , CTD.EMPLOYEE_INFO_HU = #{employeeInfoHu}
+             , CTD.EMPLOYEE_INFO_EN = #{employeeInfoEn}
+             , ct.updated_by = #{updatedBy}
+             , ct.updated_at = now()
         WHERE CT.TEMPLATE_SEQ = #{templateSeq}
     </update>
     <insert id="saveContractTemplateCopyInfo" parameterType="ContractTemplateVo">
@@ -91,52 +103,57 @@
             from contract_template
         </selectKey>
         insert into contract_template ( template_title
-        , template_seq
-        , template_type
-        , use_yn
-        , memo
-        , created_by
-        , created_at )
-        select concat(ct.template_title ,'_copy') as template_title
-        , #{nextSeq}
-        , ct.template_type
-        , ct.use_yn
-        , ct.memo
-        , 'admin' as created_by
-        , now() as created_at
-        from contract_template ct
-        where ct.template_seq = #{templateSeq}
+                                        , template_seq
+                                        , template_type
+                                        , use_yn
+                                        , memo
+                                        , created_by
+                                        , updated_by
+                                        , created_at
+                                        , updated_at
+                                        )
+                           select concat(ct.template_title ,'_copy') as template_title
+                                , #{nextSeq}
+                                , ct.template_type
+                                , ct.use_yn
+                                , ct.memo
+                                , #{createdBy} as created_by
+                                , #{updatedBy} as updated_by
+                                , now() as created_at
+                                , now() as updated_at
+                             from contract_template ct
+                            where ct.template_seq = #{templateSeq}
     </insert>
     <insert id="saveContractTemplateCopyDetailsInfo" parameterType="ContractTemplateVo">
         insert into contract_template_details ( template_seq
-        , contract_title_en
-        , contract_title_hu
-        , preamble_en
-        , preamble_hu
-        , contents_en
-        , contents_hu
-        , employer_info_en
-        , employer_info_hu
-        , employee_info_en
-        , employee_info_hu
-        , created_by
-        , created_at
-        )
-        select #{nextSeq} as template_seq
-        , contract_title_en
-        , contract_title_hu
-        , preamble_en
-        , preamble_hu
-        , contents_en
-        , contents_hu
-        , employer_info_en
-        , employer_info_hu
-        , employee_info_en
-        , employee_info_hu
-        , 'admin' as created_by
-        , now() as created_at
-        from contract_template_details ctd
-        where ctd.template_seq = #{templateSeq}
+                                                , contract_title_en
+                                                , contract_title_hu
+                                                , contents_en
+                                                , contents_hu
+                                                , employer_info_en
+                                                , employer_info_hu
+                                                , employee_info_en
+                                                , employee_info_hu
+                                                , created_by
+                                                , created_at
+                                                , updated_by
+                                                , updated_at
+                                                )
+                                           select #{nextSeq} as template_seq
+                                                , contract_title_en
+                                                , contract_title_hu
+                                                , contents_en
+                                                , contents_hu
+                                                , employer_info_en
+                                                , employer_info_hu
+                                                , employee_info_en
+                                                , employee_info_hu
+                                                , #{createdBy}  as created_by
+                                                , now() as created_at
+                                                , #{updatedBy}  as updated_by
+                                                , now() as updated_at
+                                             from contract_template_details ctd
+                                            where ctd.template_seq = #{templateSeq}
     </insert>
     <select id="getTemplateCode" resultType="Template">
         select template_seq

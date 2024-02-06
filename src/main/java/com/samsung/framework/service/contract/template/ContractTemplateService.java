@@ -2,9 +2,12 @@ package com.samsung.framework.service.contract.template;
 
 import com.samsung.framework.common.enums.ContractTemplateEnum;
 import com.samsung.framework.mapper.contract.template.ContractTemplateMapper;
+import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.contract.template.ContractTemplateVO;
 import com.samsung.framework.vo.contract.template.Template;
 import com.samsung.framework.vo.search.SearchVO;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,12 +45,22 @@ public class ContractTemplateService {
         return info;
     }
 
-    public int saveContractTemplateInfo(ContractTemplateVO contractTemplateVO) {
+    public int saveContractTemplateInfo(ContractTemplateVO contractTemplateVO , HttpServletRequest request) {
+        // updated by
+        HttpSession session = request.getSession();
+        AccountVO account = (AccountVO) session.getAttribute("loginInfo");
+        contractTemplateVO.setUpdatedAt(account.getAdminId());
         return contractTemplateMapper.saveContractTemplateInfo(contractTemplateVO);
     }
 
-    public Map<String,Object> saveContractTemplateCopyInfo(ContractTemplateVO contractTemplateVO) {
+    public Map<String,Object> saveContractTemplateCopyInfo(ContractTemplateVO contractTemplateVO , HttpServletRequest request) {
         Map<String ,Object> resultMap = new HashMap<String ,Object>();
+        //  로그인 한  관리자 정보
+        HttpSession session = request.getSession();
+        AccountVO account = (AccountVO) session.getAttribute("loginInfo");
+        contractTemplateVO.setUpdatedBy(account.getAdminId());
+        contractTemplateVO.setCreatedBy(account.getAdminId());
+
         int result = contractTemplateMapper.saveContractTemplateCopyInfo(contractTemplateVO);
         result += contractTemplateMapper.saveContractTemplateCopyDetailsInfo(contractTemplateVO);
         resultMap.put("result" , result);
