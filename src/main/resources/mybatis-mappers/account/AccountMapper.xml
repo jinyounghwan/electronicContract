@@ -23,7 +23,7 @@
                         AND LOWER(NAME) LIKE LOWER(CONCAT('%', #{searchKeyword}, '%'))
                     </when>
                     <when test="searchKeywordType == 'EMPLOYEE_ID' or searchKeywordType =='ADMIN_ID'">
-                        OR LOWER(EMP_NO) LIKE LOWER(CONCAT('%', #{searchKeyword}, '%'))
+                        AND LOWER(EMP_NO) LIKE LOWER(CONCAT('%', #{searchKeyword}, '%'))
                     </when>
                     <when test="searchKeywordType == 'EMAIL'">
                         AND LOWER(EMAIL) LIKE LOWER(CONCAT('%', #{searchKeyword}, '%'))
