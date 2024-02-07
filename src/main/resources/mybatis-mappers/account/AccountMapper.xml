@@ -77,10 +77,10 @@
             GROUP BY CREATED_BY
             ORDER BY CREATED_AT DESC
         )
-        SELECT  DISTINCT  U.EMP_NO AS EMP_NO , U.ADMIN_ID AS ADMIN_ID
-                , U.CREATED_AT AS CREATED_AT , U.UPDATED_AT AS UPDATED_AT
-                , L.LAST_LOGIN AS LAST_LOGIN , U.NAME AS NAME
-                , U.EMAIL AS EMAIL , (SELECT (L.CREATED_AT) FROM LOG WHERE LOG_TYPE='PASSWORD_CHANGE') AS PASSWORD_AT
+        SELECT  DISTINCT  U.EMP_NO AS EMP_NO , U.CREATED_AT AS CREATED_AT
+                , U.UPDATED_AT AS UPDATED_AT, L.LAST_LOGIN AS LAST_LOGIN
+                , U.NAME AS NAME, U.EMAIL AS EMAIL
+                , (SELECT (L.CREATED_AT) FROM LOG WHERE LOG_TYPE='PASSWORD_CHANGE') AS PASSWORD_AT
         FROM USERS U
             LEFT JOIN LOG L ON U.EMP_NO = L.CREATED_BY
         WHERE
@@ -115,15 +115,13 @@
             GROUP BY CREATED_BY
             ORDER BY CREATED_AT DESC
         )
-        SELECT  DISTINCT  U.EMP_NO AS EMP_NO , U.ADMIN_ID AS ADMIN_ID
-                , U.CREATED_AT AS CREATED_AT , U.UPDATED_AT AS UPDATED_AT
-                , L.LAST_LOGIN AS LAST_LOGIN , U.NAME AS NAME
-                , U.EMAIL AS EMAIL
+        SELECT  DISTINCT  U.EMP_NO AS EMP_NO , U.CREATED_AT AS CREATED_AT
+                , U.UPDATED_AT AS UPDATED_AT, L.LAST_LOGIN AS LAST_LOGIN
+                , U.NAME AS NAME, U.EMAIL AS EMAIL
         FROM USERS U
         LEFT JOIN LOG L ON U.EMP_NO = L.CREATED_BY
         WHERE
-            ADMIN_ID = #{userId}
-            OR EMP_NO = #{userId} AND EMP_NO <![CDATA[<>]]> 0
+            U.EMP_NO = #{userId} AND U.ACCOUNT_TYPE = #{accountType}
     </select>
 
 
@@ -137,14 +135,13 @@
     <!-- 최근 로그인 이력 저장을 위한 정보 조회 -->
     <select id="getLoginInfo" resultType="AccountVO">
         SELECT U.EMP_NO, U.DEPT_CODE
-             , U.ADMIN_ID,U.USER_PW
-             , U.NAME, U.EMAIL
-             , U.ACCOUNT_TYPE, U.PHONE
-             , U.POSITION
+             ,U.USER_PW, U.NAME
+             , U.EMAIL, U.ACCOUNT_TYPE
+             , U.PHONE, U.POSITION
         FROM USERS U
         WHERE U.EMP_NO = #{userId}
-           OR U.ADMIN_ID = #{userId}
-            AND USE_YN = 'Y'
+            AND U.ACCOUNT_TYPE = #{accountType}
+            AND U.USE_YN = 'Y'
     </select>
 
     <insert id="insertMember" parameterType="AccountVO">
@@ -172,13 +169,11 @@
     <update id="updPwd" parameterType="AccountVO">
         UPDATE USERS U
         SET USER_PW = #{userPw}, UPDATED_AT = sysdate(), UPDATED_BY = #{userId}
-        WHERE U.ADMIN_ID = #{userId}
-            OR U.EMP_NO = #{empNo}
+        WHERE U.EMP_NO = #{empNo}
     </update>
     
     <select id="myInfo" parameterType="AccountVO" resultType="AccountVo">
         select emp_no
-            , admin_id
             , dept_code
             , name
             , account_type
@@ -207,6 +202,6 @@
                 NAME = #{name}
             </if>
         WHERE
-            U.ADMIN_ID = #{adminId}
+            U.EMP_NO = #{adminId}
     </update>
 </mapper>

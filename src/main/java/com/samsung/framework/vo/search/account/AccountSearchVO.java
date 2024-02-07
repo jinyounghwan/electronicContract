@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 public class AccountSearchVO extends SearchVO {
     // 직원 사번
-    private int empNo;
+    private String empNo;
     private String deptCode;
     private String userId;
     private String adminId;

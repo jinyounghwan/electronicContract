@@ -12,7 +12,7 @@ import javax.swing.text.StringContent;
 @Builder
 public class ContractVO {
     private int contractNo;
-    private int empNo;
+    private String empNo;
     private int templateSeq;
     private String deptCode;
     private String docStatus;

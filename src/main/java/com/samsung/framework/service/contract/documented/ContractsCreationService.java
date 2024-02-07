@@ -69,11 +69,11 @@ public class ContractsCreationService {
         for(List<ContractExcelVO> targetList : list){
             targetList.stream().iterator().forEachRemaining(data->{
                 // validation - 임직원 번호가 맞는지..등
-                AccountVO o = AccountVO.builder().empNo(StringUtil.getInt(data.getEmpNo())).build();
+                AccountVO o = AccountVO.builder().empNo(data.getEmpNo()).build();
                 // user 정보 조회
                 AccountVO user = accountMapper.myInfo(o);
                 ContractVO contractVO = ContractVO.builder()
-                        .empNo(StringUtil.getInt(data.getEmpNo())).templateSeq(StringUtil.getInt(data.getTemplateSeq()))
+                        .empNo(data.getEmpNo()).templateSeq(StringUtil.getInt(data.getTemplateSeq()))
                         .name(data.getName())
                         .validation("Y")
                         .agreeYn("N")

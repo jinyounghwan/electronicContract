@@ -29,6 +29,8 @@ public class ContractPaperCompService {
 
         List<String> docStatusList = Arrays.asList(ContractProcessEnum.processCode(ContractProcessEnum.COMPLETED), ContractProcessEnum.processCode(ContractProcessEnum.PAPER_CONTRACT));
         searchVO.setContractDocStatusTypeList(docStatusList);
+        List<String> processStatusList = Arrays.asList(ContractProcessEnum.processCode(ContractProcessEnum.SIGNED));
+        searchVO.setProcessStatusTypeList(processStatusList);
         return contractPaperCompletionMapper.getContractPaperCompTotal(searchVO);
     }
 
@@ -38,6 +40,9 @@ public class ContractPaperCompService {
         accountSearchVO.setEmpNo(account.getEmpNo());
         List<String> docStatusList = Arrays.asList(ContractProcessEnum.processCode(ContractProcessEnum.COMPLETED), ContractProcessEnum.processCode(ContractProcessEnum.PAPER_CONTRACT));
         accountSearchVO.setContractDocStatusTypeList(docStatusList);
+
+        List<String> processStatusList = Arrays.asList(ContractProcessEnum.processCode(ContractProcessEnum.SIGNED));
+        accountSearchVO.setProcessStatusTypeList(processStatusList);
         List<ContractCompVO> list = contractPaperCompletionMapper.getContractPaperCompList(accountSearchVO);
         list.forEach(data->{
             data.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(data.getCreatedAt(),DateUtil.DATETIME_YMDHM_PATTERN));
