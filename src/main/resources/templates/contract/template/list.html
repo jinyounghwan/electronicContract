@@ -34,9 +34,9 @@
                                     <input type="hidden" name="totalCount" id="totalCount" th:value="${totalCount}">
                                     <tr  th:if="${not #lists.isEmpty(list)}" th:each="item, stat : ${list}">
                                         <td th:text="${item.templateSeq}"></td>
-                                        <td th:text="${item.templateTitle}"></td>
+                                        <td th:utext="${item.templateTitle}"></td>
                                         <td th:text="${item.templateType}"></td>
-                                        <td th:text="${item.contractTitleEn}"></td>
+                                        <td th:utext="${item.contractTitleEn}"></td>
                                         <td th:text="${item.createdAt}"></td>
                                         <td th:text="${item.updatedAt}"></td>
                                         <td><a th:href="@{/contract/template/info/{seq}(seq=${item.templateSeq})}"> View</a> <br>

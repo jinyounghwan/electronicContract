@@ -70,8 +70,8 @@
                                         <tr th:if="${not #lists.isEmpty(list)}" th:each="item, stat : ${list}">
                                             <td class="data-check"><input class="form-check-input" type="checkbox" th:value="${item.contractNo}" data-select="check"></td>
                                             <td th:text="${item.contractNo}"></td>
-                                            <td th:text="${item.templateTitle}"></td>
-                                            <td th:text="${item.contractTitleEn}"></td>
+                                            <td th:utext="${item.templateTitle}"></td>
+                                            <td th:utext="${item.contractTitleEn}"></td>
                                             <td th:text="${item.name}"></td>
                                             <td th:text="${item.empNo}"></td>
                                             <td th:text="${item.createdAt}"></td>

@@ -90,6 +90,7 @@ public class ContractsViewService {
                 .contractDateHu(view.getContractDateHu())
                 .jobTitleEn(view.getJobTitleEn())
                 .jobTitleHu(view.getJobTitleHu())
+                .docStatus(view.getDocStatus())
                 .build();
     }
     private String replaceWageType(String type){
