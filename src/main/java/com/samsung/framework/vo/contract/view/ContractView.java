@@ -25,12 +25,14 @@ public class ContractView {
     private String contentsEn;
     private String contentsHu;
     private String contractDateEn;
+    private String docStatus;
+    private String processStatus;
 
     @Builder
     public ContractView(int contractNo,int empNo,String name, String hireDateEn, String hireDateHu
                         , String contractDateHu, String jobTitleEn, String jobTitleHu, String salaryEn,String salaryHu
-                        , String salaryNo, String wageTypeEn, String wageTypeHu, String contractTitleEn, String contractTitleHu
-                        , String contentsEn , String contentsHu, String contractDateEn){
+                        , String salaryNo, String docStatus, String wageTypeEn, String wageTypeHu, String contractTitleEn, String contractTitleHu
+                        , String contentsEn , String contentsHu, String contractDateEn, String processStatus){
         this.contractNo = contractNo;
         this.empNo = empNo;
         this.name = name;
@@ -49,6 +51,8 @@ public class ContractView {
         this.contentsEn = contentsEn;
         this.contentsHu = contentsHu;
         this.contractDateEn = contractDateEn;
+        this.docStatus = docStatus;
+        this.processStatus = processStatus;
     }
 
 
