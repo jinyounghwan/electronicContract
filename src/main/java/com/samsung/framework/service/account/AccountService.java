@@ -53,8 +53,8 @@ public class AccountService {
      * @param userId
      * @return
      */
-    public AccountVO getAccountDetail(String userId) throws UnsupportedEncodingException {
-        AccountVO account = accountMapper.getAccountDetail(userId);
+    public AccountVO getAccountDetail(AccountVO vo) throws UnsupportedEncodingException {
+        AccountVO account = accountMapper.getAccountDetail(vo);
         account.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(account.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         account.setUpdatedAtStr(DateUtil.convertLocalDateTimeToString(account.getUpdatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         account.setLastLoginStr(DateUtil.convertLocalDateTimeToString(account.getLastLogin(), DateUtil.DATETIME_YMDHM_PATTERN));
@@ -147,7 +147,21 @@ public class AccountService {
      * @return {@link AccountVO}
      */
     public AccountVO getLoginInfo(@Valid LoginRequest loginRequest) throws CustomLoginException, NoSuchAlgorithmException {
-        AccountVO target = accountMapper.getLoginInfo(loginRequest.getUserId());
+        AccountVO vo = null;
+
+        // admindId 체크
+        if(loginRequest.getUserId().contains("admin")) {
+            vo = AccountVO.builder()
+                    .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.ADMIN))
+                    .userId(loginRequest.getUserId())
+                    .build();
+        } else{
+           vo = AccountVO.builder()
+                    .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.EMPLOYEE))
+                    .userId(loginRequest.getUserId())
+                    .build();
+        }
+        AccountVO target = accountMapper.getLoginInfo(vo);
         if(StringUtil.isEmpty(target)) {
             GhtAccountVO ghrAccount = ghrAccountMapper.getGhrInfo(Integer.parseInt(loginRequest.getUserId()));
             
@@ -157,7 +171,7 @@ public class AccountService {
             }
 
              target = AccountVO.builder()
-                    .empNo(ghrAccount.getEmpNo())
+                    .empNo(String.valueOf(ghrAccount.getEmpNo()))
                     .userPw(encryptionUtil.encrypt(String.valueOf(ghrAccount.getEmpNo()))) // 초기 비밀번호 세팅은 사번으로
                     .deptCode(ghrAccount.getDepartmentCode())
                     .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.EMPLOYEE))
@@ -209,7 +223,7 @@ public class AccountService {
 
         if(validationUtil.parameterValidator(account, AccountVO.class)){
             AccountVO target = AccountVO.builder()
-                    .empNo(Integer.parseInt(account.getUserId()))
+                    .empNo(account.getUserId())
                     .userPw(encryptionUtil.encrypt(account.getPassword()))
                     .build();
 

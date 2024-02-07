@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class AccountVO {
-    private int empNo;
+    private String empNo;
     private String deptCode;
     private String userId;
     private String adminId;

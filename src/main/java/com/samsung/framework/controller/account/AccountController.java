@@ -178,6 +178,10 @@ public class AccountController {
     public ResponseEntity login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) throws CustomLoginException, NoSuchAlgorithmException {
         // 유저 이름에 해당하는 유저 정보를 가져온다.
         AccountVO loginInfo = accountService.getLoginInfo(loginRequest);
+        if(loginInfo.getUserId().contains("admin")){
+            loginInfo.setAdminId(loginInfo.getAdminId());
+        }
+
         HttpSession session = request.getSession();
         if(loginInfo!=null){
             session.setAttribute("loginInfo", loginInfo);
@@ -210,14 +214,22 @@ public class AccountController {
 
     @GetMapping("/employee/detail/{userId}")
     public ModelAndView getEmployeeDetail(ModelAndView mv, @PathVariable("userId")String userId) throws UnsupportedEncodingException {
-        AccountVO account = accountService.getAccountDetail(userId);
+        AccountVO vo = AccountVO.builder()
+                .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.EMPLOYEE))
+                .userId(userId)
+                .build();
+        AccountVO account = accountService.getAccountDetail(vo);
         mv.addObject("account", account);
         mv.setViewName("account/employeeDetail");
         return mv;
     }
     @GetMapping("/admin/detail/{userId}")
     public ModelAndView getAdminDetail(ModelAndView mv, @PathVariable("userId")String userId) throws UnsupportedEncodingException {
-        AccountVO account = accountService.getAccountDetail(userId);
+        AccountVO vo = AccountVO.builder()
+                .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.ADMIN))
+                .userId(userId)
+                .build();
+        AccountVO account = accountService.getAccountDetail(vo);
         mv.addObject("account",account);
         mv.setViewName("account/adminDetail");
         return mv;
@@ -225,7 +237,11 @@ public class AccountController {
 
     @GetMapping("/admin/edit/{userId}")
     public ModelAndView getAdminEdit(ModelAndView mv, @PathVariable("userId")String userId) throws UnsupportedEncodingException {
-        AccountVO account = accountService.getAccountDetail(userId);
+        AccountVO vo = AccountVO.builder()
+                .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.ADMIN))
+                .userId(userId)
+                .build();
+        AccountVO account = accountService.getAccountDetail(vo);
         mv.addObject("account",account);
         mv.setViewName("account/adminEdit");
         return mv;
@@ -293,7 +309,11 @@ public class AccountController {
 
     @GetMapping("/employee/edit/{userId}")
     public ModelAndView getEmployeeEdit(ModelAndView mv, @PathVariable("userId")String userId) throws UnsupportedEncodingException {
-        AccountVO account = accountService.getAccountDetail(userId);
+        AccountVO vo = AccountVO.builder()
+                .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.EMPLOYEE))
+                .userId(userId)
+                .build();
+        AccountVO account = accountService.getAccountDetail(vo);
         mv.addObject("account",account);
         mv.setViewName("account/employeeEdit");
 

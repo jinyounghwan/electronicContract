@@ -13,6 +13,10 @@
         <foreach collection="contractDocStatusTypeList" item="item" open="(" close=")" separator=", ">
             #{item}
         </foreach>
+        OR C.PROCESS_STATUS IN
+        <foreach collection="processStatusTypeList" item="item" open="(" close=")" separator=", ">
+            #{item}
+        </foreach>
         AND C.EMP_NO = #{empNo}
     </select>
 
@@ -24,11 +28,14 @@
             INNER JOIN  CONTRACT_TEMPLATE CT ON C.TEMPLATE_SEQ = CT.TEMPLATE_SEQ
             INNER JOIN CONTRACT_TEMPLATE_DETAILS CTD ON C.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
         WHERE
-            DOC_STATUS IN
+            C.DOC_STATUS IN
             <foreach collection="contractDocStatusTypeList" item="item" open="(" close=")" separator=", ">
                 #{item}
             </foreach>
-            AND C.EMP_NO = #{empNo}
+            OR C.PROCESS_STATUS IN
+            <foreach collection="processStatusTypeList" item="item" open="(" close=")" separator=", ">
+                #{item}
+            </foreach>
     </select>
 
     <select id="getPaperCompInfo" parameterType="long" resultType="ContractCompVO">

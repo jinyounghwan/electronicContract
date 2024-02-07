@@ -22,8 +22,8 @@ public class SaveContractRequest {
     @NotNull(message = "템플릿 코드는 필수 값 입니다.")
     private String templateCode;
 
-    @Min(value = 1, message = "임직원 번호는 필수 값 입니다.")
-    private int empNo;
+    @NotNull(message = "임직원 번호는 필수 값 입니다.")
+    private String empNo;
 
     private String salaryHu;
     private String salaryEn;
