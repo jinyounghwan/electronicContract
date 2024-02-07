@@ -280,7 +280,7 @@ public class FileUtil {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return (ResponseEntity) ResponseEntity.ok();
+        return ResponseEntity.badRequest().build();
     }
 
     /**
