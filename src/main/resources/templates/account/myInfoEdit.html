@@ -87,7 +87,7 @@
                     location.href="/contract/progress";
                 })
                 .fail(function(jqXHR){
-                    console.log(jqXHR);
+                    sendToErrorPage(jqXHR);
                 })
             }
 

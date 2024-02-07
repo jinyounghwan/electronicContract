@@ -82,7 +82,7 @@
             }).done(function(data) {
                $('#content').replaceWith(data);
             }).fail(function(jqXHR) {
-                console.log(jqXHR);
+                sendToErrorPage(jqXHR);
             });
         }
     </script>

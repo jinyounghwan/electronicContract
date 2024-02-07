@@ -118,7 +118,7 @@
                 }).done(function(data) {
                    $('#content').replaceWith(data);
                 }).fail(function(jqXHR) {
-                    console.log(jqXHR);
+                    sendToErrorPage(jqXHR);
                 });
             }
 
@@ -146,7 +146,7 @@
                         getList();
                     }
                 }).fail(function(jqXHR) {
-                    console.log(jqXHR);
+                    sendToErrorPage(jqXHR);
                 });
             }
             /* assign */
@@ -173,7 +173,7 @@
                         getList();
                     }
                 }).fail(function(jqXHR) {
-                    console.log(jqXHR);
+                    sendToErrorPage(jqXHR);
                 });
             }
 
