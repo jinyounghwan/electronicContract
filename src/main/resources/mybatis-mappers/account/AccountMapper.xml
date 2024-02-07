@@ -23,7 +23,7 @@
                         AND LOWER(NAME) LIKE LOWER(CONCAT('%', #{searchKeyword}, '%'))
                     </when>
                     <when test="searchKeywordType == 'EMPLOYEE_ID' or searchKeywordType =='ADMIN_ID'">
-                        OR LOWER(EMP_NO) LIKE LOWER(CONCAT('%', #{searchKeyword}, '%'))
+                        AND LOWER(EMP_NO) LIKE LOWER(CONCAT('%', #{searchKeyword}, '%'))
                     </when>
                     <when test="searchKeywordType == 'EMAIL'">
                         AND LOWER(EMAIL) LIKE LOWER(CONCAT('%', #{searchKeyword}, '%'))
@@ -67,19 +67,28 @@
     </select>
 
     <select id = "getAccountList" resultType="AccountVO">
-        WITH LOG AS (
+        WITH LAST_LOG AS (
             SELECT CREATED_BY AS CREATED_BY, MAX(CREATED_AT) AS LAST_LOGIN,
-                   CREATED_AT AS CREATED_AT, LOG_TYPE AS LOG_TYPE
+            CREATED_AT AS CREATED_AT, LOG_TYPE AS LOG_TYPE
             FROM PROCESS_LOG
+            WHERE LOG_TYPE='LOGIN'
+            GROUP BY CREATED_BY
+            ORDER BY CREATED_AT DESC
+        ),PASSWORD_LOG AS (
+            SELECT CREATED_BY AS CREATED_BY, MAX(CREATED_AT) AS PASSWORD_AT,
+            CREATED_AT AS CREATED_AT
+            FROM PROCESS_LOG
+            WHERE LOG_TYPE='PASSWORD_CHANGE'
             GROUP BY CREATED_BY
             ORDER BY CREATED_AT DESC
         )
         SELECT  DISTINCT  U.EMP_NO AS EMP_NO , U.CREATED_AT AS CREATED_AT
-                , U.UPDATED_AT AS UPDATED_AT, L.LAST_LOGIN AS LAST_LOGIN
+                , U.UPDATED_AT AS UPDATED_AT, LL.LAST_LOGIN AS LAST_LOGIN
                 , U.NAME AS NAME, U.EMAIL AS EMAIL
-                , (SELECT (L.CREATED_AT) FROM LOG WHERE LOG_TYPE='PASSWORD_CHANGE') AS PASSWORD_AT
+                , PWD.PASSWORD_AT AS PASSWORD_AT
         FROM USERS U
-            LEFT JOIN LOG L ON U.EMP_NO = L.CREATED_BY
+            LEFT JOIN LAST_LOG LL ON U.EMP_NO = LL.CREATED_BY
+            LEFT JOIN PASSWORD_LOG PWD ON U.EMP_NO = PWD.CREATED_BY
         WHERE
             ACCOUNT_TYPE = #{accountType}
         <include refid="search"/>

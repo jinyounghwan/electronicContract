@@ -12,6 +12,7 @@
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
+            <div th:replace="~{common/alert2}"></div>
             <!--content-->
             <div class="container-fluid">
                 <h1 class="page-title">내정보 확인</h1>
@@ -83,7 +84,7 @@
                     data: JSON.stringify(data)
                 })
                 .done(function(data){
-                    alert(data.message);
+                    openAlert(data.message);
                     location.href="/contract/progress";
                 })
                 .fail(function(jqXHR){
