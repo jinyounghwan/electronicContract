@@ -94,15 +94,11 @@ public class ContractCompService {
     }
 
     public int getContractCompTotal(SearchVO searchVO) {
-        List<String> docStatusList = Arrays.asList(ContractProcessEnum.processCode(ContractProcessEnum.COMPLETED), ContractProcessEnum.processCode(ContractProcessEnum.PAPER_CONTRACT));
-        searchVO.setContractDocStatusTypeList(docStatusList);
         int count = contractCompletionMapper.getContractCompTotal(searchVO);
         return count;
     }
 
     public List<ContractCompVO> getContractCompList(SearchVO searchVO){
-        List<String> docStatusList = Arrays.asList(ContractProcessEnum.processCode(ContractProcessEnum.COMPLETED), ContractProcessEnum.processCode(ContractProcessEnum.PAPER_CONTRACT));
-        searchVO.setContractDocStatusTypeList(docStatusList);
         List<ContractCompVO> list = contractCompletionMapper.getContractCompList(searchVO);
         list.forEach(data->{
             data.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(data.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));

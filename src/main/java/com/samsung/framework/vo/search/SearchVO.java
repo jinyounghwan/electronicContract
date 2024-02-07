@@ -72,15 +72,6 @@ public class SearchVO {
      */
     private String displayName;
 
-    /**
-     * 계약서 상태 유형 리스트
-     */
-    private List<String> contractDocStatusTypeList = new ArrayList<>();
-
-    /**
-     * 계약서 진행 상태 리스트
-     */
-    private List<String> processStatusTypeList = new ArrayList<>();
     public SearchVO( String code, String displayName) {
         this.code = code;
         this.displayName = displayName;
