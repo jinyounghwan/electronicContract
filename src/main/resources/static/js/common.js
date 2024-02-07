@@ -256,10 +256,14 @@ let viewContract = (seq) =>{
             $('[data-select]').each(function(index, item){
                 var $this = $(item);
                 var key = $this.data('select');
-                $this.text(data[key]);
+                $this.html(data[key]);
             });
             $('[data-target="view"]').attr('style' , 'display:block');
             $('[data-target="viewBackground"]').attr('class' , 'modal-backdrop');
+            console.log(data.docStatus);
+            if(data.docStatus == 'PRCS1002' && (data.processStatus != 'PRCS2003' || data.processStatus != 'PRCS2004')){
+                $('[data-target="statusBtn"]').show();
+            }
         }
     }).fail(function(jqXHR) {
         console.log(jqXHR);

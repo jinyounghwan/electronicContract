@@ -10,7 +10,7 @@
             on c.template_seq = ct.template_seq
           join contract_template_details ctd
             on ct.template_seq = ctd.template_seq
-         where doc_status ='PRCS1001'
+         where doc_status ='PRCS1002'
            and process_status in ('PRCS2001','PRCS2002')
            and del_yn ='N'
            and emp_no =#{empNo}
@@ -69,8 +69,6 @@
              join contract_template_details ctd
                on ct.template_seq = ctd.template_seq
             where c.del_yn = 'N'
-              and doc_status ='PRCS1001'
-              and process_status in ('PRCS2001','PRCS2002')
               and emp_no = #{empNo}
               and c.contract_no = #{contractNo}
     </select>

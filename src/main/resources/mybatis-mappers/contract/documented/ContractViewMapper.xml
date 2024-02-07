@@ -23,6 +23,8 @@
                 , ctd.contract_title_en
                 , ctd.contents_en
                 , ctd.contents_hu
+                , c.doc_status
+                , c.process_status
              from contracts c
              join users u
                on c.emp_no = u.emp_no

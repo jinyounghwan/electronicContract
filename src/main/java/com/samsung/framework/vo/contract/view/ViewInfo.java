@@ -16,4 +16,6 @@ public class ViewInfo {
     private String name;
     private String jobTitleEn;
     private String jobTitleHu;
+    private String docStatus;
+    private String processStatus;
 }
