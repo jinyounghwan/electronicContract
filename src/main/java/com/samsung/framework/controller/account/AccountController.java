@@ -131,7 +131,6 @@ public class AccountController {
     @GetMapping("/userId-check")
     public ModelAndView userIdCheck(ModelAndView mv, HttpServletRequest request){
         String id = request.getParameter("id");
-        log.info("id : {}", id);
         mv.addObject("memberId", id);
         mv.setViewName("member/member-info-check");
         return mv;
@@ -178,8 +177,8 @@ public class AccountController {
     public ResponseEntity login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) throws CustomLoginException, NoSuchAlgorithmException {
         // 유저 이름에 해당하는 유저 정보를 가져온다.
         AccountVO loginInfo = accountService.getLoginInfo(loginRequest);
-        if(loginInfo.getUserId().contains("admin")){
-            loginInfo.setAdminId(loginInfo.getAdminId());
+        if(loginRequest.getUserId().contains("admin")){
+            loginInfo.setAdminId(loginInfo.getUserId());
         }
 
         HttpSession session = request.getSession();
@@ -254,7 +253,6 @@ public class AccountController {
     }
     @PostMapping("/api/admin/update")
     public ResponseEntity updAdminAcct(HttpServletRequest request, @RequestBody AccountVO account) throws NoSuchAlgorithmException {
-        log.info("updAdminAcct");
         Map<String, Object> result = accountService.updAdminAcct(request, account);
 
         return ResponseEntity.ok(result);
@@ -323,7 +321,6 @@ public class AccountController {
     @ResponseBody
     public Map<String, Object> isExistsPwdChange(@RequestBody LoginRequest loginRequest, HttpServletRequest request) throws UnsupportedEncodingException {
         Map<String, Object> result = new HashMap<>();
-        log.info("loginRequest :: {}",loginRequest.getUserId());
         boolean exists = logMapper.isExistsPasswordChangeLog(loginRequest.getUserId());
 
         // 관리자 계정, 임직원 계정 체크 로직
