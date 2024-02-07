@@ -39,10 +39,13 @@
                                 <tr th:if="${not #lists.isEmpty(list)}" th:each="row, stat : ${list}">
                                     <td th:text="${row.getName()}"></td>
                                     <td th:text="${row.getEmpNo()}"></td>
-                                    <td th:text="${row.getLastLoginStr()}"></td>
-                                    <td>-</td>
+                                    <td th:if="${row.getLastLoginStr()} !=''" th:text="${row.getLastLoginStr()}"></td>
+                                    <td th:if="${row.getLastLoginStr()}==''">-</td>
+                                    <td th:if="${row.getPasswordAtStr()}!=''" th:text="${row.getPasswordAtStr()}"></td>
+                                    <td th:if="${row.getPasswordAtStr()}==''">-</td>
                                     <td th:text="${row.getCreatedAtStr()}"></td>
-                                    <td th:text="${row.getUpdatedAtStr()}"></td>
+                                    <td th:if="${row.getUpdatedAtStr()} !=''" th:text="${row.getUpdatedAtStr()}"></td>
+                                    <td th:if="${row.getUpdatedAtStr()} ==''">-</td>
                                     <td><a th:href="@{/account/employee/detail/{userId}(userId=${row.getEmpNo()})}">View</a><br/>
                                         <a th:href="@{/account/employee/edit/{userId}(userId=${row.getEmpNo()})}">Edit</a>
                                     </td>

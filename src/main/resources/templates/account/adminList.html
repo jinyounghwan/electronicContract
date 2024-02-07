@@ -42,10 +42,13 @@
                                     <td th:text="${row.getName()}"></td>
                                     <td th:text="${row.getAdminId()}"></td>
                                     <td th:text="${row.getEmail()}"></td>
-                                    <td th:text="${row.getLastLoginStr()}"></td>
-                                    <td>-</td>
+                                    <td th:if="${row.getLastLoginStr()} !=''" th:text="${row.getLastLoginStr()}"></td>
+                                    <td th:if="${row.getLastLoginStr()}==''">-</td>
+                                    <td th:if="${row.getPasswordAtStr()}!=''" th:text="${row.getPasswordAtStr()}"></td>
+                                    <td th:if="${row.getPasswordAtStr()}==''">-</td>
                                     <td th:text="${row.getCreatedAtStr()}"></td>
-                                    <td th:text="${row.getUpdatedAtStr()}"></td>
+                                    <td th:if="${row.getUpdatedAtStr()} !=''" th:text="${row.getUpdatedAtStr()}"></td>
+                                    <td th:if="${row.getUpdatedAtStr()} ==''">-</td>
                                     <td><a th:href="@{/account/admin/detail/{userId}(userId=${row.getAdminId()})}" >View </br></a>
                                         <a th:href="@{/account/admin/edit/{userId}(userId=${row.getAdminId()})}">Edit</a>
                                     </td>

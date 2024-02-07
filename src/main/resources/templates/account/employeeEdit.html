@@ -12,6 +12,7 @@
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
+            <div th:replace="~{common/alert2}"></div>
             <!--content-->
             <div class="container-fluid">
                 <h1 class="page-title">임직원 계정</h1>
@@ -83,7 +84,7 @@
                 let json = JSON.parse(data);
                 if(json.code===400){
                     openAlert(json.message);
-                } else{
+                } else if(json.code===200){
                     openAlert(json.message);
                     location.href = "/account/employee"
                 }
