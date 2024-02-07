@@ -333,14 +333,14 @@ public class AccountController {
 
     @GetMapping("/myInfo")
     public ModelAndView getMyInfo(HttpServletRequest request, ModelAndView mv) throws UnsupportedEncodingException {
-        mv.setViewName("/account/myInfo");
+        mv.setViewName("account/myInfo");
         mv.addObject("account",accountService.getSessionAccount(request));
         return mv;
     }
 
     @GetMapping("/myInfo/edit")
     public ModelAndView getChangeMyInfo(HttpServletRequest request, ModelAndView mv) throws UnsupportedEncodingException {
-        mv.setViewName("/account/myInfoEdit");
+        mv.setViewName("account/myInfoEdit");
         mv.addObject("account", accountService.getSessionAccount(request));
         return mv;
     }
