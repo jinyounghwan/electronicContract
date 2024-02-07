@@ -111,7 +111,7 @@
                 location.href="/contract/sign/comp"
             })
             .fail(function(jqXHR) {
-                console.log(jqXHR);
+                sendToErrorPage(jqXHR);
             });
         }
 

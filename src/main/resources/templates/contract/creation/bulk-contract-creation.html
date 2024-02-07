@@ -67,7 +67,7 @@
                        openAlert('The creation was successful.Created'+ value.totalCount +' records.' , '');
                     }
                 }).fail(function(jqXHR) {
-                    console.log(jqXHR);
+                    sendToErrorPage(jqXHR);
                 });
             }
         </script>
