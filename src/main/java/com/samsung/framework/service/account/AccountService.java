@@ -75,6 +75,7 @@ public class AccountService {
             data.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(data.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
             data.setUpdatedAtStr(DateUtil.convertLocalDateTimeToString(data.getUpdatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
             data.setLastLoginStr(DateUtil.convertLocalDateTimeToString(data.getLastLogin(), DateUtil.DATETIME_YMDHM_PATTERN));
+            data.setPasswordAtStr(DateUtil.convertLocalDateTimeToString(data.getPasswordAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         });
 
         return list;

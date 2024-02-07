@@ -12,6 +12,7 @@
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
+            <div th:replace="~{common/alert2}"></div>
             <!--content-->
             <div class="container-fluid">
                 <h1 class="page-title">관리자 계정정보</h1>
@@ -22,11 +23,11 @@
                                 <tbody>
                                 <tr>
                                     <th class="col-2">Last Name</th>
-                                    <td><input type="text" name="lastName" class="form-control form-control-user" th:placeholder="${account.getLastName()}"></td>
+                                    <td><input type="text" name="lastName" class="form-control form-control-user" th:placeholder="${account.getLastName()}" th:text="${account.getLastName()}"></td>
                                 </tr>
                                 <tr>
                                     <th>First Name</th>
-                                    <td><input type="text" name="firstName" class="form-control form-control-user" th:placeholder="${account.getFirstName()}"></td>
+                                    <td><input type="text" name="firstName" class="form-control form-control-user" th:placeholder="${account.getFirstName()}" th:text="${account.getFirstName()}"></td>
                                 </tr>
                                 <tr>
                                     <th>Email</th>
