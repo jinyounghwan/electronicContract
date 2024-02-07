@@ -105,7 +105,7 @@ public class ContractProgressService {
         AccountVO account = (AccountVO) session.getAttribute("loginInfo");
         // 저장이 성공 되었을 때
         LogSaveRequest saveRequest = LogSaveRequest.builder().logType(type)
-               // .processStep(type.getDescription())
+                .processStep(type.getDescription())
                 .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
                 .createdBy(account.getAdminId())
                 .contractNo(StringUtil.getString(progress.getContractNo()))
