@@ -1482,7 +1482,7 @@ pre code {
 .table thead th {
   /* vertical-align: middle; */
   /* border-bottom: 2px solid #e3e6f0; */
-  background: #4e73df;
+  background: #394568;
   color: #fff;
   text-align: center;
 }
@@ -2345,8 +2345,8 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #4e73df;
-  border-color: #4e73df;
+  background-color: #394568;
+  border-color: #394568;
 }
 
 .btn-primary:hover {
@@ -4786,8 +4786,8 @@ input[type="button"].btn-block {
 .page-item.active .page-link {
   z-index: 3;
   color: #fff;
-  background-color: #4e73df;
-  border-color: #4e73df;
+  background-color: #394568;
+  border-color: #394568;
 }
 
 .page-item.disabled .page-link {

@@ -106,6 +106,17 @@ public class SearchVO {
         list.add(new SearchVO( "NAME","이름"));
         return list;
     }
+    /**
+     * SearchKeyWord Dropdown리스트
+     * @return
+     */
+    public List<SearchVO> getSearcTempletehKeywordTypeOptionList() {
+        var list = new ArrayList<SearchVO>();
+        list.add(new SearchVO("ALL", "전체"));
+        list.add(new SearchVO("TITLE", "제목"));
+        list.add(new SearchVO( "TYPE","템플릿 타입"));
+        return list;
+    }
 
 
     /**
@@ -115,11 +126,11 @@ public class SearchVO {
     public List<SearchVO> getContractDocSearchStateTypeList(){
         var list = new ArrayList<SearchVO>();
         list.add(new SearchVO("ALL", "전체"));
-        list.add(new SearchVO( "CREATED","생성"));
-        list.add(new SearchVO("ASSIGNED","ASSIGNED"));
-        list.add(new SearchVO("RECALLED","회수"));
-        list.add(new SearchVO("COMPLETED", "완료"));
-        list.add(new SearchVO("PAPER_CONTRACT","수기 계약서"));
+        list.add(new SearchVO( "PRCS1001","생성"));
+        list.add(new SearchVO("PRCS1002","ASSIGNED"));
+        list.add(new SearchVO("PRCS1003","회수"));
+        list.add(new SearchVO("PRCS1004", "완료"));
+        list.add(new SearchVO("PRCS1005","수기 계약서"));
         return list;
     }
     /**
@@ -129,10 +140,10 @@ public class SearchVO {
     public List<SearchVO> getContractSearchStateTypeList() {
         var list = new ArrayList<SearchVO>();
         list.add(new SearchVO("ALL","전체"));
-        list.add(new SearchVO("UNSEEN","확인 전"));
-        list.add(new SearchVO( "VIEW","확인 후"));
-        list.add(new SearchVO("SIGNED", "서명 완료"));
-        list.add(new SearchVO("REJECTED", "거절"));
+        list.add(new SearchVO("PRCS2001","확인 전"));
+        list.add(new SearchVO( "PRCS2002","확인 후"));
+        list.add(new SearchVO("PRCS2003", "서명 완료"));
+        list.add(new SearchVO("PRCS2004", "거절"));
         return list;
     }
 

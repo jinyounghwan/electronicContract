@@ -29,6 +29,8 @@ let searchList = (currentPage , displayRow, totalCount)=> {
     let parameter = {
         searchDateType : $('[data-select="dateRangeSelect"] option:selected').val(),
         searchKeywordType : $('[data-select="keywordTypeSelect"] option:selected').val(),
+        contractDocStatusType : $('[data-select="contractDocSearchStateTypeSelect"] option:selected').val(),
+        contractStatusType : $('[data-select="contractSearchStateTypeSelect"] option:selected').val(),
         startDt: $('#startDt').val(),
         endDt: $('#endDt').val(),
         searchKeyword :$('#searchKeyword').val(),
@@ -404,4 +406,14 @@ let contractComplete = () =>{
     }).fail(function(jqXHR) {
         console.log(jqXHR);
     });
+}
+
+/**
+ * Redirect to Error Page
+ * @param jqXHR
+ */
+let sendToErrorPage = (jqXHR) => {
+    let ex = JSON.parse(jqXHR.responseText);
+    console.log('redirectToErrorPage :: ' + ex);
+    window.location.href='/error/common?message=' + ex.message;
 }

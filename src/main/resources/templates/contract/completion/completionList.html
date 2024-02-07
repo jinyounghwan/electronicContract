@@ -8,7 +8,7 @@
             <!--content-->
             <div class="container-fluid">
                 <h1 class="page-title">완료 계약서</h1>
-                <div th:replace="~{common/contractSignCompletedSearch}"></div>
+                <div th:replace="~{common/contractSignCompletedSearch ::searchBox(${dateRangeSelect} ,${keywordTypeSelect} , ${contractDocSearchStateTypeSelect} ) }" ></div>
                 <div class="card shadow mb-4">
                     <!--<div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
@@ -56,9 +56,9 @@
                                     <td th:text="${row.getContractNo}"></td>
                                     <td th:text="${row.getTemplateTitle}"></td>
                                     <td th:text="${row.getContractTitleEn}"></td>
-                                    <td th:text="${row.getName}"</td>
-                                    <td th:text="${row.empNo}"</td>
-                                    <td th:text="${row.createdAtStr}"</td>
+                                    <td th:text="${row.getName}"></td>
+                                    <td th:text="${row.empNo}"></td>
+                                    <td th:text="${row.createdAtStr}"></td>
                                     <td th:text="${row.signDateAtStr}"></td>
                                     <td th:text="${row.docStatus}"></td>
                                     <td th:text="${row.processStatus}"></td>

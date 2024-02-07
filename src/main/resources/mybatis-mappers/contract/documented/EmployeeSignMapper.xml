@@ -32,7 +32,7 @@
                 , c.name
         , c.sign_date
                 ,ctd.contract_title_en
-        ,date_format(c.assigned_at , '%Y-%m-%d %T')as assigned_at
+        ,date_format(c.assigned_at , '%Y-%m-%d')as assigned_at
              from contracts c
              join contract_template ct
                on c.template_seq = ct.template_seq
@@ -59,9 +59,10 @@
                 , c.updated_by
                 , c.updated_at
                 , c.name
-         , c.sign_date
-        , date_format(c.assigned_at , '%Y-%m-%d %T')as assigned_at
-                ,ctd.contract_title_en
+                , c.dept_code
+                 , c.sign_date
+                , date_format(c.assigned_at , '%Y-%m-%d %T')as assigned_at
+                        ,ctd.contract_title_en
              from contracts c
              join contract_template ct
                on c.template_seq = ct.template_seq

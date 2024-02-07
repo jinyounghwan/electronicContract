@@ -1,14 +1,13 @@
 <html lang="kr" xmlns:th="http://www.thymeleaf.org">
 <!--search box-->
-<div class="databox">
+<div class="databox" th:fragment="searchBox(dateRangeSelect , keywordTypeSelect , contractDocSearchStateTypeSelect , contractSearchStateTypeSelect)">
     <div class="data-linebox">
         <div class="data-line">
             <div class="data-title">date</div>
             <div class="data-select datatable-dropdown">
-
                 <label>
-                    <select class="datatable-selector" th:field="*{dateRangeSelect}" data-select="dateRangeSelect">
-                        <option th:each="e: ${dateRangeSelect}" th:value="${e.getCode()}" th:text="|${e.getDisplayName()}|" th:selected="${e.getCode}">전체</option>
+                    <select class="datatable-selector"  data-select="dateRangeSelect">
+                        <option th:each="e: ${dateRangeSelect}" th:value="${e.getCode()}" th:text="|${e.getDisplayName()}|" th:selected="${e.getCode()} == ${search.searchDateType}">전체</option>
                     </select>
                 </label>
             </div>
@@ -22,8 +21,8 @@
             <div class="data-title">Search</div>
             <div class="data-select datatable-dropdown">
                 <label>
-                    <select class="datatable-selector" th:field="*{keywordTypeSelect}" data-select="keywordTypeSelect">
-                        <option th:each="e: ${keywordTypeSelect}" th:value="${e.getCode()}" th:text="|${e.getDisplayName()}|"  th:selected="${e.getCode} == 'ALL'">전체</option>
+                    <select class="datatable-selector" data-select="keywordTypeSelect">
+                        <option th:each="e: ${keywordTypeSelect}" th:value="${e.getCode()}" th:text="|${e.getDisplayName()}|"  th:selected="${e.getCode()} == ${search.searchKeywordType}">전체</option>
                     </select>
                 </label>
             </div>
@@ -35,8 +34,8 @@
             <div class="data-title">Doc. Status</div>
             <div class="data-select datatable-dropdown" style="width: 48%;">
                 <label>
-                    <select class="datatable-selector" th:field="*{contractDocSearchStateTypeSelect}" data-select="contractDocSearchStateTypeSelect">
-                        <option th:each="e: ${contractDocSearchStateTypeSelect}" th:value="${e.getCode()}" th:text="|${e.getDisplayName()}|" th:selected="${e.getCode} == 'ALL'">전체</option>
+                    <select class="datatable-selector" data-select="contractDocSearchStateTypeSelect">
+                        <option th:each="e: ${contractDocSearchStateTypeSelect}" th:value="${e.getCode()}" th:text="|${e.getDisplayName()}|" th:selected="${e.getCode()} == ${search.contractDocStatusType}">전체</option>
                     </select>
                 </label>
             </div>
@@ -44,8 +43,8 @@
             <div class="data-title" style="width: 20%; margin-left: 1%;">Contract Status</div>
             <div class="data-select datatable-dropdown mr-0">
                 <label>
-                    <select class="datatable-selector" th:field="*{contractSearchStateTypeSelect}" data-select="contractSearchStateTypeSelect">
-                        <option th:each="e: ${contractSearchStateTypeSelect}" th:value="${e.getCode()}" th:text="|${e.getDisplayName()}|" th:selected="${e.getCode} == 'ALL'">전체</option>
+                    <select class="datatable-selector"  data-select="contractSearchStateTypeSelect">
+                        <option th:each="e: ${contractSearchStateTypeSelect}" th:value="${e.getCode()}" th:text="|${e.getDisplayName()}|" th:selected="${e.getCode()} == ${search.contractStatusType}">전체</option>
                     </select>
                 </label>
             </div>
