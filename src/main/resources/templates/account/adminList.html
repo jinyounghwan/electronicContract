@@ -40,7 +40,7 @@
                                 <input type="hidden" name="totalCount" id="totalCount" th:value="${totalCount}">
                                 <tr th:if="${not #lists.isEmpty(list)}" th:each="row, stat : ${list}">
                                     <td th:text="${row.getName()}"></td>
-                                    <td th:text="${row.getAdminId()}"></td>
+                                    <td th:text="${row.getEmpNo()}"></td>
                                     <td th:text="${row.getEmail()}"></td>
                                     <td th:if="${row.getLastLoginStr()} !=''" th:text="${row.getLastLoginStr()}"></td>
                                     <td th:if="${row.getLastLoginStr()}==''">-</td>
@@ -49,8 +49,8 @@
                                     <td th:text="${row.getCreatedAtStr()}"></td>
                                     <td th:if="${row.getUpdatedAtStr()} !=''" th:text="${row.getUpdatedAtStr()}"></td>
                                     <td th:if="${row.getUpdatedAtStr()} ==''">-</td>
-                                    <td><a th:href="@{/account/admin/detail/{userId}(userId=${row.getAdminId()})}" >View </br></a>
-                                        <a th:href="@{/account/admin/edit/{userId}(userId=${row.getAdminId()})}">Edit</a>
+                                    <td><a th:href="@{/account/admin/detail/{userId}(userId=${row.getEmpNo()})}" >View </br></a>
+                                        <a th:href="@{/account/admin/edit/{userId}(userId=${row.getEmpNo()})}">Edit</a>
                                     </td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(list)}">
