@@ -40,7 +40,7 @@
                                         <th>Name</th>
                                         <th>employee ID</th>
                                         <th>Created</th>
-                                        <th>Assigned</th>
+                                        <th>Recalled</th>
                                         <th>Doc. Status</th>
                                         <th>Contract Status</th>
                                         <th>Action</th>
@@ -70,7 +70,7 @@
                                             <td th:text="${item.name}"></td>
                                             <td th:text="${item.empNo}"></td>
                                             <td th:text="${item.createdAt}"></td>
-                                            <td th:text="${item.signatureDataNo}"></td>
+                                            <td th:text="${item.updatedAt}"></td>
                                             <td th:text="${item.docStatus}"></td>
                                             <td th:text="${item.processStatus}"></td>
                                             <td><a th:href="@{/contract/sign/recall/info/{seq}(seq=${item.contractNo})}" >View</a></td>
