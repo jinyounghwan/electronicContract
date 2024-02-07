@@ -36,6 +36,7 @@
             <foreach collection="processStatusTypeList" item="item" open="(" close=")" separator=", ">
                 #{item}
             </foreach>
+        LIMIT #{paging.displayRow} OFFSET #{paging.offset}
     </select>
 
     <select id="getPaperCompInfo" parameterType="long" resultType="ContractCompVO">
