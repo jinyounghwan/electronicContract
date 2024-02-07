@@ -59,10 +59,10 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" th:onclick="closeContractView()">Close</button>
                 <!--${session.loginInfo == null}-->
-<!--                <button type="button" class="btn btn-primary" th:if="${session.admin  == null}" >Reject</button>-->
-<!--                <button type="button" class="btn btn-primary" th:if="${session.admin  == null}" >Complete</button>-->
-                <button type="button" class="btn btn-primary"  th:onclick="rejectConfirm()" >Reject</button>
-                <button type="button" class="btn btn-primary" th:onclick="contractComplete()" >Agreement</button>
+                <button type="button" class="btn btn-primary" th:if="${session.adminId  == null}" >Reject</button>
+                <button type="button" class="btn btn-primary" th:if="${session.adminId  == null}" >Complete</button>
+<!--                <button type="button" class="btn btn-primary"  th:onclick="rejectConfirm()" >Reject</button>-->
+<!--                <button type="button" class="btn btn-primary" th:onclick="contractComplete()" >Agreement</button>-->
             </div>
         </div>
     </div>
