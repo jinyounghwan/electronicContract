@@ -239,7 +239,7 @@ public class AccountService {
             //로그 저장
              var logSaveRequest = LogSaveRequest.builder()
                     .logType(LogTypeEnum.PASSWORD_CHANGE)
-                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemoteAddr())
+                     .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
                     .createdBy(String.valueOf(account.getUserId()))
                     .build();
 
@@ -278,7 +278,7 @@ public class AccountService {
             //로그 저장
             var logSaveRequest = LogSaveRequest.builder()
                     .logType(LogTypeEnum.PASSWORD_CHANGE)
-                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemoteAddr())
+                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
                     .createdBy(String.valueOf(account.getUserId()))
                     .build();
             logUtil.saveLog(logSaveRequest);
@@ -311,7 +311,7 @@ public class AccountService {
             //로그 저장
             var logSaveRequest = LogSaveRequest.builder()
                     .logType(LogTypeEnum.PASSWORD_CHANGE)
-                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemoteAddr())
+                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
                     .createdBy(String.valueOf(account.getUserId()))
                     .build();
             logUtil.saveLog(logSaveRequest);

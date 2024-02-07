@@ -78,7 +78,7 @@ public class ContractCompService {
 
             var logSaveRequest = LogSaveRequest.builder()
                     .logType(ContractProcessEnum.getProcessStatus(ContractProcessEnum.processCode(ContractProcessEnum.LOG_SIGN_N_COMPLETE)))
-                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemoteAddr())
+                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
                     .createdBy(String.valueOf(account.getEmpNo()))
                     .contractNo(String.valueOf(target.getContractNo()))
                     .build();
