@@ -32,7 +32,7 @@
                                     </tr>
                                     <tr>
                                         <th>Assigned</th>
-                                        <td th:text="${info.getSignDateStr()} + ', ' + ${info.getCreatedBy()}"></td>
+                                        <td th:text="${info.getSignDateAtStr()} + ', ' + ${info.getCreatedBy()}"></td>
                                     </tr>
                                     <tr>
                                         <th>Doc. Status</th>
@@ -70,7 +70,7 @@
                                     </tr>
                                     <tr>
                                         <th>Assigned</th>
-                                        <td th:text="${info.getSignDateStr()}"></td>
+                                        <td th:text="${info.getSignDateAtStr()}"></td>
                                     </tr>
                                     </tbody>
                                 </table>
