@@ -39,7 +39,7 @@
              join contract_template_details ctd
                on ct.template_seq = ctd.template_seq
             where c.del_yn = 'N'
-              and doc_status ='PRCS1001'
+              and doc_status = 'PRCS1002'
               and process_status in ('PRCS2001','PRCS2002')
               and emp_no = #{empNo}
             LIMIT #{paging.displayRow} OFFSET #{paging.offset}
