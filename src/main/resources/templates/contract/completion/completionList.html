@@ -101,12 +101,12 @@
                 dataType:'text',
                 contentType: 'application/json; charset=UTF-8',
                 data: JSON.stringify(search)
-            })
+                })
                 .done(function(data){
                     $('#content-wrapper').replaceWith(data);
                 })
                 .fail(function(jqXHR){
-                    console.log(jqXHR);
+                    sendToErrorPage(jqXHR);
                 });
         }
     </script>

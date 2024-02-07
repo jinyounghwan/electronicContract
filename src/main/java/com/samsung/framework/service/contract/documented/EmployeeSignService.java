@@ -48,7 +48,7 @@ public class EmployeeSignService {
         if(!viewed){
             LogSaveRequest saveRequest = LogSaveRequest.builder().logType(LogTypeEnum.LOG_VIEW)
                      .processStep(LogTypeEnum.LOG_VIEW.getDescription())
-                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemoteAddr())
+                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
                     .createdBy(account.getAdminId())
                     .contractNo(StringUtil.getString(seq))
                     .build();
@@ -68,7 +68,7 @@ public class EmployeeSignService {
 
         LogSaveRequest saveRequest = LogSaveRequest.builder().logType(LogTypeEnum.getLogTypeEnum(contractVO.getProcessStatus()))
                  .processStep(LogTypeEnum.getLogDescription(contractVO.getProcessStatus()))
-                .ipAddress(request.getRemoteAddr() + ":" + request.getRemoteAddr())
+                .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
                 .createdBy(account.getAdminId())
                 .contractNo(StringUtil.getString(contractVO.getContractNo()))
                 .build();

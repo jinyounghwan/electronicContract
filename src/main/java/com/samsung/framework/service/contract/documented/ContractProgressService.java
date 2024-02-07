@@ -106,7 +106,7 @@ public class ContractProgressService {
         // 저장이 성공 되었을 때
         LogSaveRequest saveRequest = LogSaveRequest.builder().logType(type)
                // .processStep(type.getDescription())
-                .ipAddress(request.getRemoteAddr() + ":" + request.getRemoteAddr())
+                .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
                 .createdBy(account.getAdminId())
                 .contractNo(StringUtil.getString(progress.getContractNo()))
                 .build();
