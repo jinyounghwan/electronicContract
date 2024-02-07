@@ -9,14 +9,8 @@
         INNER JOIN  CONTRACT_TEMPLATE CT ON C.TEMPLATE_SEQ = CT.TEMPLATE_SEQ
         INNER JOIN CONTRACT_TEMPLATE_DETAILS CTD ON C.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
         WHERE
-        DOC_STATUS IN
-        <foreach collection="contractDocStatusTypeList" item="item" open="(" close=")" separator=", ">
-            #{item}
-        </foreach>
-        OR C.PROCESS_STATUS IN
-        <foreach collection="processStatusTypeList" item="item" open="(" close=")" separator=", ">
-            #{item}
-        </foreach>
+            DOC_STATUS IN('PRCS1004','PRCS1005')
+        AND C.PROCESS_STATUS  IN('PRCS2003','PRCS2004')
         AND C.EMP_NO = #{empNo}
     </select>
 
@@ -28,14 +22,9 @@
             INNER JOIN  CONTRACT_TEMPLATE CT ON C.TEMPLATE_SEQ = CT.TEMPLATE_SEQ
             INNER JOIN CONTRACT_TEMPLATE_DETAILS CTD ON C.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
         WHERE
-            C.DOC_STATUS IN
-            <foreach collection="contractDocStatusTypeList" item="item" open="(" close=")" separator=", ">
-                #{item}
-            </foreach>
-            OR C.PROCESS_STATUS IN
-            <foreach collection="processStatusTypeList" item="item" open="(" close=")" separator=", ">
-                #{item}
-            </foreach>
+            DOC_STATUS IN('PRCS1004','PRCS1005')
+          AND C.PROCESS_STATUS  IN('PRCS2003','PRCS2004')
+          AND C.EMP_NO = #{empNo}
         LIMIT #{paging.displayRow} OFFSET #{paging.offset}
     </select>
 

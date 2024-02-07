@@ -65,12 +65,12 @@
                 userId: adminId
             };
             if(data.password !== data.confirmPassword){
-                alert("패스워드가 일치하지 않습니다.");
+                openAlert("패스워드가 일치하지 않습니다.");
                 return false;
             }
 
             if(data.password==='' && data.confirmPassword===''){
-                alert("패스워드를 입력해주세요.");
+                openAlert("패스워드를 입력해주세요.");
                 return false;
             }
             $.ajax({
