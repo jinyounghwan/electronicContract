@@ -26,7 +26,7 @@
                     and ct.template_title like concat('%',#{searchKeyword},'%')
                 </when>
                 <when test="searchKeywordType == 'EMPLOYEE_ID'">
-                    and ct.emp_no like concat('%',#{searchKeyword},'%')
+                    and c.emp_no like concat('%',#{searchKeyword},'%')
                 </when>
                 <when test="searchKeywordType == 'NAME'">
                     and c.name like concat('%',#{searchKeyword},'%')
