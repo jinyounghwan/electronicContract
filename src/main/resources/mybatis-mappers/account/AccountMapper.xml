@@ -71,7 +71,8 @@
 
     <select id = "getAccountList" resultType="AccountVO">
         WITH LOG AS (
-            SELECT CREATED_BY AS CREATED_BY, MAX(CREATED_AT) AS LAST_LOGIN
+            SELECT CREATED_BY AS CREATED_BY, MAX(CREATED_AT) AS LAST_LOGIN,
+                   CREATED_AT AS CREATED_AT, LOG_TYPE AS LOG_TYPE
             FROM PROCESS_LOG
             GROUP BY CREATED_BY
             ORDER BY CREATED_AT DESC
@@ -79,7 +80,7 @@
         SELECT  DISTINCT  U.EMP_NO AS EMP_NO , U.ADMIN_ID AS ADMIN_ID
                 , U.CREATED_AT AS CREATED_AT , U.UPDATED_AT AS UPDATED_AT
                 , L.LAST_LOGIN AS LAST_LOGIN , U.NAME AS NAME
-                , U.EMAIL AS EMAIL
+                , U.EMAIL AS EMAIL , (SELECT (L.CREATED_AT) FROM LOG WHERE LOG_TYPE='PASSWORD_CHANGE') AS PASSWORD_AT
         FROM USERS U
             LEFT JOIN LOG L ON U.EMP_NO = L.CREATED_BY
         WHERE
@@ -122,7 +123,7 @@
         LEFT JOIN LOG L ON U.EMP_NO = L.CREATED_BY
         WHERE
             ADMIN_ID = #{userId}
-            OR EMP_NO = #{userId}
+            OR EMP_NO = #{userId} AND EMP_NO <![CDATA[<>]]> 0
     </select>
 
 
