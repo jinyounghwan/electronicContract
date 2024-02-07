@@ -91,6 +91,7 @@ public class ContractsViewService {
                 .jobTitleEn(view.getJobTitleEn())
                 .jobTitleHu(view.getJobTitleHu())
                 .docStatus(view.getDocStatus())
+                .processStatus(view.getProcessStatus())
                 .build();
     }
     private String replaceWageType(String type){
