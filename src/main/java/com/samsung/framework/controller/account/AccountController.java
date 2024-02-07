@@ -189,7 +189,7 @@ public class AccountController {
 
             var logSaveRequest = LogSaveRequest.builder()
                     .logType(LogTypeEnum.LOGIN)
-                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemoteAddr())
+                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
                     .createdBy(String.valueOf(loginRequest.getUserId()))
                     .build();
 
