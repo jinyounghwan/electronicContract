@@ -145,4 +145,10 @@
         WHERE
             C.CONTRACT_NO = #{contractNo}
     </select>
+
+    <select id="getContractTemplateSeq" resultType="Integer">
+        SELECT TEMPLATE_SEQ AS TEMPLATE_SEQ
+        FROM CONTRACT_TEMPLATE
+        WHERE TEMPLATE_TYPE = #{templateType}
+    </select>
 </mapper>

@@ -42,6 +42,9 @@ public class ContractCompService {
             String hireDateHu = DateUtil.convertLocalDateTimeToString(ghrAccount.getHireDate(),"YYYY-MM-dd");
             String hireDateEn = DateUtil.convertLocalDateTimeToString(ghrAccount.getHireDate(),"MM/dd/YYYY");
 
+            // contract_template에서 TemplateType 해당 하는 TemplateSeq를 가져온다.
+            int templateSeq = contractCompletionMapper.getContractTemplateSeq(contract.getTemplateType());
+
             // 파일 업로드 (저장)
             List<FilePublicVO> list = fileService.uploadFile(file, "CONTRACT");
             List<FilePublicVO> targetList =fileService.saveFile(list, String.valueOf(account.getEmpNo()));
@@ -63,7 +66,7 @@ public class ContractCompService {
                     .validation("Y")
                     .agreeYn("N")
                     .delYn("N")
-                    .templateSeq(1)
+                    .templateSeq(templateSeq)
                     .empNo(ghrAccount.getEmpNo())
                     .build();
             result.put("code", 200);
