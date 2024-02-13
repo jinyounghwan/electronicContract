@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum ExceptionCodeMsgEnum {
 
     // SERVER
-    SERVER_ERROR(999, "SERVER ERROR")
+      SERVER_ERROR(999, "SERVER ERROR")
     , SERVER_DATA_ERROR(998, "서버 데이터 에러")
     , NOT_EQUAL_OBJECT_SIZE(997, "비교 객체의 사이즈가 불일치 합니다.")
     , INVALID_NUMBER_FORMAT(996, "잘못된 숫자 형식 입니다.")

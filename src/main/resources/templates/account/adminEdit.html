@@ -63,7 +63,7 @@
             let firstName = $('input[name=firstName]').val();
 
             if( (lastName!=='' && firstName==='') && (lastName==='' && firstName!=='') ){
-                alert("lastName 또는 FirstName이 비어있습니다.");
+                openAlert("lastName 또는 FirstName이 비어있습니다.");
                 return false;
             }
 
@@ -76,7 +76,7 @@
             };
 
             if(data.password !== data.confirmPassword){
-                alert("패스워드가 일치하지 않습니다.");
+                openAlert("패스워드가 일치하지 않습니다.");
                 return false;
             }
 

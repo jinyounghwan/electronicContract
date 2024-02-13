@@ -341,10 +341,16 @@ public class AccountController {
 
     @PostMapping("/api/pwdChange")
     @ResponseBody
-    public ResponseEntity updPwd(HttpServletRequest request, @RequestBody PwdChangeRequest pwdChangeRequest) throws NoSuchAlgorithmException {
+    public ResponseEntity updPwd(HttpServletRequest request, @RequestBody PwdChangeRequest pwdChangeRequest) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         HttpSession session = request.getSession();
         AccountVO loginInfo = (AccountVO) session.getAttribute("loginInfo");
+
+        // 관리자 계정, 임직원 계정 체크 로직
+        AccountVO accountVO = accountService.getSessionAccount(request);
+        boolean adminIdCheck = StringUtil.isEmpty(accountVO.getAdminId());
         Map<String, Object> result = accountService.updPwd(request, pwdChangeRequest, loginInfo);
+
+        result.put("adminIdCheck", adminIdCheck);
         return ResponseEntity.ok(result);
     }
 
