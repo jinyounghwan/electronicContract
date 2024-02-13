@@ -35,7 +35,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
             , "/account/api/**", "/account/myInfo/**"
             , "/contract/sign/wait/**", "/contract/sign/paper/comp/**"
             , "/account/pwdChange", "/contract/view"
-            , "/file/download/**");
+            , "/file/download/**", "/contract/view/history");
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
