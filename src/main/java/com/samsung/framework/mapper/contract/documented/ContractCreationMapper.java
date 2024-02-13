@@ -7,4 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ContractCreationMapper {
 
     int saveContract(ContractVO contractVO);
+
+    int saveContractDetail(ContractVO contractVO);
 }

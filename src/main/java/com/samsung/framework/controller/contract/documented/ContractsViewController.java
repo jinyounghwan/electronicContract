@@ -2,6 +2,7 @@ package com.samsung.framework.controller.contract.documented;
 
 import com.samsung.framework.domain.contract.ProgressRequest;
 import com.samsung.framework.service.contract.documented.ContractsViewService;
+import com.samsung.framework.vo.contract.view.ContractView;
 import com.samsung.framework.vo.contract.view.HistoryVO;
 import com.samsung.framework.vo.contract.view.ViewInfo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,8 +28,8 @@ public class ContractsViewController {
     @PostMapping(value = {"",""})
     @ResponseBody
     public ResponseEntity getContractView(HttpServletRequest request , @RequestBody ProgressRequest param){
-        ViewInfo o = contractsViewService.getContractView(request , param);
-        return ResponseEntity.ok(o);
+        ContractView view = contractsViewService.getContractView(request , param);
+        return ResponseEntity.ok(view);
     }
     @PostMapping(value="/history")
     @ResponseBody

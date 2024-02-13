@@ -38,7 +38,7 @@
                                         <td th:text="${item.templateType}"></td>
                                         <td th:utext="${item.contractTitleEn}"></td>
                                         <td th:text="${item.createdAt}"></td>
-                                        <td th:text="${item.updatedAt}"></td>
+                                        <td th:text="${item.updatedAt} ? ${item.updatedAt} : '-' "></td>
                                         <td><a th:href="@{/contract/template/info/{seq}(seq=${item.templateSeq})}"> View</a> <br>
                                             <a th:href="@{/contract/template/edit/{seq}(seq=${item.templateSeq})}">Edit</a>
                                         </td>

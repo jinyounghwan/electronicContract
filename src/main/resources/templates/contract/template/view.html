@@ -40,7 +40,7 @@
                                     </tr>
                                     <tr>
                                         <th>Modified</th>
-                                        <td th:if="${not #strings.isEmpty(info.getUpdatedAt())}"  th:text="${info.getUpdatedAt()} +' , '+${info.getUpdatedBy()}">2023-09-11  16:03:01 , admin34</td>
+                                        <td th:text="${info.getUpdatedAt()} ? ${info.getUpdatedAt()} +' , '+${info.getUpdatedBy()} : '-'">2023-09-11  16:03:01 , admin34</td>
 
                                     </tr>
                                     </tbody>
@@ -72,18 +72,18 @@
                                     </tr>
                                     <tr>
                                         <th>Contract Detail</th>
-                                        <td th:text="${info.contentsHu}"></td>
-                                        <td th:text="${info.contentsEn}"></td>
+                                        <td th:utext="${info.contentsHu}"></td>
+                                        <td th:utext="${info.contentsEn}"></td>
                                     </tr>
                                     <tr>
                                         <th>Contract Info</th>
-                                        <td th:text="${info.employerInfoHu}"></td>
-                                        <td th:text="${info.employerInfoEn}"></td>
+                                        <td th:utext="${info.contractInfoHu}"></td>
+                                        <td th:utext="${info.contractInfoEn}"></td>
                                     </tr>
                                     <tr>
                                         <th>Signature Area</th>
-                                        <td th:text="${info.employeeInfoHu}" ></td>
-                                        <td th:text="${info.employeeInfoEn}" ></td>
+                                        <td th:utext="${info.employeeInfoHu}" ></td>
+                                        <td th:utext="${info.employeeInfoEn}" ></td>
                                     </tr>
                                     </tbody>
                                 </table>

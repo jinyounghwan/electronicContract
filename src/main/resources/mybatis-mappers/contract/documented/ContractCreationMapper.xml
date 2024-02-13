@@ -45,8 +45,44 @@
                               , #{createdBy}
                               , #{contractDateHu}
                               , #{contractDateEn}
-
                                )
+
+    </insert>
+    <insert id="saveContractDetail" parameterType="ContractVO">
+        insert into individual_contract_template_details (
+                                                            template_details_seq
+                                                            , contract_no
+                                                            , emp_no
+                                                            , contract_title_en
+                                                            , contract_title_hu
+                                                            , contents_en
+                                                            , contents_hu
+                                                            , contract_info_en
+                                                            , contract_info_hu
+                                                            , employer_info_en
+                                                            , employer_info_hu
+                                                            , employee_info_en
+                                                            , employee_info_hu
+                                                            , created_by
+                                                            , created_at
+                                                            )
+                                                     values(
+                                                              #{templateDetailsSeq}
+                                                            , #{contractNo}
+                                                            , #{empNo}
+                                                            , #{contractTitleEn}
+                                                            , #{contractTitleHu}
+                                                            , #{contentsEn}
+                                                            , #{contentsHu}
+                                                            , #{contractInfoEn}
+                                                            , #{contractInfoHu}
+                                                            , #{employerInfoEn}
+                                                            , #{employerInfoHu}
+                                                            , #{employeeInfoEn}
+                                                            , #{employeeInfoHu}
+                                                            , #{createdBy}
+                                                            , now()
+                                                            )
 
     </insert>
 

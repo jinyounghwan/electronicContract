@@ -28,4 +28,7 @@ public class ContractTemplateVO {
     private String updatedBy;
     private String updatedAt;
     private int nextSeq;
+    private String contractInfoEn;
+    private String contractInfoHu;
+    private int templateDetailsSeq;
 }

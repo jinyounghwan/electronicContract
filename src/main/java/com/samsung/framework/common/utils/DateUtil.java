@@ -108,6 +108,16 @@ public class DateUtil {
         Date date = sf.parse(day);
         return date;
     }
+    public static String getFormatDate(String day, String pattern)  {
+        log.info("pars day:" + day);
+        SimpleDateFormat sf = new SimpleDateFormat(pattern);
+        try{
+            Date date = sf.parse(day);
+            return date.toString();
+        }catch (Exception e){
+            return null;
+        }
+    }
 
     /**
      * @desc yyyy-MM-dd HH:mm:ss

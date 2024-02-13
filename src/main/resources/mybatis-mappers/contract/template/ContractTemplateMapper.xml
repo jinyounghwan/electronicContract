@@ -73,15 +73,17 @@
                 , date_format(ct.updated_at , '%Y-%m-%d %T')as updated_at
                 , CTD.CONTRACT_TITLE_EN
                 , CTD.CONTRACT_TITLE_HU
-                , CTD.CONTRACT_TITLE_EN
                 , CTD.CONTENTS_EN
                 , CTD.CONTENTS_HU
                 , CTD.EMPLOYER_INFO_HU
                 , CTD.EMPLOYER_INFO_EN
                 , CTD.EMPLOYEE_INFO_HU
                 , CTD.EMPLOYEE_INFO_EN
+                , CTD.CONTRACT_INFO_EN
+                , CTD.CONTRACT_INFO_HU
                 , CT.UPDATED_BY
                 , CT.CREATED_BY
+                , CTD.TEMPLATE_DETAILS_SEQ
              FROM CONTRACT_TEMPLATE CT
              JOIN CONTRACT_TEMPLATE_DETAILS CTD
                ON CT.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
@@ -141,6 +143,8 @@
                                                 , employee_info_hu
                                                 , created_by
                                                 , created_at
+                                                , contract_info_en
+                                                , contract_info_hu
                                                 )
                                            select #{nextSeq} as template_seq
                                                 , contract_title_en
@@ -153,6 +157,8 @@
                                                 , employee_info_hu
                                                 , #{createdBy}  as created_by
                                                 , now() as created_at
+                                                , contract_info_en
+                                                , contract_info_hu
                                              from contract_template_details ctd
                                             where ctd.template_seq = #{templateSeq}
     </insert>
