@@ -92,6 +92,7 @@
         WHERE
             ACCOUNT_TYPE = #{accountType}
         <include refid="search"/>
+        ORDER BY CREATED_AT DESC
         LIMIT #{paging.displayRow} OFFSET #{paging.offset}
     </select>
 
