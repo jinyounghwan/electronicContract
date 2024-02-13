@@ -41,7 +41,7 @@
                                             <div class="data-select datatable-dropdown">
                                                 <label>
                                                     <select id="templateType" class="datatable-selector" th:field="*{templateTypeSelect}" data-select="keywordTypeSelect">
-                                                        <option th:each="e: ${templateTypeSelect}" th:value="${e.getCode()}" th:text="|${e.getDisplayName()}|"></option>
+                                                        <option th:each="e: ${templateTypeSelect}" th:value="${e.getTemplateSeq()}" th:text="|${e.getTemplateTitle()}|"></option>
                                                     </select>
                                                 </label>
                                             </div>
@@ -90,7 +90,7 @@
         let registrationPaperContarct = () => {
             const data = {
                 empNo : $('input[name=employeeId]').val(),
-                templateType : $('#templateType option:selected').val(),
+                templateSeq : $('#templateType option:selected').val(),
                 name : $('input[name=subject]').val(),
                 contractDate : $('input[name=date]').val()
             }

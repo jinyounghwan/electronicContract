@@ -8,10 +8,12 @@ import com.samsung.framework.domain.account.ghr.GhrAccount;
 import com.samsung.framework.domain.contract.paper.ContractComp;
 import com.samsung.framework.domain.log.LogSaveRequest;
 import com.samsung.framework.mapper.contract.documented.ContractCompletionMapper;
+import com.samsung.framework.mapper.contract.template.ContractTemplateMapper;
 import com.samsung.framework.service.account.ghr.GhrAccountService;
 import com.samsung.framework.service.file.FileService;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.contract.completion.ContractCompVO;
+import com.samsung.framework.vo.contract.template.Template;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.search.SearchVO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +32,7 @@ import java.util.Map;
 @Service
 public class ContractCompService {
     private final GhrAccountService ghrAccountService;
+    private final ContractTemplateMapper contractTemplateMapper;
     private final ContractCompletionMapper contractCompletionMapper;
     private final FileService fileService;
     private final LogUtil logUtil;
@@ -41,9 +44,6 @@ public class ContractCompService {
             // 시간 변경
             String hireDateHu = DateUtil.convertLocalDateTimeToString(ghrAccount.getHireDate(),"YYYY-MM-dd");
             String hireDateEn = DateUtil.convertLocalDateTimeToString(ghrAccount.getHireDate(),"MM/dd/YYYY");
-
-            // contract_template에서 TemplateType 해당 하는 TemplateSeq를 가져온다.
-            int templateSeq = contractCompletionMapper.getContractTemplateSeq(contract.getTemplateType());
 
             // 파일 업로드 (저장)
             List<FilePublicVO> list = fileService.uploadFile(file, "CONTRACT");
@@ -66,7 +66,7 @@ public class ContractCompService {
                     .validation("Y")
                     .agreeYn("N")
                     .delYn("N")
-                    .templateSeq(templateSeq)
+                    .templateSeq(contract.getTemplateSeq())
                     .empNo(ghrAccount.getEmpNo())
                     .build();
             result.put("code", 200);
@@ -123,4 +123,7 @@ public class ContractCompService {
         return contract;
    }
 
+    public List<Template> getTemplateCode() {
+        return contractTemplateMapper.getTemplateCode();
+    }
 }

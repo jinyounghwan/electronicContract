@@ -6,10 +6,12 @@ import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.domain.contract.paper.ContractComp;
 import com.samsung.framework.domain.log.LogSaveRequest;
+import com.samsung.framework.mapper.contract.template.ContractTemplateMapper;
 import com.samsung.framework.service.account.ghr.GhrAccountService;
 import com.samsung.framework.service.contract.documented.ContractCompService;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.contract.completion.ContractCompVO;
+import com.samsung.framework.vo.contract.template.Template;
 import com.samsung.framework.vo.log.LogSaveResponse;
 import com.samsung.framework.vo.search.SearchVO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -81,9 +83,8 @@ public class ContractCompletionController {
     }
 
     @ModelAttribute("templateTypeSelect")
-    public List<SearchVO> templateTypeOptionList(){
-        SearchVO list = new SearchVO();
-        return list.getTemplateSearchKeywordTypeOptionList();
+    public List<Template> templateTypeOptionList(){
+        return contractCompletionService.getTemplateCode();
     }
 
     @GetMapping({"","/"})
@@ -143,4 +144,5 @@ public class ContractCompletionController {
 
         return mv;
     }
+
 }
