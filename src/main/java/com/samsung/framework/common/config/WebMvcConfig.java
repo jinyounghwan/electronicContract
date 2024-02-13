@@ -33,7 +33,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final List<String> authorityExcludePattern = Arrays.asList("/static/js/**", "/static/lib/**/**", "/static/css/**", "/error", "/resources/**", "/static/**" ,"/menu/**", "/img/**"
             , "/account/login", "/account/logout"
             , "/account/api/**", "/account/myInfo/**"
-            , "/contract/sign/wait/**", "/contract/sign/paper/comp/**");
+            , "/contract/sign/wait/**", "/contract/sign/paper/comp/**"
+            , "/account/pwdChange", "/contract/view"
+            , "/file/download/**", "/contract/view/history");
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

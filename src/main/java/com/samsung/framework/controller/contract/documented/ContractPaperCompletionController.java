@@ -1,5 +1,7 @@
 package com.samsung.framework.controller.contract.documented;
 
+import com.samsung.framework.common.enums.ContractProcessEnum;
+import com.samsung.framework.common.enums.ContractTemplateEnum;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.service.account.AccountService;
 import com.samsung.framework.service.contract.documented.ContractPaperCompService;
@@ -56,6 +58,7 @@ public class ContractPaperCompletionController {
     public ModelAndView getPaperCompInfo(ModelAndView mv, @PathVariable long contractNo){
         ContractCompVO  contractCompVO = contractPaperCompService.getPaperCompInfo(contractNo);
         mv.setViewName("contract/completion/contractPaperCompletion-detail");
+        contractCompVO.setDocStatus(ContractProcessEnum.getProcessStatus(contractCompVO.getDocStatus()));
         mv.addObject("info", contractCompVO);
         return mv;
     }
