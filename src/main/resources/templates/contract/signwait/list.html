@@ -43,7 +43,7 @@
                                 </thead>
                                 <tbody>
                                     <tr th:if="${not #lists.isEmpty(list)}" th:each="item, stat : ${list}">
-                                        <td th:text="${item.contractTitleEn}"></td>
+                                        <td th:utext="${item.contractTitleEn}"></td>
                                         <td th:text="${item.name}"></td>
                                         <td th:text="${item.empNo}"></td>
                                         <td th:text="${item.assignedAt}"></td>

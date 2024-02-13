@@ -44,7 +44,7 @@
                                 <tbody>
                                 <input type="hidden" name="totalCount" id="totalCount" th:value="${totalCount}">
                                 <tr th:if="${not #lists.isEmpty(list)}" th:each="item, stat : ${list}">
-                                    <td th:text="${item.contractTitleEn}"></td>
+                                    <td th:utext="${item.contractTitleEn}"></td>
                                     <td th:text="${item.name}"></td>
                                     <td th:text="${item.empNo}"></td>
                                     <td th:text="${item.createdAtStr}"></td>
