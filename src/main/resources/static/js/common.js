@@ -251,8 +251,6 @@ let viewContract = (seq) =>{
         contentType: 'application/json; charset=UTF-8',
     }).done(function(data) {
         console.log(data);
-        console.log(data['contractTitleHu']);
-        console.log(!isEmpty(data));
         if(!isEmpty(data)){
             $('[data-select]').each(function(index, item){
                 var $this = $(item);
@@ -261,7 +259,6 @@ let viewContract = (seq) =>{
             });
             $('[data-target="view"]').attr('style' , 'display:block');
             $('[data-target="viewBackground"]').attr('class' , 'modal-backdrop');
-            console.log(data.docStatus);
             if(data.docStatus == 'PRCS1002' && (data.processStatus != 'PRCS2003' || data.processStatus != 'PRCS2004')){
                 $('[data-target="statusBtn"]').show();
             }

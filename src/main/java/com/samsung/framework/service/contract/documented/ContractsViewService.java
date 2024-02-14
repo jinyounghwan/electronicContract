@@ -1,5 +1,7 @@
 package com.samsung.framework.service.contract.documented;
 
+import com.samsung.framework.common.enums.ContractProcessEnum;
+import com.samsung.framework.common.enums.LogTypeEnum;
 import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.common.utils.VariableHandlingUtil;
 import com.samsung.framework.domain.common.Variables;
@@ -44,6 +46,8 @@ public class ContractsViewService {
     }
 
     public List<HistoryVO> getContractHistoryView(HttpServletRequest request, ProgressRequest param) {
-        return  logMapper.getContractLogList(param.getContractNo());
+        List<HistoryVO> list =  logMapper.getContractLogList(param.getContractNo());
+        list.forEach(e -> e.setProcessStep(LogTypeEnum.getAction(e.getProcessStep())));
+        return  list;
     }
 }

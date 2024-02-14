@@ -4,7 +4,8 @@
 
 <mapper namespace="com.samsung.framework.mapper.contract.documented.ContractSignRejectMapper">
     <sql id="whereClause">
-        and process_status = 'PRCS2004'
+        and c.process_status = 'PRCS2004'
+        and c.doc_status = 'PRCS1004'
         <if test="(startDt != null and startDt != '') and (endDt != null and endDt != '')">
             <choose>
                 <when test="searchDateType == 'CREATED_AT'">

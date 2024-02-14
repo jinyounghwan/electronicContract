@@ -8,20 +8,21 @@ import lombok.Getter;
 public enum LogTypeEnum {
 
 
-    LOGIN("로그인")
-    , CONTRACT_PROCESS("계약서 진행상황")
-    , LOG_CREATE("PRCS3001")
-    , LOG_ASSIGN("PRCS3002")
-    , LOG_RECALL("PRCS3003")
-    , LOG_SIGN_N_COMPLETE("PRCS3004")
-    , LOG_REJECT("PRCS3005")
-    , LOG_DOWNLOAD("PRCS3006")
-    , LOG_PAPER_SIGN("PRCS3007")
-    , LOG_VIEW("PRCS3008")
-    ,PASSWORD_CHANGE("패스워드 변경");
+    LOGIN("로그인" , "LOGIN")
+    , CONTRACT_PROCESS("계약서 진행상황" , "Contract Progress")
+    , LOG_CREATE("PRCS3001","Create")
+    , LOG_ASSIGN("PRCS3002" ,"Assign")
+    , LOG_RECALL("PRCS3003" , "Recall")
+    , LOG_SIGN_N_COMPLETE("PRCS3004","Sign & Complete")
+    , LOG_REJECT("PRCS3005" ,"Reject")
+    , LOG_DOWNLOAD("PRCS3006","Download")
+    , LOG_PAPER_SIGN("PRCS3007","Paper Sign")
+    , LOG_VIEW("PRCS3008" , "View")
+    ,PASSWORD_CHANGE("패스워드 변경" , "Password Change");
 
 
     private String description;
+    private String action;
 
     public static LogTypeEnum getLogTypeEnum (String target){
         if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.REJECTED))){
@@ -38,6 +39,15 @@ public enum LogTypeEnum {
             return LogTypeEnum.LOG_ASSIGN.getDescription();
         }
         return null;
+    }
+
+    public static String getAction(String processCode ){
+        for (LogTypeEnum item : LogTypeEnum.values()){
+            if(processCode.equals(item.getDescription())){
+                return item.action.toString();
+            }
+        }
+        return new String();
     }
 
 }
