@@ -7,6 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Setter
 public class HistoryVO {
     private String logType;
     private String processStep;
