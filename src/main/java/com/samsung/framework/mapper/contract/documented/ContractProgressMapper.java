@@ -18,4 +18,6 @@ public interface ContractProgressMapper {
     ContractVO getContractProgressInfo(String seq);
 
     int updateContractDocStatusInfo(ProgressRequest progressRequest);
+
+    int updateProgressStatus(String seq);
 }

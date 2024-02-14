@@ -28,11 +28,11 @@
                     </tr>
                     <tr>
                       <th>Created</th>
-                      <td th:text="${info.createdAt}">2023-09-10  08:14:59 , admin12</td>
+                      <td th:text="${info.createdAt} + ' , '+ ${info.createdBy} ">2023-09-10  08:14:59 , admin12</td>
                     </tr>
                     <tr>
                       <th>Assigned</th>
-                      <td th:text="${info.assignedAt} ?${info.assignedAt} :'-' ">2023-09-10  08:14:59 , admin12</td>
+                      <td th:text="${info.assignedAt} ? ${info.assignedAt} + ' , '+ ${info.assignedBy} : '-' ">2023-09-10  08:14:59 , admin12</td>
                     </tr>
                     <tr>
                       <th>Doc. Status</th>
@@ -66,11 +66,11 @@
                 </tr>
                 <tr>
                   <th>Contracting Party</th>
-                  <td th:text="${info.name} + '/' + ${info.deptCode}">Hong Gildong / 08015741</td>
+                  <td th:text="${info.name} + '/' + ${info.empNo}">Hong Gildong / 08015741</td>
                 </tr>
                 <tr>
                   <th>Assigned</th>
-                  <td th:text="${info.assignedAt} ?${info.assignedAt} :'-' ">2023-09-10  08:14:59 , admin12</td>
+                  <td th:text="${info.assignedAt} ? ${info.assignedAt}: '-' ">2023-09-10  08:14:59 , admin12</td>
                 </tr>
                 </tbody>
               </table>

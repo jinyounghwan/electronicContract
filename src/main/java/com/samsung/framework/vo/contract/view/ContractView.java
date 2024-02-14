@@ -23,5 +23,5 @@ public class ContractView {
     private String employerInfoEn;
     private String employerInfoHu;
     private String docStatus;
-    private String progressStatus;
+    private String processStatus;
 }

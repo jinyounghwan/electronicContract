@@ -61,14 +61,25 @@
     <th:block layout:fragment="script">
         <script th:inline="javascript">
             $(function(){
-                let value = $('[data-select="templateCode"] option:selected').val();
-                if( value != 'TMPL2000'){
+                let value = $('[data-select="templateCode"] option:selected').data('value');
+                console.log(value)
+                if( value != 'TMPL2000' &&  value != 'TMPL3000' ){
                     // 연봉 관련 template가 아니라면..
+                    console.log("aaaa");
                     $('[data-target="hidden-tr"]').css('display', 'none');
                 }
+                $('[data-select="templateCode"] option').each(function(i , e){
+                   if(i == 0){
+                       var value = $(e).data('value');
+                       console.log(value);
+                       if(value == 'TMPL2000' || value == 'TMPL3000'){
+                            $('[data-target="hidden-tr"]').css('display', 'table-row');
+                       }
+                   }
+                });
                 $('[data-select="templateCode"]').on('change' , function(){
                     let selected =  $('[data-select="templateCode"] option:selected').data('value');
-                    if(selected == 'TMPL2000'){
+                    if(selected == 'TMPL2000' || selected == 'TMPL3000'){
                         $('[data-target="hidden-tr"]').css('display', 'table-row');
                     }else{
                         $('[data-target="hidden-tr"]').css('display', 'none');

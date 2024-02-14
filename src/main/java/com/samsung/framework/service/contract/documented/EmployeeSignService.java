@@ -1,11 +1,13 @@
 package com.samsung.framework.service.contract.documented;
 
+import com.samsung.framework.common.enums.ContractProcessEnum;
 import com.samsung.framework.common.enums.LogTypeEnum;
 import com.samsung.framework.common.enums.ResultCodeMsgEnum;
 import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.contract.ProgressRequest;
 import com.samsung.framework.domain.log.LogSaveRequest;
+import com.samsung.framework.mapper.contract.documented.ContractProgressMapper;
 import com.samsung.framework.mapper.contract.documented.EmployeeSignMapper;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.common.ResultStatusVO;
@@ -28,6 +30,7 @@ import java.util.Map;
 public class EmployeeSignService {
     private final EmployeeSignMapper signWaitMapper;
     private final LogUtil logUtil;
+    private final ContractProgressMapper contractProgressMapper;
 
     public int getTotal(AccountSearchVO o , HttpServletRequest request) {
         return signWaitMapper.getTotal(o);
@@ -53,6 +56,7 @@ public class EmployeeSignService {
                                                                  .contractNo(StringUtil.getString(seq))
                                                                  .build();
             Map<String, LogSaveResponse> logs = logUtil.saveLog(saveRequest);
+            int result = contractProgressMapper.updateProgressStatus(seq);
         }
         return signWaitMapper.getContractWaitInfo(vo);
     }
@@ -61,6 +65,7 @@ public class EmployeeSignService {
         HttpSession session = request.getSession();
         AccountVO account = (AccountVO) session.getAttribute("loginInfo");
         contractVO.setUpdatedBy(account.getUserId());
+        contractVO.setDocStatus(ContractProcessEnum.processCode(ContractProcessEnum.COMPLETED));
         int result = signWaitMapper.updateProcessStatus(contractVO);
         if(result == 0){
             return new ResultStatusVO(ResultCodeMsgEnum.UPDATE_DATA_FAIL.getCode(),ResultCodeMsgEnum.UPDATE_DATA_FAIL.name());

@@ -17,6 +17,8 @@
                       , ictd.employee_info_hu
                       , ictd.employer_info_en
                       , ictd.employer_info_hu
+                      , c.doc_status
+                      , c.process_status
                    from contracts c
                    join individual_contract_template_details ictd
                      on c.contract_no = ictd.contract_no
