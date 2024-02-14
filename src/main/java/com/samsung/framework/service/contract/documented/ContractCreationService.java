@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -68,8 +69,10 @@ public class ContractCreationService {
                                                  .contractDateHu(StringUtil.getString(target.getDate()))
                                                  .salaryEn(target.getSalaryEn())
                                                  .salaryHu(target.getSalaryHu())
-                                                 .hireDateEn(DateUtil.getFormatDate(StringUtil.getString(user.getEmployedAt()) ,"dd/mm/yyyy")) //  헝가리, 영어 날짜로 변경
-                                                 .hireDateHu(DateUtil.getFormatDate(StringUtil.getString(user.getEmployedAt()) ,"yyyy.mm.dd"))
+//                                                 .hireDateEn(DateUtil.getFormatDate(StringUtil.getString(user.getEmployedAt()) ,"dd/mm/yyyy")) //  헝가리, 영어 날짜로 변경
+//                                                 .hireDateHu(DateUtil.getFormatDate(StringUtil.getString(user.getEmployedAt()) ,"yyyy.mm.dd"))
+                                                 .hireDateEn(user.getHireDateEn())
+                                                 .hireDateHu(user.getHireDateHu())
                                                  .build();
         // en title
         String replacedTitleEn  = variableHandlingUtil.replaceVariables(template.getContractTitleEn() , replacementTarget);
@@ -97,8 +100,8 @@ public class ContractCreationService {
                                 .validation("Y")
                                 .agreeYn("N")
                                 .delYn("N")
-                                .hireDateEn(DateUtil.getFormatDate(StringUtil.getString(user.getEmployedAt()) ,"dd/mm/yyyy")) //  헝가리, 영어 날짜로 변경
-                                .hireDateHu(DateUtil.getFormatDate(StringUtil.getString(user.getEmployedAt()) ,"yyyy.mm.dd"))
+                                .hireDateEn(user.getHireDateEn()) //  헝가리, 영어 날짜로 변경
+                                .hireDateHu(user.getHireDateHu())
                                 .salaryEn(target.getSalaryEn())
                                 .salaryHu(target.getSalaryHu())
                                 .docStatus(ContractProcessEnum.processCode(ContractProcessEnum.CREATED))
