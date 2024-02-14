@@ -47,11 +47,11 @@ public class EmployeeSignService {
         boolean viewed = logUtil.getLogType(seq , LogTypeEnum.LOG_VIEW.toString());
         if(!viewed){
             LogSaveRequest saveRequest = LogSaveRequest.builder().logType(LogTypeEnum.LOG_VIEW)
-                     .processStep(LogTypeEnum.LOG_VIEW.getDescription())
-                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
-                    .createdBy(account.getAdminId())
-                    .contractNo(StringUtil.getString(seq))
-                    .build();
+                                                                 .processStep(LogTypeEnum.LOG_VIEW.getDescription())
+                                                                 .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
+                                                                 .createdBy(account.getUserId())
+                                                                 .contractNo(StringUtil.getString(seq))
+                                                                 .build();
             Map<String, LogSaveResponse> logs = logUtil.saveLog(saveRequest);
         }
         return signWaitMapper.getContractWaitInfo(vo);
