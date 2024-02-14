@@ -21,8 +21,10 @@
             , process_step
             , ip_address
             , mac_address
-            , created_by
-            , created_at
+        , (select name
+             from users u
+            where u.emp_no = pl.created_by) as created_by
+        , created_at
          from process_log pl
         where contract_no = #{contractNo}
     </select>
