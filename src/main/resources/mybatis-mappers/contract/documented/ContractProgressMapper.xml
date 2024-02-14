@@ -130,8 +130,8 @@
                 , c.sign_date
                 , ctd.contract_title_en
                 , u.dept_code
-                , date_format(c.assigned_at ,'%Y-%m-%d') as assigned_at
-        , c.assigned_by
+                , c.assigned_at
+                , c.assigned_by
              from contracts c
              join contract_template ct
                on c.template_seq = ct.template_seq

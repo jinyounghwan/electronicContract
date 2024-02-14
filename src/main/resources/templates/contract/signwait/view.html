@@ -27,7 +27,7 @@
                                 </tr>
                                 <tr>
                                     <th>Contracting Party</th>
-                                    <td th:text="${info.name} + '/' + ${info.deptCode}">2023-09-10  08:14:59 , admin12</td>
+                                    <td th:text="${info.name} + ' / ' + ${info.empNo}">2023-09-10  08:14:59 , admin12</td>
                                 </tr>
                                 <tr>
                                     <th>Assigned</th>
@@ -42,6 +42,7 @@
                     <div class="btn-area-left">
                         <button class="btn btn-primary" type="button" th:onclick="'viewContract('+${info.contractNo}+')'">View Contract</button>
                         <button class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
+                        <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/contract/sign/wait}'|">List</button>
                     </div>
                 </div>
             </div>
