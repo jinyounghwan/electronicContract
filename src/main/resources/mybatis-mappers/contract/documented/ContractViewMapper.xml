@@ -3,35 +3,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.samsung.framework.mapper.contract.documented.ContractsViewMapper">
-    <select id="getContractView" parameterType="ContractView" resultType="ContractView">
-           select c.contract_no /* getContractView - 계약서 */
-                , u.name
-                , u.emp_no
-                , c.hire_date_hu
-                , date_format(c.hire_date_en , '%m/%d/%Y') as hire_date_en
-                , date_format(c.contract_date_hu , '%Y-%m-%d') as contract_date_hu
-                , c.job_title_en
-                , c.job_title_hu
-                , c.salary_no
-                , c.salary_hu
-                , c.salary_en
-                , c.wage_type_en
-                , c.wage_type_hu
-                , date_format( c.contract_date_en, '%m/%d/%Y') as contract_date_en
-                , date_format( c.contract_date_hu, '%Y-%m-%d') as contract_date_hu
-                , ctd.contract_title_hu
-                , ctd.contract_title_en
-                , ctd.contents_en
-                , ctd.contents_hu
-                , c.doc_status
-                , c.process_status
-             from contracts c
-             join users u
-               on c.emp_no = u.emp_no
-             join contract_template ct
-               on c.template_seq = ct.template_seq
-             join contract_template_details ctd
-               on ct.template_seq = ctd.template_seq
-            where contract_no = #{contractNo}
+    <select id="getContractView" resultType="ContractView">
+                 select c.contract_no
+                      , c.contract_date_hu
+                      , c.contract_date_en
+                      , ictd.contract_title_en
+                      , ictd.contract_title_hu
+                      , ictd.contents_en
+                      , ictd.contents_hu
+                      , ictd.contract_info_en
+                      , ictd.contract_info_hu
+                      , ictd.employee_info_en
+                      , ictd.employee_info_hu
+                      , ictd.employer_info_en
+                      , ictd.employer_info_hu
+                   from contracts c
+                   join individual_contract_template_details ictd
+                     on c.contract_no = ictd.contract_no
+                  where c.contract_no = #{contractNo}
     </select>
 </mapper>
