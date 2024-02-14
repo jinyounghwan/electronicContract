@@ -1,0 +1,22 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="alert3Param(accountType)">
+    <div class="modal" data-target="modal" style="display: none;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body alert-pop">
+                    <div class="modal-textbox" >
+                        <p data-select="alertText">Redirect Alert</p>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary"
+                            th:acctType="${accountType}"
+                            th:onclick="closeAlertAndRedirect(this.getAttribute('acctType'))">OK</button>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" data-val="resVal" value="">
+    </div>
+<!--    <div class="modal-backdrop" data-target="background"></div>-->
+    <div data-target="background"></div>
+</html>

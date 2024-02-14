@@ -11,6 +11,7 @@ public enum MapKeyStringEnum {
     , TEST("test")
     , DATA("data")
     , CODE("code")
+    , MESSAGE("message")
     , PAGING("paging")
     , ROLES("roles")
     , AUTH("authority")

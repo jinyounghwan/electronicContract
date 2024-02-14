@@ -12,7 +12,7 @@
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
-            <div th:replace="~{common/alert2}"></div>
+            <div th:replace="~{common/alert3::alert3Param(accountType=${account.accountType}) }"></div>
             <!--content-->
             <div class="container-fluid">
                 <h1 class="page-title">내정보 확인</h1>
@@ -69,7 +69,8 @@
                 let confirmPassword = $('input[name=confirmPassword]').val();
 
                 if(password !== confirmPassword){
-                    openAlert("패스워드가 일치하지 않습니다.");
+                    let data = {code: '400', message: '패스워드가 일치하지 않습니다.'}
+                    openAlertAndRedirect(data);
                     return;
                 }
 
@@ -84,14 +85,30 @@
                     data: JSON.stringify(data)
                 })
                 .done(function(data){
-                    openAlert(data.message);
-                    location.href="/contract/progress";
+                    openAlertAndRedirect(data);
                 })
                 .fail(function(jqXHR){
                     sendToErrorPage(jqXHR);
                 })
             }
 
+            let openAlertAndRedirect = (data) => {
+                $('[data-target="modal"]').attr('style' , 'display:block');
+                $('[data-target="background"]').attr('class' , 'modal-backdrop');
+                $('[data-select="alertText"]').text(data.message);
+                $('[data-val="resVal"]').val(data.code);
+            }
+
+            let closeAlertAndRedirect = (acctType) => {
+                $('[data-target="modal"]').attr('style' , 'display:none');
+                $('[data-target="background"]').removeAttr('class');
+                $('[data-select="alertText"]').text('');
+
+                if ($('[data-val="resVal"]').val() === '200') {
+                    if(acctType === 'ACCT001') {}location.href = '/contract/sign/wait';
+                    if(acctType === 'ACCT002') location.href = '/contract/progress'
+                }
+            }
     </script>
 </th:block>
 </html>
