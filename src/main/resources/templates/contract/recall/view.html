@@ -31,8 +31,8 @@
                       <td th:text="${info.createdAt}">2023-09-10  08:14:59 , admin12</td>
                     </tr>
                     <tr>
-                      <th>Assigned</th>
-                      <td th:text="${info.signDate}">2023-09-10  08:14:59 , admin12</td>
+                      <th>Recalled</th>
+                      <td th:text="${info.updatedAt} +' , '+ ${info.updatedBy}">2023-09-10  08:14:59 , admin12</td>
                     </tr>
                     <tr>
                       <th>Doc. Status</th>
@@ -70,7 +70,7 @@
                 </tr>
                 <tr>
                   <th>Assigned</th>
-                  <td th:text="${info.signDate}">2023-09-10  08:14:59 , admin12</td>
+                  <td th:text="${info.assignedAt} ? ${info.assignedAt}: '-' ">2023-09-10  08:14:59 , admin12</td>
                 </tr>
                 </tbody>
               </table>

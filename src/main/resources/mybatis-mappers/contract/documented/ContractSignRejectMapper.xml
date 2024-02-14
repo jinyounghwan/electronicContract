@@ -93,14 +93,14 @@
             , c.created_by
             , c.created_at
             , c.updated_by
-            , c.updated_at
+            , date_format(c.updated_at , '%Y-%m-%d')as updated_at
             , ct.template_title
             , c.name
             , c.sign_date
             , ctd.contract_title_en
             , c.dept_code
             , c.reject_reason
-            , c.assigned_at
+            , date_format(c.assigned_at, '%Y-%m-%d') as assigned_at
             , c.assigned_by
         from contracts c
         join contract_template ct

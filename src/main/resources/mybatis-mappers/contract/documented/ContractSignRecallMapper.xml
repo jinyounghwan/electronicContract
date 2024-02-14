@@ -92,7 +92,7 @@
             , c.created_by
             , c.created_at
             , c.updated_by
-            , c.updated_at
+            , date_format(c.updated_at , '%Y-%m-%d')as updated_at
             , ct.template_title
             , c.name
             , c.sign_date

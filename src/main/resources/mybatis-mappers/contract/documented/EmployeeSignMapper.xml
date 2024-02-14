@@ -78,6 +78,7 @@
               , updated_by = #{updatedBy}
               , process_status = #{processStatus}
               , updated_at = now()
+              , doc_status = #{docStatus}
             <if test="processStatus == 'PRCS2003' ">
                 , sign_date = now()
             </if>

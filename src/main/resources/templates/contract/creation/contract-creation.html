@@ -68,7 +68,7 @@
                 }
                 $('[data-select="templateCode"]').on('change' , function(){
                     let selected =  $('[data-select="templateCode"] option:selected').data('value');
-                    if(selected == 'TMPL2000'){
+                    if(selected == 'TMPL2000' || selected == 'TMPL3000'){
                         $('[data-target="hidden-tr"]').css('display', 'table-row');
                     }else{
                         $('[data-target="hidden-tr"]').css('display', 'none');

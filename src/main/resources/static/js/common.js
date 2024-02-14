@@ -259,8 +259,9 @@ let viewContract = (seq) =>{
             });
             $('[data-target="view"]').attr('style' , 'display:block');
             $('[data-target="viewBackground"]').attr('class' , 'modal-backdrop');
-            if(data.docStatus == 'PRCS1002' && (data.processStatus != 'PRCS2003' || data.processStatus != 'PRCS2004')){
-                $('[data-target="statusBtn"]').show();
+            if((data.docStatus != 'PRCS1002' && data.docStatus != 'PRCS1001' ) && (data.processStatus != 'PRCS2003' && data.processStatus != 'PRCS2004')){
+                console.log('aaa');
+                $('[data-target="statusBtn"]').hide();
             }
         }
     }).fail(function(jqXHR) {
