@@ -369,7 +369,7 @@ let rejectConfirmCheck = () =>{
         // reject 확인 시
         console.log($('#contractNo').val())
         let data = {'contractNo' : $('#contractNo').val()
-                    ,'rejectReason' : $("#rejectReason").text()
+                    ,'rejectReason' : $('[data-select="rejectReason"]').val()
         };
         $.ajax({
             url: '/contract/sign/wait/reject/update',
