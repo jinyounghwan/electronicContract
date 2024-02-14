@@ -1,6 +1,7 @@
 package com.samsung.framework.mapper.contract.documented;
 
 import com.samsung.framework.service.contract.documented.ContractsCreationService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,8 @@ public class ContractsCreationController {
 
     @ResponseBody
     @PostMapping("/bulk-upload")
-    public ResponseEntity bulkUpload(@RequestPart(value="file", required = true) List<MultipartFile> multipartFiles) throws Exception {
-        Map<String, Object> resultMap= contractsCreationService.bulkUpload(multipartFiles);
+    public ResponseEntity bulkUpload(@RequestPart(value="file", required = true) List<MultipartFile> multipartFiles , HttpServletRequest request) throws Exception {
+        Map<String, Object> resultMap= contractsCreationService.bulkUpload(multipartFiles , request);
         return ResponseEntity.ok().body(resultMap);
     }
 }

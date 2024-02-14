@@ -35,10 +35,4 @@ public class ContractExcelVO {
     String contractDateEn;
     String name;
 
-    /*
-    *   통과여부
-    * */
-    boolean validation;
-    int rowNum;
-
 }

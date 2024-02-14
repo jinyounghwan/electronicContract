@@ -43,4 +43,6 @@ public class AccountVO {
     private String resignedAtStr;
     private LocalDateTime passwordAt;
     private String passwordAtStr;
+    private String hireDateEn;
+    private String hireDateHu;
 }

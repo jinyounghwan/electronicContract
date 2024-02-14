@@ -186,7 +186,9 @@
             , account_type
             , email
             , employed_at
-         from users u
+            , date_format(employed_at , '%d/%m/%Y') as hire_date_en
+            , date_format(employed_at , '%Y.%m.%d') as hire_date_hu
+        from users u
         where emp_no = #{empNo}
            or admin_id =#{adminId}
     </select>
