@@ -6,6 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum FileTypeEnum {
-    IMAGE("01"), VIDEO("02"), EXCEL("03"), WORD("04"), HANGEUL("05"), OTHER("06");
+    IMAGE("01", null), VIDEO("02", null), EXCEL("03", "98"), WORD("04", null), HANGEUL("05", null), OTHER("06", null);
     private String fileType;
+    private String templateDownloadFileSeq;
 }

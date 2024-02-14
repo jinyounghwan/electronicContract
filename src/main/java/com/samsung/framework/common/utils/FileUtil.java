@@ -82,6 +82,11 @@ public class FileUtil {
         return (DateUtil.getUtcNowDateFormat("yyMMdd") + StringUtil.getRandomStringByUUID() + getFileExtension(fileName)).replaceAll(" ","");
     }
 
+    public static void main(String[] args) throws Exception {
+        String fileName = createFileName("Upload_Template.xlsx");
+        log.info("fileName: {}", fileName);
+    }
+
     /**
      * pdf 파일 이름 생성
      */

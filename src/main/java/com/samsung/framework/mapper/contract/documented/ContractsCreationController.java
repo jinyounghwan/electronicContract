@@ -1,11 +1,13 @@
 package com.samsung.framework.mapper.contract.documented;
 
+import com.samsung.framework.common.enums.FileTypeEnum;
 import com.samsung.framework.service.contract.documented.ContractsCreationService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,7 +23,8 @@ public class ContractsCreationController {
     private final ContractsCreationService contractsCreationService;
 
     @GetMapping(value={"/",""})
-    public String contractBulkCreation(){
+    public String contractBulkCreation(Model model){
+        model.addAttribute("fileSeq", FileTypeEnum.EXCEL.getTemplateDownloadFileSeq());
         return "contract/creation/bulk-contract-creation";
     }
 
