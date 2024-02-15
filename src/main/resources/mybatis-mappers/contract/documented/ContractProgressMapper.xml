@@ -16,7 +16,7 @@
                 </when>
                 <when test="searchDateType == 'ALL'">
                     AND c.created_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
-                    AND c.updated_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
+                    or c.updated_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
                 </when>
             </choose>
         </if>
