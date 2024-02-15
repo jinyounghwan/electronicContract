@@ -111,7 +111,7 @@
         INNER JOIN CONTRACT_TEMPLATE_DETAILS CTD ON C.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
         WHERE
                 DOC_STATUS IN('PRCS1004','PRCS1005')
-            AND C.PROCESS_STATUS  IN('PRCS2003','PRCS2004')
+            AND C.PROCESS_STATUS  IN('PRCS2003')
             <include refid="search"/>
     </select>
 
@@ -126,7 +126,7 @@
         INNER JOIN CONTRACT_TEMPLATE_DETAILS CTD ON C.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
         WHERE
                 DOC_STATUS IN('PRCS1004','PRCS1005')
-            AND C.PROCESS_STATUS  IN('PRCS2003','PRCS2004')
+            AND C.PROCESS_STATUS  IN('PRCS2003')
             <include refid="search"/>
         ORDER BY C.CREATED_AT DESC
         LIMIT #{paging.displayRow} OFFSET #{paging.offset}
