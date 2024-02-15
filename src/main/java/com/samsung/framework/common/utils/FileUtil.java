@@ -58,6 +58,7 @@ public class FileUtil {
        String nowDay = DateUtil.getUtcNowDateFormat("yyMM");
        String uploadPath = getUploadPath(getOsRootDir()+fileDir,nowDay) + File.separator + fileName;
        File uploadFile = new File(uploadPath);
+       log.info("uploadPath :: {}", uploadPath);
 
        try{
            multipartFile.transferTo(uploadFile);
@@ -230,9 +231,7 @@ public class FileUtil {
         String os = System.getProperty("os.name").toLowerCase();
         String fileRootPath = "";
         if(os.contains("win")) {
-            fileRootPath = "C:" ;
-        }else if(os.contains("nix") || os.contains("nux") || os.contains("aix")){
-            fileRootPath = File.separator+"home";
+            fileRootPath = "C:";
         }
 
         return fileRootPath;
