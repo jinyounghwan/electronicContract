@@ -423,3 +423,25 @@ let sendToErrorPage = (jqXHR) => {
     console.log('redirectToErrorPage :: ' + ex);
     window.location.href='/error/common?message=' + ex.message;
 }
+
+/**
+ * Pdf Download
+ */
+let pdfDownload = () => {
+    let html = $('#target-pdf').html();
+    let param = {
+        "html": html
+    };
+    console.log(param);
+    $.ajax({
+        contentType:'application/json; charset=UTF-8',
+        url: '/pdf/download',
+        type: 'POST',
+        dataType: 'json',
+        data: JSON.stringify(param)
+    }).done(function (data){
+        console.log(data);
+    }).fail(function(jqXHR){
+
+    })
+}
