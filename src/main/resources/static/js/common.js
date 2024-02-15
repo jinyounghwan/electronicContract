@@ -211,7 +211,7 @@ let viewHistory = (seq) =>{
             data.forEach((value)=> {
                 var $tr  = $('<tr>');
                 var $td1 = $('<td>' +value.processStep+ '</td>');
-                var $td2= $('<td>' +value.createdBy+ '</td>');
+                var $td2= $('<td>' +value.createdByName + ' ('+ value.createdBy+') '+'</td>');
                 var $td3 = $('<td>' +value.createdAt+ '</td>');
                 var $td4 = $('<td>' +value.ipAddress+ '</td>');
                 $tr.append($td1);
@@ -393,10 +393,16 @@ let rejectConfirmClose = () =>{
     $('[data-select="rejectReason"]').val('');
     $('[data-target="rejectBackground"]').removeAttr('class');
 }
+let completeConfirmClose = () =>{
+    $('[data-target="alert3"]').attr('style' , 'display:none');
+    $("#formCheck1").prop("checked", false);
+}
 
 let contractComplete = () =>{
+    if(!$("#formCheck1").is(':checked')){
+        return false;
+    }
     // complete 확인 시
-    console.log($('#contractNo').val())
     let data = {'contractNo' : $('#contractNo').val()};
     $.ajax({
         url: '/contract/sign/wait/complete/update',
@@ -422,4 +428,8 @@ let sendToErrorPage = (jqXHR) => {
     let ex = JSON.parse(jqXHR.responseText);
     console.log('redirectToErrorPage :: ' + ex);
     window.location.href='/error/common?message=' + ex.message;
+}
+
+let openAgreementAlert = () => {
+    $('[data-target="alert3"]').attr('style' , 'display:block');
 }

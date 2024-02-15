@@ -14,5 +14,6 @@ public class HistoryVO {
     private String ipAddress;
     private String macAddress;
     private String createdBy;
+    private String createdByName;
     private String createdAt;
 }
