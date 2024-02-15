@@ -150,18 +150,8 @@ public class AccountService {
         AccountVO vo = null;
 
         // admindId 체크
-        if(loginRequest.getUserId().contains("admin")) {
-            vo = AccountVO.builder()
-                    .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.ADMIN))
-                    .userId(loginRequest.getUserId())
-                    .build();
-        } else{
-           vo = AccountVO.builder()
-                    .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.EMPLOYEE))
-                    .userId(loginRequest.getUserId())
-                    .build();
-        }
-        AccountVO target = accountMapper.getLoginInfo(vo);
+        AccountVO target = accountMapper.getLoginInfo(loginRequest.getUserId());
+
         if(StringUtil.isEmpty(target)) {
             GhtAccountVO ghrAccount = ghrAccountMapper.getGhrInfo(Integer.parseInt(loginRequest.getUserId()));
             
