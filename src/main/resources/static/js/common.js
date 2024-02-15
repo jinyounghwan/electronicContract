@@ -433,3 +433,24 @@ let sendToErrorPage = (jqXHR) => {
 let openAgreementAlert = () => {
     $('[data-target="alert3"]').attr('style' , 'display:block');
 }
+/**
+ * Pdf Download
+ */
+let pdfDownload = () => {
+    let html = $('#target-pdf').html();
+    let param = {
+        "html": html
+    };
+    console.log(param);
+    $.ajax({
+        contentType:'application/json; charset=UTF-8',
+        url: '/pdf/download',
+        type: 'POST',
+        dataType: 'json',
+        data: JSON.stringify(param)
+    }).done(function (data){
+        console.log(data);
+    }).fail(function(jqXHR){
+
+    })
+}

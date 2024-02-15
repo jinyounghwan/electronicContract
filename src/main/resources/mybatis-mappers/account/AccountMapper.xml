@@ -147,7 +147,6 @@
              , U.PHONE, U.POSITION
         FROM USERS U
         WHERE U.EMP_NO = #{userId}
-            AND U.ACCOUNT_TYPE = #{accountType}
             AND U.USE_YN = 'Y'
     </select>
 

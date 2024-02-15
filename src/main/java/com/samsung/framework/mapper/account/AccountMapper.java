@@ -18,7 +18,7 @@ public interface AccountMapper {
     AccountVO findMemberById(int id);
     int insertMember(AccountVO account);
     AccountVO findMemberByUserName(String userName);
-    AccountVO getLoginInfo(AccountVO account);
+    AccountVO getLoginInfo(String userId);
     boolean existsByEmpNo(int empNo);
     AccountVO myInfo(AccountVO accountVO);
     int updPwd(AccountVO account);

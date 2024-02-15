@@ -89,12 +89,12 @@
                         data: JSON.stringify(member)
                     }).done(function(data){
                         if(data.exists){
-                            if(data.adminIdCheck){ // 임직원 계정
-                                location.href="/contract/sign/wait";
-                            }else { // 어드민 계정
+                            if(data.adminIdCheck){ // 어드민 계정
                                 location.href="/contract/progress";
+                            }else { // 임직원 계정
+                                location.href="/contract/sign/wait";
                             }
-                        } else {
+                        } else { // 최초 로그인
                             location.href="/account/pwdChange";
                         }
                     }).fail(function(jqXHR) {
