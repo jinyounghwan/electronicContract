@@ -8,9 +8,6 @@ group = 'com.samsung'
 version = '1.0.0-RELEASE'
 sourceCompatibility = '17'
 
-// JSP 적용 시, WAR build
-//apply plugin: 'war'
-
 bootJar {
 	archiveBaseName = 'e-contract'
 	archiveFileName = 'e-contract-1.0.0-RELEASE.jar'
@@ -39,15 +36,12 @@ repositories {
 	mavenCentral()
 }
 
-//ext['spring-security.version']='6.1.1'
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-aop:3.0.4'
-//	compileOnly 'org.springframework.boot:spring-boot-starter-security'
-	// Encryption
-	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+
 	// PropertiesUtil
 	implementation 'org.springframework.boot:spring-boot-configuration-processor:3.0.4'
 
@@ -62,21 +56,10 @@ dependencies {
 	implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2")
 	// log4j
 	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
-	// jwt
-//	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-//	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
-//	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
 	// poi
 	implementation 'org.apache.poi:poi:5.2.0'
 	implementation 'org.apache.poi:poi-ooxml:5.2.0'
-
-//	implementation (group: 'org.springframework.security', name: 'spring-security-config', version: '6.1.1')
-//	implementation (group: 'org.springframework.security', name: 'spring-security-core', version: '6.1.1')
-//	implementation (group: 'org.springframework.security', name: 'spring-security-crypto', version: '6.1.1')
-//	implementation (group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: '6.1.1')
-//	implementation (group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: '6.1.1')
-//	implementation (group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: '6.1.1')
-//	implementation (group: 'org.springframework.security', name: 'spring-security-web', version: '6.1.1')
 
 	// devtools
 	compileOnly('org.springframework.boot:spring-boot-devtools')
@@ -85,16 +68,9 @@ dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
 	implementation('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect')
 
-
 	// mail
 	implementation('org.springframework.boot:spring-boot-starter-mail')
-	// JSP
-//	compileOnly 'org.apache.tomcat.embed:tomcat-embed-jasper'
-//	compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
-	//jstl
-//	implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
-//	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
-	
+
 	// HTML TO PDF LIBRARY
 	implementation 'com.itextpdf:itextpdf:5.5.13.3'
 	implementation 'com.itextpdf.tool:xmlworker:5.5.13.3'
@@ -102,7 +78,6 @@ dependencies {
 
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
-
 
 }
 
