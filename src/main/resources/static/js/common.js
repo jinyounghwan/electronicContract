@@ -442,15 +442,17 @@ let pdfDownload = () => {
         "html": html
     };
     console.log(param);
-    $.ajax({
-        contentType:'application/json; charset=UTF-8',
-        url: '/pdf/download',
-        type: 'POST',
-        dataType: 'json',
-        data: JSON.stringify(param)
-    }).done(function (data){
-        console.log(data);
-    }).fail(function(jqXHR){
-
-    })
+    alert('pdf 생성 로직 수정 후 적용 예정');
+    // TODO: IJ itext 변경 완료 후 수정 진행 예정...
+    // $.ajax({
+    //     contentType:'application/json; charset=UTF-8',
+    //     url: '/pdf/download',
+    //     type: 'POST',
+    //     dataType: 'json',
+    //     data: JSON.stringify(param)
+    // }).done(function (data){
+    //     console.log(data);
+    // }).fail(function(jqXHR){
+    //
+    // })
 }
