@@ -13,12 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,10 +31,10 @@ public class PdfController {
     @Autowired
     FileService fileService;
     @PostMapping("/download")
-    public ResponseEntity download(@RequestBody Map<String,Object> param, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ResponseEntity download(@RequestPart(value="param") Map<String,Object> param, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String html = StringUtil.getString(param.get("html"));
         FilePublicVO file = pdfService.createPDF(html);
 
-        return fileService.downloadFile(file, request, response);
+        return fileService.downloadFile(file,request, response);
     }
 }

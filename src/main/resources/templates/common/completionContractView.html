@@ -1,5 +1,6 @@
 <html lang="kr" xmlns:th="http://www.thymeleaf.org">
 <!--poppup-->
+<form id="downloadForm" enctype="multipart/form-data" method="POST" action="/pdf/download">
 <div class="modal" style="display:none;" data-target="view">
     <div class="modal-dialog modal-l modal-dialog-centered">
         <div class="modal-content">
@@ -39,14 +40,14 @@
                         </table>
                         <div>
                             <p data-select="contractInfoHu">Kelt / Place and date of signing: Göd, 2023.12.01.</p>
-                            <div th:style="letf" class="document-sig">
-                                <div class="modal-sigbox">
+                            <div  class="document-sig">
+                                <div id="modal-left" class="modal-sigbox">
                                     <div class="modal-sig">
                                         <div class="modal-comimg"></div>
                                         <div class="modal-signtxt"><p data-select="employeeInfoHu">Yi Hyun Chang<br/>Elnök/President<br/>Munkáltató/Employer<br/>Samsung SDI Magyarország Zrt.</p></div>
                                     </div>
                                 </div>
-                                <div  th:style="right" class="modal-sigbox">
+                                <div id="modal-right" class="modal-sigbox">
                                     <div class="modal-sig">
                                         <div class="modal-signimg">SIGN HERE</div>
                                         <div class="modal-signtxt"><p data-select="employeeInfoEn">Yi Hyun Chang<br/>Elnök/President<br/>Munkáltató/Employer<br/>Samsung SDI Magyarország Zrt.</p></div>
@@ -60,7 +61,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" th:onclick="closeContractView()">Close</button>
                 <!--${session.loginInfo == null}-->
-                <button type="button" class="btn btn-primary" data-target="statusBtn" th:if="${session.loginInfo.adminId == null}" th:onclick="pdfDownload()">Download</button>
+                <button id="btn-download" type="button" class="btn btn-primary" data-target="statusBtn" th:if="${session.loginInfo.adminId == null}" th:onclick="pdfDownload()">Download</button>
                 <!--                <button type="button" class="btn btn-primary" data-target="statusBtn" th:onclick="rejectConfirm()" >Reject</button>-->
                 <!--                <button type="button" class="btn btn-primary" data-target="statusBtn"  th:onclick="contractComplete()" >Agreement</button>-->
             </div>
@@ -70,5 +71,5 @@
 <!--<div class="modal-backdrop"></div>-->
 <div data-target="background"></div>
 <!--poppup end-->
-
+</form>
 </html>

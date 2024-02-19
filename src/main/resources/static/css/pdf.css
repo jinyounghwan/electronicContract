@@ -258,3 +258,10 @@
     height: 65px;
     text-align: center;
     line-height: 65px;}
+
+#modal-left{
+    float:left;
+}
+#modal-right{
+    float: right;
+}

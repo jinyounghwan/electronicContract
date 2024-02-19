@@ -293,40 +293,8 @@ let viewPaperContract = (fileDataNo) =>{
                     responseType: 'blob' // 응답을 Blob 객체로 받음
                 }
             }).done(function(blob, status, xhr) {
-                // check for a filename
-                let fileName = "";
-                let disposition = xhr.getResponseHeader("Content-Disposition");
-                if(disposition && disposition.indexOf("attachment") !== -1) {
-                    let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                    let matches = filenameRegex.exec(disposition);
-                    if(matches != null && matches[1]){
-                        fileName = decodeURI(matches[1].replace(/['"]/g, ""));
-                        console.log(fileName);
-                    }
-
-                }
-                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                    window.navigator.msSaveOrOpenBlob(blob, fileName);
-                } else {
-                    let URL = window.URL || window.webkitURL;
-                    let downloadUrl = URL.createObjectURL(blob);
-
-                    if (fileName) {
-                        let a = document.createElement("a");
-
-                        // for safari
-                        if (a.download === undefined) {
-                            window.location.href = downloadUrl;
-                        } else {
-                            a.href = downloadUrl;
-                            a.download = fileName;
-                            document.body.appendChild(a);
-                            a.click();
-                        }
-                    } else {
-                        window.location.href = downloadUrl;
-                    }
-                }
+                // 파일 다운로드
+                buttonFileDownload(blob, xhr);
             })
             .fail(function(jqXHR) {
                 console.log(jqXHR);
@@ -433,26 +401,72 @@ let sendToErrorPage = (jqXHR) => {
 let openAgreementAlert = () => {
     $('[data-target="alert3"]').attr('style' , 'display:block');
 }
+
 /**
  * Pdf Download
  */
 let pdfDownload = () => {
+    let formData = new FormData();
     let html = $('#target-pdf').html();
+
     let param = {
         "html": html
     };
-    console.log(param);
-    alert('pdf 생성 로직 수정 후 적용 예정');
+
+    formData.append('param', new Blob([JSON.stringify(html)], { type: 'application/json' }));
+
     // TODO: IJ itext 변경 완료 후 수정 진행 예정...
-    // $.ajax({
-    //     contentType:'application/json; charset=UTF-8',
-    //     url: '/pdf/download',
-    //     type: 'POST',
-    //     dataType: 'json',
-    //     data: JSON.stringify(param)
-    // }).done(function (data){
-    //     console.log(data);
-    // }).fail(function(jqXHR){
-    //
-    // })
+    $.ajax({
+        url: '/pdf/download',
+        type: 'POST',
+        cache: false,
+        data: formData,
+        contentType:false,
+        processData:false,
+        xhrFields: {
+            responseType: 'blob' // 응답을 Blob 객체로 받음
+        }
+    }).done(function (blob, status, xhr){
+        buttonFileDownload(blob, xhr);
+    }).fail(function(jqXHR){
+        console.log(jqXHR);
+    })
+}
+
+// 파일 다운로드
+function buttonFileDownload(blob, xhr){
+    // check for a filename
+    let fileName = "";
+    let disposition = xhr.getResponseHeader("Content-Disposition");
+    if(disposition && disposition.indexOf("attachment") !== -1) {
+        let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        let matches = filenameRegex.exec(disposition);
+        if(matches != null && matches[1]){
+            fileName = decodeURI(matches[1].replace(/['"]/g, ""));
+            console.log(fileName);
+        }
+
+    }
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(blob, fileName);
+    } else {
+        let URL = window.URL || window.webkitURL;
+        let downloadUrl = URL.createObjectURL(blob);
+
+        if (fileName) {
+            let a = document.createElement("a");
+
+            // for safari
+            if (a.download === undefined) {
+                window.location.href = downloadUrl;
+            } else {
+                a.href = downloadUrl;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+            }
+        } else {
+            window.location.href = downloadUrl;
+        }
+    }
 }

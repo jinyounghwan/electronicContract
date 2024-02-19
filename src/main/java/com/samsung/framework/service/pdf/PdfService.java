@@ -41,19 +41,22 @@ public class PdfService {
     private String getRealDir;
 
     public FilePublicVO createPDF(String html) throws Exception {
+
         // html \n 문자 -> 빈칸으로 변경
         html = this.htmlTagConvert(html);
         // img src= \" -> ' 변경
         String convertHtml = FileUtil.imgTagConvert(html);
         String createFileName = FileUtil.createPdfFileName();
-        String nowDay = DateUtil.getUtcNowDateFormat("yyMM") + '/';
+        String nowDay = DateUtil.getUtcNowDateFormat("yyMM");
         // 파일 저장 위치 설정
         final String storagePath = FileUtil.getOsRootDir() + getRootDir + getRealDir + PDF_STORAGE_PATH + nowDay;
         // 최초 PDF 저장 시 PDF 폴더가 없다면 생성
         FileUtil.makeDirectories(storagePath);
 
+        log.info("convertHtml :: {} ", convertHtml);
+
         // 실제 저장위치 및 파일이름
-        final String paths = storagePath + createFileName;
+        final String paths = storagePath + File.separator + createFileName;
 
         log.info("File Paths : {} ", paths);
 
@@ -128,8 +131,11 @@ public class PdfService {
                 log.info("PDF 파일 닫기 에러");
                 e.printStackTrace();
             }
+            String filePath = FileUtil.seperateOs(storagePath);
+            filePath = filePath.substring(0,filePath.lastIndexOf(File.separator));
+            log.info("filePath :: {}",filePath);
 
-            FilePublicVO filePublic = FilePublicVO.builder()
+            return FilePublicVO.builder()
                     .fileNo(1)
                     .storagePath(FileUtil.seperateOs(storagePath))
                     .name(createFileName)
@@ -138,7 +144,6 @@ public class PdfService {
                     .originalName(createFileName)
                     .size(String.valueOf(FileUtil.getFileSize(paths)))
                     .build();
-            return filePublic;
         }
     }
     public String htmlTagConvert(String html){
