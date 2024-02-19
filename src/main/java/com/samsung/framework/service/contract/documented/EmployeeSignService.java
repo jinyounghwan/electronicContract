@@ -74,7 +74,7 @@ public class EmployeeSignService {
         LogSaveRequest saveRequest = LogSaveRequest.builder().logType(LogTypeEnum.getLogTypeEnum(contractVO.getProcessStatus()))
                  .processStep(LogTypeEnum.getLogDescription(contractVO.getProcessStatus()))
                 .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
-                .createdBy(account.getAdminId())
+                .createdBy(account.getUserId())
                 .contractNo(StringUtil.getString(contractVO.getContractNo()))
                 .build();
         Map<String, LogSaveResponse> logs = logUtil.saveLog(saveRequest);
