@@ -150,18 +150,8 @@ public class AccountService {
         AccountVO vo = null;
 
         // admindId 체크
-        if(loginRequest.getUserId().contains("admin")) {
-            vo = AccountVO.builder()
-                    .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.ADMIN))
-                    .userId(loginRequest.getUserId())
-                    .build();
-        } else{
-           vo = AccountVO.builder()
-                    .accountType(AccountTypeEnum.menuCode(AccountTypeEnum.EMPLOYEE))
-                    .userId(loginRequest.getUserId())
-                    .build();
-        }
-        AccountVO target = accountMapper.getLoginInfo(vo);
+        AccountVO target = accountMapper.getLoginInfo(loginRequest.getUserId());
+
         if(StringUtil.isEmpty(target)) {
             GhtAccountVO ghrAccount = ghrAccountMapper.getGhrInfo(Integer.parseInt(loginRequest.getUserId()));
             
@@ -304,22 +294,25 @@ public class AccountService {
 
             int update = accountMapper.updPwd(account);
             if(update < 1){
-                result.put("code", 204);
-                result.put("message", "수정할 대상이 없습니다.");
+                result.put(MapKeyStringEnum.CODE.getKeyString(), 204);
+                result.put(MapKeyStringEnum.MESSAGE.getKeyString(), "수정할 대상이 없습니다.");
+            }else {
+                result.put(MapKeyStringEnum.CODE.getKeyString(), 200);
+                result.put(MapKeyStringEnum.MESSAGE.getKeyString(), "수정 되었습니다.");
+
+                //로그 저장
+                var logSaveRequest = LogSaveRequest.builder()
+                        .logType(LogTypeEnum.PASSWORD_CHANGE)
+                        .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
+                        .createdBy(String.valueOf(account.getUserId()))
+                        .build();
+                logUtil.saveLog(logSaveRequest);
             }
-            result.put("message", "수정 되었습니다.");
-            //로그 저장
-            var logSaveRequest = LogSaveRequest.builder()
-                    .logType(LogTypeEnum.PASSWORD_CHANGE)
-                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
-                    .createdBy(String.valueOf(account.getUserId()))
-                    .build();
-            logUtil.saveLog(logSaveRequest);
 
             return result;
         }
-        result.put("code",400);
-        result.put("message", "비밀번호는 영어와 숫자 포함해서 8~16자리 이내로 입력해주세요.");
+        result.put(MapKeyStringEnum.CODE.getKeyString(),400);
+        result.put(MapKeyStringEnum.MESSAGE.getKeyString(), "비밀번호는 영어와 숫자 포함해서 8~16자리 이내로 입력해주세요.");
         return result;
     }
 

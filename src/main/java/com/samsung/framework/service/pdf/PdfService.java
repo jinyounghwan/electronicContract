@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Pattern;
 
 
 @Slf4j
@@ -40,6 +41,10 @@ public class PdfService {
     private String getRealDir;
 
     public FilePublicVO createPDF(String html) throws Exception {
+
+        // html \n 문자 -> 빈칸으로 변경
+
+        html = this.htmlTagConvert(html);
         // img src= \" -> ' 변경
         String convertHtml = FileUtil.imgTagConvert(html);
         String createFileName = FileUtil.createPdfFileName();
@@ -66,7 +71,7 @@ public class PdfService {
             CSSResolver cssResolver =  new StyleAttrCSSResolver();
             CssFile cssFile = null;
             try{
-                InputStream cssStream = getClass().getClassLoader().getResourceAsStream("static/css/pdf/ItextPdf.css");
+                InputStream cssStream = getClass().getClassLoader().getResourceAsStream("static/css/common.css");
                 cssFile = XMLWorkerHelper.getCSS(cssStream);
             } catch(Exception e){
                 throw new IllegalArgumentException("PDF CSS 파일을 찾을 수 없습니다.");
@@ -133,5 +138,10 @@ public class PdfService {
                                                 .build();
         return filePublic;
     }
+    public String htmlTagConvert(String html){
+        html = html.replaceAll("\n"," ");
+        html = html.replaceAll("<br>", "<br/>");
 
+        return html;
+    }
 }

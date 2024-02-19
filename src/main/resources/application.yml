@@ -49,9 +49,9 @@ properties:
       password: ${JASYPT_PASSWORD}
   # file
   file:
-    rootDir: \files\electronicContract
-    tempDir: \temp
-    realDir: \upload
+    rootDir: /files/electronicContract
+    tempDir: /temp
+    realDir: /upload
 
 encryption:
   salt: C7fSALM5ffwTHsUkwgLiiaPgkmeVbjRn1Tac7cL1B8OtopSBXi6gqbKyQlr+cA5UIbOLAvz8PeQ3H3NjxEcE03CqyRw1Jq4jI4YVYYhG5FYQYKEJDy5m1p3h8qJRf43xMIw86r989tvZVz0xkV1ZAJKUYqY6EKeHKT8FpBMDS70=

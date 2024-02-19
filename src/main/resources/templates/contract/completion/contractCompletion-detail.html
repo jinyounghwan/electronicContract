@@ -31,8 +31,8 @@
                                         <td th:text="${info.getCreatedAtStr()} + ', ' + ${info.getCreatedBy()}"></td>
                                     </tr>
                                     <tr>
-                                        <th>Assigned</th>
-                                        <td th:text="${info.getSignDateAtStr()} + ', ' + ${info.getCreatedBy()}"></td>
+                                        <th>Signed</th>
+                                        <td th:text="${info.getSignDateAtStr()} + ', ' + ${info.getUpdatedBy()}"></td>
                                     </tr>
                                     <tr>
                                         <th>Doc. Status</th>
@@ -50,7 +50,7 @@
 
                     <div class="card mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Contract Info.</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

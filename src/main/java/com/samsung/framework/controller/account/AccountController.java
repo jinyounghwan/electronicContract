@@ -177,7 +177,8 @@ public class AccountController {
     public ResponseEntity login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) throws CustomLoginException, NoSuchAlgorithmException {
         // 유저 이름에 해당하는 유저 정보를 가져온다.
         AccountVO loginInfo = accountService.getLoginInfo(loginRequest);
-        if(loginRequest.getUserId().contains("admin")){
+
+        if(loginInfo.getAccountType().equals(AccountTypeEnum.menuCode(AccountTypeEnum.ADMIN))){
             loginInfo.setAdminId(loginInfo.getUserId());
         }
 
@@ -325,7 +326,7 @@ public class AccountController {
 
         // 관리자 계정, 임직원 계정 체크 로직
         AccountVO accountVO = accountService.getSessionAccount(request);
-        boolean adminIdCheck = StringUtil.isEmpty(accountVO.getAdminId());
+        boolean adminIdCheck = StringUtil.isNotEmpty(accountVO.getAdminId());
 
         result.put("exists", exists);
         result.put("adminIdCheck", adminIdCheck);

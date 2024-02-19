@@ -84,9 +84,10 @@ public class ContractCompService {
                     .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
                     .createdBy(String.valueOf(account.getEmpNo()))
                     .contractNo(String.valueOf(target.getContractNo()))
+                    .processStep(ContractProcessEnum.processCode(ContractProcessEnum.PAPER_CONTRACT))
                     .build();
-            logUtil.saveLog(logSaveRequest);
 
+            logUtil.saveLog(logSaveRequest);
             result.put("message", "계약서 저장 완료");
             return result;
         }

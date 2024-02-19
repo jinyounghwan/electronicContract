@@ -58,6 +58,7 @@ public class FileUtil {
        String nowDay = DateUtil.getUtcNowDateFormat("yyMM");
        String uploadPath = getUploadPath(getOsRootDir()+fileDir,nowDay) + File.separator + fileName;
        File uploadFile = new File(uploadPath);
+       log.info("uploadPath :: {}", uploadPath);
 
        try{
            multipartFile.transferTo(uploadFile);
@@ -80,6 +81,11 @@ public class FileUtil {
      */
     public static String createFileName(String fileName) throws Exception {
         return (DateUtil.getUtcNowDateFormat("yyMMdd") + StringUtil.getRandomStringByUUID() + getFileExtension(fileName)).replaceAll(" ","");
+    }
+
+    public static void main(String[] args) throws Exception {
+        String fileName = createFileName("Upload_Template.xlsx");
+        log.info("fileName: {}", fileName);
     }
 
     /**
@@ -225,9 +231,7 @@ public class FileUtil {
         String os = System.getProperty("os.name").toLowerCase();
         String fileRootPath = "";
         if(os.contains("win")) {
-            fileRootPath = "C:" ;
-        }else if(os.contains("nix") || os.contains("nux") || os.contains("aix")){
-            fileRootPath = File.separator+"home";
+            fileRootPath = "C:";
         }
 
         return fileRootPath;

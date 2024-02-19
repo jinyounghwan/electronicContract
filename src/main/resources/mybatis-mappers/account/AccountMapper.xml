@@ -92,6 +92,7 @@
         WHERE
             ACCOUNT_TYPE = #{accountType}
         <include refid="search"/>
+        ORDER BY CREATED_AT DESC
         LIMIT #{paging.displayRow} OFFSET #{paging.offset}
     </select>
 
@@ -146,7 +147,6 @@
              , U.PHONE, U.POSITION
         FROM USERS U
         WHERE U.EMP_NO = #{userId}
-            AND U.ACCOUNT_TYPE = #{accountType}
             AND U.USE_YN = 'Y'
     </select>
 

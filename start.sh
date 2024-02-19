@@ -25,6 +25,6 @@ echo ">> PWD: {$PWD} <<"
 
 # nohup java -jar -Dspring.profiles.active=dev -Dproperties.jasypt.encryptor.password='dejay1234!@#$' $JAR_FILE >> ./logs/contract.log 2>&1 &
 # nohup java -jar -Dspring.profiles.active=prod -Dproperties.jasypt.encryptor.password='dejay1234!@#$' $JAR_FILE > /dev/null 2>&1 &
-nohup java -jar -Dspring.profiles.active=prod -Dproperties.jasypt.encryptor.password='dejay1234!@#$' $JAR_FILE 1>/dev/null 2>./logs/execution-error.log &
+nohup java -jar -Dspring.profiles.active=prod $JAR_FILE >> ./logs/contract-run.log 2>&1 &
 
 echo "DEPLOYMENT COMPLETE!"
