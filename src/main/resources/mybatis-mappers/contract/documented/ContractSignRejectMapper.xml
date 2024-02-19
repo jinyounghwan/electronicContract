@@ -100,7 +100,7 @@
             , ctd.contract_title_en
             , c.dept_code
             , c.reject_reason
-            , date_format(c.assigned_at, '%Y-%m-%d') as assigned_at
+            , c.assigned_at
             , c.assigned_by
         from contracts c
         join contract_template ct
