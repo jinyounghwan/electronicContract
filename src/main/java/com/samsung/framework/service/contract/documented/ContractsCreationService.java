@@ -80,7 +80,7 @@ public class ContractsCreationService {
                 AccountVO o = AccountVO.builder().empNo(data.getEmpNo()).build();
                 AccountVO user = accountMapper.myInfo(o);
                 // template 여부 체크
-                ContractTemplateVO template = contractTemplateMapper.getContractTemplateInfo(StringUtil.getString(data.getTemplateSeq()));
+                ContractTemplateVO template = contractTemplateMapper.getContractTemplateInfo(StringUtil.getString(data.getTemplateCode()));
                 Variables replacementTarget = Variables.builder().name(user.getName()).employeeNo(user.getEmpNo())
                         .contractDateEn(DateUtil.getStrContractDateEn(StringUtil.getString(data.getContractDate())))
                         .contractDateHu(data.getContractDate())
@@ -110,7 +110,7 @@ public class ContractsCreationService {
                 String replacedEmployeeInfoHu = variableHandlingUtil.replaceVariables(template.getEmployeeInfoHu(), replacementTarget);
                 // 계약서 생성을 위해 데이터 셋팅
                 ContractVO contractVO = ContractVO.builder()
-                        .empNo(data.getEmpNo()).templateSeq(StringUtil.getInt(data.getTemplateSeq()))
+                        .empNo(data.getEmpNo()).templateSeq(StringUtil.getInt(data.getTemplateCode()))
                         .name(user.getName())
                         .validation("Y")
                         .agreeYn("N")

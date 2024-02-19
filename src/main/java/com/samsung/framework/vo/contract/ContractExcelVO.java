@@ -21,10 +21,10 @@ public class ContractExcelVO {
     String salaryHu;
     @ExcelColumn(headerName = "SalaryEn")
     String salaryEn;
+    @ExcelColumn(headerName = "TemplateType")
+    String templateType;
     @ExcelColumn(headerName = "TemplateCode")
     String templateCode;
-    @ExcelColumn(headerName = "TemplateSeq")
-    String templateSeq;
     @ExcelColumn(headerName = "ContractDate")
     String contractDate;
     String jobTitleHu;
