@@ -4,7 +4,7 @@ spring:
     #    url: jdbc:log4jdbc:mariadb://10.34.220.168:3306/dejay_public
     #    username: dejay_was
     #    password: 22@samsung
-    jdbc-url: jdbc:log4jdbc:mariadb://10.34.220.195:3307/electronic_contract?allowMultiQueries=true
+    jdbc-url: jdbc:log4jdbc:mariadb://10.34.220.244:3307/electronic_contract?allowMultiQueries=true
     username: sdi_hungary_db
     password: contract$@salary
   security:

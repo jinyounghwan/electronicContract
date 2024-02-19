@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    jdbc-url: jdbc:log4jdbc:mariadb://10.34.220.195:3307/electronic_contract?allowMultiQueries=true
+    jdbc-url: jdbc:log4jdbc:mariadb://10.34.220.244:3307/electronic_contract?allowMultiQueries=true
     username: sdi_hungary_db
     password: contract$@salary
     hikari:
