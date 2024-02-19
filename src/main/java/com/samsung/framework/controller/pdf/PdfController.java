@@ -36,10 +36,7 @@ public class PdfController {
     public ResponseEntity download(@RequestBody Map<String,Object> param, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String html = StringUtil.getString(param.get("html"));
         FilePublicVO file = pdfService.createPDF(html);
-        List<FilePublicVO> fileList = new ArrayList<>();
-        fileList.add(file);
-        // db에 save 저장
-        //List<FilePublicVO> saveList = fileService.saveFile(fileList);
-        return new ResponseEntity(HttpStatus.OK);
+
+        return fileService.downloadFile(file, request, response);
     }
 }

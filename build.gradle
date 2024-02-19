@@ -103,7 +103,24 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 
-
+//	implementation files('libs/barcodes-8.0.3.jar')
+//	implementation files('libs/bouncy-castle-adapter-8.0.3.jar')
+//	implementation files('libs/bouncy-castle-connector-8.0.3.jar')
+//	implementation files('libs/bouncy-castle-fips-adapter-8.0.3.jar')
+//	implementation files('libs/commons-8.0.3.jar')
+//	implementation files('libs/font-asian-8.0.3.jar')
+//	implementation files('libs/forms-8.0.3.jar')
+//	implementation files('libs/hyph-8.0.3.jar')
+//	implementation files('libs/io-8.0.3.jar')
+//	implementation files('libs/kernel-8.0.3.jar')
+//	implementation files('libs/layout-8.0.3.jar')
+//	implementation files('libs/pdfa-8.0.3.jar')
+//	implementation files('libs/pdftest-8.0.3.jar')
+//	implementation files('libs/pdfua-8.0.3.jar')
+//	implementation files('libs/sign-8.0.3.jar')
+//	implementation files('libs/styled-xml-parser-8.0.3.jar')
+//	implementation files('libs/svg-8.0.3.jar')
+//	implementation group: 'com.itextpdf', name: 'html2pdf', version: '5.0.3'
 }
 
 tasks.named('test') {
