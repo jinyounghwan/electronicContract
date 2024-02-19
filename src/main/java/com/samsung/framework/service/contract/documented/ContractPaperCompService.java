@@ -45,6 +45,7 @@ public class ContractPaperCompService {
 
     public ContractCompVO getPaperCompInfo(long contractNo){
         ContractCompVO target = contractPaperCompletionMapper.getPaperCompInfo(contractNo);
+
         target.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(target.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         target.setSignDateAtStr(DateUtil.convertLocalDateTimeToString(target.getSignDate(), DateUtil.DATETIME_YMDHM_PATTERN));
         return target;
