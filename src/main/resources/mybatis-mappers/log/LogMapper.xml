@@ -17,16 +17,17 @@
     </select>
 
     <select id="getContractLogList" parameterType="Integer" resultType="HistoryVO">
-        select log_type
-            , process_step
-            , ip_address
-            , mac_address
-        , (select name
-             from users u
-            where u.emp_no = pl.created_by) as created_by
-        , created_at
-         from process_log pl
-        where contract_no = #{contractNo}
+           select log_type
+                , process_step
+                , ip_address
+                , mac_address
+                , (select name
+                    from users u
+                   where u.emp_no = pl.created_by) as created_by_name
+                , created_by
+                , created_at
+             from process_log pl
+            where contract_no = #{contractNo}
     </select>
 
     <select id="getLogType" parameterType="String">

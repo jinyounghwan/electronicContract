@@ -92,8 +92,8 @@ public class ValidationUtil {
             BulkExcelVO target = BulkExcelVO.builder()
                     .empNo(obj.getEmpNo())
                     .contractDate(obj.getContractDate())
-                    .templateCode(obj.getTemplateCode())
-                    .templateSeq(obj.getTemplateSeq())
+                    .templateCode(obj.getTemplateType())
+                    .templateSeq(obj.getTemplateCode())
                     .salaryHu(obj.getSalaryHu())
                     .salaryEn(obj.getSalaryEn())
                     .build();

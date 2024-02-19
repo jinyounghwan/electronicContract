@@ -3,10 +3,7 @@ package com.samsung.framework.service.contract.documented;
 import com.samsung.framework.common.enums.ContractProcessEnum;
 import com.samsung.framework.common.enums.ContractTemplateEnum;
 import com.samsung.framework.common.enums.ResultCodeMsgEnum;
-import com.samsung.framework.common.utils.ObjectHandlingUtil;
-import com.samsung.framework.common.utils.StringUtil;
-import com.samsung.framework.common.utils.ValidationUtil;
-import com.samsung.framework.common.utils.VariableHandlingUtil;
+import com.samsung.framework.common.utils.*;
 import com.samsung.framework.domain.common.Variables;
 import com.samsung.framework.mapper.account.AccountMapper;
 import com.samsung.framework.mapper.contract.documented.ContractCreationMapper;
@@ -83,9 +80,9 @@ public class ContractsCreationService {
                 AccountVO o = AccountVO.builder().empNo(data.getEmpNo()).build();
                 AccountVO user = accountMapper.myInfo(o);
                 // template 여부 체크
-                ContractTemplateVO template = contractTemplateMapper.getContractTemplateInfo(StringUtil.getString(data.getTemplateSeq()));
+                ContractTemplateVO template = contractTemplateMapper.getContractTemplateInfo(StringUtil.getString(data.getTemplateCode()));
                 Variables replacementTarget = Variables.builder().name(user.getName()).employeeNo(user.getEmpNo())
-                        .contractDateEn(data.getContractDate())
+                        .contractDateEn(DateUtil.getStrContractDateEn(StringUtil.getString(data.getContractDate())))
                         .contractDateHu(data.getContractDate())
                         .salaryEn(data.getSalaryEn())
                         .salaryHu(data.getSalaryHu())
@@ -113,7 +110,7 @@ public class ContractsCreationService {
                 String replacedEmployeeInfoHu = variableHandlingUtil.replaceVariables(template.getEmployeeInfoHu(), replacementTarget);
                 // 계약서 생성을 위해 데이터 셋팅
                 ContractVO contractVO = ContractVO.builder()
-                        .empNo(data.getEmpNo()).templateSeq(StringUtil.getInt(data.getTemplateSeq()))
+                        .empNo(data.getEmpNo()).templateSeq(StringUtil.getInt(data.getTemplateCode()))
                         .name(user.getName())
                         .validation("Y")
                         .agreeYn("N")
@@ -124,8 +121,8 @@ public class ContractsCreationService {
                         .salaryHu(data.getSalaryHu())
                         .docStatus(ContractProcessEnum.processCode(ContractProcessEnum.CREATED))
                         .processStatus(ContractProcessEnum.processCode(ContractProcessEnum.UNSEEN))
-                        .contractDateHu(data.getContractDate()) // format 변경
-                        .contractDateEn(data.getContractDate())
+                        .contractDateHu(data.getContractDate())
+                        .contractDateEn(DateUtil.getStrContractDateEn(StringUtil.getString(data.getContractDate())))
                         .deptCode(user.getDeptCode()).createdBy(account.getAdminId())
                         .templateDetailsSeq(template.getTemplateDetailsSeq())
                         .contractTitleEn(replacedTitleEn)

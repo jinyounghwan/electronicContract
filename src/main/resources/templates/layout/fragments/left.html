@@ -48,12 +48,12 @@
                     let parentElement = $("#accordionSidebar");
                     let url = data.path;
                     if(realCodeCd==='MENU104000' || realCodeCd==='MENU105000'){ // MENU 104000, 105000은 제외
-                        parentElement.append(`<li class="nav-item"> <a class="nav-link arrow collapsed" href='${url}'><span>${data.name}</span></a>
+                        parentElement.append(`<li class="nav-item"> <a class="nav-link arrow collapsed" href='${url}' onclick="menuClickHandler(this)"><span>${data.name}</span></a>
                    <div class="collapse">
                    </div></li>`);
                     }
                     else{
-                        parentElement.append(`<li class="nav-item"> <a class="nav-link arrow" href=''><span>${data.name}</span></a>
+                        parentElement.append(`<li class="nav-item"> <a class="nav-link arrow" href='#none' onclick="menuClickHandler(this)"><span>${data.name}</span></a>
                    <div class="collapse">
                        <div class="collapse-inner" id= '${realCodeCd}'>
 
@@ -81,7 +81,29 @@
                     parentElement.innerHTML +=`<a class="collapse-item" href='${url}' id= ${realCodeCd}><span>${data.name}</span></a>`;
                 }
             }
+
+            // 대메뉴 클릭 핸들러
+            function menuClickHandler(that) {
+                    let _this = $(that);
+                    if(hasSmMenu(_this.attr('href'))) {
+                        if(_this.hasClass('collapsed')) {
+                            _this.removeClass('collapsed');
+                            _this.siblings('div.collapse').css('display', 'block');
+                        }else {
+                            _this.addClass('collapsed');
+                            _this.siblings('div.collapse').css('display', 'none');
+                        }
+                    }
+            }
+
+            function hasSmMenu(url) {
+                if('/contract/sign/wait' === url || '/contract/sign/paper/comp' === url) {
+                    return false;
+                }
+                return true;
+            }
         }
+
     </script>
 </th:block>
 

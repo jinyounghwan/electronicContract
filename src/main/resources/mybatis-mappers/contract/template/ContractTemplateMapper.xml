@@ -104,6 +104,8 @@
              , CTD.EMPLOYER_INFO_EN = #{employerInfoEn}
              , CTD.EMPLOYEE_INFO_HU = #{employeeInfoHu}
              , CTD.EMPLOYEE_INFO_EN = #{employeeInfoEn}
+             , CTD.CONTRACT_INFO_EN = #{contractInfoEn}
+             , CTD.CONTRACT_INFO_HU = #{contractInfoHu}
              , ct.updated_by = #{updatedBy}
              , ct.updated_at = now()
         WHERE CT.TEMPLATE_SEQ = #{templateSeq}

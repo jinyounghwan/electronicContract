@@ -211,7 +211,7 @@ let viewHistory = (seq) =>{
             data.forEach((value)=> {
                 var $tr  = $('<tr>');
                 var $td1 = $('<td>' +value.processStep+ '</td>');
-                var $td2= $('<td>' +value.createdBy+ '</td>');
+                var $td2= $('<td>' +value.createdByName + ' ('+ value.createdBy+') '+'</td>');
                 var $td3 = $('<td>' +value.createdAt+ '</td>');
                 var $td4 = $('<td>' +value.ipAddress+ '</td>');
                 $tr.append($td1);
@@ -393,10 +393,16 @@ let rejectConfirmClose = () =>{
     $('[data-select="rejectReason"]').val('');
     $('[data-target="rejectBackground"]').removeAttr('class');
 }
+let completeConfirmClose = () =>{
+    $('[data-target="alert3"]').attr('style' , 'display:none');
+    $("#formCheck1").prop("checked", false);
+}
 
 let contractComplete = () =>{
+    if(!$("#formCheck1").is(':checked')){
+        return false;
+    }
     // complete 확인 시
-    console.log($('#contractNo').val())
     let data = {'contractNo' : $('#contractNo').val()};
     $.ajax({
         url: '/contract/sign/wait/complete/update',
@@ -424,6 +430,9 @@ let sendToErrorPage = (jqXHR) => {
     window.location.href='/error/common?message=' + ex.message;
 }
 
+let openAgreementAlert = () => {
+    $('[data-target="alert3"]').attr('style' , 'display:block');
+}
 /**
  * Pdf Download
  */
@@ -433,15 +442,17 @@ let pdfDownload = () => {
         "html": html
     };
     console.log(param);
-    $.ajax({
-        contentType:'application/json; charset=UTF-8',
-        url: '/pdf/download',
-        type: 'POST',
-        dataType: 'json',
-        data: JSON.stringify(param)
-    }).done(function (data){
-        console.log(data);
-    }).fail(function(jqXHR){
-
-    })
+    alert('pdf 생성 로직 수정 후 적용 예정');
+    // TODO: IJ itext 변경 완료 후 수정 진행 예정...
+    // $.ajax({
+    //     contentType:'application/json; charset=UTF-8',
+    //     url: '/pdf/download',
+    //     type: 'POST',
+    //     dataType: 'json',
+    //     data: JSON.stringify(param)
+    // }).done(function (data){
+    //     console.log(data);
+    // }).fail(function(jqXHR){
+    //
+    // })
 }

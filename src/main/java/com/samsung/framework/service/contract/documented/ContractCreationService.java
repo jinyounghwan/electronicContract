@@ -65,12 +65,10 @@ public class ContractCreationService {
         HttpSession session = request.getSession();
         AccountVO account = (AccountVO) session.getAttribute("loginInfo");
         Variables replacementTarget = Variables.builder().name(user.getName()).employeeNo(user.getEmpNo())
-                                                 .contractDateEn(StringUtil.getString(target.getDate()))
+                                                 .contractDateEn(DateUtil.getStrContractDateEn(StringUtil.getString(target.getDate())))
                                                  .contractDateHu(StringUtil.getString(target.getDate()))
                                                  .salaryEn(target.getSalaryEn())
                                                  .salaryHu(target.getSalaryHu())
-//                                                 .hireDateEn(DateUtil.getFormatDate(StringUtil.getString(user.getEmployedAt()) ,"dd/mm/yyyy")) //  헝가리, 영어 날짜로 변경
-//                                                 .hireDateHu(DateUtil.getFormatDate(StringUtil.getString(user.getEmployedAt()) ,"yyyy.mm.dd"))
                                                  .hireDateEn(user.getHireDateEn())
                                                  .hireDateHu(user.getHireDateHu())
                                                  .build();
@@ -106,8 +104,8 @@ public class ContractCreationService {
                                 .salaryHu(target.getSalaryHu())
                                 .docStatus(ContractProcessEnum.processCode(ContractProcessEnum.CREATED))
                                 .processStatus(ContractProcessEnum.processCode(ContractProcessEnum.UNSEEN))
-                                .contractDateHu(StringUtil.getString(target.getDate())) // format 변경
-                                .contractDateEn(StringUtil.getString(target.getDate()))
+                .contractDateEn(DateUtil.getStrContractDateEn(StringUtil.getString(target.getDate())))
+                                .contractDateHu(StringUtil.getString(target.getDate()))
                                 .deptCode(user.getDeptCode()).createdBy(account.getAdminId())
                 .templateDetailsSeq(template.getTemplateDetailsSeq())
                 .contractTitleEn(replacedTitleEn)

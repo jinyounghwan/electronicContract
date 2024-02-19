@@ -12,7 +12,7 @@
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
-            <div th:replace="~{common/alert3::alert3Param(accountType=${account.accountType}) }"></div>
+            <div th:replace="~{common/alertNRedirection::alertNRedirection(accountType=${account.accountType}) }"></div>
             <!--content-->
             <div class="container-fluid">
                 <h1 class="page-title">내정보 확인</h1>
@@ -105,8 +105,8 @@
                 $('[data-select="alertText"]').text('');
 
                 if ($('[data-val="resVal"]').val() === '200') {
-                    if(acctType === 'ACCT001') {}location.href = '/contract/sign/wait';
-                    if(acctType === 'ACCT002') location.href = '/contract/progress'
+                    if(acctType === 'ACCT001') location.href = '/contract/sign/wait';
+                    if(acctType === 'ACCT002') location.href = '/contract/progress';
                 }
             }
     </script>
