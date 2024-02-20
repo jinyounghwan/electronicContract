@@ -6,12 +6,9 @@ import com.samsung.framework.domain.log.LogSaveRequest;
 import com.samsung.framework.mapper.log.LogMapper;
 import com.samsung.framework.vo.log.LogSaveResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.ValidatorFactory;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.xml.transform.Result;
 import java.util.HashMap;
 import java.util.Map;
 
