@@ -63,7 +63,7 @@
                 </div>
                 <div class="btn-area">
                     <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/account/admin}'|">List</button>
-                    <button class="btn btn-primary" type="button" th:onclick="|location.href='@{/account/admin/edit/{userId}(userId=${account.getAdminId()})}'|">Edit</button>
+                    <button class="btn btn-primary" type="button" th:onclick="|location.href='@{/account/admin/edit/{userId}(userId=${account.getEmpNo()})}'|">Edit</button>
                 </div>
             </div>
         </div>
