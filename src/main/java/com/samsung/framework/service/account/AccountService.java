@@ -58,6 +58,7 @@ public class AccountService {
         account.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(account.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         account.setUpdatedAtStr(DateUtil.convertLocalDateTimeToString(account.getUpdatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         account.setLastLoginStr(DateUtil.convertLocalDateTimeToString(account.getLastLogin(), DateUtil.DATETIME_YMDHM_PATTERN));
+        account.setPasswordAtStr(DateUtil.convertLocalDateTimeToString(account.getPasswordAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         getFirstNameLastName(account);
 
         return account;

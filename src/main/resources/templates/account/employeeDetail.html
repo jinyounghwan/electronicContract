@@ -34,19 +34,23 @@
                                 </tr>
                                 <tr>
                                     <th>Last Log In</th>
-                                    <td th:text="${account.getLastLoginStr()}"></td>
+                                    <td th:if="${account.getLastLoginStr()}!=''" th:text="${account.getLastLoginStr()}"></td>
+                                    <td th:if="${account.getLastLoginStr()}==''">-</td>
                                 </tr>
                                 <tr>
                                     <th>Password changed</th>
-                                    <td>-</td>
+                                    <td th:if="${account.getPasswordAtStr()}!=''" th:text="${account.getPasswordAtStr()}"></td>
+                                    <td th:if="${account.getPasswordAtStr()}==''">-</td>
                                 </tr>
                                 <tr>
                                     <th>Created</th>
-                                    <td th:text="${account.getCreatedAtStr()}"></td>
+                                    <td th:if="${account.getCreatedAtStr()}!=''" th:text="${account.getCreatedAtStr()}"></td>
+                                    <td th:if="${account.getCreatedAtStr()}==''">-</td>
                                 </tr>
                                 <tr>
                                     <th>Modified</th>
-                                    <td th:text="${account.getUpdatedAtStr()}"></td>
+                                    <td th:if="${account.getUpdatedAtStr()}!=''" th:text="${account.getUpdatedAtStr()}"></td>
+                                    <td th:if="${account.getUpdatedAtStr()}==''">-</td>
                                 </tr>
                                 </tbody>
                             </table>

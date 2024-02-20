@@ -58,8 +58,8 @@
                                     <td th:utext="${row.getContractTitleEn}"></td>
                                     <td th:text="${row.getName}"></td>
                                     <td th:text="${row.empNo}"></td>
-                                    <td th:text="${row.createdAtStr}"></td>
-                                    <td th:text="${row.signDateAtStr}"></td>
+                                    <td th:text="${row.createdAtStr}?${row.createdAtStr}:'-'"></td>
+                                    <td th:text="${row.signDateAtStr}?${row.signDateAtStr}:'-'"></td>
                                     <td th:text="${row.docStatus}"></td>
                                     <td th:text="${row.processStatus}"></td>
                                     <td><a th:href="@{/contract/sign/comp/detail/{contractNo}(contractNo=${row.getContractNo()})}" >View</a></td>

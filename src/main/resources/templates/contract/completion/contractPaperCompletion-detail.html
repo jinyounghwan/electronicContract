@@ -31,8 +31,7 @@
                                 </tr>
                                 <tr>
                                     <th>Assigned</th>
-                                    <td th:if="${info.SignDateAtStr != null}" th:text="${info.signDateAtStr}"></td>
-                                    <td th:if="${info.SignDateAtStr == null}" th:text="-"></td>
+                                    <td th:text="${info.signDateAtStr}?${info.signDateAtStr}:'-'"></td>
                                 </tr>
                                 </tbody>
                             </table>
