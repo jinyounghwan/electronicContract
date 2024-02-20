@@ -42,6 +42,7 @@
               and doc_status = 'PRCS1002'
               and process_status in ('PRCS2001','PRCS2002')
               and emp_no = #{empNo}
+         order by c.created_at desc
             LIMIT #{paging.displayRow} OFFSET #{paging.offset}
     </select>
     <select id="getContractWaitInfo" parameterType="ContractVO" resultType="ContractVO">
