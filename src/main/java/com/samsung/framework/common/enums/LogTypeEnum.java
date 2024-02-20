@@ -28,7 +28,7 @@ public enum LogTypeEnum {
         if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.REJECTED))){
             return LogTypeEnum.LOG_REJECT;
         }else if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.SIGNED))){
-            return LogTypeEnum.LOG_ASSIGN;
+            return LogTypeEnum.LOG_SIGN_N_COMPLETE;
         }
         return null;
     }
@@ -36,7 +36,7 @@ public enum LogTypeEnum {
         if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.REJECTED))){
             return LogTypeEnum.LOG_REJECT.getDescription();
         }else if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.SIGNED))){
-            return LogTypeEnum.LOG_ASSIGN.getDescription();
+            return LogTypeEnum.LOG_SIGN_N_COMPLETE.getDescription();
         }
         return null;
     }
