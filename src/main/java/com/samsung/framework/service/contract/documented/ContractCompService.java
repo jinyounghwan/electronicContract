@@ -84,7 +84,7 @@ public class ContractCompService {
                     .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
                     .createdBy(String.valueOf(account.getEmpNo()))
                     .contractNo(String.valueOf(target.getContractNo()))
-                    .processStep(ContractProcessEnum.processCode(ContractProcessEnum.PAPER_CONTRACT))
+                    .processStep(ContractProcessEnum.processCode(ContractProcessEnum.LOG_PAPER_SIGN))
                     .build();
 
             logUtil.saveLog(logSaveRequest);
