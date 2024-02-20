@@ -33,7 +33,7 @@ public class PdfController {
     @PostMapping("/download")
     public ResponseEntity download(@RequestPart(value="param") Map<String,Object> param, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String html = StringUtil.getString(param.get("html"));
-        FilePublicVO file = pdfService.createPDF(html, request);
+        FilePublicVO file = pdfService.createPDF(html);
 
         return fileService.downloadFile(file,request, response);
     }
