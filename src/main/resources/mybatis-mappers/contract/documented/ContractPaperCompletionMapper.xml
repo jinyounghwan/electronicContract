@@ -25,7 +25,7 @@
             DOC_STATUS IN('PRCS1004','PRCS1005')
           AND C.PROCESS_STATUS  IN('PRCS2003')
           AND C.EMP_NO = #{empNo}
-        ORDER BY C.CREATED_AT DESC
+          ORDER BY C.SIGN_DATE DESC
         LIMIT #{paging.displayRow} OFFSET #{paging.offset}
     </select>
 

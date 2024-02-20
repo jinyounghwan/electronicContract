@@ -47,8 +47,7 @@
                                     <td th:utext="${item.contractTitleEn}"></td>
                                     <td th:text="${item.name}"></td>
                                     <td th:text="${item.empNo}"></td>
-                                    <td th:if="${item.signDateAtStr != null}" th:text="${item.signDateAtStr}"></td>
-                                    <td th:if="${item.signDateAtStr == null}" th:text="-"></td>
+                                    <td th:text="${item.signDateAtStr}?${item.signDateAtStr}:'-'"></td>
                                     <td><a th:href="@{/contract/sign/paper/comp/info/{contractNo}(contractNo=${item.contractNo})}" >View</a></td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(list)}">
