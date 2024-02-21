@@ -55,6 +55,7 @@
     height: -webkit-min-content;
     height: -moz-min-content;
     height: min-content;
+    height: min-content;
     content: "";
 }
 
@@ -135,23 +136,29 @@
     line-height: 70px;
 }
 .modal-img {/* padding-left: 1rem; *//* padding-bottom: 0.5rem; */}
-.modal-img img{width: 9rem;}
+.modal-img img{width: 144px;}
+.modal-img {
+    width: 144px;
+}
 .modal-body .table-list{border-collapse: collapse;width: 100%;color: #858796;margin-top: 0.2rem;}
 .modal-body .table-list th{padding: 0.6rem 1rem;vertical-align: top;font-size: 11pt;text-align: center;color: #3a3b45;}
 .modal-body .table-list td {padding: 0.6rem 0.6rem;vertical-align: top;color: #3a3b45;text-align: justify;}
-.modal-sigbox {float: left;}
-.modal-sigbox p {font-size: 10pt;margin: 20px 0 0;font-weight: 600;}
-.modal-sig {border-bottom: 1px dotted #3a3b45;display: block;height: 70px;}
-.modal-sig span {font-size: 0.8rem;display: inline-block;bottom: 5px;position: absolute;float: left;}
+.modal-sigbox {float: left; width: 235px;}
+.modal-sigbox p {font-size: 10pt;width: 235px;font-weight: 600;}
+.modal-sig {border-bottom: 1px dotted #3a3b45;height: 70px; width: 235px;}
+.modal-sig span {display: inline-block;bottom: 5px;position: absolute;float: left;}
 .modal-signimg {
     background: #fff4df;
+    font-family: "times";
+    font-size: 9pt;
     width: 235px;
-    height: 65px;
+    height: 35px;
     text-align: center;
-    line-height: 65px;
+    padding-top: 25px;
+    color: #858796;
 }
-.modal-signtxt{font-size: 0.8rem;}
-.modal-comimg {background: #fff;
+.modal-comimg {
+    background: #fff;
     width: 235px;
     height: 65px;
     text-align: center;
@@ -237,7 +244,7 @@
     line-height: 70px;
 }
 .modal-img {/* padding-left: 1rem; *//* padding-bottom: 0.5rem; */}
-.modal-img img{width: 9rem;}
+/*.modal-img img{width: 9rem;}*/
 .modal-body .table-list{border-collapse: collapse;width: 100%;color: #858796;margin-top: 0.2rem;}
 .modal-body .table-list th{padding: 0.6rem 1rem;vertical-align: top;}
 .modal-body .table-list td {padding: 0.6rem 0.6rem;vertical-align: top;color: #3a3b45;text-align: justify;}
@@ -246,13 +253,10 @@
 .modal-sig {border-bottom: 1px dotted #3a3b45;display: block;height: 70px;}
 .modal-sig span {font-size: 0.8rem;display: inline-block;bottom: 5px;position: absolute;float: left;}
 .modal-signimg {
-    background: #fff4df;
     width: 235px;
     height: 65px;
     text-align: center;
-    line-height: 65px;
 }
-.modal-signtxt{font-size: 0.8rem;}
 .modal-comimg {background: #fff;
     width: 235px;
     height: 65px;
@@ -265,3 +269,45 @@
 #modal-right{
     float: right;
 }
+
+
+td {
+    font-family: "times";
+    font-size: 9pt;
+}
+
+td p span {
+    font-weight: 700;
+}
+
+[data-select="contractTitleHu"] {
+    text-align: center;
+}
+
+[data-select="contractInfoHu"] {
+    font-weight: 700;
+    font-family: "times";
+    color: #858796;
+    font-size: 9pt;
+}
+[data-select="employeeInfoHu"] {
+    font-weight: 700;
+    font-family: "times";
+    color: #858796;
+    font-size: 9pt;
+}
+
+th {
+    font-family: "times";
+    text-align: center;
+    width: 325px;
+}
+.modal-signtxt {
+    font-family: "times";
+    font-size: 25px;
+    font-weight: 700;
+    text-align: center;
+    width: 235px;
+}
+
+
