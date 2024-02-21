@@ -155,6 +155,8 @@ public class PdfService {
     public String htmlTagConvert(String html){
         html = html.replaceAll("\n"," ");
         html = html.replaceAll("<br>", "<br/>");
+        html = html.replaceAll("<strong>", "<span>");
+        html = html.replaceAll("</strong>", "</span>");
         return html;
     }
 
