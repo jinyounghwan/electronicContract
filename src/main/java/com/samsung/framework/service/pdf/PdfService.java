@@ -29,6 +29,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Slf4j
@@ -50,10 +52,11 @@ public class PdfService {
         // html \n 문자 -> 빈칸으로 변경
         html = this.htmlTagConvert(html);
         String serverIp = this.getPdfAddressImgUrl(request);
-
         String convertHtml = FileUtil.imgTagSetting(html,serverIp);
+        convertHtml = this.tdTagConvert(convertHtml);
         String createFileName = FileUtil.createPdfFileName();
         String nowDay = DateUtil.getUtcNowDateFormat("yyMM");
+
         // 파일 저장 위치 설정
         final String storagePath = FileUtil.getOsRootDir() + getRootDir + getRealDir + PDF_STORAGE_PATH + nowDay;
         // 최초 PDF 저장 시 PDF 폴더가 없다면 생성
@@ -176,5 +179,34 @@ public class PdfService {
         log.info("server pdfAddress ::  "+prefix);
 
         return prefix;
+    }
+
+    /**
+     * td 태그 위에 p태그로 감싸기
+     * @param html
+     * @return
+     */
+    public String tdTagConvert(String html){
+        Pattern pattern = Pattern.compile("<td[^>]*>");
+        Matcher matcher = pattern.matcher(html);
+        while(matcher.find()) {
+            String tdTag = matcher.group();
+            StringBuilder sb = new StringBuilder(tdTag);
+            log.info("tdTag Index :: {} ", tdTag.indexOf(">"));
+            sb.insert(tdTag.indexOf(">")+1, "<p>");
+            log.info("String :: {}", sb);
+            html = html.replaceAll(tdTag, String.valueOf(sb));
+        }
+
+        // 1회만 반복
+        pattern = Pattern.compile("</td>");
+        matcher = pattern.matcher(html);
+        matcher.find();
+        String tdTagClose = matcher.group();
+        StringBuilder sb = new StringBuilder(tdTagClose);
+        sb.insert(tdTagClose.indexOf("<"), "</p>");
+        html = html.replaceAll(tdTagClose, String.valueOf(sb));
+
+        return html;
     }
 }
