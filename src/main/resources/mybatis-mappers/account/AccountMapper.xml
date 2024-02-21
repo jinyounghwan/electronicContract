@@ -212,4 +212,21 @@
         WHERE
             U.EMP_NO = #{adminId}
     </update>
+    <select id="getUserInfo" resultType="UserVO">
+         select u.emp_no
+              , u.dept_code
+              , u.name
+              , u.account_type
+              , u.email
+              , u.employed_at
+              , date_format(u.employed_at , '%d/%m/%Y') as hire_date_en
+              , date_format(u.employed_at , '%Y.%m.%d') as hire_date_hu
+              , gai.salary_no
+              , gai.job as job_title
+              , gai.wage_type
+           from ghr_account_info gai
+           join users u
+             on gai.emp_no = u.emp_no
+          where gai.emp_no = #{empNo}
+    </select>
 </mapper>

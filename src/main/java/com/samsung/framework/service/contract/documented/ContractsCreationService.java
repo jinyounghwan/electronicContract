@@ -2,9 +2,11 @@ package com.samsung.framework.service.contract.documented;
 
 import com.samsung.framework.common.enums.ContractProcessEnum;
 import com.samsung.framework.common.enums.ContractTemplateEnum;
+import com.samsung.framework.common.enums.LogTypeEnum;
 import com.samsung.framework.common.enums.ResultCodeMsgEnum;
 import com.samsung.framework.common.utils.*;
 import com.samsung.framework.domain.common.Variables;
+import com.samsung.framework.domain.log.LogSaveRequest;
 import com.samsung.framework.mapper.account.AccountMapper;
 import com.samsung.framework.mapper.contract.documented.ContractCreationMapper;
 import com.samsung.framework.mapper.contract.documented.ContractsCreationMapper;
@@ -18,6 +20,8 @@ import com.samsung.framework.vo.contract.ContractExcelVO;
 import com.samsung.framework.vo.contract.creation.ContractVO;
 import com.samsung.framework.vo.contract.template.ContractTemplateVO;
 import com.samsung.framework.vo.file.FilePublicVO;
+import com.samsung.framework.vo.log.LogSaveResponse;
+import com.samsung.framework.vo.user.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +46,7 @@ public class ContractsCreationService {
     private final ContractCreationMapper contractCreationMapper;
     private final ValidationUtil validationUtil;
     private final VariableHandlingUtil variableHandlingUtil;
+    private final LogUtil logUtil;
     /**
      * 계약서 일괄 생성
      * @param multipartFiles
@@ -72,22 +77,27 @@ public class ContractsCreationService {
             reusltMap.put("code", ResultCodeMsgEnum.CREATE_DATA_FAIL.getCode());
             reusltMap.put("msg", ResultCodeMsgEnum.CREATE_DATA_FAIL.getMsg());
             dataMap.put("empNo" , bulkExcelVO.getEmpNo());
+            dataMap.put("alertMessage"  , bulkExcelVO.getMsg());
             reusltMap.put("data",dataMap );
             return reusltMap;
         }
         for(List<ContractExcelVO> targetList : list){
             targetList.stream().iterator().forEachRemaining(data->{
-                AccountVO o = AccountVO.builder().empNo(data.getEmpNo()).build();
-                AccountVO user = accountMapper.myInfo(o);
+                UserVO user = accountMapper.getUserInfo(data.getEmpNo());
                 // template 여부 체크
                 ContractTemplateVO template = contractTemplateMapper.getContractTemplateInfo(StringUtil.getString(data.getTemplateCode()));
-                Variables replacementTarget = Variables.builder().name(user.getName()).employeeNo(user.getEmpNo())
+                Variables replacementTarget = Variables.builder().name(user.getName()).employeeNo(StringUtil.getString(user.getEmpNo()))
                         .contractDateEn(DateUtil.getStrContractDateEn(StringUtil.getString(data.getContractDate())))
-                        .contractDateHu(data.getContractDate())
+                        .contractDateHu(StringUtil.getString(data.getContractDate()).replaceAll("-","."))
                         .salaryEn(data.getSalaryEn())
                         .salaryHu(data.getSalaryHu())
                         .hireDateEn(user.getHireDateEn())
                         .hireDateHu(user.getHireDateHu())
+                        .jobTitleEn(user.getJobTitle())
+                        .jobTitleHu(user.getJobTitle())
+                        .salaryNo(user.getSalaryNo())
+                        .wageTypeEn(user.getWageType())
+                        .wageTypeHu(replaceWageType(user.getWageType()))
                         .build();
                 // en title
                 String replacedTitleEn  = variableHandlingUtil.replaceVariables(template.getContractTitleEn() , replacementTarget);
@@ -121,7 +131,7 @@ public class ContractsCreationService {
                         .salaryHu(data.getSalaryHu())
                         .docStatus(ContractProcessEnum.processCode(ContractProcessEnum.CREATED))
                         .processStatus(ContractProcessEnum.processCode(ContractProcessEnum.UNSEEN))
-                        .contractDateHu(data.getContractDate())
+                        .contractDateHu(data.getContractDate().replaceAll("-","."))
                         .contractDateEn(DateUtil.getStrContractDateEn(StringUtil.getString(data.getContractDate())))
                         .deptCode(user.getDeptCode()).createdBy(account.getAdminId())
                         .templateDetailsSeq(template.getTemplateDetailsSeq())
@@ -136,6 +146,14 @@ public class ContractsCreationService {
                         .build();
                 int saveContract = contractCreationMapper.saveContract(contractVO);
                 saveContract = contractCreationMapper.saveContractDetail(contractVO);
+                // 저장이 성공 되었을 때
+                LogSaveRequest saveRequest = LogSaveRequest.builder().logType(LogTypeEnum.LOG_CREATE)
+                        .processStep(LogTypeEnum.LOG_CREATE.getDescription())
+                        .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
+                        .createdBy(account.getAdminId())
+                        .contractNo(StringUtil.getString(contractVO.getContractNo()))
+                        .build();
+                Map<String, LogSaveResponse> logs = logUtil.saveLog(saveRequest);
             });
         }
         reusltMap.put("code", ResultCodeMsgEnum.REQUEST_SUCCESS.getCode());
@@ -143,5 +161,20 @@ public class ContractsCreationService {
         dataMap.put("totalCount" ,list.get(0).size());
         reusltMap.put("data",dataMap );
         return reusltMap;
+    }
+    private String replaceWageType(String type){
+        String replaceType ="";
+        switch (type) {
+            case "M" -> {
+                replaceType =  "hó";
+            }
+            case "H" -> {
+                replaceType =  "óra";
+            }
+            default -> {
+                replaceType = "";
+            }
+        }
+        return replaceType;
     }
 }
