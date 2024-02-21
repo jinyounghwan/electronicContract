@@ -386,14 +386,16 @@ public class FileUtil {
 
 
     // PDF img src \" => ' 로 변환
-    public static String imgTagConverter(String html){
+    public static String imgTagSetting(String html, String address){
         //이미지 태그 안닫힌 태그들 찾아서 닫는 작업 진행
         Pattern pattern  =  Pattern.compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
         Matcher match = pattern.matcher(html);
         while(match.find()){
             String imgTag   = match.group();
             String imgTag2  = imgTag.replaceAll(">", "/>");
-
+            StringBuilder sb = new StringBuilder(imgTag2);
+            sb.insert(imgTag2.indexOf("\"")+1, address);
+            html = html.replaceAll(imgTag, String.valueOf(sb));
             html = html.replaceAll(imgTag, imgTag2);
         }
 

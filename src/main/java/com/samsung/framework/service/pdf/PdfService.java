@@ -45,12 +45,13 @@ public class PdfService {
     @Value("${ip.local-address}")
     private String localAddress;
 
-    public FilePublicVO createPDF(String html) throws Exception {
+    public FilePublicVO createPDF(String html, HttpServletRequest request) throws Exception {
 
         // html \n 문자 -> 빈칸으로 변경
         html = this.htmlTagConvert(html);
-        // img src= \" -> ' 변경
-        String convertHtml = FileUtil.imgTagConverter(html);
+        String serverIp = this.getPdfAddressImgUrl(request);
+
+        String convertHtml = FileUtil.imgTagSetting(html,serverIp);
         String createFileName = FileUtil.createPdfFileName();
         String nowDay = DateUtil.getUtcNowDateFormat("yyMM");
         // 파일 저장 위치 설정
@@ -157,5 +158,21 @@ public class PdfService {
         return html;
     }
 
+    /**
+     * serverIp에 따른 url
+     * @param request
+     * @return
+     */
+    public String getPdfAddressImgUrl(HttpServletRequest request){
+        String serverIp = request.getRemoteAddr();
+        String prefix;
+        if(serverIp.equals(localAddress)){
+            prefix = "http://localhost:"+port;
+        } else {
+            prefix = "http://"+serverIp+":"+port;
+        }
+        log.info("server pdfAddress ::  "+prefix);
 
+        return prefix;
+    }
 }
