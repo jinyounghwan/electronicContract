@@ -46,7 +46,7 @@ public class ContractCompService {
             String hireDateEn = DateUtil.convertLocalDateTimeToString(ghrAccount.getHireDate(),"MM/dd/YYYY");
 
             // 파일 업로드 (저장)
-            List<FilePublicVO> list = fileService.uploadFile(file, "CONTRACT");
+            List<FilePublicVO> list = fileService.uploadFile(file, "Contract");
             List<FilePublicVO> targetList =fileService.saveFile(list, String.valueOf(account.getEmpNo()));
             FilePublicVO filePublicVO = targetList.get(0);
 
