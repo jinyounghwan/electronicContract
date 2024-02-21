@@ -391,6 +391,9 @@ public class DateUtil {
      * @return String
      */
     public static String getStrContractDateEn(String date){
+        if(StringUtil.isEmpty(date)){
+            return null;
+        }
         int index = date.indexOf(" ");
         if(index >0){
             date = date.substring(0, index);

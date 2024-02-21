@@ -61,8 +61,18 @@
                     var code = data.code;
                     var value = data.data;
                     if(code == 7){
-                        // data 생성 실패
-                        openAlert('The mass create has failed.  Employee No'+ value.empNo +' Please check the information.' , '');
+                        if(value.alertMessage != "" && value.alertMessage != null){
+                            var empNo = (value.empNo != null && value.empNo != "")  ? value.empNo : "";
+                            if(empNo != ""){
+                                openAlert( 'Employee No '+ empNo + ' '+value.alertMessage  + ' Please check the information. ', '');
+                            }else{
+                                openAlert( value.alertMessage , '');
+                            }
+
+                        }else{
+                            // data 생성 실패
+                            openAlert('The mass create has failed.  Employee No'+ value.empNo +' Please check the information.' , '');
+                        }
                     }else if(code == 200){
                        openAlert('The creation was successful.Created'+ value.totalCount +' records.' , '');
                     }

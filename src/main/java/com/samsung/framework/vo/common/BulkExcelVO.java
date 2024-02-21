@@ -13,26 +13,29 @@ import lombok.Setter;
 @Getter
 public class BulkExcelVO {
 
-    public BulkExcelVO(@NotNull(message = "EmpNo 정보가 없습니다.") String empNo) {
+    public BulkExcelVO(@NotNull(message = "EmpNo invalid") String empNo , String msg ) {
         this.empNo = empNo;
+        this.msg = msg;
     }
 
-    @NotNull(message = "ContractDate 정보가 없습니다.")
+    @NotNull(message = "ContractDate invalid")
     String contractDate;
 
-    @NotNull(message = "TemplateCode 정보가 없습니다.")
+    @NotNull(message = "TemplateType invalid")
     String templateCode;
 
-    @NotNull(message = "TemplateSeq 정보가 없습니다.")
+    @NotNull(message = "TemplateCode invalid")
     String templateSeq;
 
-    @NotNull(message = "EmpNo 정보가 없습니다.")
+    @NotNull(message = "EmpNo invalid")
     String empNo;
 
-    @NotNull(message = "SalaryHu 정보가 없습니다.")
+    @NotNull(message = "SalaryHu invalid")
     String salaryHu;
 
-    @NotNull(message = "SalaryEn 정보가 없습니다.")
+    @NotNull(message = "SalaryEn invalid")
     String salaryEn;
+
+    String msg;
 
 }

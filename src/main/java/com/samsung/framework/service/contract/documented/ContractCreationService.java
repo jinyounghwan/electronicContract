@@ -2,7 +2,6 @@ package com.samsung.framework.service.contract.documented;
 
 import com.samsung.framework.common.enums.ContractProcessEnum;
 import com.samsung.framework.common.enums.LogTypeEnum;
-import com.samsung.framework.common.enums.MapKeyStringEnum;
 import com.samsung.framework.common.enums.ResultCodeMsgEnum;
 import com.samsung.framework.common.utils.*;
 import com.samsung.framework.domain.common.Variables;
@@ -27,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -56,21 +54,27 @@ public class ContractCreationService {
             return ObjectHandlingUtil.setSingleObjResultStatusVO(null, ResultCodeMsgEnum.NO_TEMPLATE_CODE);
         }
         //  employee user 정보 조회
-        AccountVO o = AccountVO.builder().empNo(target.getEmpNo()).build();
-        AccountVO user = accountMapper.myInfo(o);
+//        AccountVO user = accountMapper.myInfo(o);
+
+        UserVO user = accountMapper.getUserInfo(target.getEmpNo());
         if(Objects.isNull(user)){
             return ObjectHandlingUtil.setSingleObjResultStatusVO(null, ResultCodeMsgEnum.INVALID_EMP_NO);
         }
         // created by
         HttpSession session = request.getSession();
         AccountVO account = (AccountVO) session.getAttribute("loginInfo");
-        Variables replacementTarget = Variables.builder().name(user.getName()).employeeNo(user.getEmpNo())
-                                                 .contractDateEn(DateUtil.getStrContractDateEn(StringUtil.getString(target.getDate())))
-                                                 .contractDateHu(StringUtil.getString(target.getDate()))
+        Variables replacementTarget = Variables.builder().name(user.getName()).employeeNo(StringUtil.getString(user.getEmpNo()))
+                .contractDateEn(DateUtil.getStrContractDateEn(StringUtil.getString(target.getDate())))
+                .contractDateHu(StringUtil.getString(target.getDate()).replaceAll("-","."))
                                                  .salaryEn(target.getSalaryEn())
                                                  .salaryHu(target.getSalaryHu())
                                                  .hireDateEn(user.getHireDateEn())
                                                  .hireDateHu(user.getHireDateHu())
+                .jobTitleEn(user.getJobTitle())
+                .jobTitleHu(user.getJobTitle())
+                .salaryNo(user.getSalaryNo())
+                .wageTypeEn(user.getWageType())
+                .wageTypeHu(replaceWageType(user.getWageType()))
                                                  .build();
         // en title
         String replacedTitleEn  = variableHandlingUtil.replaceVariables(template.getContractTitleEn() , replacementTarget);
@@ -105,7 +109,7 @@ public class ContractCreationService {
                                 .docStatus(ContractProcessEnum.processCode(ContractProcessEnum.CREATED))
                                 .processStatus(ContractProcessEnum.processCode(ContractProcessEnum.UNSEEN))
                 .contractDateEn(DateUtil.getStrContractDateEn(StringUtil.getString(target.getDate())))
-                                .contractDateHu(StringUtil.getString(target.getDate()))
+                .contractDateHu(StringUtil.getString(target.getDate()).replaceAll("-","."))
                                 .deptCode(user.getDeptCode()).createdBy(account.getAdminId())
                 .templateDetailsSeq(template.getTemplateDetailsSeq())
                 .contractTitleEn(replacedTitleEn)
@@ -148,5 +152,21 @@ public class ContractCreationService {
      * */
     public List<Template> getTemplateCode() {
         return contractTemplateMapper.getTemplateCode();
+    }
+
+    private String replaceWageType(String type){
+        String replaceType ="";
+        switch (type) {
+            case "M" -> {
+                replaceType =  "hó";
+            }
+            case "H" -> {
+                replaceType =  "óra";
+            }
+            default -> {
+                replaceType = "";
+            }
+        }
+        return replaceType;
     }
 }
