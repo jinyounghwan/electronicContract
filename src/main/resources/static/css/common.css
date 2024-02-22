@@ -11200,3 +11200,13 @@ body.sidebar-toggled footer.sticky-footer {
 
 .document-sigbox p{margin-bottom:0;}
 .sigtxt{font-weight: 600;margin-left: 0.6rem;}
+th span {
+  font-family: "times";
+}
+[data-select="contractInfoHu"] {
+  font-family: "times";
+  font-weight: 700;
+}
+.dot-img {
+  width: 230px;
+}

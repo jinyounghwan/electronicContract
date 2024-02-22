@@ -412,6 +412,7 @@ let pdfDownload = () => {
     let param = {
         "html": html
     };
+    console.log(html);
 
     formData.append('param', new Blob([JSON.stringify(param)], { type: 'application/json' }));
 
