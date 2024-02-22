@@ -50,9 +50,9 @@
                 , c.agree_yn
                 , c.del_yn
                 , c.created_by
-                , c.created_at
+                , date_format(c.created_at,'%Y-%m-%d') as created_at
                 , c.updated_by
-                , c.updated_at
+                , date_format(c.updated_at , '%Y-%m-%d')as updated_at
                 , ct.template_title
                 , c.name
                 , ctd.contract_title_en

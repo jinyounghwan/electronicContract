@@ -85,8 +85,8 @@
           </div>
           <div class="btn-area-right">
             <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/contract/progress}'|" >List</button>
-            <button class="btn btn-primary" type="button" th:onclick="openAlert('Are you sure you want to Recall?', 'recall')">Recall</button>
-            <button class="btn btn-primary" type="button" th:onclick="openAlert('Are you sure you want to Assign?', 'assign')">Assign</button>
+            <button class="btn btn-primary" type="button" th:style="${info.docStatus == 'ASSIGNED'||info.docStatus == 'CREATED' ? '' : 'display:none;'}" th:onclick="openAlert('Are you sure you want to Recall?', 'recall')">Recall</button>
+            <button class="btn btn-primary" type="button" th:style="${info.docStatus == 'CREATED' ? '' : 'display:none;'}" th:onclick="openAlert('Are you sure you want to Assign?', 'assign')">Assign</button>
           </div>
         </div>
       </div>
