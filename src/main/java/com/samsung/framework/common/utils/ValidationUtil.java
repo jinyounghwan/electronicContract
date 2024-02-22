@@ -113,8 +113,6 @@ public class ValidationUtil {
                     }
 
                     return new BulkExcelVO(obj.getEmpNo() , null );
-                }else {
-                    // TODO: IJ 유저정보 등록 여부 조회 및 검증 필요
                 }
             }else{
                 BulkExcelBasicVO target = BulkExcelBasicVO.builder()
@@ -133,8 +131,6 @@ public class ValidationUtil {
                         log.error("[excelBulkDataValidator] {}(empNo) / {}", obj.getEmpNo(), violation.getMessage());
                     }
                     return new BulkExcelVO(obj.getEmpNo() , msg);
-                }else {
-                    // TODO: IJ 유저정보 등록 여부 조회 및 검증 필요
                 }
             }
         }

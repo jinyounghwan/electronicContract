@@ -19,7 +19,7 @@ else
 fi
 
 echo ">> Deploying Electronic Contract Application...! <<"
-# TODO: 서버 세팅 후 경로 변경
+
 cd $PROJECT_REPO
 echo ">> PWD: {$PWD} <<"
 
