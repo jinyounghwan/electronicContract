@@ -11210,3 +11210,9 @@ th span {
 .dot-img {
   width: 230px;
 }
+
+.pdf-modal-sig {
+  border-bottom: 1px #3a3b45;
+  display: block;
+  height: 70px;
+}
