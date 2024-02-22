@@ -36,4 +36,14 @@ public enum ContractTemplateEnum {
 
         return new String("No template title");
     }
+    public static String getTemplateCode(String target) {
+
+        for (ContractTemplateEnum item : ContractTemplateEnum.values()) {
+            if ((item.getPrefix() + item.getParentCode()).equals(target)) {
+               return item.getPrefix() +  item.getParentCode();
+            }
+        }
+
+        return new String("No template title");
+    }
 }

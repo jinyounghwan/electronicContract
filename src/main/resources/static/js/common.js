@@ -412,10 +412,10 @@ let pdfDownload = () => {
     let param = {
         "html": html
     };
+    console.log(html);
 
     formData.append('param', new Blob([JSON.stringify(param)], { type: 'application/json' }));
 
-    // TODO: IJ itext 변경 완료 후 수정 진행 예정...
     $.ajax({
         url: '/pdf/download',
         type: 'POST',

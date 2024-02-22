@@ -26,4 +26,12 @@ public class UserVO {
     private LocalDateTime createdAt;
     private String updatedBy;
     private LocalDateTime updatedAt;
+    private String hireDateEn;
+    private String hireDateHu;
+    private String salaryNo;
+    private String jobTitle;
+    private String wageType;
+    private String wageTypeEn;
+    private String wageTypeHu;
+
 }

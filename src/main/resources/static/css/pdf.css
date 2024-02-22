@@ -46,8 +46,8 @@
     width: 500px;
 }
 
-.dotted-line{
-    border-bottom: 1px dotted black;
+.dot-img {
+    width: 230px;
 }
 
 [data-select="contractInfoHu"] {
@@ -74,4 +74,3 @@ p span {
 .modal-img {
     width: 144px;
 }
-
