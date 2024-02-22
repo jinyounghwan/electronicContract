@@ -94,3 +94,6 @@ p span {
     padding-left: 30px;
 }
 
+[data-select="contentsHu"]{
+    padding-top: 10px;
+}
