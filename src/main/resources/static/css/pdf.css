@@ -20,6 +20,9 @@
     float: right;
 }
 .modal-signimg {
+    font-family: "times";
+    color: #3a3b45;
+    font-size: 9pt;
     background: #fff4df;
     width: 235px;
     height: 65px;
@@ -46,3 +49,25 @@
 .dotted-line{
     border-bottom: 1px dotted black;
 }
+
+[data-select="contractInfoHu"] {
+    font-weight: 700;
+}
+
+[data-select="contractTitleHu"] {
+    font-weight: 700;
+}
+
+[data-select="contractTitleEn"] {
+    font-weight: 700;
+}
+
+div,p,span {
+    font-family: "times";
+    font-size: 9pt;
+}
+
+.modal-img {
+    width: 144px;
+}
+
