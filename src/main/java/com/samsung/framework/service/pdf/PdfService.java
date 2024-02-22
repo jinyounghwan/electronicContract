@@ -46,7 +46,8 @@ public class PdfService {
     private String port;
     @Value("${ip.local-address}")
     private String localAddress;
-
+    @Value("${ip.server-address")
+    private String serverAddress;
     public FilePublicVO createPDF(String html, HttpServletRequest request) throws Exception {
 
         // html \n 문자 -> 빈칸으로 변경
@@ -171,11 +172,10 @@ public class PdfService {
         if(serverIp.equals(localAddress)){
             prefix = "http://localhost:"+port;
         } else {
-            prefix = "http://"+serverIp+":"+port;
+            prefix = "http://"+serverAddress+":"+port;
         }
         log.info("server pdfAddress ::  "+prefix);
 
         return prefix;
     }
-
 }
