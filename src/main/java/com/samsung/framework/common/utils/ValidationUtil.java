@@ -1,6 +1,8 @@
 package com.samsung.framework.common.utils;
 
+import com.samsung.framework.common.enums.ContractTemplateEnum;
 import com.samsung.framework.common.enums.ExceptionCodeMsgEnum;
+import com.samsung.framework.vo.common.BulkExcelBasicVO;
 import com.samsung.framework.vo.common.BulkExcelVO;
 import com.samsung.framework.vo.contract.ContractExcelVO;
 import jakarta.validation.ConstraintViolation;
@@ -89,29 +91,49 @@ public class ValidationUtil {
         validator = validatorFactory.getValidator();
 
         for (ContractExcelVO obj : bulkList) {
-            BulkExcelVO target = BulkExcelVO.builder()
-                    .empNo(obj.getEmpNo())
-                    .contractDate(obj.getContractDate())
-                    .templateCode(obj.getTemplateType())
-                    .templateSeq(obj.getTemplateCode())
-                    .salaryHu(obj.getSalaryHu())
-                    .salaryEn(obj.getSalaryEn())
-                    .build();
+            String templateType = ContractTemplateEnum.getTemplateCode(obj.getTemplateType());
+            // 연봉 관련 template type 일 때
+            if(templateType.equals(ContractTemplateEnum.getTemplateCode(ContractTemplateEnum.SALARY)) || templateType.equals(ContractTemplateEnum.getTemplateCode(ContractTemplateEnum.PRIVACY_AGREEMENT))){
+                BulkExcelVO target = BulkExcelVO.builder()
+                        .empNo(obj.getEmpNo())
+                        .contractDate(obj.getContractDate())
+                        .templateCode(obj.getTemplateType())
+                        .templateSeq(obj.getTemplateCode())
+                        .salaryHu(obj.getSalaryHu())
+                        .salaryEn(obj.getSalaryEn())
+                        .build();
 
-            Set<ConstraintViolation<BulkExcelVO>> validate = validator.validate(target);
+                Set<ConstraintViolation<BulkExcelVO>> validate = validator.validate(target);
+                String msg = "";
+                if(validate.size() > 0) {
+                    log.error(validate.toString());
+                    for (ConstraintViolation<BulkExcelVO> violation : validate) {
+                        msg = violation.getMessage();
+                        log.error("[excelBulkDataValidator] {}(empNo) / {}", obj.getEmpNo(), violation.getMessage());
+                    }
 
-            if(validate.size() > 0) {
-                log.error(validate.toString());
-                for (ConstraintViolation<BulkExcelVO> violation : validate) {
-                    log.error("[excelBulkDataValidator] {}(empNo) / {}", obj.getEmpNo(), violation.getMessage());
+                    return new BulkExcelVO(obj.getEmpNo() , null );
                 }
+            }else{
+                BulkExcelBasicVO target = BulkExcelBasicVO.builder()
+                        .empNo(obj.getEmpNo())
+                        .contractDate(obj.getContractDate())
+                        .templateCode(obj.getTemplateType())
+                        .templateSeq(obj.getTemplateCode())
+                        .build();
 
-                return new BulkExcelVO(obj.getEmpNo());
-            }else {
-                // TODO: IJ 유저정보 등록 여부 조회 및 검증 필요
+                Set<ConstraintViolation<BulkExcelBasicVO>> validate = validator.validate(target);
+                String msg = "";
+                if(validate.size() > 0) {
+                    log.error(validate.toString());
+                    for (ConstraintViolation<BulkExcelBasicVO> violation : validate) {
+                        msg = violation.getMessage();
+                        log.error("[excelBulkDataValidator] {}(empNo) / {}", obj.getEmpNo(), violation.getMessage());
+                    }
+                    return new BulkExcelVO(obj.getEmpNo() , msg);
+                }
             }
         }
-
-        return new BulkExcelVO("00000000");
+        return new BulkExcelVO("00000000" , null);
     }
 }

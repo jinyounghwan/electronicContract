@@ -83,9 +83,9 @@ public class SearchVO {
      */
     public List<SearchVO> getSearchDateRangeOptionList() {
         var list = new ArrayList<SearchVO>();
-        list.add(new SearchVO("ALL","전체"));
-        list.add(new SearchVO("CREATED_AT","작성일"));
-        list.add(new SearchVO("UPDATED_AT", "수정일"));
+        list.add(new SearchVO("ALL","ALL"));
+        list.add(new SearchVO("CREATED_AT","CREATED DATE"));
+        list.add(new SearchVO("UPDATED_AT", "UPDATE DATE"));
         return list;
     }
 
@@ -95,10 +95,10 @@ public class SearchVO {
      */
     public List<SearchVO> getSearchKeywordTypeOptionList() {
         var list = new ArrayList<SearchVO>();
-        list.add(new SearchVO("ALL", "전체"));
-        list.add(new SearchVO("TITLE", "제목"));
-        list.add(new SearchVO("EMPLOYEE_ID","사번"));
-        list.add(new SearchVO( "NAME","이름"));
+        list.add(new SearchVO("ALL", "ALL"));
+        list.add(new SearchVO("TITLE", "TITLE"));
+        list.add(new SearchVO("EMPLOYEE_ID","EMPLOYEE ID"));
+        list.add(new SearchVO( "NAME","NAME"));
         return list;
     }
     /**
@@ -107,9 +107,9 @@ public class SearchVO {
      */
     public List<SearchVO> getSearcTempletehKeywordTypeOptionList() {
         var list = new ArrayList<SearchVO>();
-        list.add(new SearchVO("ALL", "전체"));
-        list.add(new SearchVO("TITLE", "제목"));
-        list.add(new SearchVO( "TYPE","템플릿 타입"));
+        list.add(new SearchVO("ALL", "ALL"));
+        list.add(new SearchVO("TITLE", "TITLE"));
+        list.add(new SearchVO( "TYPE","TEMPLATE TYPE"));
         return list;
     }
 
@@ -120,12 +120,12 @@ public class SearchVO {
      */
     public List<SearchVO> getContractDocSearchStateTypeList(){
         var list = new ArrayList<SearchVO>();
-        list.add(new SearchVO("ALL", "전체"));
-        list.add(new SearchVO( "PRCS1001","생성"));
+        list.add(new SearchVO("ALL", "ALL"));
+        list.add(new SearchVO( "PRCS1001","CREATED"));
         list.add(new SearchVO("PRCS1002","ASSIGNED"));
-        list.add(new SearchVO("PRCS1003","회수"));
-        list.add(new SearchVO("PRCS1004", "완료"));
-        list.add(new SearchVO("PRCS1005","수기 계약서"));
+        list.add(new SearchVO("PRCS1003","RECALLED"));
+        list.add(new SearchVO("PRCS1004", "COMPLETED"));
+        list.add(new SearchVO("PRCS1005","PAPERCONTRACT"));
         return list;
     }
     /**
@@ -134,11 +134,11 @@ public class SearchVO {
      */
     public List<SearchVO> getContractSearchStateTypeList() {
         var list = new ArrayList<SearchVO>();
-        list.add(new SearchVO("ALL","전체"));
-        list.add(new SearchVO("PRCS2001","확인 전"));
-        list.add(new SearchVO( "PRCS2002","확인 후"));
-        list.add(new SearchVO("PRCS2003", "서명 완료"));
-        list.add(new SearchVO("PRCS2004", "거절"));
+        list.add(new SearchVO("ALL","ALL"));
+        list.add(new SearchVO("PRCS2001","UNSEEN"));
+        list.add(new SearchVO( "PRCS2002","VIEWED"));
+        list.add(new SearchVO("PRCS2003", "SIGNED"));
+        list.add(new SearchVO("PRCS2004", "REJECTED"));
         return list;
     }
 
@@ -148,9 +148,9 @@ public class SearchVO {
      */
     public List<SearchVO> getAcctSearchKeywordTypeOptionList(){
         var list = new ArrayList<SearchVO>();
-        list.add(new SearchVO("ALL", "전체"));
-        list.add(new SearchVO("EMPLOYEE_ID","사번"));
-        list.add(new SearchVO( "NAME","이름"));
+        list.add(new SearchVO("ALL", "ALL"));
+        list.add(new SearchVO("EMPLOYEE_ID","EMPLOYEE ID"));
+        list.add(new SearchVO( "NAME","NAME"));
         return list;
     }
 

@@ -49,14 +49,14 @@
                 , c.agree_yn
                 , c.del_yn
                 , c.created_by
-                , c.created_at
+                , date_format(c.created_at,'%Y-%m-%d') as created_at
                 , c.updated_by
                 , date_format(c.updated_at , '%Y-%m-%d')as updated_at
                 , ct.template_title
                 , c.name
                 , ctd.contract_title_en
                 , c.dept_code
-                ,c.assigned_at
+                , c.assigned_at
             from contracts c
             join contract_template ct
               on c.template_seq = ct.template_seq
