@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 @Slf4j
 @Component
 public class FileUtil {
+
     /**
      * 다중 파일 업로드
      * @param multipartFiles - 파일 객체 리스트
@@ -385,15 +386,19 @@ public class FileUtil {
 
 
     // PDF img src \" => ' 로 변환
-    public static String imgTagConvert(String html){
+    public static String imgTagSetting(String html, String address){
         //이미지 태그 안닫힌 태그들 찾아서 닫는 작업 진행
         Pattern pattern  =  Pattern.compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
         Matcher match = pattern.matcher(html);
         while(match.find()){
             String imgTag   = match.group();
             String imgTag2  = imgTag.replaceAll(">", "/>");
+            StringBuilder sb = new StringBuilder(imgTag2);
+            sb.insert(imgTag2.indexOf("\"")+1, address);
+            html = html.replaceAll(imgTag, String.valueOf(sb));
             html = html.replaceAll(imgTag, imgTag2);
         }
+
         String replace = html.replaceAll("\"", "'");
 
         return replace;
@@ -405,4 +410,6 @@ public class FileUtil {
 
         return path;
     }
+
+
 }

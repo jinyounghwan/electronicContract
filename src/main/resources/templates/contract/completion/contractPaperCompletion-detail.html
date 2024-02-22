@@ -31,7 +31,7 @@
                                 </tr>
                                 <tr>
                                     <th>Assigned</th>
-                                    <td th:text="${info.createdAtStr}"></td>
+                                    <td th:text="${info.signDateAtStr}?${info.signDateAtStr}:'-'"></td>
                                 </tr>
                                 </tbody>
                             </table>

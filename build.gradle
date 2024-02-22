@@ -71,14 +71,13 @@ dependencies {
 	// mail
 	implementation('org.springframework.boot:spring-boot-starter-mail')
 
-	// HTML TO PDF LIBRARY
+	// PDF LIBRARY
 	implementation 'com.itextpdf:itextpdf:5.5.13.3'
 	implementation 'com.itextpdf.tool:xmlworker:5.5.13.3'
 	implementation 'com.itextpdf:pdfa:7.2.3'
 
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
-
 }
 
 tasks.named('test') {

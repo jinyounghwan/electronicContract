@@ -38,13 +38,16 @@ public class ContractPaperCompService {
         List<ContractCompVO> list = contractPaperCompletionMapper.getContractPaperCompList(accountSearchVO);
         list.forEach(data->{
             data.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(data.getCreatedAt(),DateUtil.DATETIME_YMDHM_PATTERN));
+            data.setSignDateAtStr(DateUtil.convertLocalDateTimeToString(data.getSignDate(), DateUtil.DATETIME_YMDHM_PATTERN));
         });
         return list;
     }
 
     public ContractCompVO getPaperCompInfo(long contractNo){
         ContractCompVO target = contractPaperCompletionMapper.getPaperCompInfo(contractNo);
+
         target.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(target.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
+        target.setSignDateAtStr(DateUtil.convertLocalDateTimeToString(target.getSignDate(), DateUtil.DATETIME_YMDHM_PATTERN));
         return target;
     }
 }

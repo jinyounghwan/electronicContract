@@ -1,5 +1,6 @@
 package com.samsung.framework.service.pdf;
 
+
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
@@ -21,12 +22,14 @@ import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
 import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.FileUtil;
 import com.samsung.framework.vo.file.FilePublicVO;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -39,27 +42,36 @@ public class PdfService {
     private String getRootDir;
     @Value("${properties.file.realDir}")
     private String getRealDir;
+    @Value("${server.port}")
+    private String port;
+    @Value("${ip.local-address}")
+    private String localAddress;
 
-    public FilePublicVO createPDF(String html) throws Exception {
+    public FilePublicVO createPDF(String html, HttpServletRequest request) throws Exception {
 
         // html \n 문자 -> 빈칸으로 변경
-
         html = this.htmlTagConvert(html);
-        // img src= \" -> ' 변경
-        String convertHtml = FileUtil.imgTagConvert(html);
+        String serverIp = this.getPdfAddressImgUrl(request);
+        String convertHtml = FileUtil.imgTagSetting(html,serverIp);
+        convertHtml = this.tdTagConvert(convertHtml);
         String createFileName = FileUtil.createPdfFileName();
-        String nowDay = DateUtil.getUtcNowDateFormat("yyMM")+'/';
+        String nowDay = DateUtil.getUtcNowDateFormat("yyMM");
+
         // 파일 저장 위치 설정
         final String storagePath = FileUtil.getOsRootDir() + getRootDir + getRealDir + PDF_STORAGE_PATH + nowDay;
         // 최초 PDF 저장 시 PDF 폴더가 없다면 생성
         FileUtil.makeDirectories(storagePath);
-        // 실제 저장위치 및 파일이름
-        final String paths =  storagePath + createFileName;
 
-        log.info("File Paths : {} ",paths);
+        log.info("convertHtml :: {} ", convertHtml);
+
+        // 실제 저장위치 및 파일이름
+        final String paths = storagePath + File.separator + createFileName;
+
+        log.info("File Paths : {} ", paths);
+
         // 최초 문서 사이즈 설정
         Document document = new Document(PageSize.A4, 30, 30, 30, 30);
-        try{
+        try {
             // PDF 파일 생성
             PdfWriter pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(paths));
             // PDF 파일에 사용할 폰트 크기 설정
@@ -68,27 +80,31 @@ public class PdfService {
             document.open();
 
             // CSS 설정 변수 세팅
-            CSSResolver cssResolver =  new StyleAttrCSSResolver();
-            CssFile cssFile = null;
-            try{
-                InputStream cssStream = getClass().getClassLoader().getResourceAsStream("static/css/common.css");
-                cssFile = XMLWorkerHelper.getCSS(cssStream);
-            } catch(Exception e){
+            CSSResolver cssResolver = new StyleAttrCSSResolver();
+            CssFile commonCssFile = null;
+            CssFile fontCssFile = null;
+            try {
+                InputStream cssStream = getClass().getClassLoader().getResourceAsStream("static/css/pdf.css");
+                commonCssFile = XMLWorkerHelper.getCSS(cssStream);
+                cssStream = getClass().getClassLoader().getResourceAsStream("static/css/font.css");
+                fontCssFile = XMLWorkerHelper.getCSS(cssStream);
+            } catch (Exception e) {
                 throw new IllegalArgumentException("PDF CSS 파일을 찾을 수 없습니다.");
             }
-            if(cssFile == null){
+            if (commonCssFile == null || fontCssFile == null) {
                 throw new IllegalArgumentException("PDF CSS 파일을 찾을 수 없습니다.");
             }
-            cssResolver.addCss(cssFile);
+            cssResolver.addCss(commonCssFile);
+            cssResolver.addCss(fontCssFile);
 
             XMLWorkerFontProvider fontProvider = new XMLWorkerFontProvider(XMLWorkerFontProvider.DONTLOOKFORFONTS);
 
-            try{
-                fontProvider.register("static/font/AppleSDGothicNeoR.ttf","AppleSDGothicNeo");
-            } catch(Exception e) {
+            try {
+                fontProvider.register("static/font/AppleSDGothicNeoR.ttf", "AppleSDGothicNeo");
+            } catch (Exception e) {
                 throw new IllegalArgumentException("PDF 폰트 파일을 찾을 수 없습니다.");
             }
-            if(fontProvider.getRegisteredFonts() == null) {
+            if (fontProvider.getRegisteredFonts() == null) {
                 throw new IllegalArgumentException("PDF 폰트 파일을 찾을 수 없습니다.");
             }
 
@@ -109,38 +125,87 @@ public class PdfService {
             xmlParser.parse(stringReader);
             document.close();
             pdfWriter.close();
-        } catch (DocumentException e1){
+        } catch (DocumentException e1) {
             throw new IllegalArgumentException("PDF 라이브러리 설정 에러");
-        } catch(FileNotFoundException e2){
+        } catch (FileNotFoundException e2) {
             throw new IllegalArgumentException("PDF 파일 생성중 에러");
-        } catch(IOException e3){
+        } catch (IOException e3) {
             throw new IllegalArgumentException("PDF 파일 생성중 에러2");
-        } catch(Exception e4){
+        } catch (Exception e4) {
             throw new IllegalArgumentException("PDF 파일 생성중 에러3");
-        }
-        finally {
-            try{
+        } finally {
+            try {
                 document.close();
-            } catch(Exception e){
+            } catch (Exception e) {
                 log.info("PDF 파일 닫기 에러");
                 e.printStackTrace();
             }
-        }
+            String filePath = FileUtil.seperateOs(storagePath);
+            filePath = filePath.substring(0,filePath.lastIndexOf(File.separator));
+            log.info("filePath :: {}",filePath);
 
-        FilePublicVO filePublic = FilePublicVO.builder()
-                                                .fileNo(1)
-                                                .storagePath(FileUtil.seperateOs(storagePath))
-                                                .name(createFileName)
-                                                .extension(FileUtil.getFileExtension(createFileName))
-                                                .delYn("N")
-                                                .originalName(createFileName)
-                                                .size(String.valueOf(FileUtil.getFileSize(paths)))
-                                                .build();
-        return filePublic;
+            return FilePublicVO.builder()
+                    .fileNo(1)
+                    .storagePath(FileUtil.seperateOs(storagePath))
+                    .name(createFileName)
+                    .extension(FileUtil.getFileExtension(createFileName))
+                    .delYn("N")
+                    .originalName(createFileName)
+                    .size(String.valueOf(FileUtil.getFileSize(paths)))
+                    .build();
+        }
     }
     public String htmlTagConvert(String html){
         html = html.replaceAll("\n"," ");
         html = html.replaceAll("<br>", "<br/>");
+        html = html.replaceAll("<strong>", "<span>");
+        html = html.replaceAll("</strong>", "</span>");
+        return html;
+    }
+
+    /**
+     * serverIp에 따른 url
+     * @param request
+     * @return
+     */
+    public String getPdfAddressImgUrl(HttpServletRequest request){
+        String serverIp = request.getRemoteAddr();
+        String prefix;
+        if(serverIp.equals(localAddress)){
+            prefix = "http://localhost:"+port;
+        } else {
+            prefix = "http://"+serverIp+":"+port;
+        }
+        log.info("server pdfAddress ::  "+prefix);
+
+        return prefix;
+    }
+
+    /**
+     * td 태그 위에 p태그로 감싸기
+     * @param html
+     * @return
+     */
+    public String tdTagConvert(String html){
+        Pattern pattern = Pattern.compile("<td[^>]*>");
+        Matcher matcher = pattern.matcher(html);
+        while(matcher.find()) {
+            String tdTag = matcher.group();
+            StringBuilder sb = new StringBuilder(tdTag);
+            log.info("tdTag Index :: {} ", tdTag.indexOf(">"));
+            sb.insert(tdTag.indexOf(">")+1, "<p>");
+            log.info("String :: {}", sb);
+            html = html.replaceAll(tdTag, String.valueOf(sb));
+        }
+
+        // 1회만 반복
+        pattern = Pattern.compile("</td>");
+        matcher = pattern.matcher(html);
+        matcher.find();
+        String tdTagClose = matcher.group();
+        StringBuilder sb = new StringBuilder(tdTagClose);
+        sb.insert(tdTagClose.indexOf("<"), "</p>");
+        html = html.replaceAll(tdTagClose, String.valueOf(sb));
 
         return html;
     }

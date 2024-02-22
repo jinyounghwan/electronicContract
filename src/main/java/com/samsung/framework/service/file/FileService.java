@@ -171,6 +171,7 @@ public class FileService{
      */
     public ResponseEntity downloadFile(FilePublicVO file, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String realPath = FileUtil.getOsRootDir() + file.getStoragePath() + File.separator + file.getName();
+        log.info("realPath :: {}", realPath);
         String fileNmOrg = file.getOriginalName();
         return fileUtil.downloadFile(fileNmOrg ,realPath, request, response);
     }

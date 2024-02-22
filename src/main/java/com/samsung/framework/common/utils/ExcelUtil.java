@@ -171,7 +171,7 @@ public class ExcelUtil {
                 } else if(org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(cell)){
                    result = String.valueOf(cell.getDateCellValue());
                 }else{
-                    result = (int)cell.getNumericCellValue();
+                    result = String.valueOf((int)cell.getNumericCellValue());
                 }
                 break;
         }
