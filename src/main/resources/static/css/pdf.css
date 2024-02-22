@@ -67,6 +67,10 @@ div,p,span {
     font-size: 9pt;
 }
 
+p span {
+    font-weight: 700;
+}
+
 .modal-img {
     width: 144px;
 }
