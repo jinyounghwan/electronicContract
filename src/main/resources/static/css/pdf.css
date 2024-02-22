@@ -26,7 +26,8 @@
     background: #fff4df;
     width: 235px;
     height: 65px;
-    line-height: 65px;
+    text-align: center;
+    padding: 25px;
 }
 
 .modal-signtxt{
@@ -40,10 +41,6 @@
     width: 235px;
     height: 65px;
     line-height: 65px;
-}
-
-.document-sig {
-    width: 500px;
 }
 
 .dot-img {
@@ -74,3 +71,26 @@ p span {
 .modal-img {
     width: 144px;
 }
+
+.document-sig {
+    width: 650px;
+}
+
+#modal-left {
+    padding-left: 40px;
+}
+
+#modal-right {
+    padding-left: 25px;
+}
+
+[data-select="employeeInfoHu"] {
+    text-align: center;
+    padding-left: 30px;
+}
+
+[data-select="employeeInfoEn"] {
+    text-align: center;
+    padding-left: 30px;
+}
+
