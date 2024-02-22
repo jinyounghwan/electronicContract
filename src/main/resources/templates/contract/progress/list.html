@@ -38,7 +38,7 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                     <tr>
-                                        <th class="data-check"><input class="form-check-input" type="checkbox" onclick="allCheckBox(this)"></th>
+                                        <th class="data-check"><input class="form-check-input" type="checkbox" onclick="allCheckBox(this)" data-select="headCheck"></th>
                                         <th>Contract<br>Issuance No.</th>
                                         <th>Template Title</th>
                                         <th>Contract Title (EN)</th>
@@ -76,7 +76,7 @@
                                             <td th:text="${item.empNo}"></td>
                                             <td th:text="${item.createdAt}"></td>
                                             <td th:text="${item.assignedAt} ?${item.assignedAt} :'-' "></td>
-                                            <td th:text="${item.docStatus}"></td>
+                                            <td  data-target="docStatus" th:text="${item.docStatus}"></td>
                                             <td th:text="${item.processStatus}"></td>
                                             <td><a th:href="@{/contract/progress/info/{seq}(seq=${item.contractNo})}" >View</a></td>
                                         </tr>
@@ -151,7 +151,7 @@
             }
             /* assign */
             function assign(){
-                let checked = checkedArr();
+                let checked = assignCheckedArr();
                 if(checked.length > 0){
                     openAlert('Are you sure you want to Assign?','updateAssign');
                 }
@@ -177,6 +177,23 @@
                 });
             }
 
+            function assignCheckedArr(){
+                let checked = [];
+                $('[data-select="check"]:checked').each(function(index ,item ){
+                    var docStatus =$(item).parent().siblings('[data-target="docStatus"]').text();
+                    if(docStatus =='ASSIGNED'){
+                        // let vo = {};
+                        // let value = $(item).val();
+                        // vo.contractNo = value;
+                        // checked.push(vo);
+                        alert('This is an unprocessable state. Please press F5 to refresh and try again.');
+                        $('[data-select="check"]:checked').prop('checked' , false);
+                        $('[data-select="headCheck"]:checked').prop('checked' , false);
+                        return false;
+                    }
+                });
+                return checked;
+            }
             function checkedArr(){
                 let checked = [];
                 $('[data-select="check"]:checked').each(function(index ,item ){

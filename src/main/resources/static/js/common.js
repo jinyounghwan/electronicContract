@@ -250,7 +250,6 @@ let viewContract = (seq) =>{
         data:JSON.stringify(data),
         contentType: 'application/json; charset=UTF-8',
     }).done(function(data) {
-        console.log(data);
         if(!isEmpty(data)){
             $('[data-select]').each(function(index, item){
                 var $this = $(item);

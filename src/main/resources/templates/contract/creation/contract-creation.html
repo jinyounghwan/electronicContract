@@ -71,7 +71,7 @@
                 $('[data-select="templateCode"] option').each(function(i , e){
                    if(i == 0){
                        var value = $(e).data('value');
-                       console.log(value);
+                       // template code  to salary
                        if(value == 'TMPL2000' || value == 'TMPL3000'){
                             $('[data-target="hidden-tr"]').css('display', 'table-row');
                        }
@@ -100,7 +100,7 @@
                            alert('저장이 완료 되었습니다.');
                            location.href='/contract/progress';
                        }else{
-                           alert('관리자에게 문의 바랍니다.');
+                           alert(data.message);
                            location.href='/contract/create';
                        }
                    }).fail(function(jqXHR) {
