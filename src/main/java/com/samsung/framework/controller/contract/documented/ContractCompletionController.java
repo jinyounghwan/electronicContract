@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 계약서 완료 Controller
@@ -69,7 +70,12 @@ public class ContractCompletionController {
      */
     @ModelAttribute("contractDocSearchStateTypeSelect")
     public List<SearchVO>  searchContractDocSearchStateTypeSelect() {
-        return new SearchVO().getContractDocSearchStateTypeList();
+        return new SearchVO().getContractDocSearchStateTypeList().stream()
+                .filter(state -> state.getCode().equals(ContractProcessEnum.processCode(ContractProcessEnum.COMPLETED)) ||
+                        state.getCode().equals(ContractProcessEnum.processCode(ContractProcessEnum.PAPER_CONTRACT)) ||
+                        state.getCode().equals("ALL")
+                )
+                .collect(Collectors.toList());
     }
 
     /**
