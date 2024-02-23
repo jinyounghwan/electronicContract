@@ -14,7 +14,6 @@
                         <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
                     </div>-->
                     <div class="datatable-top">
-                        <div class="left"><p th:text="${totalCount}+ 'items'"></p></div>
                         <div class="left datatable-dropdown">
                             <label>
                                 <select class="datatable-selector" th:onchange="viewCountSelect(this)">
@@ -25,6 +24,7 @@
                                     <option th:selected="${paging.getDisplayRow()} == '25'" value="25">25</option></select>
                             </label>
                         </div>
+                        <div class="left"><p th:text="${totalCount}+ 'items'"></p></div>
                         <div class="right data-btn-area">
                             <button class="btn btn-outline-primary" type="button" th:onclick="|location.href='@{/contract/sign/comp/paper}'|" >Paper Contract Upload</button>
                         </div>
