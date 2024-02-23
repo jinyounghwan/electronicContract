@@ -46,7 +46,7 @@ public class PdfService {
     private String port;
     @Value("${ip.local-address}")
     private String localAddress;
-    @Value("${ip.server-address")
+    @Value("${ip.server-address}")
     private String serverAddress;
     public FilePublicVO createPDF(String html, HttpServletRequest request) throws Exception {
 
