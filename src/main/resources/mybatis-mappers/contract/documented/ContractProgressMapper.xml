@@ -146,4 +146,10 @@
         set process_status = 'PRCS2002'
         where contract_no = #{contractNo}
     </update>
+
+    <select id="getFileSeq" resultType="FilePublicVO" parameterType="FilePublicVO">
+        SELECT storage_path
+        FROM file_pdf
+        WHERE file_seq =#{seq}
+    </select>
 </mapper>

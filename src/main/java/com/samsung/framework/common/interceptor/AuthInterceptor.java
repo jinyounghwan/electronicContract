@@ -30,6 +30,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         try{
             session = request.getSession();
 
+            log.info("session >> " +session );
             if (session != null) {
                 AccountVO loginInfo = (AccountVO) session.getAttribute("loginInfo");
                 if(loginInfo != null) {
@@ -37,12 +38,14 @@ public class AuthInterceptor implements HandlerInterceptor {
                         return true;
                     }else {
                         mv = getModelAndView("common/messageRedirect", ExceptionCodeMsgEnum.NO_MENU_AUTHORITY.getMsg(), "/contract/sign/wait");
+
                     }
                 }
             }
 
             if(request.getRequestURI().equals("/")) return true;
 
+            log.info("preHandle >> " + mv);
             throw new ModelAndViewDefiningException(mv);
         } catch (Exception e) {
             throw new ModelAndViewDefiningException(mv);

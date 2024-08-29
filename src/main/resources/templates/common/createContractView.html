@@ -10,24 +10,24 @@
             <div id="target-pdf" class="modal-body document-box">
                 <div class="document">
                     <div class="document-cont">
-                        <div class="modal-img"><img src="/img/SDIHUCI.jpg" alt="HungarySDI Logo"/></div>
+                        <div class="modal-img"><img th:src="@{/static/img/SDIHUCI.jpg}"></div>
                         <table class="table-list">
                             <thead>
                             <tr>
-                                <th class="col-6 pdf-contract-title" data-select="contractTitleHu"></th>
-                                <th class="col-6 pdf-contract-title" data-select="contractTitleEn">AMENDMENT OF EMPLOYMENT CONTRACT</th>
+                                <th class="col-6" data-select="contractTitleHu" style="font-size:9pt;">MUNKASZERZŐDÉS MÓDOSÍTÁSA</th>
+                                <th class="col-6" data-select="contractTitleEn" style="font-size:9pt;">AMENDMENT OF EMPLOYMENT CONTRACT</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <td class="col-6 contract-content" data-select="contentsHu">
+                                <td class="col-6" data-select="contentsHu" >
                                     <!--                                    <p>a <strong>SAMSUNG SDI Magyarország Zrt.</strong> (székhely: 2131 Göd, Schenek István utca 1.;), mint munkáltató (a továbbiakban: „Munkáltató”) és</p>-->
                                     <!--                                    <p>….이름.… (dolgozó azonosító: …사번… ), mint munkavállaló (a továbbiakban: „Munkavállaló”)</p>-->
                                     <!--                                    <p>(a továbbiakban együttesen: „Szerződő felek”) között az alulírott helyen és napon az alábbi feltételek szerint: </p>-->
                                     <!--                                    <P>1. Szerződő felek a közöttük 2018.08.21. napján létrejött munkaszerződést (a továbbiakban: „Munkaszerződés”) 2023.12.01. kezdődő hatállyal, közös akarattal az alábbiak szerint módosítják:</P>-->
                                     <!--                                    <p>Továbbá</p>-->
                                 </td>
-                                <td class="col-6 contract-content" data-select="contentsEn">
+                                <td class="col-6" data-select="contentsEn">
                                     <!--  <p>the <strong>SAMSUNG SDI Magyarország Zrt.</strong> (registered seat: 2131 Göd Schenek István u. 1.;), as employer (hereinafter: „Employer”) and</p>
                                       <p>…이름… (employee No.: …사번…), as employee (hereinafter „ Employee”)</p>
                                       <p>(hereinafter jointly referred to as „Contracting parties”) at the place and on the date below under the following conditions:</p>
@@ -37,21 +37,19 @@
                             </tr>
                             </tbody>
                         </table>
-                        <div>
-                            <p class="contract-footer-color" data-select="contractInfoHu">Kelt / Place and date of signing: Göd, 2023.12.01.</p>
+                        <div class="document-sigbox">
+                            <p class="sigtxt" data-select="contractInfoHu">Kelt / Place and date of signing: Göd, 2023.12.01.</p>
                             <div class="document-sig">
-                                <div id="modal-left" class="modal-sigbox contract-footer-left">
-                                    <div class="pdf-modal-sig">
+                                <div class="modal-sigbox">
+                                    <div class="modal-sig">
                                         <div class="modal-comimg"></div>
-                                        <div class="dotted-line"><img src="/img/dotted-line.png" class="dot-img" alt="dot-line"/></div>
-                                        <div class="modal-signtxt"><p data-select="employeeInfoHu">Yi Hyun Chang<br/>Elnök/President<br/>Munkáltató/Employer<br/>Samsung SDI Magyarország Zrt.</p></div>
+                                        <div class="modal-signtxt"><p data-select="employeeInfoHu">Yi Hyun Chang<br>Elnök/President<br>Munkáltató/Employer<br>Samsung SDI Magyarország Zrt.</p></div>
                                     </div>
                                 </div>
-                                <div id="modal-right" class="modal-sigbox contract-footer-right">
-                                    <div class="pdf-modal-sig">
+                                <div class="modal-sigbox">
+                                    <div class="modal-sig">
                                         <div class="modal-signimg">SIGN HERE</div>
-                                       <!-- <img id="signatureImage" src="" alt="Signature Image" />-->
-                                        <div class="modal-signtxt"><p data-select="employeeInfoEn">Yi Hyun Chang<br/>Elnök/President<br/>Munkáltató/Employer<br/>Samsung SDI Magyarország Zrt.</p></div>
+                                        <div class="modal-signtxt"><p data-select="employeeInfoEn">Yi Hyun Chang<br>Elnök/President<br>Munkáltató/Employer<br>Samsung SDI Magyarország Zrt.</p></div>
                                     </div>
                                 </div>
                             </div>
@@ -60,9 +58,11 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button id="btn-download" type="button" class="btn btn-primary" data-target="statusBtn"  th:onclick="createPdfDownload()">Create</button>
                 <button type="button" class="btn btn-secondary" th:onclick="closeContractView()">Close</button>
                 <!--${session.loginInfo == null}-->
-                <button id="btn-download" type="button" class="btn btn-primary" data-target="statusBtn" th:if="${session.loginInfo.adminId == null}" th:onclick="pdfDownload()">Download</button>
+                <button type="button" class="btn btn-primary" data-target="statusBtn" th:if="${session.loginInfo.accountType == 'ACCT001'}" th:onclick="rejectConfirm()">Reject</button>
+                <button type="button" class="btn btn-primary" data-target="statusBtn" th:if="${session.loginInfo.accountType == 'ACCT001'}" th:onclick="openAgreementAlert()" >Agreement</button>
                 <!--                <button type="button" class="btn btn-primary" data-target="statusBtn" th:onclick="rejectConfirm()" >Reject</button>-->
                 <!--                <button type="button" class="btn btn-primary" data-target="statusBtn"  th:onclick="contractComplete()" >Agreement</button>-->
             </div>
@@ -73,4 +73,3 @@
 <div data-target="background"></div>
 <!--poppup end-->
 </html>
-

@@ -3,11 +3,25 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}" lang="ko">
 <th:block layout:fragment="content">
+    <style>
+        #popup {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: white;
+          padding: 20px;
+          border: 1px solid #ccc;
+          z-index: 1000; /* 팝업창이 다른 요소 위에 표시되도록 설정 */
+          display: none; /* 기본적으로 숨겨진 상태 */
+        }
+    </style>
+
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
             <!--content-->
             <div class="container-fluid">
-                <h1 class="page-title">계약서 조회</h1>
+                <h1 class="page-title">Contract inquiry</h1>
                 <div class="card mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Contract Info.</h6>
@@ -16,6 +30,14 @@
                         <div class="table-responsive">
                             <table class="table-list">
                                 <input type="hidden" id="contractNo" th:value="${info.contractNo}">
+
+                                <div id="popup" style="display : none;">
+                                    <iframe id="pdfTest2" width="1200" height="600px"></iframe>
+                                    <canvas id="signatureCanvas" width="500" height="200" style="border: 1px solid black;"></canvas>
+                                    <button id="saveSignature" class="btn btn-primary">Sign</button>
+                                    <span id="closeButton" class="btn btn-secondary">Close</span>
+                                </div>
+
                                 <tbody>
                                 <tr>
                                     <th class="col-2">Contract Title</th>
@@ -43,9 +65,11 @@
                 </div>
                 <div class="btn-area-box">
                     <div class="btn-area-left">
-                        <button class="btn btn-primary" type="button" th:onclick="'viewContract('+${info.contractNo}+')'">View Contract</button>
+                        <!--<button class="btn btn-primary" type="button" th:onclick="'viewContract('+${info.contractNo}+')'">View Contract</button>-->
+                        <button class="btn btn-primary" type="button" id="viewPdfButton">PDF view</button>
                         <button class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
                         <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/contract/sign/wait}'|">List</button>
+
                     </div>
                 </div>
             </div>
@@ -59,6 +83,97 @@
 </th:block>
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+
+    $(document).ready(function() {
+        let canvas = document.getElementById('signatureCanvas');
+        let ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let signatureImage;
+
+        canvas.width = 200; // PDF의 크기에 맞게 설정
+        canvas.height = 150; // PDF의 크기에 맞게 설정
+
+        // 마우스 클릭하여 드로잉 시작
+        canvas.addEventListener('mousedown', function(e) {
+            isDrawing = true;
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY);
+        });
+
+        // 마우스를 드래그하면서 서명
+        canvas.addEventListener('mousemove', function(e) {
+            if (isDrawing) {
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.strokeStyle = 'black';  // 드래그 색상 빨간색으로 설정
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        });
+
+        // 마우스 버튼을 놓으면 드로잉 종료
+        canvas.addEventListener('mouseup', function(e) {
+            isDrawing = false;
+            ctx.closePath();
+        });
+
+        // 마우스가 캔버스를 벗어나면 드로잉 종료
+        canvas.addEventListener('mouseout', function(e) {
+            isDrawing = false;
+            ctx.closePath();
+        });
+
+        document.getElementById('saveSignature').addEventListener('click', function() {
+            signatureImage = canvas.toDataURL('image/png');  // 서명 이미지를 Base64 형식으로 변환
+            saveSignatureToPdf(signatureImage);
+        });
+    });
+
+        $("#viewPdfButton").click(function() {
+          let templateSeq = document.getElementById("contractNo").value;
+          console.log("ContractNo !! > "  + templateSeq);
+
+        let data = {'seq' : templateSeq}
+              $.ajax({
+                  url: "/contract/sign/wait/pdf/" + templateSeq,
+                  method: "GET",
+                  success: function(base64EncodedPdf) {
+                    console.log("view TEST Success Data >>" + base64EncodedPdf);
+                      var pdfUrl = "data:application/pdf;base64," + base64EncodedPdf;
+                      $("#pdfTest2").attr("src", pdfUrl);
+                         $("#popup").show();
+                  },
+                  error: function(xhr) {
+                      alert("PDF 파일을 가져오지 못했습니다. (" + xhr.status + ")");
+                  }
+              });
+
+        });
+
+         // 닫기 버튼 클릭 이벤트
+    $("#closeButton").click(function() {
+      $("#popup").hide();
+    });
+
+    function saveSignatureToPdf(signatureImage) {
+        let templateSeq = document.getElementById("contractNo").value;
+
+        $.ajax({
+            url: '/contract/sign/wait/saveSignature',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                pdfBase64: $("#pdfTest2").attr("src").split(',')[1],  // PDF 데이터 (Base64)
+                signatureBase64: signatureImage.split(',')[1],  // 서명 이미지 데이터 (Base64)
+                seq: templateSeq
+            }),
+            success: function(response) {
+                alert("서명이 포함된 PDF가 성공적으로 저장되었습니다.");
+            },
+            error: function(xhr) {
+                alert("서명 저장에 실패했습니다. (" + xhr.status + ")");
+            }
+        });
+    }
     </script>
 </th:block>>
 

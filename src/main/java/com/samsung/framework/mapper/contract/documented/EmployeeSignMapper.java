@@ -4,6 +4,7 @@ import com.samsung.framework.vo.contract.creation.ContractVO;
 import com.samsung.framework.vo.search.account.AccountSearchVO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.io.File;
 import java.util.List;
 
 @Mapper
@@ -15,4 +16,6 @@ public interface EmployeeSignMapper {
     ContractVO getContractWaitInfo(ContractVO vo);
 
     int updateProcessStatus(ContractVO contractVO);
+
+    int updateSignPath(ContractVO SignVo);
 }

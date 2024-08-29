@@ -1,6 +1,7 @@
 package com.samsung.framework.mapper.account;
 
 import com.samsung.framework.domain.account.Account;
+import com.samsung.framework.domain.account.LoginRequest;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.user.UserVO;
@@ -28,4 +29,9 @@ public interface AccountMapper {
     int updAdminAcct(AccountVO account);
 
     UserVO getUserInfo(@Param(value="empNo") String empNo);
+
+    int updateAuth(AccountVO account);
+
+    int countDelete(String userId);
+    AccountVO getAuthInfo(String userId);
 }

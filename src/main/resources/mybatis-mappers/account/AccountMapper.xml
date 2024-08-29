@@ -161,6 +161,15 @@
             AND U.USE_YN = 'Y'
     </select>
 
+    <!-- 인증키 조회를 위한 정보 조회 -->
+    <select id="getAuthInfo" resultType="AccountVO">
+        SELECT U.EMP_NO,
+        U.authority
+        FROM USERS U
+            WHERE U.EMP_NO = #{userId}
+                AND U.USE_YN = 'Y'
+    </select>
+
     <insert id="insertMember" parameterType="AccountVO">
         INSERT INTO USERS
         (
@@ -223,6 +232,23 @@
         WHERE
             U.EMP_NO = #{adminId}
     </update>
+
+
+    <update id="updateAuth" parameterType="AccountVO">
+        UPDATE USERS U
+            SET U.UPDATED_AT = sysdate() ,
+                 U.authority = #{authority}
+        WHERE U.EMP_NO = #{empNo}
+    </update>
+
+    <!-- 재전송 타이머 종료시 인증키 초기화-->
+    <update id="countDelete">
+        UPDATE USERS
+            SET authority = NULL
+        WHERE EMP_NO = #{userId}
+    </update>
+
+
     <select id="getUserInfo" resultType="UserVO">
          select u.emp_no
               , u.dept_code

@@ -9,6 +9,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class ContractTemplateVO {
+    private int templateDetailsSeq;
     private int templateSeq;
     private String templateTitle;
     private String templateTypeTitle;
@@ -30,5 +31,5 @@ public class ContractTemplateVO {
     private int nextSeq;
     private String contractInfoEn;
     private String contractInfoHu;
-    private int templateDetailsSeq;
+
 }

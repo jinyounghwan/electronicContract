@@ -2,113 +2,116 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}" lang="ko">
-    <th:block layout:fragment="content">
-        <div id="content-wrapper" class="d-flex flex-column">
-            <div id="content">
-                <!--content-->
-                <div class="container-fluid">
-                    <h1 class="page-title">계약서 생성</h1>
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <form id="contractForm" name="contractForm">
-                                    <table class="table-list">
-                                        <tbody>
-                                        <tr>
-                                            <th class="col-2">Date</th>
-                                            <td><input type="date" class="form-control form-control-user" id="date" name="date" placeholder="YYYY.MM.DD" data-required="true" data-alert="date 를 입력 해 주세요 "></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Template Code</th>
-                                            <td>
-                                                <div class="data-group datatable-dropdown">
-                                                    <label style="width: 100%;">
-                                                        <select class="datatable-selector" th:field="*{templateCodeList}" data-select="templateCode">
-                                                            <option th:each="e , i : ${templateCodeList}" th:value="${e.templateSeq}" th:text="|${e.templateTitle}|" th:attr = "data-value=${e.templateType}" >전체</option>
-                                                        </select>
-                                                    </label>
-                                                </div>
-                                            </td>
-<!--                                            <th>Template Code</th>-->
-<!--                                            <td><input type="text" class="form-control form-control-user" name="templateSeq" placeholder="" data-required="true" data-alert="template code 를 입력 해 주세요" ></td>-->
-                                        </tr>
-                                        <tr>
-                                            <th>Employee ID</th>
-                                            <td><input type="text" name="empNo" class="form-control form-control-user" placeholder="" data-required="true" data-alert="employee id를 입렵 해 주세요 "></td>
-                                        </tr>
-                                        <tr data-target="hidden-tr">
-                                            <th>Salary_hu</th>
-                                            <td><input type="text" name="SalaryHu" class="form-control form-control-user" placeholder="" ></td>
-                                        </tr>
-                                        <tr data-target="hidden-tr">
-                                            <th>Salary_en</th>
-                                            <td><input type="text" name="SalaryEn" class="form-control form-control-user" placeholder="" ></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </form>
-                            </div>
+<th:block layout:fragment="content">
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--content-->
+            <div class="container-fluid">
+                <h1 class="page-title">Create contract</h1>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <form id="contractForm" name="contractForm">
+                                <table class="table-list">
+                                    <tbody>
+                                    <tr>
+                                        <th class="col-2">Date</th>
+                                        <td><input type="date" class="form-control form-control-user" id="date" name="date" placeholder="YYYY.MM.DD" data-required="true" data-alert="date 를 입력 해 주세요 "></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Template Code</th>
+                                        <td>
+                                            <div class="data-group datatable-dropdown">
+                                                <label style="width: 100%;">
+                                                    <select class="datatable-selector" th:field="*{templateCodeList}" data-select="templateCode" id="tempSeq">
+                                                        <option th:each="e , i : ${templateCodeList}" th:value="${e.templateSeq}" th:text="|${e.templateTitle}|" th:attr = "data-value=${e.templateType}" >전체</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <!--                                            <th>Template Code</th>-->
+                                        <!--                                            <td><input type="text" class="form-control form-control-user" name="templateSeq" placeholder="" data-required="true" data-alert="template code 를 입력 해 주세요" ></td>-->
+                                    </tr>
+                                    <tr>
+                                        <th>Employee ID</th>
+                                        <td><input type="text" name="empNo" class="form-control form-control-user" placeholder="" data-required="true" data-alert="employee id를 입렵 해 주세요 "></td>
+                                    </tr>
+                                    <tr data-target="hidden-tr">
+                                        <th>Salary_hu</th>
+                                        <td><input type="text" name="SalaryEn" class="form-control form-control-user" placeholder="" ></td>
+                                    </tr>
+                                    <tr data-target="hidden-tr">
+                                        <th>Salary_en</th>
+                                        <td><input type="text" name="SalaryEn" class="form-control form-control-user" placeholder="" ></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
                         </div>
                     </div>
-                    <div class="btn-area">
-                        <button class="btn btn-primary" type="button" th:onclick="create()">Create</button>
-                    </div>
                 </div>
-                <!--contents-->
+                <div class="btn-area">
+                    <button class="btn btn-primary"  type="button" th:onclick="createViewContract()">View Contract</button>
+                    <!--<button class="btn btn-primary" type="button" th:onclick="create()">Create</button>-->
+                </div>
             </div>
+            <!--contents-->
+            <div th:replace="~{common/paperViewContract}"></div>
+            <div th:replace="~{common/createContractView}"></div>
+            <div th:replace="~{common/contractProgressHistory}"></div>
         </div>
-    </th:block>
-    <th:block layout:fragment="script">
-        <script th:inline="javascript">
-            $(function(){
-                let value = $('[data-select="templateCode"] option:selected').data('value');
-                console.log(value)
-                if( value != 'TMPL2000' &&  value != 'TMPL3000' ){
-                    // 연봉 관련 template가 아니라면..
-                    console.log("aaaa");
+    </div>
+</th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(function(){
+            let value = $('[data-select="templateCode"] option:selected').data('value');
+            if( value != 'TMPL2000' &&  value != 'TMPL3000' ){
+                // 연봉 관련 template가 아니라면..
+                $('[data-target="hidden-tr"]').css('display', 'none');
+            }
+            $('[data-select="templateCode"] option').each(function(i , e){
+               if(i == 0){
+                   var value = $(e).data('value');
+                   // template code  to salary
+                   if(value == 'TMPL2000' || value == 'TMPL3000'){
+                        $('[data-target="hidden-tr"]').css('display', 'table-row');
+                   }
+               }
+            });
+            $('[data-select="templateCode"]').on('change' , function(){
+                let selected =  $('[data-select="templateCode"] option:selected').data('value');
+                if(selected == 'TMPL2000' || selected == 'TMPL3000'){
+                    $('[data-target="hidden-tr"]').css('display', 'table-row');
+                }else{
                     $('[data-target="hidden-tr"]').css('display', 'none');
                 }
-                $('[data-select="templateCode"] option').each(function(i , e){
-                   if(i == 0){
-                       var value = $(e).data('value');
-                       // template code  to salary
-                       if(value == 'TMPL2000' || value == 'TMPL3000'){
-                            $('[data-target="hidden-tr"]').css('display', 'table-row');
-                       }
-                   }
-                });
-                $('[data-select="templateCode"]').on('change' , function(){
-                    let selected =  $('[data-select="templateCode"] option:selected').data('value');
-                    if(selected == 'TMPL2000' || selected == 'TMPL3000'){
-                        $('[data-target="hidden-tr"]').css('display', 'table-row');
-                    }else{
-                        $('[data-target="hidden-tr"]').css('display', 'none');
-                    }
-                });
             });
-
-           let create = () =>{
-               if(valid($('#contractForm'))){
-                   $.ajax({
-                     url: '/contract/create/save',
-                     type: 'post',
-                     dataType:'json',
-                     data:$('#contractForm').serialize() + '&templateCode=' + $('[data-select="templateCode"] option:selected').val()
-                   }).done(function(data) {
-                       console.log(data);
-                       if(data.code == 200){
-                           alert('저장이 완료 되었습니다.');
-                           location.href='/contract/progress';
-                       }else{
-                           alert(data.message);
-                           location.href='/contract/create';
-                       }
-                   }).fail(function(jqXHR) {
-                      sendToErrorPage(jqXHR);
-                   });
-               }
+        });
+<!--
+       let create = () =>{
+           if(valid($('#contractForm'))){
+               $.ajax({
+                 url: '/contract/create/save',
+                 type: 'post',
+                 dataType:'json',
+                 data:$('#contractForm').serialize() + '&templateCode=' + $('[data-select="templateCode"] option:selected').val()
+               }).done(function(data) {
+                   console.log(data);
+                   if(data.code == 200){
+                       alert('Save is complete.');
+                       location.href='/contract/progress';
+                   }else{
+                       alert(data.message);
+                       location.href='/contract/create';
+                   }
+               }).fail(function(jqXHR) {
+                  sendToErrorPage(jqXHR);
+               });
            }
-        </script>
-    </th:block>
+-->
+       }
+    </script>
+</th:block>
 
 </html>

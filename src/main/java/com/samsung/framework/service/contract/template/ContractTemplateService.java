@@ -50,6 +50,8 @@ public class ContractTemplateService {
         HttpSession session = request.getSession();
         AccountVO account = (AccountVO) session.getAttribute("loginInfo");
         contractTemplateVO.setUpdatedBy(account.getAdminId());
+        log.info("contractTemplateVO Service >1> " +contractTemplateVO.getContractTitleHu());
+        log.info("contractTemplateVO Service >2> " +contractTemplateVO.getContractTitleHu().length());
         return contractTemplateMapper.saveContractTemplateInfo(contractTemplateVO);
     }
 

@@ -18,7 +18,8 @@
 
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
-                        <div class="p-5">
+
+                        <div class="p-5" id="loginform">
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Log In</h1>
                             </div>
@@ -30,6 +31,7 @@
                                     <input type="password" class="form-control form-control-user" id="password" placeholder="Password">
                                 </div>
                                 <a class="btn btn-primary btn-user btn-block mt-4" onclick="login()">Login</a>
+                                <!--<button type="button" class="btn btn-primary btn-user btn-block mt-4" onclick="loginMail()"></button>-->
                             </form>
                             <hr>
 
@@ -37,6 +39,24 @@
                                 <p>※ If account verification is needed, please contact the contract manager.</p>
                             </div>
                         </div>
+
+                        <!-- 인증 화면을 위해 추가 str -->
+                        <div class="p-5" id="Authform" style="display: none;">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Authentication</h1>
+                                <div class="form-group">
+                                    <div class="form-control form-control-user auth-control">
+                                        <input type="AuthKey" id="AuthKey" placeholder="AuthKey" style="width: 320px; height:33px">
+                                        <span id="countdown">30</span>
+                                        <button id="myButton" style="display: none;" onclick="reAuth()">retransmit</button>
+                                    </div>
+
+                                    <a class="btn btn-primary btn-user btn-block mt-4" onclick="loginFinal()">Check</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 인증 화면을 위해 추가 end -->
+
                     </div>
                 </div>
 
@@ -49,6 +69,10 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        let userId;
+        let password;
+        let authKey;
+
         $("#password").on("keyup", function(key){
             if(key.keyCode==13){
                 login();
@@ -61,8 +85,14 @@
         })
         // 로그인 function
         function login() {
-            let userId = document.getElementById("userId").value;
-            let password = document.getElementById("password").value;
+            //가입 시 이메일로 인증번호가 전송되었습니다.
+            alert('A verification number was sent to your email upon signing up.');
+            userId = document.getElementById("userId").value;
+            password = document.getElementById("password").value;
+
+            console.log('userId> ' + userId);
+            console.log('password> ' + password);
+
 
             // 아이디 비밀번호 유효성 검사
             if(!userId || !password){
@@ -82,32 +112,141 @@
                 async:false, //동기 처리
                 data: JSON.stringify(member)
             }).done(function(data) {
-                    $.ajax({
-                        type: "POST",
-                        url : "/account/api/pwdChange/isExist",
-                        contentType: "application/json",
-                        data: JSON.stringify(member)
-                    }).done(function(data){
-                        if(data.exists){
-                            if(data.adminIdCheck){ // 어드민 계정
-                                location.href="/contract/progress";
-                            }else { // 임직원 계정
-                                location.href="/contract/sign/wait";
-                            }
-                        } else { // 최초 로그인
-                            location.href="/account/pwdChange";
-                        }
-                    }).fail(function(jqXHR) {
-                        console.log(jqXHR);
-                    });
+                  console.log("성공");
+                  loginToAuth();
             }).fail(function(jqXHR) {
                 let errors = JSON.parse(jqXHR.responseText);
                 if(errors.code===983 || errors.code===984){
                     openAlert(errors.message);
                 }
+                   if(errors.code===996){
+                    openAlert(errors.message);
+                }
             });
 
         }
+
+        function reAuth(){
+        console.log('userId > ' + userId);
+        // 인증코드가 재전송 됐습니다.
+        alert('The verification code has been resent.');
+                    $('#countdown').show();
+                    $("#myButton").hide();
+
+             let member = {
+                                userId: userId,
+                                password: password
+                            }
+
+                 $.ajax({
+                                type : "POST",
+                                url  : "/account/loginMail",
+                                contentType: "application/json",
+                                data: JSON.stringify(member)
+                            }).done(function(data) {
+                                console.log('완료');
+                                loginToAuth()
+                            });
+
+             let countdown = 30;
+             let countdownInterval = setInterval(function() {
+                countdown--;
+                $('#countdown').text(countdown);
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    $('#countdown').hide();
+                    $("#myButton").show();
+                }
+            }, 1000);
+
+        }
+
+        function loginToAuth(){
+
+         $("#loginform").hide();
+         $("#Authform").show();
+
+            let countdown = 30;
+            let countdownInterval = setInterval(function() {
+                countdown--;
+                $('#countdown').text(countdown);
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    $('#countdown').hide();
+                    $("#myButton").show();
+
+               let member = {
+                                userId: userId,
+                                password: password
+                            }
+
+                 $.ajax({
+                                type : "POST",
+                                url  : "/account/countDelete",
+                                contentType: "application/json",
+                                data: JSON.stringify(member)
+                            }).done(function(data) {
+                                console.log('완료');
+                            });
+
+                }
+            }, 1000);
+        }
+
+       function loginFinal(){
+
+        authKey = $("#AuthKey").val();
+
+        console.log('authKey > ' + authKey);
+            let member = {
+                userId: userId,
+                password: password,
+                authority : authKey
+            }
+
+             $.ajax({
+                type : "POST",
+                url  : "/account/loginAuth",
+                contentType: "application/json",
+                data: JSON.stringify(member)
+            }).done(function(data) {
+                    if(data.Code == "111"){
+                    //인증에 성공했습니다.
+                    alert('Authentication was successful.');
+                            $.ajax({
+                            type: "POST",
+                            url : "/account/api/pwdChange/isExist",
+                            contentType: "application/json",
+                            data: JSON.stringify(member)
+                        }).done(function(data){
+                            if(data.exists){
+                                if(data.adminIdCheck){ // 어드민 계정
+                                    location.href="/contract/progress";
+                                }else { // 임직원 계정
+                                    location.href="/contract/sign/wait";
+                                }
+                            } else { // 최초 로그인
+                                location.href="/account/pwdChange";
+                            }
+                        }).fail(function(jqXHR) {
+                            console.log(jqXHR);
+                        });
+                    }else{
+                        alert('The authentication number is different.'); // 인증번호가 다릅니다.
+                        return;
+                    }
+            }).fail(function(jqXHR) {
+                let errors = JSON.parse(jqXHR.responseText);
+                if(errors.code===983 || errors.code===984){
+                    openAlert(errors.message);
+                }
+                if(errors.code===996){
+                    openAlert(errors.message);
+                }
+                console.log('errors> ' + errors);
+            });
+
+       }
     </script>
 </th:block>
 </html>

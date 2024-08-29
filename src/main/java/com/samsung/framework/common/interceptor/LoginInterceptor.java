@@ -21,13 +21,18 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("[preHandle]: {}", request.getRequestURI());
+        log.info("[request]: {}", request);
+
         HttpSession session = null;
         try{
+            log.info("interceptor one ");
             session = request.getSession();
 
             if(session != null && session.getAttribute("loginInfo") != null){
+                log.info("interceptor two ");
                 return true;
             } else {
+                log.info("interceptor three ");
                 if(request.getRequestURI().equals("/")) return true;
 
                 ModelAndView modelAndView = new ModelAndView();

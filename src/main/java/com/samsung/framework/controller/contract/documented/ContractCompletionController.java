@@ -104,6 +104,7 @@ public class ContractCompletionController {
 
     @PostMapping("/list")
     public String getContractCompList(Model model, @RequestBody SearchVO searchVO){
+        log.info("완료 계약서 vo >> " + searchVO);
         // total
         int totalCount = contractCompletionService.getContractCompTotal(searchVO);
 

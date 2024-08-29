@@ -51,3 +51,4 @@ public class ContractsViewService {
         return  list;
     }
 }
+

@@ -1,0 +1,43 @@
+
+
+
+
+
+let createPdfDownloadzz = () => {
+    let formData = new FormData();
+
+    for (let i = 0; i < dataLo.length; i++) {
+    // Loop through each element in the current list (dataLo[i])
+    for (let j = 0; j < dataLo[i].length; j++) {
+    let currentData = dataLo[i][j]; // Access the current data object
+
+    $("#contractTitleHu").text(JSON.stringify(currentData.contractTitleHu));
+    $("#contractTitleEn").text(JSON.stringify(currentData.contractTitleEn));
+
+    let html = $('#target-pdf').html();
+
+    let param = {
+    "seq": j + 1, // Set seq based on current list index (j)
+    "html": html
+    };
+
+    formData.append('param', new Blob([JSON.stringify(param)], { type: 'application/json' }));
+    }
+
+    $.ajax({
+    url: '/contracts/create/pdfDownload',
+    type: 'POST',
+    cache: false,
+    data: formData,
+    contentType: false,
+    processData: false
+    }).done(function (blob, status, xhr, fileName) {
+    create(); // 계약서 생성 시 pdf저장 성공하면
+    }).fail(function(jqXHR) {
+    console.log("fail >> " + jqXHR);
+    });
+
+    // Clear formData after processing each list
+    formData = new FormData();
+    }
+};

@@ -337,4 +337,20 @@ public class AccountService {
         getFirstNameLastName(account);
         return account;
     }
+
+    // 랜덤 인증키 6자리 저장 로직
+    public void updateAuth(AccountVO account) throws CustomLoginException, NoSuchAlgorithmException {
+        log.info("인증키 upd in >>" + account);
+        accountMapper.updateAuth(account);
+    }
+
+    public AccountVO getAuthInfo(@Valid LoginRequest loginRequest) throws CustomLoginException, NoSuchAlgorithmException {
+        AccountVO target = accountMapper.getAuthInfo(loginRequest.getUserId());
+        return target;
+    }
+
+    // 타이머 종료시 인증암호 삭제로직
+    public void countDelete(LoginRequest loginRequest){
+        accountMapper.countDelete(loginRequest.getUserId());
+    }
 }

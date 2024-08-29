@@ -3,7 +3,7 @@
 <div class="databox" th:fragment="searchBox(dateRangeSelect , keywordTypeSelect , contractDocSearchStateTypeSelect , contractSearchStateTypeSelect)">
     <div class="data-linebox">
         <div class="data-line">
-            <div class="data-title">Date</div>
+            <div class="data-title">Date1</div>
             <div class="data-select datatable-dropdown">
                 <label>
                     <select class="datatable-selector"  data-select="dateRangeSelect">
@@ -12,9 +12,9 @@
                 </label>
             </div>
             <div class="data-group">
-                <input type="date" class="form-control form-control-user" id="startDt" placeholder="YYYY.MM.DD" th:value="${search.getStartDt()}">
+                <input type="date" class="form-control form-control-user" id="startDt" placeholder="DateIn" th:value="${search.getStartDt()}">
                 <span>-</span>
-                <input type="date" class="form-control form-control-user" id="endDt" placeholder="YYYY.MM.DD" th:value="${search.getEndDt()}">
+                <input type="date" class="form-control form-control-user" id="endDt" placeholder="YYYY-MM-DD" th:value="${search.getEndDt()}">
             </div>
         </div>
         <div class="data-line">

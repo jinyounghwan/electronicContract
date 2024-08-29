@@ -17,10 +17,13 @@ import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.common.BulkExcelVO;
 import com.samsung.framework.vo.common.ResultStatusVO;
 import com.samsung.framework.vo.contract.ContractExcelVO;
+import com.samsung.framework.vo.contract.completion.ContractCompVO;
 import com.samsung.framework.vo.contract.creation.ContractVO;
 import com.samsung.framework.vo.contract.template.ContractTemplateVO;
+import com.samsung.framework.vo.contract.view.ContractView;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.log.LogSaveResponse;
+import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.user.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -29,10 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -71,6 +71,7 @@ public class ContractsCreationService {
         // 엑셀 조회
         List<List<ContractExcelVO>> list  = excelService.readExcelFile(fileList);
 
+        log.info("333333");
         // 어떤 사번에서 빈값이 들어갔는지
         BulkExcelVO bulkExcelVO = validationUtil.excelBulkDataValidator(list.get(0));
         if(!"00000000".equals(bulkExcelVO.getEmpNo())){
@@ -84,6 +85,9 @@ public class ContractsCreationService {
         for(List<ContractExcelVO> targetList : list){
             targetList.stream().iterator().forEachRemaining(data->{
                 UserVO user = accountMapper.getUserInfo(data.getEmpNo());
+                log.info("data.getSalaryEn() >> " + data.getSalaryEn());
+                log.info("data.getSalaryHu() >> " + data.getSalaryHu());
+
                 // template 여부 체크
                 ContractTemplateVO template = contractTemplateMapper.getContractTemplateInfo(StringUtil.getString(data.getTemplateCode()));
                 Variables replacementTarget = Variables.builder().name(user.getName()).employeeNo(StringUtil.getString(user.getEmpNo()))
@@ -156,6 +160,7 @@ public class ContractsCreationService {
                 Map<String, LogSaveResponse> logs = logUtil.saveLog(saveRequest);
             });
         }
+        log.info("4444444");
         reusltMap.put("code", ResultCodeMsgEnum.REQUEST_SUCCESS.getCode());
         reusltMap.put("msg", ResultCodeMsgEnum.REQUEST_SUCCESS.getMsg());
         dataMap.put("totalCount" ,list.get(0).size());
@@ -177,4 +182,20 @@ public class ContractsCreationService {
         }
         return replaceType;
     }
+
+    public List<ContractTemplateVO> getExcelSelect(List<Integer> excelList2){
+
+        List<ContractTemplateVO> list = contractTemplateMapper.getExcelSelect(excelList2);
+
+       /* list.forEach(data->{
+            data.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(data.getCreatedAt(), "yyyy-MM-dd"));
+            data.setUpdatedAtStr(DateUtil.convertLocalDateTimeToString(data.getUpdatedAt(), "yyyy-MM-dd"));
+            data.setSignDateAtStr(DateUtil.convertLocalDateTimeToString(data.getSignDate(), DateUtil.DATETIME_YMDHM_PATTERN));
+            data.setDocStatus(String.valueOf(ContractProcessEnum.getProcessStatus(data.getDocStatus())));
+            data.setProcessStatus(String.valueOf(ContractProcessEnum.getProcessStatus(data.getProcessStatus())));
+        });*/
+        return list;
+    }
+
+
 }

@@ -2,14 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}" lang="ko">
-    <th:block layout:fragment="content">
-        <div id="content-wrapper" class="d-flex flex-column">
-            <div id="content">
-                <!--content-->
-                <div class="container-fluid">
-                    <form id="infoForm" name="infoForm" onsubmit="return false;">
+<th:block layout:fragment="content">
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--content-->
+            <div class="container-fluid">
+                <form id="infoForm" name="infoForm" onsubmit="return false;">
                     <input type="hidden" id="templateSeq" name="templateSeq" th:value="${info.getTemplateSeq()}">
-                    <h1 class="page-title">계약서 템플릿</h1>
+                    <h1 class="page-title">Contract template</h1>
                     <div class="card mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
@@ -18,32 +18,32 @@
                             <div class="table-responsive">
                                 <table class="table-list">
                                     <tbody>
-                                        <tr>
-                                            <th class="col-2">Template Code</th>
-                                            <td th:text="${info.getTemplateSeq()}">
-                                                00000019
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Template Title</th>
-                                            <td><input name="templateTitle" th:value="${info.getTemplateTitle()}" class="form-control form-control-user" placeholder=""></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Template Type</th>
-                                            <td th:text="${info.getTemplateType}">무기계약직 계약서</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Memo</th>
-                                            <td><input  name="memo"  th:value="${info.getMemo()}" class="form-control form-control-user" placeholder=""></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Created</th>
-                                            <td th:text="${info.getCreatedAt()} +' , '+ ${info.getCreatedBy()}">2023-09-10  08:14:59 , admin12</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Modified</th>
-                                            <td th:if="${not #strings.isEmpty(info.getUpdatedAt())}" th:text="${info.getUpdatedAt()} + ' , '+ ${info.getUpdatedBy()}">2023-09-11  16:03:01 , admin34</td>
-                                        </tr>
+                                    <tr>
+                                        <th class="col-2">Template Code</th>
+                                        <td th:text="${info.getTemplateSeq()}">
+                                            00000019
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Template Title</th>
+                                        <td><input name="templateTitle" th:value="${info.getTemplateTitle()}" class="form-control form-control-user" placeholder=""></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Template Type</th>
+                                        <td th:text="${info.getTemplateType}">무기계약직 계약서</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Memo</th>
+                                        <td><input  name="memo"  th:value="${info.getMemo()}" class="form-control form-control-user" placeholder=""></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Created</th>
+                                        <td th:text="${info.getCreatedAt()} +' , '+ ${info.getCreatedBy()}">2023-09-10  08:14:59 , admin12</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Modified</th>
+                                        <td th:if="${not #strings.isEmpty(info.getUpdatedAt())}" th:text="${info.getUpdatedAt()} + ' , '+ ${info.getUpdatedBy()}">2023-09-11  16:03:01 , admin34</td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -52,7 +52,31 @@
                     <div class="card mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Contract details</h6>
+                            <div style="margin-top: 5px">Inserting variables (Common)</div>
+                            <button class="btn btn-primary" id="WorkersName" type="button">Worker's name</button>
+                            <button class="btn btn-primary" id="EmployeeNo" type="button">Empl.No</button>
+                            <button class="btn btn-primary" id="salaryNo" type="button">salary(num)</button>
+
+                            <div>
+                                <div style="margin-top: 15px">Inserting variables :
+                                    <input type="radio" name="chk_info" value="chkBtnEn" id="chkBtnEn" checked="checked">ENG
+                                    <input type="radio" name="chk_info" value="chkBtnHu" id="chkBtnHu">HU
+                                </div>
+                                <div id="EnBtn">
+                                    <button class="btn btn-primary" id="hireDateEn" type="button">Hire Date_EN</button>
+                                    <button class="btn btn-primary" id="contractDateEn" type="button">Contract date_EN</button>
+                                    <button class="btn btn-primary" id="salaryEn" type="button">salary_EN</button>
+                                    <button class="btn btn-primary" id="wageTypeEn" type="button">wage type_EN</button>
+                                </div>
+                                <div id="HuBtn" style="display:none">
+                                    <button class="btn btn-primary" id="hireDateHu" type="button">Hire Date_HU</button>
+                                    <button class="btn btn-primary" id="contractDateHu" type="button">Contract date_HU</button>
+                                    <button class="btn btn-primary" id="salaryHu" type="button">salary_HU</button>
+                                    <button class="btn btn-primary" id="wageTypeHu" type="button">wage type_HU</button>
+                                </div>
+                            </div>
                         </div>
+
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table-list">
@@ -67,59 +91,172 @@
                                     <tbody>
                                     <tr>
                                         <th class="col-2">Contract Title</th>
-                                        <td><input name="contractTitleHu" th:value="${info.contractTitleHu}" class="form-control form-control-user" placeholder=""></td>
-                                        <td><input name="contractTitleEn" th:value="${info.contractTitleEn}" class="form-control form-control-user" placeholder=""></td>
+                                        <td><input name="contractTitleHu" id="contractTitleHu" th:value="${info.contractTitleHu}" class="form-control form-control-user" placeholder=""></td>
+                                        <td><input name="contractTitleEn" id="contractTitleEn" th:value="${info.contractTitleEn}" class="form-control form-control-user" placeholder=""></td>
                                     </tr>
                                     <tr>
                                         <th>Contract Detail</th>
-                                        <td><textarea name="contentsHu" th:text="${info.contentsHu}" class="form-control form-control-user"></textarea></td>
-                                        <td><textarea name="contentsEn" th:text="${info.contentsEn}" class="form-control form-control-user"></textarea></td>
+                                        <td><textarea name="contentsHu" id="contentsHu" th:text="${info.contentsHu}" class="form-control form-control-user"></textarea></td>
+                                        <td><textarea name="contentsEn" id="contentsEn" th:text="${info.contentsEn}" class="form-control form-control-user"></textarea></td>
                                     </tr>
                                     <tr>
                                         <th>Contract Info</th>
-                                        <td><input name="contractInfoHu" th:value="${info.contractInfoHu}" class="form-control form-control-user" placeholder=""></td>
+                                        <td><input name="contractInfoHu" id="contractInfoHu" th:value="${info.contractInfoHu}" class="form-control form-control-user" placeholder=""></td>
                                         <td><input name="contractInfoEn" th:value="${info.contractInfoEn}" class="form-control form-control-user" placeholder="" disabled></td>
                                     </tr>
                                     <tr>
                                         <th>Signature Area</th>
-                                        <td><textarea name="employeeInfoHu" th:text="${info.employeeInfoHu}" class="form-control form-control-user"></textarea></td>
-                                        <td><textarea name="employeeInfoEn" th:text="${info.employeeInfoEn}" class="form-control form-control-user"></textarea></td>
+                                        <td><textarea name="employeeInfoHu" id="employeeInfoHu" th:text="${info.employeeInfoHu}" class="form-control form-control-user"></textarea></td>
+                                        <td><textarea name="employeeInfoEn" id="employeeInfoEn" th:text="${info.employeeInfoEn}" class="form-control form-control-user"></textarea></td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-                    </form>
-                    <div class="btn-area">
-                        <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/contract/template}'|">Cancel</button>
-                        <button class="btn btn-primary" type="button" th:onclick="save()">Save</button>
-                    </div>
+                </form>
+                <div class="btn-area">
+                    <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/contract/template}'|">Cancel</button>
+                    <button class="btn btn-primary" type="button" th:onclick="save()">Save</button>
                 </div>
-                <!--contents-->
             </div>
+            <!--contents-->
         </div>
-    </th:block>
-    <th:block layout:fragment="script">
-        <script th:inline="javascript">
-            let save = () =>{
-                $.ajax({
-                  url: '/contract/template/save',
-                  type: 'post',
-                  dataType:'json',
-                  data:$('#infoForm').serialize()
-                }).done(function(data) {
-                    if(data > 0){
-                        alert('저장이 완료 되었습니다.');
-                        location.href='/contract/template/info/' + $('#templateSeq').val();
-                    }else{
-                        alert('관리자에게 문의 바랍니다.');
-                        location.href='/contract/template';
-                    }
-                }).fail(function(jqXHR) {
-                    sendToErrorPage(jqXHR);
-                });
+    </div>
+</th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        let targetElem;
+        let area;
+         let elements = [
+           '#contractTitleHu', '#contractTitleEn', '#contentsHu', '#contentsEn',
+           '#contractInfoHu', '#employeeInfoHu', '#employeeInfoEn'
+         ];
+
+         elements.forEach(function(element) {
+           $(element).click(function() {
+             targetElem = element.slice(1); // Remove leading #
+             area = document.getElementById(targetElem);
+           });
+         });
+
+         $('#WorkersName').click(function() {
+           if (targetElem) {
+             let cursorPosition = area.selectionStart;
+              area.value = area.value.substring(0, cursorPosition) + '{{name}}' + area.value.substring(cursorPosition);
+           }
+         });
+
+          $('#EmployeeNo').click(function() {
+           if (targetElem) {
+             let cursorPosition = area.selectionStart;
+              area.value = area.value.substring(0, cursorPosition) + '{{employee_no}}' + area.value.substring(cursorPosition);
+           }
+         });
+
+          $('#salaryNo').click(function() {
+           if (targetElem) {
+             let cursorPosition = area.selectionStart;
+              area.value = area.value.substring(0, cursorPosition) + '{{salary_no}}' + area.value.substring(cursorPosition);
+           }
+         });
+
+           $('#hireDateEn').click(function() {
+           if (targetElem) {
+             let cursorPosition = area.selectionStart;
+              area.value = area.value.substring(0, cursorPosition) + '{{hire_date_en}}' + area.value.substring(cursorPosition);
+           }
+         });
+          $('#contractDateEn').click(function() {
+           if (targetElem) {
+             let cursorPosition = area.selectionStart;
+              area.value = area.value.substring(0, cursorPosition) + '{{contract_date_en}}' + area.value.substring(cursorPosition);
+           }
+         });
+          $('#salaryEn').click(function() {
+           if (targetElem) {
+             let cursorPosition = area.selectionStart;
+              area.value = area.value.substring(0, cursorPosition) + '{{salary_en}}' + area.value.substring(cursorPosition);
+           }
+         });
+          $('#wageTypeEn').click(function() {
+           if (targetElem) {
+             let cursorPosition = area.selectionStart;
+              area.value = area.value.substring(0, cursorPosition) + '{{wage_type_en}}' + area.value.substring(cursorPosition);
+           }
+         });
+
+         $('#hireDateHu').click(function() {
+           if (targetElem) {
+             let cursorPosition = area.selectionStart;
+              area.value = area.value.substring(0, cursorPosition) + '{{hire_date_hu}}' + area.value.substring(cursorPosition);
+           }
+         });
+          $('#contractDateHu').click(function() {
+           if (targetElem) {
+             let cursorPosition = area.selectionStart;
+              area.value = area.value.substring(0, cursorPosition) + '{{contract_date_hu}}' + area.value.substring(cursorPosition);
+           }
+         });
+          $('#salaryHu').click(function() {
+           if (targetElem) {
+             let cursorPosition = area.selectionStart;
+              area.value = area.value.substring(0, cursorPosition) + '{{salary_hu}}' + area.value.substring(cursorPosition);
+           }
+         });
+          $('#wageTypeHu').click(function() {
+           if (targetElem) {
+             let cursorPosition = area.selectionStart;
+              area.value = area.value.substring(0, cursorPosition) + '{{wage_type_hu}}' + area.value.substring(cursorPosition);
+           }
+         });
+
+       let save = () =>{
+       let titleHu;
+       let titleEn;
+
+       $("#infoForm").find("[name='contractTitleHu']").each(function() {
+          titleHu = $(this).val();
+        });
+         $("#infoForm").find("[name='contractTitleEn']").each(function() {
+          titleEn = $(this).val();
+        });
+
+        if(titleHu.length >= 50){
+             alert("Contract TitleHu 값의 길이가 50 이상입니다.");
+             return false;
+        }else if(titleEn.length >= 50){
+             alert("Contract TitleEn 값의 길이가 50 이상입니다.");
+             return false;
+        }
+
+           $.ajax({
+             url: '/contract/template/save',
+             type: 'post',
+             dataType:'json',
+             data:$('#infoForm').serialize()
+           }).done(function(data) {
+               if(data > 0){
+                   alert('Save is complete.');
+                   location.href='/contract/template/info/' + $('#templateSeq').val();
+               }else{
+                   alert('관리자에게 문의 바랍니다.');
+                   location.href='/contract/template';
+               }
+           }).fail(function(jqXHR) {
+               sendToErrorPage(jqXHR);
+           });
+       }
+
+        $("input:radio[name='chk_info']").on("change", function() {
+            if($("input[name='chk_info']:checked").val() == 'chkBtnEn'){
+                $('#EnBtn').show();
+                $('#HuBtn').hide();
+            }else if($("input[name='chk_info']:checked").val() == 'chkBtnHu'){
+                $('#EnBtn').hide();
+                $('#HuBtn').show();
             }
-        </script>
-    </th:block>
+        });
+    </script>
+</th:block>
 </html>

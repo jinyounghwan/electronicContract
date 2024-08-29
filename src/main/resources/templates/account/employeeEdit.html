@@ -6,7 +6,7 @@
 
 </head>
 <th:block layout:fragment="css">
-    <title>임직원 계정</title>
+    <title>Employee account</title>
 </th:block>
 <th:block layout:fragment="content">
     <!-- Content Wrapper -->
@@ -15,7 +15,7 @@
             <div th:replace="~{common/alert2}"></div>
             <!--content-->
             <div class="container-fluid">
-                <h1 class="page-title">임직원 계정</h1>
+                <h1 class="page-title">Employee account</h1>
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -70,7 +70,7 @@
             }
 
             if(data.password==='' && data.confirmPassword===''){
-                openAlert("패스워드를 입력해주세요.");
+                openAlert("Please enter your password.");
                 return false;
             }
             $.ajax({

@@ -86,4 +86,32 @@
 
     </insert>
 
+    <insert id="saveFilePath" parameterType="FilePublicVO">
+        <!--SaveFilePath-->
+        INSERT INTO file_pdf
+        (
+        file_seq,
+        original_name,
+        name,
+        file_no,
+        extension,
+        storage_path,
+        size,
+        del_yn,
+        created_by,
+        created_at
+        )
+        VALUES(
+        #{fileSeq},
+        #{originalName},
+        #{name},
+        #{fileNo},
+        #{extension},
+        #{storagePath},
+        0,
+        #{delYn},
+        #{createdBy},
+        now()
+        )
+    </insert>
 </mapper>

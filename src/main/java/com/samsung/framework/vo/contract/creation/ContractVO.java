@@ -53,4 +53,5 @@ public class ContractVO {
     private String employerInfoHu;
     private String employeeInfoEn;
     private String employeeInfoHu;
+    private String signFilePath;
 }

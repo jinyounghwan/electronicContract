@@ -11,6 +11,7 @@ import com.samsung.framework.mapper.contract.documented.ContractProgressMapper;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.common.ResultStatusVO;
 import com.samsung.framework.vo.contract.creation.ContractVO;
+import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.log.LogSaveResponse;
 import com.samsung.framework.vo.search.SearchVO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,12 +47,12 @@ public class ContractProgressService {
         HttpSession session = request.getSession();
         AccountVO account = (AccountVO) session.getAttribute("loginInfo");
         progressRequest.forEach(el ->{ el.setDocStatus(ContractProcessEnum.processCode(ContractProcessEnum.RECALLED));
-                                       el.setUpdatedBy(account.getAdminId());
-                                       int result = contractProgressMapper.updateContractDocStatusInfo(el);
-                                       if(result > 0){
-                                           // 저장이 성공 되었을 때
-                                           this.saveLogs(request,LogTypeEnum.LOG_RECALL , el);
-                                       }
+            el.setUpdatedBy(account.getAdminId());
+            int result = contractProgressMapper.updateContractDocStatusInfo(el);
+            if(result > 0){
+                // 저장이 성공 되었을 때
+                this.saveLogs(request,LogTypeEnum.LOG_RECALL , el);
+            }
         });
 
         return new ResultStatusVO();
@@ -73,9 +74,11 @@ public class ContractProgressService {
     }
 
     public ContractVO getContractProgressInfo(String seq) {
+        log.info("seq >> " + seq);
         ContractVO contractVO =  contractProgressMapper.getContractProgressInfo(seq);
         contractVO.setDocStatus(ContractProcessEnum.getProcessStatus(contractVO.getDocStatus()));
         contractVO.setProcessStatus(ContractProcessEnum.getProcessStatus(contractVO.getProcessStatus()));
+
         return contractVO;
     }
 
@@ -112,5 +115,13 @@ public class ContractProgressService {
                 .build();
         Map<String, LogSaveResponse> logs = logUtil.saveLog(saveRequest);
     }
+
+    public FilePublicVO getFileSeq(String seq) {
+        log.info("seq >> " + seq);
+        FilePublicVO filePublicVO = contractProgressMapper.getFileSeq(seq);
+        log.info("filePublicVo >> " + filePublicVO);
+        return filePublicVO;
+    }
+
 
 }

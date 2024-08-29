@@ -1,8 +1,8 @@
 package com.samsung.framework.service.pdf;
 
-
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorker;
@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,12 +49,15 @@ public class PdfService {
     private String localAddress;
     @Value("${ip.server-address}")
     private String serverAddress;
+
     public FilePublicVO createPDF(String html, HttpServletRequest request) throws Exception {
 
-        // html \n 문자 -> 빈칸으로 변경
+        // HTML \n 문자 -> 빈칸으로 변경
         html = this.htmlTagConvert(html);
+
+        log.info("html >> " + html);
         String serverIp = this.getPdfAddressImgUrl(request);
-        String convertHtml = FileUtil.imgTagSetting(html,serverIp);
+        String convertHtml = FileUtil.imgTagSetting(html, serverIp);
         String createFileName = FileUtil.createPdfFileName();
         String nowDay = DateUtil.getUtcNowDateFormat("yyMM");
 
@@ -72,6 +76,7 @@ public class PdfService {
         // 최초 문서 사이즈 설정
         Document document = new Document(PageSize.A4, 30, 30, 30, 30);
         try {
+
             // PDF 파일 생성
             PdfWriter pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(paths));
             // PDF 파일에 사용할 폰트 크기 설정
@@ -84,6 +89,7 @@ public class PdfService {
             CssFile commonCssFile = null;
             CssFile fontCssFile = null;
             try {
+
                 InputStream cssStream = getClass().getClassLoader().getResourceAsStream("static/css/pdf.css");
                 commonCssFile = XMLWorkerHelper.getCSS(cssStream);
                 cssStream = getClass().getClassLoader().getResourceAsStream("static/css/font.css");
@@ -122,7 +128,10 @@ public class PdfService {
             XMLParser xmlParser = new XMLParser(true, xmlWorker, StandardCharsets.UTF_8);
 
             StringReader stringReader = new StringReader(convertHtml);
+
+            // HTML 내용 파싱 및 PDF에 추가
             xmlParser.parse(stringReader);
+
             document.close();
             pdfWriter.close();
         } catch (DocumentException e1) {
@@ -141,8 +150,8 @@ public class PdfService {
                 e.printStackTrace();
             }
             String filePath = FileUtil.seperateOs(storagePath);
-            filePath = filePath.substring(0,filePath.lastIndexOf(File.separator));
-            log.info("filePath :: {}",filePath);
+            filePath = filePath.substring(0, filePath.lastIndexOf(File.separator));
+            log.info("filePath :: {}", filePath);
 
             return FilePublicVO.builder()
                     .fileNo(1)
@@ -155,11 +164,24 @@ public class PdfService {
                     .build();
         }
     }
-    public String htmlTagConvert(String html){
-        html = html.replaceAll("\n"," ");
+
+    public String htmlTagConvert(String html) {
+        html = html.replaceAll("\n", " ");
         html = html.replaceAll("<br>", "<br/>");
         return html;
     }
+
+    private String extractBase64Image(String html) {
+        log.info("extractBase64Image >>" + html);
+        String base64Image = null;
+        Pattern pattern = Pattern.compile("src='data:image/png;base64,([^']+)'");
+        Matcher matcher = pattern.matcher(html);
+        if (matcher.find()) {
+            base64Image = matcher.group(1);
+        }
+        return base64Image;
+    }
+
 
     /**
      * serverIp에 따른 url

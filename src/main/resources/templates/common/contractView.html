@@ -1,6 +1,10 @@
 <html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/signature-pad@3.2.3/dist/signature-pad.min.js"></script>
+</head>
 <!--poppup-->
 <div class="modal" style="display:none;" data-target="view">
+    <input type="hidden" id="contractNo" th:value="${info.contractNo}">
     <div class="modal-dialog modal-l modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -71,5 +75,8 @@
 <!--<div class="modal-backdrop"></div>-->
 <div data-target="background"></div>
 <!--poppup end-->
+
+    <script th:inline="javascript">
+    </script>
 
 </html>

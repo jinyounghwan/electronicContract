@@ -27,11 +27,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     // Login
     private final List<String> loginIncludePattern = Arrays.asList("/login/**", "/member/**", "/token/authentication-info");
-    private final List<String> loginExcludePattern = Arrays.asList("/static/js/**","/static/lib/**/**", "/static/css/**","/account/login", "/error", "/resources/**", "/static/**" ,"/menu/**", "/img/**");
+    private final List<String> loginExcludePattern = Arrays.asList("/static/js/**","/static/lib/**/**", "/static/css/**","/account/login", "/account/**","/error", "/resources/**", "/static/**" ,"/menu/**", "/img/**");
 
     // Authority
     private final List<String> authorityExcludePattern = Arrays.asList("/static/js/**", "/static/lib/**/**", "/static/css/**", "/error", "/resources/**", "/static/**" ,"/menu/**", "/img/**"
-            , "/account/login", "/account/logout"
+            , "/account/login", "/account/**","/account/logout"
             , "/account/api/**", "/account/myInfo/**"
             , "/contract/sign/wait/**", "/contract/sign/paper/comp/**"
             , "/account/pwdChange", "/contract/view"

@@ -24,4 +24,5 @@ public class ContractView {
     private String employerInfoHu;
     private String docStatus;
     private String processStatus;
+    private String signFilePath;
 }

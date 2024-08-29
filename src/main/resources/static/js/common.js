@@ -234,6 +234,12 @@ let viewHistory = (seq) =>{
     });
 
 }
+
+let viewPdfButton = (seq) =>{
+    let templateSeq = seq;
+     console.log("viewPdfButton !! > "  + templateSeq);
+}
+
 let closeHistoryView = () =>{
     $('[data-target="history"]').attr('style' , 'display:none');
     $('[data-target="historyBackground"]').removeAttr('class');
@@ -243,6 +249,7 @@ let viewContract = (seq) =>{
      // 팝업창 열기
      $('[data-target="view"]').removeAttr('style');
      let data = {'contractNo' : seq }
+     console.log('data seq >> ' + data);
      $.ajax({
         url: '/contract/view',
         type: 'post',
@@ -262,12 +269,17 @@ let viewContract = (seq) =>{
                 console.log('aaa');
                 $('[data-target="statusBtn"]').hide();
             }
+          /*  if($('#signatureImage').length >0){
+                $('#signatureImage').attr('src', 'data:image/png;base64,' + data.signFilePath);
+            }*/
         }
+
     }).fail(function(jqXHR) {
         console.log(jqXHR);
     });
 
 }
+
 /*
     contract viewer close
 */
@@ -275,6 +287,71 @@ let closeContractView = () =>{
     $('[data-target="view"]').attr('style' , 'display:none');
     $('[data-target="viewBackground"]').removeAttr('class');
 }
+
+/* 계약서 생성 - contract View*/
+let createViewContract = () =>{
+if(valid($('#contractForm'))){
+        //$('[data-target="view"]').removeAttr('style');
+        $('[data-target="view"]').attr('style' , 'display:block');
+        //$('[data-target="viewBackground"]').attr('class' , 'modal-backdrop');
+
+        let test =  $('.datatable-selector').val();
+        console.log("111111 >> " + test);
+        let data = {'templateSeq' : test }
+
+        ///contract/create/viewContract 추가함
+        $.ajax({
+                url: '/contract/create/viewContract',
+                type: 'GET',
+                dataType:'json',
+                data:data,
+                contentType: 'application/json; charset=UTF-8',
+            }).done(function(data) {
+                if(!isEmpty(data)){
+                            $('[data-select]').each(function(index, item){
+                                var $this = $(item);
+                                var key = $this.data('select');
+                                $this.html(data[key]);
+
+                                console.log("key create item >>  "+ JSON.stringify(item));
+                                console.log("key create result >>  "+ key);
+
+                            });
+                            $('[data-target="view"]').attr('style' , 'display:block');
+                            $('[data-target="viewBackground"]').attr('class' , 'modal-backdrop');
+
+                        }
+            });
+    }
+}
+
+/**
+ * Create Pdf Download
+ */
+let createPdfDownload = () => {
+    let formData = new FormData();
+    let html = $('#target-pdf').html();
+
+    let param = {
+        "html": html
+    };
+
+    formData.append('param', new Blob([JSON.stringify(param)], { type: 'application/json' }));
+
+    $.ajax({
+        url: '/pdf/create/download',
+        type: 'POST',
+        cache: false,
+        data: formData,
+        contentType:false,
+        processData:false
+    }).done(function (blob, status, xhr , fileName){
+        createContractPdf(blob); // 계약서 생성 시 pdf저장 성공하면
+    }).fail(function(jqXHR){
+        console.log("fail >> " + jqXHR);
+    })
+}
+
 /*
     ViewPaperContract
  */
@@ -300,6 +377,35 @@ let viewPaperContract = (fileDataNo) =>{
             });
         });
     }
+}
+
+/**
+ * contract-creation( create function )
+ */
+  let createContractPdf = (blob) =>{
+                console.log("crate function in !!! ");
+                console.log("crate function in !!11! " + blob);
+                let param = blob;
+               if(valid($('#contractForm'))){
+                   $.ajax({
+                     url: '/contract/create/save',
+                     type: 'post',
+                     dataType:'json',
+                     data:$('#contractForm').serialize() + '&templateCode=' + $('[data-select="templateCode"] option:selected').val() + '&paramPath=' + param
+                   }).done(function(data) {
+                       console.log(data);
+                                              if(data.code == 200){
+                                                  closeContractView();
+                                                  alert('Save is complete.');
+                                                  location.href='/contract/progress';
+                                              }else{
+                                                  alert(data.message);
+                                                  location.href='/contract/create';
+                                              }
+                   }).fail(function(jqXHR) {
+                      sendToErrorPage(jqXHR);
+                   })
+               }
 }
 
 let closePaperContract = () => {
@@ -330,6 +436,8 @@ let rejectConfirm = () =>{
     $('[data-select="rejectReason"]').val('');
     $('[data-target="rejectBackground"]').attr('class' , 'modal-backdrop');
 }
+
+
 // reject ok call
 let rejectConfirmCheck = () =>{
     if(valid($('#rejectForm'))){
@@ -371,6 +479,7 @@ let contractComplete = () =>{
     }
     // complete 확인 시
     let data = {'contractNo' : $('#contractNo').val()};
+
     $.ajax({
         url: '/contract/sign/wait/complete/update',
         type: 'post',
@@ -426,14 +535,17 @@ let pdfDownload = () => {
             responseType: 'blob' // 응답을 Blob 객체로 받음
         }
     }).done(function (blob, status, xhr){
+        console.log("done");
         buttonFileDownload(blob, xhr);
     }).fail(function(jqXHR){
+        console.log("fail");
         console.log(jqXHR);
     })
 }
 
 // 파일 다운로드
 function buttonFileDownload(blob, xhr){
+
     // check for a filename
     let fileName = "";
     let disposition = xhr.getResponseHeader("Content-Disposition");
@@ -446,6 +558,7 @@ function buttonFileDownload(blob, xhr){
         }
 
     }
+
     if (window.navigator && window.navigator.msSaveOrOpenBlob) {
         window.navigator.msSaveOrOpenBlob(blob, fileName);
     } else {
@@ -468,4 +581,5 @@ function buttonFileDownload(blob, xhr){
             window.location.href = downloadUrl;
         }
     }
+
 }

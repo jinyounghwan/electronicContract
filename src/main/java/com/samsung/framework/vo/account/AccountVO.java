@@ -45,4 +45,5 @@ public class AccountVO {
     private String passwordAtStr;
     private String hireDateEn;
     private String hireDateHu;
+    private int authority;
 }

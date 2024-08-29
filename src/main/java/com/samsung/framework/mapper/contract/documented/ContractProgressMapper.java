@@ -2,6 +2,7 @@ package com.samsung.framework.mapper.contract.documented;
 
 import com.samsung.framework.domain.contract.ProgressRequest;
 import com.samsung.framework.vo.contract.creation.ContractVO;
+import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.search.SearchVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -20,4 +21,6 @@ public interface ContractProgressMapper {
     int updateContractDocStatusInfo(ProgressRequest progressRequest);
 
     int updateProgressStatus(String seq);
+
+    FilePublicVO getFileSeq(String seq);
 }

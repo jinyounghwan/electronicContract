@@ -3,12 +3,46 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}" lang="ko">
 <th:block layout:fragment="content">
+  <style>
+    /* 팝업창 스타일 */
+    #popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border: 1px solid #ccc;
+      z-index: 1000; /* 팝업창이 다른 요소 위에 표시되도록 설정 */
+      display: none; /* 기본적으로 숨겨진 상태 */
+    }
+
+    #iframeContainer {
+      width: 100%;  /* 팝업창 내 iframe 너비 100% */
+      height: 500px; /* 팝업창 내 iframe 높이 설정 */
+    }
+
+    #closeButton {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+    }
+  </style>
   <div th:replace="~{common/alert}"></div>
   <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
       <!--content-->
       <div class="container-fluid">
-        <h1 class="page-title" >계약서 조회</h1>
+        <h1 class="page-title" >Contract inquiry</h1>
+
+        <input type = "hidden" id="InfoValue" th:value="${info.contractNo}">
+
+        <div id="popup" style="display : none;">
+          <iframe id="pdfTest2" width="1200" height="600px"></iframe>
+          <span id="closeButton">닫기</span>
+        </div>
+
         <div class="card mb-4">
           <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
@@ -18,30 +52,30 @@
               <table class="table-list">
                 <input type="hidden" id="contractNo" th:value="${info.contractNo}">
                 <tbody>
-                    <tr>
-                      <th class="col-2">Contract Issuance No.</th>
-                      <td th:text="${info.contractNo}">00000019</td>
-                    </tr>
-                    <tr>
-                      <th>Template Title</th>
-                      <td th:text="${info.templateTitle}">생산파트 무기계약직 계약서</td>
-                    </tr>
-                    <tr>
-                      <th>Created</th>
-                      <td th:text="${info.createdAt} + ' , '+ ${info.createdBy} ">2023-09-10  08:14:59 , admin12</td>
-                    </tr>
-                    <tr>
-                      <th>Assigned</th>
-                      <td th:text="${info.assignedAt} ? ${info.assignedAt} + ' , '+ ${info.assignedBy} : '-' ">2023-09-10  08:14:59 , admin12</td>
-                    </tr>
-                    <tr>
-                      <th>Doc. Status</th>
-                      <td th:text="${info.docStatus}">Assigned</td>
-                    </tr>
-                    <tr>
-                      <th>Contract Status</th>
-                      <td th:text="${info.processStatus}">Unseen</td>
-                    </tr>
+                <tr>
+                  <th class="col-2">Contract Issuance No.</th>
+                  <td th:text="${info.contractNo}">00000019</td>
+                </tr>
+                <tr>
+                  <th>Template Title</th>
+                  <td th:text="${info.templateTitle}">생산파트 무기계약직 계약서</td>
+                </tr>
+                <tr>
+                  <th>Created</th>
+                  <td th:text="${info.createdAt} + ' , '+ ${info.createdBy} ">2023-09-10  08:14:59 , admin12</td>
+                </tr>
+                <tr>
+                  <th>Assigned</th>
+                  <td th:text="${info.assignedAt} ? ${info.assignedAt} + ' , '+ ${info.assignedBy} : '-' ">2023-09-10  08:14:59 , admin12</td>
+                </tr>
+                <tr>
+                  <th>Doc. Status</th>
+                  <td th:text="${info.docStatus}">Assigned</td>
+                </tr>
+                <tr>
+                  <th>Contract Status</th>
+                  <td th:text="${info.processStatus}">Unseen</td>
+                </tr>
                 </tbody>
               </table>
             </div>
@@ -79,8 +113,11 @@
         </div>
         <div class="btn-area-box">
           <div class="btn-area-left">
-            <button class="btn btn-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract</button>
-            <button class="btn btn-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" type="button" th:onclick="'viewContract('+${info.contractNo}+')'">View Contract</button>
+            <!-- <button class="btn btn-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract</button>
+              <button class="btn btn-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" type="button" th:onclick="'viewContract('+${info.contractNo}+')'">View Contract</button>-->
+
+            <button class="btn btn-primary" id="viewPdfButton">PDF View</button>
+
             <button class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
           </div>
           <div class="btn-area-right">
@@ -99,40 +136,115 @@
 </th:block>
 <th:block layout:fragment="script">
   <script th:inline="javascript">
-      function recall(){
-          let data = {'contractNo' : $('#contractNo').val()}
-           $.ajax({
-              url: '/contract/progress/recallInfo',
-              type: 'post',
-              dataType:'json',
-              data:JSON.stringify(data),
-              contentType: 'application/json; charset=UTF-8',
-            }).done(function(data) {
-                if(data.code == 200){
-                    //성공 할 때
-                    location.href= '/contract/progress';
-                }
-            }).fail(function(jqXHR) {
-                sendToErrorPage(jqXHR);
-            });
-      }
-      function assign(){
-          let data = {'contractNo' : $('#contractNo').val()}
-           $.ajax({
-              url: '/contract/progress/assignInfo',
-              type: 'post',
-              dataType:'json',
-              data:JSON.stringify(data),
-              contentType: 'application/json; charset=UTF-8',
-            }).done(function(data) {
-                if(data.code == 200){
-                    //성공 할 때
-                    location.href= '/contract/progress';
-                }
-            }).fail(function(jqXHR) {
-                sendToErrorPage(jqXHR);
-            });
-      }
+    function recall(){
+        let data = {'contractNo' : $('#contractNo').val()}
+         $.ajax({
+            url: '/contract/progress/recallInfo',
+            type: 'post',
+            dataType:'json',
+            data:JSON.stringify(data),
+            contentType: 'application/json; charset=UTF-8',
+          }).done(function(data) {
+              if(data.code == 200){
+                  //성공 할 때
+                  location.href= '/contract/progress';
+              }
+          }).fail(function(jqXHR) {
+              sendToErrorPage(jqXHR);
+          });
+    }
+
+  function assign(){
+        let data = {'contractNo' : $('#contractNo').val()}
+         $.ajax({
+            url: '/contract/progress/assignInfo',
+            type: 'post',
+            dataType:'json',
+            data:JSON.stringify(data),
+            contentType: 'application/json; charset=UTF-8',
+          }).done(function(data) {
+              if(data.code == 200){
+                  //성공 할 때
+                  location.href= '/contract/progress';
+              }
+          }).fail(function(jqXHR) {
+              sendToErrorPage(jqXHR);
+          });
+    }
+
+       $("#viewPdfButton").click(function() {
+        let templateSeq = document.getElementById("InfoValue").value;
+        console.log("ContractNo !1! > "  + templateSeq);
+
+        let data = {'seq' : templateSeq}
+              $.ajax({
+                  url: "/contract/progress/view/" + templateSeq,
+                  method: "GET",
+                  success: function(base64EncodedPdf) {
+                    console.log("view TEST Success Data >>" + base64EncodedPdf);
+                      var pdfUrl = "data:application/pdf;base64," + base64EncodedPdf;
+                      $("#pdfTest2").attr("src", pdfUrl);
+                         $("#popup").show();
+                  },
+                  error: function(xhr) {
+                      alert("PDF 파일을 가져오지 못했습니다. (" + xhr.status + ")");
+                  }
+              });
+          });
+
+
+  $("#openPopupButton").click(function() {
+    $("#popup").show();
+  });
+  // 닫기 버튼 클릭 이벤트
+    $("#closeButton").click(function() {
+      $("#popup").hide();
+    });
+
+$("#btnShowPdf").click(function() {
+      $.ajax({
+        url: "/contract/progress/getPdf",
+        method: "GET",
+        dataType: "blob",
+        success: function(data) {
+          console.log("Call!! Success ");
+          var pdfURL = URL.createObjectURL(data);
+          $("#pdfViewer2").attr("src", pdfURL);
+          $("#pdfPopup2").show();
+        },
+        error: function(error) {
+          console.error(error);
+          alert("PDF 파일 불러오기 실패!");
+        }
+      });
+    });
+
+  $("#pdfURL").click(function() {
+              $.ajax({
+                  url: "/contract/progress/getLocation",
+                  method: "GET",
+                  success: function(data) {
+                    console.log("/contract/progress/getLocation Data  >>" + "file:///" +  data);
+                       document.getElementById("popupIframe").src ="file:///" + data;
+                       $("#popup").show();
+                  }
+              });
+          });
+
+  $("#pdfTestbtn").click(function() {
+  console.log("click");
+   $.ajax({
+              url: "/contract/progress/viewTest",
+              method: "GET",
+              dataType: "blob",
+              success: function(data) {
+                console.log("pdfTestBtn Data >>" + data);
+                  var pdfBase64 = "data:application/pdf;base64," + btoa(String.fromCharCode.apply(null, new Uint8Array(data)));
+                  $("#pdfTest").attr("src", pdfBase64);
+              }
+          });
+  });
+
   </script>
 </th:block>>
 

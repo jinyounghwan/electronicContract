@@ -27,4 +27,5 @@ public class SaveContractRequest {
 
     private String salaryHu;
     private String salaryEn;
+    private String paramPath;
 }

@@ -7,7 +7,7 @@
         <div id="content">
             <!--content-->
             <div class="container-fluid">
-                <h1 class="page-title">완료 계약서</h1>
+                <h1 class="page-title">Completed contract</h1>
                 <div th:replace="~{common/contractSignCompletedSearch ::searchBox(${dateRangeSelect} ,${keywordTypeSelect} , ${contractDocSearchStateTypeSelect} ) }" ></div>
                 <div class="card shadow mb-4">
                     <!--<div class="card-header py-3">
@@ -88,6 +88,17 @@
         });
 
         function getList(param){
+
+            console.log('완료 계약서 param >> ' + JSON.stringify(param));
+            if(param == undefined){
+                console.log('성공');
+            }else{
+                if (new Date(param.startDt) > new Date(param.endDt)) {
+                    alert('시작 날짜가 끝 날짜보다 최신입니다. 다시 선택해주세요.');
+                    return false;
+                }
+            }
+
             let search;
             if(typeof param == 'undefined'){
                 // 첫 호출 일 때

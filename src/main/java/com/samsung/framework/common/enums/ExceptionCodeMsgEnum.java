@@ -43,6 +43,10 @@ public enum ExceptionCodeMsgEnum {
     , INVALID_AUTH(976, "유효하지 않은 인증 정보 입니다.")
     , NO_MENU_AUTHORITY(975, "메뉴 접근 권한이 없습니다.")
 
+    // AUTH_CODE
+    , NO_MATCH_AUTH(112 , "값이 다릅니다.")
+    , MATCH_AUTH(111 , "값이 일치합니다.")
+
     // FILE
     , INVALID_FILE(974, "유효하지 않은 파일 형식입니다.")
     ;

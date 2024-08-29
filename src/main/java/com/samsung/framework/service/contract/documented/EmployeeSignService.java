@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -78,6 +79,16 @@ public class EmployeeSignService {
                 .contractNo(StringUtil.getString(contractVO.getContractNo()))
                 .build();
         Map<String, LogSaveResponse> logs = logUtil.saveLog(saveRequest);
+        return new ResultStatusVO();
+    }
+
+    // sign Image Path update
+    public ResultStatusVO updateSignPath(ContractVO ContractVO) {
+
+        int result = signWaitMapper.updateSignPath(ContractVO);
+        if(result == 0){
+            return new ResultStatusVO(ResultCodeMsgEnum.UPDATE_DATA_FAIL.getCode(),ResultCodeMsgEnum.UPDATE_DATA_FAIL.name());
+        }
         return new ResultStatusVO();
     }
 }

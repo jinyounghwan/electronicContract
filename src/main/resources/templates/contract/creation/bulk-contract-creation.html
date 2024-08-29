@@ -2,84 +2,349 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}" lang="ko">
+<style>
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      border: 1px solid #ccc;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .popup-content {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .popup h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .popup p {
+      margin-bottom: 5px;
+    }
+
+    #pagination {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #pagination span {
+      margin: 0 5px;
+    }
+</style>
 <th:block layout:fragment="content">
-        <div id="content-wrapper" class="d-flex flex-column">
-            <div id="content">
-                <div th:replace="~{common/alert2}"></div>
-                <!--content-->
-                <div class="container-fluid">
-                    <h1 class="page-title">계약서 일괄생성</h1>
-                    <div class="data-btn-area mb-3 text-right ">
-                        <button class="btn btn-outline-primary" type="button" th:onclick="|location.href='@{/file/download/{fileSeq}(fileSeq=${fileSeq})}'|">Upload Template Download</button>
-                    </div>
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <form id="form" enctype="multipart/form-data">
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <div th:replace="~{common/alert2}"></div>
+            <!--content-->
+            <div class="container-fluid">
+                <h1 class="page-title">Bulk creation of contracts</h1>
+
+                <!--<div id="popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px;">-->
+                <div id="popup"  class="modal-dialog modal-l modal-dialog-centered" style="display: none;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Contract View</h5>
+                            <button type="button" class="btn-close"></button>
+                        </div>
+                        <div id="target-pdf" class="modal-body document-box">
+                            <div class="document">
+                                <div class="document-cont">
+                                    <div class="modal-img"><img src="/img/SDIHUCI.jpg" alt="HungarySDI Logo"/></div>
                                     <table class="table-list">
+                                        <thead>
+                                        <tr>
+                                            <th class="col-6 pdf-contract-title" id="contractTitleHu"></th>
+                                            <th class="col-6 pdf-contract-title" id="contractTitleEn"></th>
+                                        </tr>
+                                        </thead>
                                         <tbody>
                                         <tr>
-                                            <th class="col-2">Upload</th>
-                                            <td>
-                                                <div class="input-group">
-                                                    <input type="file" id="file-input" data-select="fileInput" name="file" onchange="addFileText(this)" class="form-control form-control-user mr-2"  style="display:none;" placeholder="" multiple>
-                                                    <label for="file-input" data-select="fileName" class="form-control form-control-user mr-2" ></label>
-                                                    <button class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04" onclick="openFile()" >+ Upload File</button>
-<!--                                                <input type="text" class="form-control form-control-user mr-2" placeholder="">-->
-<!--                                                <button class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04">+ Upload File</button>-->
-                                                </div>
-                                                <div class="mt-2"><p class="mb-0">※ Please upload the Excel file</p></div>
-                                            </td>
+                                            <td class="col-6 contract-content" id="contentsHu"></td>
+                                            <td class="col-6 contract-content" id="contentsEn"></td>
                                         </tr>
                                         </tbody>
                                     </table>
-                                </form>
+
+                                    <div>
+                                        <p class="contract-footer-color" id="contractInfoHu"></p>
+                                        <div class="document-sig">
+                                            <div id="modal-left" class="modal-sigbox contract-footer-left">
+                                                <div class="pdf-modal-sig">
+                                                    <div class="modal-comimg"></div>
+                                                    <div class="dotted-line"><img src="/img/dotted-line.png" class="dot-img" alt="dot-line"/></div>
+                                                    <div class="modal-signtxt"><p id="employeeInfoHu"></p></div>
+                                                </div>
+                                            </div>
+                                            <div id="modal-right" class="modal-sigbox contract-footer-right">
+                                                <div class="pdf-modal-sig">
+                                                    <div class="modal-signimg">SIGN HERE</div>
+                                                    <div class="dotted-line"><img src="/img/dotted-line.png" class="dot-img" alt="dot-line"/></div>
+                                                    <div class="modal-signtxt"><p id="employeeInfoEn"></p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
+                        <div class="modal-footer">
+                            <button id="prevButton" type="button" class="btn btn-primary">before</button>
+                            <button id="nextButton" type="button" class="btn btn-primary">next</button>
+
+                            <button id="pdfSave" type="button" class="btn btn-secondary" onclick="createPdfDownloadBulk()">save</button>
+                            <button type="button" class="btn btn-secondary" onclick="closeBtn()">Close</button>
+                            <!--${session.loginInfo == null}-->
+                        </div>
                     </div>
-                    <div class="btn-area">
-                        <button class="btn btn-primary" type="button" th:onclick="create()">Create</button>
+                    <div id="popupContent"></div>
+
+                </div>
+
+                <div id="PopupPdf"></div>
+
+
+                <div class="data-btn-area mb-3 text-right ">
+                    <!--<button class="btn btn-outline-primary" type="button" th:onclick="|location.href='@{/file/download/{fileSeq}(fileSeq=${fileSeq})}'|">Upload Template Download</button>-->
+                    <button class="btn btn-outline-primary" type="button" id="tmpExcel">Upload Template Download</button>
+
+                </div>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <form id="form" enctype="multipart/form-data">
+                                <table class="table-list">
+                                    <tbody>
+                                    <tr>
+                                        <th class="col-2">Upload</th>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="file" id="file-input" data-select="fileInput" name="file" onchange="addFileText(this)" class="form-control form-control-user mr-2"  style="display:none;" placeholder="" multiple>
+                                                <label for="file-input" data-select="fileName" class="form-control form-control-user mr-2" ></label>
+                                                <button class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04" onclick="openFile()" > Upload File</button>
+                                                <!--                                                <input type="text" class="form-control form-control-user mr-2" placeholder="">-->
+                                                <!--                                                <button class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04">+ Upload File</button>-->
+                                            </div>
+                                            <div class="mt-2"><p class="mb-0">※ Please upload the Excel file</p></div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
                     </div>
                 </div>
-                <!--contents-->
+                <div class="btn-area">
+                    <!-- <button class="btn btn-primary" type="button" th:onclick="create()">Create</button>-->
+                    <button class="btn btn-primary" type="button" th:onclick="createTest()">Create</button>
+                </div>
             </div>
+            <!--contents-->
         </div>
-    </th:block>
-    <th:block layout:fragment="script">
-        <script th:inline="javascript">
-            let create = () =>{
-                let form = $('#form')[0];
-                let formData = new FormData(form);
-                $.ajax({
-                    type: 'post',
-                    url: `/contracts/create/bulk-upload`,
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    cache: false
-                }).done(function(data) {
-                    var code = data.code;
-                    var value = data.data;
-                    if(code == 7){
-                        if(value.alertMessage != "" && value.alertMessage != null){
-                            var empNo = (value.empNo != null && value.empNo != "")  ? value.empNo : "";
-                            if(empNo != ""){
-                                openAlert( 'Employee No '+ empNo + ' '+value.alertMessage  + ' Please check the information. ', '');
-                            }else{
-                                openAlert( value.alertMessage , '');
-                            }
+    </div>
+</th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        let dataLo = [];
+        let currentPage = 0;
+        let pageSize = 1;
 
-                        }else{
-                            // data 생성 실패
-                            openAlert('The mass create has failed.  Employee No'+ value.empNo +' Please check the information.' , '');
-                        }
-                    }else if(code == 200){
-                       openAlert('The creation was successful.Created'+ value.totalCount +' records.' , '');
-                    }
-                }).fail(function(jqXHR) {
-                    sendToErrorPage(jqXHR);
-                });
+
+    let createTest = () =>{
+    console.log('dataLo >> ' + dataLo);
+    let html = $('#target-pdf').html();
+
+         let form = $('#form')[0];
+         let formData = new FormData(form);
+
+        let uploadedFile = formData.get('file');
+
+        console.log('upfile > ' + uploadedFile);
+        for (let [key, value] of formData.entries()) {
+          console.log('value Name > ' + value.name);
+          console.log(key, value);
+
+          if(value.name != 'Contract Bulk Creation_Upload Templatee.xlsx'){
+          alert('Upload the appropriate template.');
+                return;
+          }
+        }
+
+       $.ajax({
+             type: 'post',
+             url: `/contracts/create/bulk-uploadTest`,
+             data: formData,
+             processData: false,
+             contentType: false,
+             cache: false
+         }).done(function(data) {
+         dataLo = data.data;
+
+         showData(currentPage);
+         }).fail(function(jqXHR) {
+            alert('엑셀 데이터가 올바르지 않습니다.');
+             sendToErrorPage(jqXHR);
+         });
+     }
+
+     function showData(page) {
+        let popupContent = $("#popupContent");
+        popupContent.empty();
+
+        $("#contractTitleHu").text(JSON.stringify(dataLo[page].contractTitleHu));
+        $("#contractTitleEn").text(JSON.stringify(dataLo[page].contractTitleEn));
+        $("#contentsHu").text(JSON.stringify(dataLo[page].contentsHu));
+        $("#contentsEn").text(JSON.stringify(dataLo[page].contentsEn));
+        $("#contractInfoHu").text(JSON.stringify(dataLo[page].contractInfoHu));
+        $("#employeeInfoHu").text(JSON.stringify(dataLo[page].employeeInfoHu));
+        $("#employeeInfoHu").text(JSON.stringify(dataLo[page].employeeInfoEu));
+
+        $("#popup").show();
+    }
+
+        $("#prevButton").click(function() {
+            if (currentPage > 0) {
+                currentPage--;
+                showData(currentPage);
             }
-        </script>
-    </th:block>
+        });
+
+        $("#nextButton").click(function() {
+            if (currentPage < dataLo.length - 1) {
+                currentPage++;
+                showData(currentPage);
+            }
+        });
+
+     let create = () =>{
+     console.log('create in ');
+         let formData = new FormData();    // 초기화
+         let form = $('#form')[0];
+         formData = new FormData(form);
+         $.ajax({
+             type: 'post',
+             url: `/contracts/create/bulk-upload`,
+             data: formData,
+             processData: false,
+             contentType: false,
+             cache: false
+         }).done(function(data) {
+             var code = data.code;
+             var value = data.data;
+             if(code == 7){
+                 if(value.alertMessage != "" && value.alertMessage != null){
+                     var empNo = (value.empNo != null && value.empNo != "")  ? value.empNo : "";
+                     if(empNo != ""){
+                         openAlert( 'Employee No '+ empNo + ' '+value.alertMessage  + ' Please check the information. ', '');
+                     }else{
+                         openAlert( value.alertMessage , '');
+                     }
+                 }else{
+                     // data 생성 실패
+                     openAlert('The mass create has failed.  Employee No'+ value.empNo +' Please check the information.' , '');
+                 }
+             }else if(code == 200){
+                openAlert('The creation was successful.Created'+ value.totalCount +' records.' , '');
+                $("#popup").hide();
+             }
+         }).fail(function(jqXHR) {
+             sendToErrorPage(jqXHR);
+         });
+     }
+
+       $("#tmpExcel").click(function() {
+         $.ajax({
+             url: "/contracts/create/downloadExcel",
+             method: "GET",
+             xhr: function() {
+                 var xhr = new XMLHttpRequest();
+                 xhr.responseType = "blob";
+                 return xhr;
+             },
+             success: function(data) {
+                 var blob = new Blob([data], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+                  var filename = "ContractBulkCreationUploadTemplate.xlsx"; // Use desired filename
+
+                    // Create a dynamic anchor element
+                    var anchor = document.createElement('a');
+                    anchor.href = URL.createObjectURL(blob);
+                    anchor.download = filename; // Set filename attribute
+
+                    // Trigger the click event to initiate download
+                    anchor.click();
+
+                    // Remove the temporary URL and anchor element after download
+                    URL.revokeObjectURL(anchor.href);
+                    anchor.remove();
+             }
+         });
+     });
+
+ let uploadExcel = () =>{
+     const file = document.getElementById('excelFile').files[0];
+     const formData = new FormData();
+     formData.append('excelFile', file);
+
+     const xhr = new XMLHttpRequest();
+     xhr.open('POST', '/contracts/create/uploadExcelData', true);
+     xhr.onload = function() {
+         if (xhr.status === 200) {
+             console.log('엑셀 업로드 및 처리 완료!');
+         } else {
+             console.error('업로드 실패!');
+         }
+     };
+     xhr.send(formData);
+ }
+
+<!-- pdf 저장 추가 -->
+   let createPdfDownloadBulk = () => {
+    for(let i =0; i < dataLo.length; i++){
+    let formData = new FormData();
+        $("#contractTitleHu").text(JSON.stringify(dataLo[i].contractTitleHu));
+        $("#contractTitleEn").text(JSON.stringify(dataLo[i].contractTitleEn));
+        $("#contentsHu").text(JSON.stringify(dataLo[i].contentsHu));
+        $("#contentsEn").text(JSON.stringify(dataLo[i].contentsEn));
+        $("#contractInfoHu").text(JSON.stringify(dataLo[i].contractInfoHu));
+        $("#employeeInfoHu").text(JSON.stringify(dataLo[i].employeeInfoHu));
+        $("#employeeInfoHu").text(JSON.stringify(dataLo[i].employeeInfoEu));
+
+        let html = $('#target-pdf').html();
+
+        let param = {
+            "html": html
+        };
+
+        formData.append('param', new Blob([JSON.stringify(param)], { type: 'application/json' }));
+
+        $.ajax({
+            url: '/contracts/create/pdfDownload',
+            type: 'POST',
+            cache: false,
+            data: formData,
+            contentType:false,
+            processData:false
+        }).done(function (blob, status, xhr , fileName){
+            console.log('Pdf Down success');
+        }).fail(function(jqXHR){
+            console.log("fail >> " + jqXHR);
+        })
+        formData = new FormData();
+    }
+
+    create();
+}
+
+let closeBtn = () =>{
+   $("#popup").hide();
+}
+
+    </script>
+</th:block>
 </html>

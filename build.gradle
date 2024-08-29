@@ -18,6 +18,7 @@ jar {
 	enabled = false
 }
 
+
 sourceSets {
 	main {
 		resources {
@@ -78,6 +79,9 @@ dependencies {
 
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	// PDF BOX
+	implementation 'org.apache.pdfbox:pdfbox:2.0.29'
 }
 
 tasks.named('test') {

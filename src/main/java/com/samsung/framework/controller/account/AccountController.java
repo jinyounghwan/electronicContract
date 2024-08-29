@@ -31,10 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 계정 관련 컨트롤러
@@ -154,8 +151,10 @@ public class AccountController {
      */
     @GetMapping({"", "/login"})
     public ModelAndView login(HttpServletRequest request, ModelAndView mv) {
+        log.info("get login > "  + request.getSession());
         HttpSession session = request.getSession();
         AccountVO account = (AccountVO) session.getAttribute("loginInfo");
+        log.info("get account > "  + account);
         if (account != null) {
             mv.setViewName("redirect:/contract/progress");
             return mv;
@@ -163,6 +162,8 @@ public class AccountController {
 
         mv.addObject("member", new AccountVO());
         mv.setViewName("account/login");
+
+        log.info("login mv >> " + mv);
         return mv;
     }
 
@@ -175,13 +176,15 @@ public class AccountController {
      */
     @PostMapping({"", "/login"})
     public ResponseEntity login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) throws CustomLoginException, NoSuchAlgorithmException {
+
         // 유저 이름에 해당하는 유저 정보를 가져온다.
         AccountVO loginInfo = accountService.getLoginInfo(loginRequest);
+
+        log.info("로그인" + loginInfo);
 
         if(loginInfo.getAccountType().equals(AccountTypeEnum.menuCode(AccountTypeEnum.ADMIN))){
             loginInfo.setAdminId(loginInfo.getUserId());
         }
-
         HttpSession session = request.getSession();
         if(loginInfo!=null){
             session.setAttribute("loginInfo", loginInfo);
@@ -195,7 +198,88 @@ public class AccountController {
 
             Map<String, LogSaveResponse> resultMap = logUtil.saveLog(logSaveRequest);
 
+            // 메일 api 보내고 db에 인증키 저장
+            loginMail(loginRequest);
+
             return ResponseEntity.ok().body(resultMap);
+        }else {
+            log.info("로그인 else >> ?? ");
+            session.setAttribute("loginInfo", null);
+
+            throw new CustomLoginException(ExceptionCodeMsgEnum.ACCOUNT_NOT_EXISTS.getCode(), ExceptionCodeMsgEnum.ACCOUNT_NOT_EXISTS.getMsg());
+        }
+
+    }
+
+    // 로그인 2차인증 Mail 보내고 db 저장
+    @PostMapping({"", "/loginMail"})
+    public ResponseEntity loginMail(@RequestBody LoginRequest loginRequest) throws CustomLoginException, NoSuchAlgorithmException {
+
+        log.info("loginRequest>> "  + loginRequest.getUserId());
+        Random random = new Random();
+        int randomNumber = 100000 + random.nextInt(900000);
+        log.info("랜덤 숫자 >> " + randomNumber);
+
+        //랜덤 인증키 Set
+        AccountVO accountVO = new AccountVO();
+        accountVO.setAuthority(randomNumber);
+        accountVO.setEmpNo(loginRequest.getUserId());
+
+        // 1.
+        // Knox Mail api 로직 추가해야함 ( 랜덤숫자 / 로그인아이디-메일 실어서 보내야함 )
+
+        // 2. api 보낸 후 db에 저장하는 로직 추가해야함
+
+        // 아이디 받아서 update where에 조건 걸어서 랜덤키 추가
+        accountService.updateAuth(accountVO);
+
+        return ResponseEntity.ok().body(randomNumber);
+    }
+
+    // 인증키 입력 후 화면에서 인증키 받아와서 select해서 매칭
+    @PostMapping("/loginAuth")
+    public ResponseEntity loginAuthenticationKey(@RequestBody LoginRequest loginRequest, HttpServletRequest request) throws CustomLoginException, NoSuchAlgorithmException {
+
+        // 유저 이름에 해당하는 유저 정보를 가져온다.
+        AccountVO loginInfo = accountService.getLoginInfo(loginRequest);
+
+        if(loginInfo.getAccountType().equals(AccountTypeEnum.menuCode(AccountTypeEnum.ADMIN))){
+            loginInfo.setAdminId(loginInfo.getUserId());
+        }
+        HttpSession session = request.getSession();
+        if(loginInfo!=null){
+            session.setAttribute("loginInfo", loginInfo);
+            session.setMaxInactiveInterval(1800);
+
+            var logSaveRequest = LogSaveRequest.builder()
+                    .logType(LogTypeEnum.LOGIN)
+                    .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
+                    .createdBy(String.valueOf(loginRequest.getUserId()))
+                    .build();
+
+            Map<String, LogSaveResponse> resultMap = logUtil.saveLog(logSaveRequest);
+
+            // user테이블에서 아이디로 select해서 받아온 키값
+            AccountVO accountVO =  accountService.getAuthInfo(loginRequest);
+
+            // 화면에서 받아온 값
+            int selAuth = Integer.parseInt(loginRequest.getAuthority());
+
+            Map<String,Object> result = new HashMap<>();
+
+            if(accountVO.getAuthority() == selAuth){
+
+                result.put("Code" , ExceptionCodeMsgEnum.MATCH_AUTH.getCode());
+                result.put("Msg" , ExceptionCodeMsgEnum.MATCH_AUTH.getMsg());
+                log.info("값이 같다 ");
+            }else{
+                result.put("Code" , ExceptionCodeMsgEnum.NO_MATCH_AUTH.getCode());
+                result.put("Msg" , ExceptionCodeMsgEnum.NO_MATCH_AUTH.getMsg());
+                log.info("값이 다르다 ");
+            }
+            // 3. 일치합니다 다릅니다 ~ 하고 리턴하기전에 테이블에 들어가있는 인증키 delete
+            log.info("resultMap >> " +resultMap);
+            return ResponseEntity.ok().body(result);
         }else {
             session.setAttribute("loginInfo", null);
 
@@ -204,6 +288,16 @@ public class AccountController {
 
     }
 
+    @PostMapping("/countDelete")
+    public ResponseEntity countDelete(@RequestBody LoginRequest loginRequest, HttpServletRequest request) throws CustomLoginException, NoSuchAlgorithmException {
+        Map<String,Object> result = new HashMap<>();
+        result.put("test" , "test");
+        log.info("countDelete 완료 >> " + loginRequest.getUserId());
+
+        accountService.countDelete(loginRequest);
+        // 삭제로직 만들어야함
+        return ResponseEntity.ok().body(result);
+    }
     // 로그아웃
     @GetMapping("/logout")
     public ModelAndView logout(ModelAndView mv, HttpSession session){
@@ -321,6 +415,8 @@ public class AccountController {
     @PostMapping("/api/pwdChange/isExist")
     @ResponseBody
     public Map<String, Object> isExistsPwdChange(@RequestBody LoginRequest loginRequest, HttpServletRequest request) throws UnsupportedEncodingException {
+
+        log.info("isExist >>!!");
         Map<String, Object> result = new HashMap<>();
         boolean exists = logMapper.isExistsPasswordChangeLog(loginRequest.getUserId());
 
