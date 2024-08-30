@@ -295,10 +295,15 @@ if(valid($('#contractForm'))){
         $('[data-target="view"]').attr('style' , 'display:block');
         //$('[data-target="viewBackground"]').attr('class' , 'modal-backdrop');
 
-        let test =  $('.datatable-selector').val();
-        console.log("111111 >> " + test);
-        let data = {'templateSeq' : test }
 
+        let test =  $('.datatable-selector').val();
+        let employeeId = $('[name=empNo]').val();
+        let salaryHu = $('[name=SalaryHu]').val();
+        let salaryEn = $('[name=SalaryEn]').val();
+        let date = $('[name=date]').val();
+
+        let data = {'templateSeq' : test, 'employeeId' : employeeId, 'salaryHu' : salaryHu, 'salaryEn' : salaryEn, 'date' : date }
+        console.log(data);
         ///contract/create/viewContract 추가함
         $.ajax({
                 url: '/contract/create/viewContract',

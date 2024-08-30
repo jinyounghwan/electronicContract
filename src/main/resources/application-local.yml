@@ -4,7 +4,7 @@ spring:
     #    url: jdbc:log4jdbc:mariadb://10.34.220.168:3306/dejay_public
     #    username: dejay_was
     #    password: 22@samsung
-    jdbc-url: jdbc:log4jdbc:mariadb://127.0.0.1:3308/electronic_contract?allowMultiQueries=true
+    jdbc-url: jdbc:log4jdbc:mariadb://172.30.1.47:3308/electronic_contract?allowMultiQueries=true
     username: root
     password: 1234
   security:
@@ -57,7 +57,7 @@ server:
 
 # file
 file:
-  rootDir: /files/electronicContract
+  rootDir: /Users/juntaek/Documents/pdf
   tempDir: /temp
   realDir: /upload
 

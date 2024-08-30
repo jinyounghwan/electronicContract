@@ -12,4 +12,12 @@ public class CreateViewContract {
 
     @NotNull(message = "templateSeq 는(은) 필수 값 입니다.")
     private String templateSeq;
+
+    private String employeeId;
+
+    private String salaryHu;
+
+    private String salaryEn;
+
+    private String date;
 }
