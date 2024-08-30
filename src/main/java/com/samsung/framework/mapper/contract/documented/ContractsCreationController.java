@@ -1,13 +1,18 @@
 package com.samsung.framework.mapper.contract.documented;
 
 import com.samsung.framework.common.enums.FileTypeEnum;
+import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.StringUtil;
+import com.samsung.framework.common.utils.VariableHandlingUtil;
+import com.samsung.framework.domain.common.Variables;
+import com.samsung.framework.mapper.account.AccountMapper;
 import com.samsung.framework.service.contract.documented.ContractsCreationService;
 import com.samsung.framework.service.pdf.PdfService;
 import com.samsung.framework.service.file.FileService;
 import com.samsung.framework.vo.contract.template.ContractTemplateVO;
 import com.samsung.framework.vo.contract.view.ContractView;
 import com.samsung.framework.vo.file.FilePublicVO;
+import com.samsung.framework.vo.user.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +40,8 @@ public class ContractsCreationController {
     private final ContractsCreationService contractsCreationService;
     private final PdfService pdfService;
     private final FileService fileService;
+    private final AccountMapper accountMapper;
+    private final VariableHandlingUtil variableHandlingUtil;
 
     @GetMapping(value={"/",""})
     public String contractBulkCreation(Model model){
@@ -60,6 +67,11 @@ public class ContractsCreationController {
         List<Map<String, Object>> dataList = new ArrayList<>();
         List<ContractTemplateVO> excelList= new ArrayList<>();
         List<Integer> excelList2= new ArrayList<>();
+        List<UserVO> userList = new ArrayList<>();
+        List<String> contractList = new ArrayList<>();
+        List<String> salaryHuList = new ArrayList<>();
+        List<String> salaryEnList = new ArrayList<>();
+
         int id =0;
         //엑셀 데이터 읽기
         for (MultipartFile file : multipartFiles) {
@@ -81,9 +93,13 @@ public class ContractsCreationController {
                 }
 
                 String text = row.getCell(2).getStringCellValue();
-                double amount = row.getCell(3).getNumericCellValue();
-                String employeeNo = row.getCell(4).getStringCellValue();
-                String department = row.getCell(5).getStringCellValue();
+//                double amount = row.getCell(3).getNumericCellValue();
+                String employeeNo = row.getCell(3).getStringCellValue();
+                String salaryHu = row.getCell(4).getStringCellValue();
+                String salaryEn = row.getCell(5).getStringCellValue();
+//                String department = row.getCell(5).getStringCellValue();
+
+                UserVO user = accountMapper.getUserInfo(employeeNo);
 
                 // Create a data map and add it to the list
                 Map<String, Object> rowData = new HashMap<>();
@@ -98,11 +114,68 @@ public class ContractsCreationController {
                 log.info("Row DataTest: " + rowData);
 
                 excelList2.add(id);
-
+                userList.add(user);
+                contractList.add(date);
+                salaryHuList.add(salaryHu);
+                salaryEnList.add(salaryEn);
             }
         }
 
         excelList =  contractsCreationService.getExcelSelect(excelList2);
+
+        for(int i=0;i<excelList.size();i++) {
+
+            UserVO user = userList.get(i);
+            String contractDate = contractList.get(i);
+            String salaryHu = salaryHuList.get(i);
+            String salaryEn = salaryEnList.get(i);
+
+            Variables replacementTarget = Variables.builder().name(user.getName()).employeeNo(StringUtil.getString(user.getEmpNo()))
+                    .contractDateEn(DateUtil.getStrContractDateEn(StringUtil.getString(contractDate)))
+                    .contractDateHu(StringUtil.getString(contractDate).replaceAll("-","."))
+                    .salaryEn(salaryEn)
+                    .salaryHu(salaryHu)
+                    .hireDateEn(user.getHireDateEn())
+                    .hireDateHu(user.getHireDateHu())
+                    .jobTitleEn(user.getJobTitle())
+                    .jobTitleHu(user.getJobTitle())
+                    .salaryNo(user.getSalaryNo())
+                    .wageTypeEn(user.getWageType())
+                    .wageTypeHu(replaceWageType(user.getWageType()))
+                    .build();
+            log.info(">> replacementTarget = " + replacementTarget);
+            // en title
+            String replacedTitleEn  = variableHandlingUtil.replaceVariables(excelList.get(i).getContractTitleEn() , replacementTarget);
+            // hu title
+            String replacedTitleHu = variableHandlingUtil.replaceVariables(excelList.get(i).getContractTitleHu() , replacementTarget);
+            // en content
+            String replacedContentEn = variableHandlingUtil.replaceVariables(excelList.get(i).getContentsEn(), replacementTarget);
+            // hu content
+            String replacedContentHu = variableHandlingUtil.replaceVariables(excelList.get(i).getContentsHu() , replacementTarget);
+            // en contract info
+            String replacedContractInfoEn = "";
+            if(!StringUtil.isEmpty(excelList.get(i).getContractInfoEn())){
+                replacedContractInfoEn = variableHandlingUtil.replaceVariables(excelList.get(i).getContractInfoEn() , replacementTarget);
+            }
+            // hu contract info
+            String replacedContractInfoHu = variableHandlingUtil.replaceVariables(excelList.get(i).getContractInfoHu() , replacementTarget);
+            // en signatureArea
+            String replacedEmployeeInfoEn = variableHandlingUtil.replaceVariables(excelList.get(i).getEmployeeInfoEn(), replacementTarget);
+            // hu signatureArea
+            String replacedEmployeeInfoHu = variableHandlingUtil.replaceVariables(excelList.get(i).getEmployeeInfoHu(), replacementTarget);
+
+            excelList.get(i).setContractTitleEn(replacedTitleEn);
+            excelList.get(i).setContractTitleHu(replacedTitleHu);
+            excelList.get(i).setContentsEn(replacedContentEn);
+            excelList.get(i).setContentsHu(replacedContentHu);
+            excelList.get(i).setContractInfoEn(replacedContractInfoEn);
+            excelList.get(i).setContractInfoHu(replacedContractInfoHu);
+            excelList.get(i).setEmployeeInfoEn(replacedEmployeeInfoEn);
+            excelList.get(i).setEmployeeInfoHu(replacedEmployeeInfoHu);
+
+        }
+
+
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("data" , excelList);
 
@@ -223,6 +296,22 @@ public class ContractsCreationController {
         String fileName = file.getName();
 
         return ResponseEntity.ok(fileName);
+    }
+
+    private String replaceWageType(String type){
+        String replaceType ="";
+        switch (type) {
+            case "M" -> {
+                replaceType =  "hó";
+            }
+            case "H" -> {
+                replaceType =  "óra";
+            }
+            default -> {
+                replaceType = "";
+            }
+        }
+        return replaceType;
     }
 
 }
