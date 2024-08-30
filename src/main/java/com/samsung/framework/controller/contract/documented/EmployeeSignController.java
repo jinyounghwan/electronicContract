@@ -79,7 +79,7 @@ public class EmployeeSignController {
         FilePublicVO filePathSel = contractProgressService.getFileSeq(seq);
 
         //String filePath = "C:/files/electronicContract/upload/Contract/PDF/2405/2405101d0a065adbeb497ea2621fa49959b54e.pdf"; // Replace with your actual file path
-        String filePath = filePathSel.getStoragePath(); // file_integration > File Pat
+        String filePath = filePathSel.getStoragePath(); // file_integration > File Path
 
         log.info("filePath select >" + filePath);
 
