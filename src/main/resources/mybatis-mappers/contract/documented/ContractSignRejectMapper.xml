@@ -109,4 +109,10 @@
         on ct.template_seq = ctd.template_seq
         where c.contract_no = #{seq}
     </select>
+
+    <select id="getFileSeq" resultType="FilePublicVO" parameterType="FilePublicVO">
+        SELECT storage_path
+        FROM file_pdf
+        WHERE file_seq =#{seq}
+    </select>
 </mapper>

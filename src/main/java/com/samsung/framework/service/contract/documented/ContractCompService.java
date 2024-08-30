@@ -127,4 +127,11 @@ public class ContractCompService {
     public List<Template> getTemplateCode() {
         return contractTemplateMapper.getTemplateCode();
     }
+
+    public FilePublicVO getFileSeq(String seq) {
+        log.info("seq >> " + seq);
+        FilePublicVO filePublicVO = contractCompletionMapper.getFileSeq(seq);
+        log.info("filePublicVo >> " + filePublicVO);
+        return filePublicVO;
+    }
 }

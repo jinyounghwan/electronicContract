@@ -3,12 +3,45 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}" lang="ko">
 <th:block layout:fragment="content">
+    <style>
+        /* 팝업창 스타일 */
+        #popup {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: white;
+          padding: 20px;
+          border: 1px solid #ccc;
+          z-index: 1000; /* 팝업창이 다른 요소 위에 표시되도록 설정 */
+          display: none; /* 기본적으로 숨겨진 상태 */
+        }
+
+        #iframeContainer {
+          width: 100%;  /* 팝업창 내 iframe 너비 100% */
+          height: 500px; /* 팝업창 내 iframe 높이 설정 */
+        }
+
+        #closeButton {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          cursor: pointer;
+        }
+    </style>
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 <!--content-->
                 <div class="container-fluid">
                     <h1 class="page-title">Contract inquiry</h1>
+
+                    <input type = "hidden" id="InfoValue" th:value="${info.contractNo}">
+
+                    <div id="popup" style="display : none;">
+                        <iframe id="pdfTest2" width="1200" height="600px"></iframe>
+                        <span id="closeButton">닫기</span>
+                    </div>
 
                     <div class="card mb-4">
                         <div class="card-header py-3">
@@ -79,8 +112,9 @@
                     </div>
                     <div class="btn-area-box">
                         <div class="btn-area-left">
-                            <button class="btn btn-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract</button>
-                            <button class="btn btn-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" type="button" th:onclick="'viewContract('+${info.getContractNo()}+')'">View Contract</button>
+                            <button class="btn btn-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract1</button>
+                            <!--<button class="btn btn-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" type="button" th:onclick="'viewContract('+${info.getContractNo()}+')'">View Contract1</button>-->
+                            <button class="btn btn-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">PDF View</button>
                             <button class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
                         </div>
                         <div class="btn-area-right">
@@ -98,7 +132,30 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        // 닫기 버튼 클릭 이벤트
+        $("#closeButton").click(function() {
+          $("#popup").hide();
+        });
 
+        $("#viewPdfButton").click(function() {
+               let templateSeq = document.getElementById("InfoValue").value;
+               console.log("ContractNo !1! > "  + templateSeq);
+
+               let data = {'seq' : templateSeq}
+                     $.ajax({
+                         url: "/contract/sign/comp/view/" + templateSeq,
+                         method: "GET",
+                         success: function(base64EncodedPdf) {
+                           console.log("view TEST Success Data >>" + base64EncodedPdf);
+                             var pdfUrl = "data:application/pdf;base64," + base64EncodedPdf;
+                             $("#pdfTest2").attr("src", pdfUrl);
+                                $("#popup").show();
+                         },
+                         error: function(xhr) {
+                             alert("PDF 파일을 가져오지 못했습니다. (" + xhr.status + ")");
+                         }
+                     });
+                 });
     </script>
 </th:block>
 </html>

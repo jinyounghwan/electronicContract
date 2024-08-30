@@ -1,6 +1,7 @@
 package com.samsung.framework.mapper.contract.documented;
 
 import com.samsung.framework.vo.contract.creation.ContractVO;
+import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.search.SearchVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,4 +14,6 @@ public interface ContractSignRecallMapper {
     List<ContractVO> getContractSignRecallList(SearchVO searchVO);
 
     ContractVO getContractSignRecallInfo(String seq);
+
+    FilePublicVO getFileSeq(String seq);
 }

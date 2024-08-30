@@ -3,6 +3,7 @@ package com.samsung.framework.mapper.contract.template;
 import com.samsung.framework.vo.contract.template.ContractTemplateVO;
 import com.samsung.framework.vo.contract.template.Template;
 import com.samsung.framework.vo.contract.view.ContractView;
+import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.search.SearchVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -48,4 +49,5 @@ public interface ContractTemplateMapper {
     List<ContractTemplateVO> getExcelSelect(List<Integer> excelList2);
 
     ContractView getCreateContractView(@Param(value="templateSeq") String templateSeq);
+
 }

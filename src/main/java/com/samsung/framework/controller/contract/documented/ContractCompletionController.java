@@ -12,6 +12,7 @@ import com.samsung.framework.service.contract.documented.ContractCompService;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.contract.completion.ContractCompVO;
 import com.samsung.framework.vo.contract.template.Template;
+import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.log.LogSaveResponse;
 import com.samsung.framework.vo.search.SearchVO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,10 +27,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -150,6 +151,23 @@ public class ContractCompletionController {
         mv.addObject("info", contract);
 
         return mv;
+    }
+
+    @GetMapping("/view/{seq}")
+    public ResponseEntity<String> viewPdf(@PathVariable String seq) throws IOException {
+
+        FilePublicVO filePathSel = contractCompletionService.getFileSeq(seq);
+
+        //String filePath = "C:/files/electronicContract/upload/Contract/PDF/2405/2405101d0a065adbeb497ea2621fa49959b54e.pdf"; // Replace with your actual file path
+        String filePath = filePathSel.getStoragePath(); // file_integration > File Pat
+
+        log.info("filePath select >" + filePath);
+
+        byte[] pdfBytes = Files.readAllBytes(Paths.get(filePath));
+        String base64EncodedPdf = Base64.getEncoder().encodeToString(pdfBytes);
+        log.info("base !! > " + base64EncodedPdf);
+
+        return ResponseEntity.ok(base64EncodedPdf);
     }
 
 }

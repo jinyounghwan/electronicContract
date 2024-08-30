@@ -168,4 +168,10 @@
         FROM CONTRACT_TEMPLATE
         WHERE TEMPLATE_TYPE = #{templateType}
     </select>
+
+    <select id="getFileSeq" resultType="FilePublicVO" parameterType="FilePublicVO">
+        SELECT storage_path
+        FROM file_pdf
+        WHERE file_seq =#{seq}
+    </select>
 </mapper>
