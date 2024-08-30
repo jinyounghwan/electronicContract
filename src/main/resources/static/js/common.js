@@ -308,10 +308,10 @@ if(valid($('#contractForm'))){
         $.ajax({
                 url: '/contract/create/viewContract',
                 type: 'GET',
+                dataType:'json',
                 data:data,
                 contentType: 'application/json; charset=UTF-8',
             }).done(function(data) {
-                dataType:'json',
                 if(!isEmpty(data)){
                             $('[data-select]').each(function(index, item){
                                 var $this = $(item);
