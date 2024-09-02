@@ -33,7 +33,7 @@
     <div id="content">
       <!--content-->
       <div class="container-fluid">
-        <h1 class="page-title">Contract inquiry</h1>
+        <h1 class="page-title">Contract detail</h1>
 
         <input type = "hidden" id="InfoValue" th:value="${info.contractNo}">
 
@@ -42,82 +42,65 @@
           <span id="closeButton">닫기</span>
         </div>
 
-        <div class="card mb-4">
-          <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
+        <div class="btn-area-box">
+          <div class="btn-area-left">
+            <div th:text="no. + ${info.contractNo}">00000019</div>
+            <h6 class="m-0 font-weight-bold text-primary" th:utext="${info.contractTitleEn}"></h6>
           </div>
+          <div class="btn-area-right">
+            <button class="btn btn-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract</button>
+            <button class="btn btn-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">PDF View</button>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="card mb-4">
           <div class="card-body">
             <div class="table-responsive">
               <table class="table-list">
                 <input type="hidden" id="contractNo" th:value="${info.contractNo}">
                 <tbody>
                     <tr>
-                      <th class="col-2">Contract Issuance No.</th>
-                      <td th:text="${info.contractNo}">00000019</td>
-                    </tr>
-                    <tr>
                       <th>Template Title</th>
                       <td th:text="${info.templateTitle}">생산파트 무기계약직 계약서</td>
-                    </tr>
-                    <tr>
                       <th>Created</th>
                       <td th:text="${info.createdAt} + ' , '+ ${info.createdBy} ">2023-09-10  08:14:59 , admin12</td>
                     </tr>
                     <tr>
-                      <th>Rejected</th>
-                      <td th:text="${info.updatedAt} +' , '+ ${info.updatedBy}">2023-09-10  08:14:59 , admin12</td>
+                      <th>Sender</th>
+                      <td>SAMSUNG SDI Hungary</td>
+                      <th>Doc. Status</th>
+                      <td th:text="${info.getDocStatus()}"></td>
                     </tr>
                     <tr>
+                      <th>Party to a contract</th>
+                      <td th:text="${info.name} + '/' + ${info.empNo}">Hong Gildong / 08015741</td>
                       <th>Contract Status</th>
                       <td th:text="${info.processStatus}">Unseen</td>
                     </tr>
                     <tr>
+                      <th>Assigned date</th>
+                      <td th:text="${info.assignedAt} ? ${info.assignedAt}: '-' ">2023-09-10  08:14:59</td>
+                      <th>Reject date</th>
+                      <td th:text="${info.updatedAt}">2023-09-10  08:14:59</td>
+                    </tr>
+                    <tr>
                       <th>Reason for Rejection</th>
-                      <td th:text="${info.rejectReason}">Assigned</td>
+                      <td th:text="${info.rejectReason}">rejectReason</td>
                     </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
-        <div class="card mb-4">
-          <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Contract Info.</h6>
-          </div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table-list">
 
-                <tbody>
-                <tr>
-                  <th class="col-2">Contract Title</th>
-                  <td th:utext="${info.contractTitleEn}">Employment contract</td>
-                </tr>
-                <tr>
-                  <th>Sending Company</th>
-                  <td>SAMSUNG SDI Hungary</td>
-                </tr>
-                <tr>
-                  <th>Contracting Party</th>
-                  <td th:text="${info.name} + '/' + ${info.empNo}">Hong Gildong / 08015741</td>
-                </tr>
-                <tr>
-                  <th>Assigned</th>
-                  <td th:text="${info.assignedAt} ? ${info.assignedAt}: '-' ">2023-09-10  08:14:59 , admin12</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
         <div class="btn-area-box">
           <div class="btn-area-left">
-            <!--<button class="btn btn-primary" type="button" th:onclick="'viewContract('+${info.contractNo}+')'">View Contract5</button>-->
-            <button class="btn btn-primary" id="viewPdfButton">PDF View</button>
-            <button class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
+            <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/contract/sign/reject}'|" >List</button>
           </div>
           <div class="btn-area-right">
-            <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/contract/sign/reject}'|" >List</button>
+            <button class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
           </div>
         </div>
       </div>

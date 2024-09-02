@@ -35,12 +35,14 @@ public class ContractCompVO {
     private LocalDateTime createdAt;
     private String updatedBy;
     private LocalDateTime updatedAt;
+    private LocalDateTime assignedAt;
     private String templateType;
     private String templateTitle;
     private String contractTitleEn;
     private String createdAtStr;
     private String updatedAtStr;
     private String signDateAtStr;
+    private String assignDateAtStr;
     private String userName;
     private String contractDate;
 }

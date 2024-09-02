@@ -119,6 +119,7 @@ public class ContractCompService {
         contract.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(contract.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         contract.setUpdatedAtStr(DateUtil.convertLocalDateTimeToString(contract.getUpdatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         contract.setSignDateAtStr(DateUtil.convertLocalDateTimeToString(contract.getSignDate(), DateUtil.DATETIME_YMDHM_PATTERN));
+        contract.setAssignDateAtStr(DateUtil.convertLocalDateTimeToString(contract.getAssignedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         contract.setDocStatus(String.valueOf(ContractProcessEnum.getProcessStatus(contract.getDocStatus())));
         contract.setProcessStatus(String.valueOf(ContractProcessEnum.getProcessStatus(contract.getProcessStatus())));
         return contract;
