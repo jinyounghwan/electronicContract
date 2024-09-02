@@ -45,12 +45,12 @@
 
                     <div class="btn-area-box">
                         <div class="btn-area-left">
-                            <div th:text="no. + ${info.contractNo}">00000019</div>
-                            <h6 class="m-0 font-weight-bold text-primary" th:utext="${info.contractTitleEn}"></h6>
+                            <div class="contractNo" th:text="no. + ${info.contractNo}">00000019</div>
+                            <h4 class="m-0 font-weight-bold text-primary" th:utext="${info.contractTitleEn}"></h4>
                         </div>
                         <div class="btn-area-right">
                             <button class="btn btn-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract</button>
-                            <button class="btn btn-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">PDF View</button>
+                            <button class="btn btn-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">View Contract</button>
                         </div>
                     </div>
 

@@ -398,8 +398,8 @@ h6, .h6 {
   line-height: 1.2;
 }
 
+/* margin-top: 1.5rem; */
 hr {
-  margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   border: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -11104,7 +11104,7 @@ body.sidebar-toggled footer.sticky-footer {
 .table-list th{padding: 0.6rem 1rem;vertical-align: middle;/* border-bottom: 1px solid #e3e6f0; */text-align: left;color: #3a3b45;}
 .table-list td {padding: 0.75rem 1rem;vertical-align: top;/* border-bottom: 1px solid #e3e6f0; */text-align: left;}
 .btn-area {width: 100%;text-align: right;padding-top: 0.4rem; margin-bottom:1.5rem;}
-.btn-area-box { width: 100%; display: flex;padding-top: 0.4rem; margin-bottom:1.5rem;}
+.btn-area-box { width: 100%; display: flex;padding-top: 0.4rem;} /* margin-bottom:1.5rem; */
 .btn-area-left {width: 100%;}
 .btn-area-right{width: 100%;text-align: right;}
 .error-box{margin-top: 10rem;}
@@ -11215,4 +11215,8 @@ th span {
   border-bottom: 1px #3a3b45;
   display: block;
   height: 70px;
+}
+
+.contractNo {
+  margin-bottom:5px;
 }
