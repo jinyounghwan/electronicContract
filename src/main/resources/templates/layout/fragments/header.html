@@ -3,8 +3,8 @@
 
 <!-- Head-->
     <nav class="navbar navbar-expand navbar-light topbar static-top" th:if="${session.loginInfo != null}">
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" th:if="${session.loginInfo.adminId == null}" th:href="@{/contract/sign/wait}"><div class="sidebar-brand-text"><img src="/static/img/SDI_Eng_Right.png"><span>Salary contract system</span></div></a>
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" th:if="${session.loginInfo.adminId != null}" th:href="@{/contract/progress}"><div class="sidebar-brand-text"><img src="/static/img/SDI_Eng_Right.png"><span>Salary contract system</span></div></a>
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" th:if="${session.loginInfo.adminId == null}" th:href="@{/contract/sign/wait}"><div class="sidebar-brand-text"><img src="/static/img/SDI_Eng_Right.png"><span>Employment Contract System</span></div></a>
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" th:if="${session.loginInfo.adminId != null}" th:href="@{/contract/progress}"><div class="sidebar-brand-text"><img src="/static/img/SDI_Eng_Right.png"><span>Employment Contract System</span></div></a>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item no-arrow">
                 <a th:if= "${session.loginInfo == null}" class="nav-link" href="/account/login"><span class="nav-text">LOG-IN</span></a>
