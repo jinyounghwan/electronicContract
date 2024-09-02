@@ -165,11 +165,16 @@
                                             where ctd.template_seq = #{templateSeq}
     </insert>
     <select id="getTemplateCode" resultType="Template">
-        select template_seq
-             , template_title
-             , template_type
+        select
+            ct.template_seq
+            , ct.template_title
+            , ct.template_type
+            , ctd.contract_title_en
         from contract_template ct
+         join contract_template_details ctd
+            on ct.template_seq = ctd.template_seq
         order by ct.created_at  desc
+
     </select>
     <select id="getTemplateSeq" parameterType="java.lang.String" resultType="Integer">
         select template_seq from contract_template ct where template_type = #{templateCode}

@@ -72,6 +72,18 @@ public class ContractTemplateController {
 
         // list
         List<ContractTemplateVO> list = contractTemplateService.getContractTemplateList(searchVO);
+
+        for(int i=0; i < list.size(); i++){
+            if(list.get(i).getTemplateType().equals("TMPL3000")){
+                list.get(i).setTemplateType("Privacy agreement");
+            }else if(list.get(i).getTemplateType().equals("TMPL2000")){
+                list.get(i).setTemplateType("Salary contract");
+            }else if(list.get(i).getTemplateType().equals("TMPL1000")){
+                list.get(i).setTemplateType("Employeement contract");
+            }
+        }
+
+
         model.addAttribute("list",list);
         model.addAttribute("search" , searchVO);
         return "contract/template/list :: #content";

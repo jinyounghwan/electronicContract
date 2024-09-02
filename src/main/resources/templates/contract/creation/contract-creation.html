@@ -19,12 +19,12 @@
                                         <td><input type="date" class="form-control form-control-user" id="date" name="date" placeholder="YYYY.MM.DD" data-required="true" data-alert="date 를 입력 해 주세요 "></td>
                                     </tr>
                                     <tr>
-                                        <th>Template Code</th>
+                                        <th>Template Title</th>
                                         <td>
                                             <div class="data-group datatable-dropdown">
                                                 <label style="width: 100%;">
                                                     <select class="datatable-selector" th:field="*{templateCodeList}" data-select="templateCode" id="tempSeq">
-                                                        <option th:each="e , i : ${templateCodeList}" th:value="${e.templateSeq}" th:text="|${e.templateTitle}|" th:attr = "data-value=${e.templateType}" >전체</option>
+                                                        <option th:each="e , i : ${templateCodeList}" th:value="${e.templateSeq}" th:text="|${e.contractTitleEn}|" th:attr = "data-value=${e.templateType}" >전체</option>
                                                     </select>
                                                 </label>
                                             </div>
@@ -33,9 +33,15 @@
                                         <!--                                            <td><input type="text" class="form-control form-control-user" name="templateSeq" placeholder="" data-required="true" data-alert="template code 를 입력 해 주세요" ></td>-->
                                     </tr>
                                     <tr>
+                                        <th>Contract Title (EN)</th>
+                                        <td><input id="ContractTitleEn" name="Contract Title" class="form-control form-control-user"  placeholder="" disabled></td>
+                                    </tr>
+
+                                    <tr>
                                         <th>Employee ID</th>
                                         <td><input type="text" name="empNo" class="form-control form-control-user" placeholder="" data-required="true" data-alert="employee id를 입렵 해 주세요 "></td>
                                     </tr>
+
                                     <tr data-target="hidden-tr">
                                         <th>Salary_hu</th>
                                         <td><input type="text" name="SalaryHu" class="form-control form-control-user" placeholder="" ></td>
@@ -64,6 +70,16 @@
 </th:block>
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        $(document).ready(function() {
+        let initialSelectedText = $('#tempSeq').find('option:selected').text();
+         $('#ContractTitleEn').val(initialSelectedText);
+
+             $('#tempSeq').on('change', function() {
+                let selectedText = $(this).find('option:selected').text();
+                $('#ContractTitleEn').val(selectedText);
+                console.log('tempSeq >> ' +selectedText);
+             });
+        });
         $(function(){
             let value = $('[data-select="templateCode"] option:selected').data('value');
             if( value != 'TMPL2000' &&  value != 'TMPL3000' ){
@@ -112,6 +128,8 @@
            }
 -->
        }
+
+
     </script>
 </th:block>
 
