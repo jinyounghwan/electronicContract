@@ -53,6 +53,8 @@
           </div>
         </div>
 
+        <hr>
+
         <div class="card mb-4">
           <div class="card-body">
             <div class="table-responsive">
@@ -95,7 +97,7 @@
             <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/contract/sign/recall}'|" >List</button>
           </div>
           <div class="btn-area-right">
-            <button class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
+            <button id="btnViewHistory" class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
           </div>
         </div>
       </div>

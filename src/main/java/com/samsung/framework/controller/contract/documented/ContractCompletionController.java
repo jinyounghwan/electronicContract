@@ -10,6 +10,7 @@ import com.samsung.framework.mapper.contract.template.ContractTemplateMapper;
 import com.samsung.framework.service.account.ghr.GhrAccountService;
 import com.samsung.framework.service.contract.documented.ContractCompService;
 import com.samsung.framework.vo.account.AccountVO;
+import com.samsung.framework.vo.common.ResultStatusVO;
 import com.samsung.framework.vo.contract.completion.ContractCompVO;
 import com.samsung.framework.vo.contract.template.Template;
 import com.samsung.framework.vo.file.FilePublicVO;
@@ -139,9 +140,10 @@ public class ContractCompletionController {
     public ResponseEntity createPaperContract(HttpServletRequest request, @RequestPart(value="data", required = true) ContractCompVO contract , @RequestPart(value="file", required = true)List<MultipartFile> file) throws Exception {
         HttpSession session = request.getSession();
         AccountVO account = (AccountVO) session.getAttribute("loginInfo");
-        Map<String, Object> result = contractCompletionService.paperContractSave(request, contract, account, file);
+        ResultStatusVO resultStatusVO = contractCompletionService.paperContractSave(request, contract, account, file);
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return ResponseEntity.ok(resultStatusVO);
+//        return new ResponseEntity<>(result, returnStatus);
     }
 
     @GetMapping("/detail/{contractNo}")

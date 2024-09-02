@@ -165,12 +165,14 @@
             /* assign */
             function assign(){
                 let checked = assignCheckedArr();
-                if(checked.length > 0){
-                    openAlert('Are you sure you want to Assign?','updateAssign');
-                }else{
+
+                let allChecked = checkedArr();
+
+                if(allChecked == 0) {
                     //assign 대상을 선택해주세요
                     alert('Please select the assignee target');
-
+                } else {
+                    openAlert('Are you sure you want to Assign?','updateAssign');
                 }
             }
             /*assign update*/

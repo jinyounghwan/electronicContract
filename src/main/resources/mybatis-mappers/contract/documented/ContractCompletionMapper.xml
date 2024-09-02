@@ -133,7 +133,7 @@
                 <when test="contractDocStatusType == 'PRCS1005'">
                     DOC_STATUS IN('PRCS1005')
                 </when>
-                <when test="contractDocStatusType == 'All'">
+                <when test="contractDocStatusType == 'ALL'">
                     DOC_STATUS IN('PRCS1004', 'PRCS1005')
                 </when>
             </choose>

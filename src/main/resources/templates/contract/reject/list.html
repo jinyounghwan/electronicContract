@@ -33,7 +33,7 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                     <tr>
-                                        <th class="data-check"><input class="form-check-input" type="checkbox" onclick="allCheckBox(this)"></th>
+<!--                                        <th class="data-check"><input class="form-check-input" type="checkbox" onclick="allCheckBox(this)"></th>-->
                                         <th>Contract<br>Issuance No.</th>
                                         <th>Template Title</th>
                                         <th>Contract Title (EN)</th>
@@ -63,7 +63,7 @@
                                         <td><a href="#" >View</a></td>
                                     </tr>-->
                                         <tr th:if="${not #lists.isEmpty(list)}" th:each="item, stat : ${list}">
-                                            <td class="data-check"><input class="form-check-input" type="checkbox" th:value="${item.contractNo}" data-select="check"></td>
+<!--                                            <td class="data-check"><input class="form-check-input" type="checkbox" th:value="${item.contractNo}" data-select="check"></td>-->
                                             <td th:text="${item.contractNo}"></td>
                                             <td th:utext="${item.templateTitle}"></td>
                                             <td th:utext="${item.contractTitleEn}"></td>
