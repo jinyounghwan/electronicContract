@@ -33,7 +33,7 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                     <tr>
-                                        <th class="data-check"><input class="form-check-input" type="checkbox" onclick="allCheckBox(this)"></th>
+<!--                                        <th class="data-check"><input class="form-check-input" type="checkbox" onclick="allCheckBox(this)"></th>-->
                                         <th>Contract<br>Issuance No.</th>
                                         <th>Template Title</th>
                                         <th>Contract Title (EN)</th>
@@ -49,21 +49,8 @@
                                     </thead>
                                     <tbody>
                                         <input type="hidden" name="totalCount" id="totalCount" th:value="${totalCount}">
-                                   <!-- <tr>
-                                        <td class="data-check"><input class="form-check-input" type="checkbox"></td>
-                                        <td>00000022</td>
-                                        <td>2024년 경력직 근로 계약서</td>
-                                        <td>Employment contract</td>
-                                        <td>Hong gildong</td>
-                                        <td>08015740</td>
-                                        <td>2023-09-10</td>
-                                        <td>2023-09-10</td>
-                                        <td>Created</td>
-                                        <td>Unseen</td>
-                                        <td><a href="#" >View</a></td>
-                                    </tr>-->
                                         <tr th:if="${not #lists.isEmpty(list)}" th:each="item, stat : ${list}">
-                                            <td class="data-check"><input class="form-check-input" type="checkbox" th:value="${item.contractNo}" data-select="check"></td>
+<!--                                            <td class="data-check"><input class="form-check-input" type="checkbox" th:value="${item.contractNo}" data-select="check"></td>-->
                                             <td th:text="${item.contractNo}"></td>
                                             <td th:utext="${item.templateTitle}"></td>
                                             <td th:utext="${item.contractTitleEn}"></td>

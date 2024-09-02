@@ -2,6 +2,7 @@ package com.samsung.framework.service.contract.documented;
 
 
 import com.samsung.framework.common.enums.ContractProcessEnum;
+import com.samsung.framework.common.enums.ResultCodeMsgEnum;
 import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.domain.account.ghr.GhrAccount;
@@ -12,6 +13,7 @@ import com.samsung.framework.mapper.contract.template.ContractTemplateMapper;
 import com.samsung.framework.service.account.ghr.GhrAccountService;
 import com.samsung.framework.service.file.FileService;
 import com.samsung.framework.vo.account.AccountVO;
+import com.samsung.framework.vo.common.ResultStatusVO;
 import com.samsung.framework.vo.contract.completion.ContractCompVO;
 import com.samsung.framework.vo.contract.template.Template;
 import com.samsung.framework.vo.file.FilePublicVO;
@@ -36,11 +38,11 @@ public class ContractCompService {
     private final ContractCompletionMapper contractCompletionMapper;
     private final FileService fileService;
     private final LogUtil logUtil;
-    public Map<String, Object> paperContractSave(HttpServletRequest request, ContractCompVO contract, AccountVO account, List<MultipartFile> file) throws Exception {
+    public ResultStatusVO paperContractSave(HttpServletRequest request, ContractCompVO contract, AccountVO account, List<MultipartFile> file) throws Exception {
         var result = new HashMap<String, Object>();
         GhrAccount ghrAccount = ghrAccountService.isExistsAccount(contract.getEmpNo());
 
-        if(contract.getEmpNo() == ghrAccount.getEmpNo()){
+        if(ghrAccount != null &&contract.getEmpNo() == ghrAccount.getEmpNo()){
             // 시간 변경
             String hireDateHu = DateUtil.convertLocalDateTimeToString(ghrAccount.getHireDate(),"YYYY-MM-dd");
             String hireDateEn = DateUtil.convertLocalDateTimeToString(ghrAccount.getHireDate(),"MM/dd/YYYY");
@@ -76,7 +78,8 @@ public class ContractCompService {
             if(insert < 1) {
                 result.put("code", 204);
                 result.put("message", "계약서를 다시 저장해주세요.");
-                return result;
+                return new ResultStatusVO();
+//                return result;
             }
 
             var logSaveRequest = LogSaveRequest.builder()
@@ -89,12 +92,14 @@ public class ContractCompService {
 
             logUtil.saveLog(logSaveRequest);
             result.put("message", "계약서 저장 완료");
-            return result;
+            return new ResultStatusVO();
+//            return result;
         }
 
         result.put("code",400);
         result.put("message", "GHR에 존재하지 않는 사번입니다.");
-        return result;
+        return new ResultStatusVO(ResultCodeMsgEnum.CREATE_DATA_FAIL.getCode(),ResultCodeMsgEnum.CREATE_DATA_FAIL.name());
+//        return result;
     }
 
     public int getContractCompTotal(SearchVO searchVO) {
@@ -103,6 +108,7 @@ public class ContractCompService {
     }
 
     public List<ContractCompVO> getContractCompList(SearchVO searchVO){
+        log.info("searchVO = " + searchVO);
         List<ContractCompVO> list = contractCompletionMapper.getContractCompList(searchVO);
         list.forEach(data->{
             data.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(data.getCreatedAt(), "yyyy-MM-dd"));

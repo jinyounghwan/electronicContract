@@ -14,7 +14,7 @@
         <div id="content">
             <!--content-->
             <div class="container-fluid">
-                <h1 class="page-title">서면 계약서 업로드</h1>
+                <h1 class="page-title">Paper Contract Upload</h1>
                 <form id="form"  method="post" enctype="multipart/form-data">
                     <div class="card mb-4">
                         <div class="card-body">
@@ -30,10 +30,6 @@
                                         </div>
                                             <div class="mt-2"><p class="mb-0">※ Please upload the PDF file</p></div>
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Contract Subject</th>
-                                        <td><input type="text" name="subject" class="form-control form-control-user" placeholder=""></td>
                                     </tr>
                                     <tr>
                                         <th>Contract Title</th>
@@ -108,7 +104,11 @@
             })
             .done(function(data) {
                 console.log(data)
-                location.href="/contract/sign/comp"
+                if(data.code == 200) {
+                    location.href="/contract/sign/comp"
+                }else{
+                    alert(data.message);
+                }
             })
             .fail(function(jqXHR) {
                 sendToErrorPage(jqXHR);

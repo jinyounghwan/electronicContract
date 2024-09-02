@@ -11220,3 +11220,10 @@ th span {
 .contractNo {
   margin-bottom:5px;
 }
+
+#btnViewHistory {
+  background-color: #f8f9fc;
+  color: #000000;
+  border: 0px;
+  text-decoration: underline;
+}

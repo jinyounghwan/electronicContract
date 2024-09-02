@@ -28,7 +28,8 @@ public enum ExceptionCodeMsgEnum {
     , ACCOUNT_DUPLICATE(987, "이미 있는 회원 아이디 입니다.")
     , LOGIN_REQUIRED(986, "로그인이 필요한 API 입니다.")
     , PASSWORD_VALUE_NOT_PROVIDED(985, "비밀번호 값이 없습니다.")
-    , INVALID_PASSWORD(984, "비밀번호가 맞지 않습니다.")
+    , INVALID_PASSWORD(984, "Invalid credentials. \n" +
+            "Please check your ID and Password\n")
     , ACCOUNT_NOT_EXISTS(983, "없는 계정 정보 입니다.")
 
     // TOKEN

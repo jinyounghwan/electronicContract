@@ -47,8 +47,8 @@
                                 <div class="form-group">
                                     <div class="form-control form-control-user auth-control">
                                         <input type="AuthKey" id="AuthKey" placeholder="AuthKey" style="width: 320px; height:33px">
-                                        <span id="countdown">30</span>
-                                        <button id="myButton" style="display: none;" onclick="reAuth()">retransmit</button>
+                                        <span id="countdown">60</span>
+                                        <button id="myButton" style="display: none;" onclick="reAuth()">resend</button>
                                     </div>
 
                                     <a class="btn btn-primary btn-user btn-block mt-4" onclick="loginFinal()">Check</a>
@@ -148,7 +148,7 @@
                                 loginToAuth()
                             });
 
-             let countdown = 30;
+             let countdown = 60;
              let countdownInterval = setInterval(function() {
                 countdown--;
                 $('#countdown').text(countdown);
@@ -166,7 +166,7 @@
          $("#loginform").hide();
          $("#Authform").show();
 
-            let countdown = 30;
+            let countdown = 60;
             let countdownInterval = setInterval(function() {
                 countdown--;
                 $('#countdown').text(countdown);
