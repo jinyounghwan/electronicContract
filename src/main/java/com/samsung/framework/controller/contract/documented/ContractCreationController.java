@@ -1,5 +1,6 @@
 package com.samsung.framework.controller.contract.documented;
 
+import com.samsung.framework.common.enums.ResultCodeMsgEnum;
 import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.common.utils.VariableHandlingUtil;
@@ -71,6 +72,11 @@ public class ContractCreationController {
 
         UserVO user = accountMapper.getUserInfo(param.getEmployeeId());
         log.info(">> USER : " + user);
+
+        if(user == null) {
+            ResultStatusVO resultStatusVO = new ResultStatusVO(400, ResultCodeMsgEnum.INVALID_EMP_NO.getMsg());
+            return ResponseEntity.ok(resultStatusVO);
+        }
 
         // contract Date 는 계약날짜니까 그거 받아와서 넣도록...?
         Variables replacementTarget = Variables.builder().name(user.getName()).employeeNo(StringUtil.getString(user.getEmpNo()))

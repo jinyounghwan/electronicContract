@@ -39,6 +39,7 @@
         <input type = "hidden" id="InfoValue" th:value="${info.contractNo}">
 
         <div id="popup" style="display : none;">
+          <div th:utext="${info.contractTitleEn}"></div>
           <iframe id="pdfTest2" width="1200" height="600px"></iframe>
           <span id="closeButton">닫기</span>
         </div>
@@ -79,7 +80,7 @@
                 </tr>
                 <tr>
                   <th>Party to a contract</th>
-                  <td th:text="${info.name} + '/' + ${info.empNo}">Hong Gildong / 08015741</td>
+                  <td th:text="${info.firstName} + ' ' + ${info.lastName} + '/' + ${info.empNo}">Hong Gildong / 08015741</td>
                   <th>Contract Status</th>
                   <td th:text="${info.processStatus}">Unseen</td>
                 </tr>

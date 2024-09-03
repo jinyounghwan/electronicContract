@@ -47,7 +47,23 @@ public class ContractsViewService {
 
     public List<HistoryVO> getContractHistoryView(HttpServletRequest request, ProgressRequest param) {
         List<HistoryVO> list =  logMapper.getContractLogList(param.getContractNo());
-        list.forEach(e -> e.setProcessStep(LogTypeEnum.getAction(e.getProcessStep())));
+        list.forEach(e -> {
+            e.setProcessStep(LogTypeEnum.getAction(e.getProcessStep()));
+            e.setFirstName(e.getCreatedByName());
+            e.setLastName("");
+            int index = e.getCreatedByName().indexOf(" ");
+            if (index != -1) {
+                try {
+                    String lastName = StringUtil.getSubstring(e.getCreatedByName(), 0, index);
+                    String firstName = StringUtil.getSubstring(e.getCreatedByName(), index);
+
+                    e.setFirstName(firstName);
+                    e.setLastName(lastName);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        });
         return  list;
     }
 }

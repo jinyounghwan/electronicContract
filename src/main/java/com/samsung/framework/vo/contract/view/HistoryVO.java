@@ -16,4 +16,6 @@ public class HistoryVO {
     private String createdBy;
     private String createdByName;
     private String createdAt;
+    private String firstName;
+    private String lastName;
 }

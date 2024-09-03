@@ -211,7 +211,7 @@ let viewHistory = (seq) =>{
             data.forEach((value)=> {
                 var $tr  = $('<tr>');
                 var $td1 = $('<td>' +value.processStep+ '</td>');
-                var $td2= $('<td>' +value.createdByName + ' ('+ value.createdBy+') '+'</td>');
+                var $td2= $('<td>' +value.firstName + ' ' + value.lastName + ' ('+ value.createdBy+') '+'</td>');
                 var $td3 = $('<td>' +value.createdAt+ '</td>');
                 var $td4 = $('<td>' +value.ipAddress+ '</td>');
                 $tr.append($td1);
