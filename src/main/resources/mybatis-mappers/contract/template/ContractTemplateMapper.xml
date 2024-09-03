@@ -222,4 +222,10 @@
         where template_seq = #{templateSeq}
     </select>
 
+    <select id="getEmployCheck" resultType="Integer">
+        select
+            count(*)
+        from users
+        where emp_no = #{employeeId}
+    </select>
 </mapper>

@@ -134,4 +134,21 @@ public class ContractCreationController {
         }
         return replaceType;
     }
+
+    @GetMapping(value = "/employCheck")
+    @ResponseBody
+    public ResponseEntity employCheck(CreateViewContract param){
+        String errmsg = "";
+
+        int employChk = contractCreationService.getEmployCheck(param);
+
+        if(employChk < 0){
+            errmsg = "Employee Id None";
+        }else{
+            errmsg = "Ok";
+        }
+
+        log.info("i >> " + employChk);
+        return ResponseEntity.ok(employChk);
+    }
 }

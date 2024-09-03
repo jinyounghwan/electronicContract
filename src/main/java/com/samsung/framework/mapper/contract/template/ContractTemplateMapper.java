@@ -5,6 +5,7 @@ import com.samsung.framework.vo.contract.template.Template;
 import com.samsung.framework.vo.contract.view.ContractView;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.search.SearchVO;
+import com.samsung.framework.vo.user.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -50,4 +51,5 @@ public interface ContractTemplateMapper {
 
     ContractView getCreateContractView(@Param(value="templateSeq") String templateSeq);
 
+    int getEmployCheck(@Param(value="employeeId") String employeeId);
 }

@@ -6,7 +6,6 @@ import com.samsung.framework.common.enums.ResultCodeMsgEnum;
 import com.samsung.framework.common.utils.*;
 import com.samsung.framework.domain.common.Variables;
 import com.samsung.framework.domain.contract.CreateViewContract;
-import com.samsung.framework.domain.contract.ProgressRequest;
 import com.samsung.framework.domain.contract.SaveContractRequest;
 import com.samsung.framework.domain.log.LogSaveRequest;
 import com.samsung.framework.mapper.account.AccountMapper;
@@ -21,19 +20,16 @@ import com.samsung.framework.vo.contract.template.ContractTemplateVO;
 import com.samsung.framework.vo.contract.template.Template;
 import com.samsung.framework.vo.contract.view.ContractView;
 import com.samsung.framework.vo.file.FilePublicVO;
-import com.samsung.framework.vo.file.FileVO;
 import com.samsung.framework.vo.log.LogSaveResponse;
 import com.samsung.framework.vo.user.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -230,6 +226,12 @@ public class ContractCreationService {
         return replaceType;
     }
 
+    /**
+     * 계약서 생성전 employId 검증로직 추가
+     */
+    public int getEmployCheck(CreateViewContract param) {
+        return contractTemplateMapper.getEmployCheck(param.getEmployeeId());
+    }
     /**
      * 계약서 생성 View Contract
      * */
