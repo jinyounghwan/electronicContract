@@ -288,6 +288,28 @@ let closeContractView = () =>{
     $('[data-target="viewBackground"]').removeAttr('class');
 }
 
+/* 계약서 생성전 employId 체크 로직 추가 */
+let employCheck = () =>{
+if(valid($('#contractForm'))){
+  let employeeId = $('[name=empNo]').val();
+       let data = {'employeeId' : employeeId}
+      console.log('employCheck data > '+ data);
+            $.ajax({
+                 url: '/contract/create/employCheck',
+                 type: 'GET',
+                 dataType:'json',
+                 data: data
+               }).done(function(data) {
+                   console.log("employCheck done msg >>" + data);
+                   if(data > 0){
+                        createViewContract();
+                   }else{
+                        alert('A person who is not registered in this system. Please registering the Employee account.');
+                   }
+               });
+           }
+     }
+
 /* 계약서 생성 - contract View*/
 let createViewContract = () =>{
 if(valid($('#contractForm'))){
