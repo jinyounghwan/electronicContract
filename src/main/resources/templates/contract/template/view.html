@@ -2,13 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}" lang="ko">
+<style>
+    /* 하이라이트 스타일 정의 */
+    .highlight {
+        background-color: yellow;
+    }
+</style>
 
     <th:block layout:fragment="content">
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 <!--content-->
                 <div class="container-fluid">
-                    <h1 class="page-title">Contract template</h1>
+                    <h1 class="page-title">Contract template detail</h1>
                     <div class="card mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
@@ -67,23 +73,23 @@
                                     <tbody>
                                     <tr>
                                         <th class="col-2">Contract Title</th>
-                                        <td th:utext="${info.contractTitleHu}">Munkaszerződés</td>
-                                        <td th:utext="${info.contractTitleEn}">Employment contract</td>
+                                        <td th:utext="${info.contractTitleHu}" id="contractTitleHu">Munkaszerződés</td>
+                                        <td th:utext="${info.contractTitleEn}" id="contractTitleEn">Employment contract</td>
                                     </tr>
                                     <tr>
                                         <th>Contract Detail</th>
-                                        <td th:utext="${info.contentsHu}"></td>
-                                        <td th:utext="${info.contentsEn}"></td>
+                                        <td th:utext="${info.contentsHu}" id="HuDetail"></td>
+                                        <td th:utext="${info.contentsEn}" id="EnDetail"></td>
                                     </tr>
                                     <tr>
                                         <th>Contract Info</th>
-                                        <td th:utext="${info.contractInfoHu}"></td>
-                                        <td th:utext="${info.contractInfoEn}"></td>
+                                        <td th:utext="${info.contractInfoHu}" id="contractInfoHu"></td>
+                                        <td th:utext="${info.contractInfoEn}" id="contractInfoEn"></td>
                                     </tr>
                                     <tr>
                                         <th>Signature Area</th>
-                                        <td th:utext="${info.employeeInfoHu}" ></td>
-                                        <td th:utext="${info.employeeInfoEn}" ></td>
+                                        <td th:utext="${info.employeeInfoHu}" id="employeeInfoHu" ></td>
+                                        <td th:utext="${info.employeeInfoEn}" id="employeeInfoEn"></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -103,6 +109,42 @@
     </th:block>
     <th:block layout:fragment="script">
         <script th:inline="javascript">
+            $(document).ready(function() {
+
+              let contractTitleHu = $('#contractTitleHu').html();
+              let highlightedTitleHu = contractTitleHu.replace(/{{(.*?)}}/g, '<span style="background-color: yellow;">{{$1}}</span>');
+              $('#contractTitleHu').html(highlightedTitleHu);
+
+              let contractTitleEn = $('#contractTitleEn').html();
+              let highlightedTitleEn = contractTitleEn.replace(/{{(.*?)}}/g, '<span style="background-color: yellow;">{{$1}}</span>');
+              $('#contractTitleEn').html(highlightedTitleEn);
+
+              let contentHu = $('#HuDetail').html();
+              let highlightContHu = contentHu.replace(/{{(.*?)}}/g, '<span style="background-color: yellow;">{{$1}}</span>');
+              $('#HuDetail').html(highlightContHu);
+
+              let contentEn = $('#EnDetail').html();
+              let highlightContEn = contentEn.replace(/{{(.*?)}}/g, '<span style="background-color: yellow;">{{$1}}</span>');
+              $('#EnDetail').html(highlightContEn);
+
+              let contentHuInfoHu = $('#contractInfoHu').html();
+              let highlightInfoHu = contentHuInfoHu.replace(/{{(.*?)}}/g, '<span style="background-color: yellow;">{{$1}}</span>');
+              $('#contractInfoHu').html(highlightInfoHu);
+
+              let contentEnInfoEn = $('#contractInfoEn').html();
+              let highlightInfoEn = contentEnInfoEn.replace(/{{(.*?)}}/g, '<span style="background-color: yellow;">{{$1}}</span>');
+              $('#contractInfoEn').html(highlightInfoEn);
+
+              let contentHuEnemployHu = $('#employeeInfoHu').html();
+              let highlightEnemployHu = contentHuEnemployHu.replace(/{{(.*?)}}/g, '<span style="background-color: yellow;">{{$1}}</span>');
+              $('#employeeInfoHu').html(highlightEnemployHu);
+
+              let contentEnemployEn = $('#employeeInfoEn').html();
+              let highlightEnemployEn = contentEnemployEn.replace(/{{(.*?)}}/g, '<span style="background-color: yellow;">{{$1}}</span>');
+              $('#employeeInfoEn').html(highlightEnemployEn);
+
+    });
+
             let copy =() =>{
                 let data = {'templateSeq' : $('#templateSeq').val()}
                 $.ajax({

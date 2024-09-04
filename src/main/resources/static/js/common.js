@@ -290,6 +290,24 @@ let closeContractView = () =>{
 
 /* 계약서 생성전 employId 체크 로직 추가 */
 let employCheck = () =>{
+  let value = $('[data-select="templateCode"] option:selected').data('value');
+  let salaryHu = $('[name=SalaryHu]').val();
+  let salaryEn = $('[name=SalaryEn]').val();
+  console.log('salaryHu >> ' + salaryHu);
+  console.log('salaryEn >> ' + salaryEn);
+  console.log('value >> ' + value);
+  if( value != 'TMPL1000'){
+  console.log('1');
+      if (salaryHu === "") {
+      console.log('2');
+                  alert("Please enter a Salary_hu.");
+                  return false;
+      }else if(salaryEn === ""){
+      console.log('3');
+                  alert("Please enter a Salary_en.");
+                  return false;
+      }
+  }
 if(valid($('#contractForm'))){
   let employeeId = $('[name=empNo]').val();
        let data = {'employeeId' : employeeId}
