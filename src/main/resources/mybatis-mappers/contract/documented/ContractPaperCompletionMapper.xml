@@ -45,4 +45,10 @@
         WHERE
             C.CONTRACT_NO = #{contractNo}
     </select>
+
+    <select id="getFileSeq" resultType="ContractVO" parameterType="FilePublicVO">
+        SELECT sign_file_path
+        FROM contracts
+        WHERE contract_no =#{seq}
+    </select>
 </mapper>

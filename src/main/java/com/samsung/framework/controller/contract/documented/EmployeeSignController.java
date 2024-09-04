@@ -96,6 +96,7 @@ public class EmployeeSignController {
         String signatureBase64 = requestData.get("signatureBase64");
         String seq = requestData.get("seq");
 
+        ContractVO contractVO = new ContractVO();
         // PDF와 서명 이미지를 바이트 배열로 변환
         byte[] pdfBytes = Base64.getDecoder().decode(pdfBase64);
         byte[] signatureBytes = Base64.getDecoder().decode(signatureBase64);
@@ -112,6 +113,11 @@ public class EmployeeSignController {
             // 서명된 PDF를 지정된 경로에 저장
             String outputFilePath = "C:/files/electronicContract/upload/Contract/PDFSIGN/" + seq + "_signed.pdf";
             document.save(outputFilePath);
+
+            contractVO.setContractNo(Integer.parseInt(seq));
+            contractVO.setSignFilePath(outputFilePath);
+
+            signWaitService.updateSignPath(contractVO);
         }
 
         return ResponseEntity.ok("PDF 저장 성공");

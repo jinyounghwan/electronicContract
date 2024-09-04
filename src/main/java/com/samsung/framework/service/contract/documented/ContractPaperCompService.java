@@ -6,6 +6,8 @@ import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.mapper.contract.documented.ContractPaperCompletionMapper;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.contract.completion.ContractCompVO;
+import com.samsung.framework.vo.contract.creation.ContractVO;
+import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.account.AccountSearchVO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,5 +51,12 @@ public class ContractPaperCompService {
         target.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(target.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         target.setSignDateAtStr(DateUtil.convertLocalDateTimeToString(target.getSignDate(), DateUtil.DATETIME_YMDHM_PATTERN));
         return target;
+    }
+
+    public ContractVO getFileSeq(String seq) {
+        log.info("seq >> " + seq);
+        ContractVO ContractVO = contractPaperCompletionMapper.getFileSeq(seq);
+        log.info("ContractVO >> " + ContractVO);
+        return ContractVO;
     }
 }
