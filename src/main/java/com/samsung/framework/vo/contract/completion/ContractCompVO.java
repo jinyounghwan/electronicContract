@@ -45,4 +45,6 @@ public class ContractCompVO {
     private String assignDateAtStr;
     private String userName;
     private String contractDate;
+    private String firstName;
+    private String lastName;
 }

@@ -5,6 +5,7 @@ import com.samsung.framework.common.enums.ContractProcessEnum;
 import com.samsung.framework.common.enums.ResultCodeMsgEnum;
 import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.LogUtil;
+import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.account.ghr.GhrAccount;
 import com.samsung.framework.domain.contract.paper.ContractComp;
 import com.samsung.framework.domain.log.LogSaveRequest;
@@ -98,7 +99,7 @@ public class ContractCompService {
 
         result.put("code",400);
         result.put("message", "GHR에 존재하지 않는 사번입니다.");
-        return new ResultStatusVO(ResultCodeMsgEnum.CREATE_DATA_FAIL.getCode(),ResultCodeMsgEnum.CREATE_DATA_FAIL.name());
+        return new ResultStatusVO(ResultCodeMsgEnum.INVALID_EMP_NO.getCode(),ResultCodeMsgEnum.INVALID_EMP_NO.getMsg());
 //        return result;
     }
 
@@ -116,6 +117,21 @@ public class ContractCompService {
             data.setSignDateAtStr(DateUtil.convertLocalDateTimeToString(data.getSignDate(), DateUtil.DATETIME_YMDHM_PATTERN));
             data.setDocStatus(String.valueOf(ContractProcessEnum.getProcessStatus(data.getDocStatus())));
             data.setProcessStatus(String.valueOf(ContractProcessEnum.getProcessStatus(data.getProcessStatus())));
+
+            data.setFirstName(data.getName());
+            data.setLastName("");
+            int index = data.getName().indexOf(" ");
+            if (index != -1) {
+                try {
+                    String lastName = StringUtil.getSubstring(data.getName(), 0, index);
+                    String firstName = StringUtil.getSubstring(data.getName(), index);
+
+                    data.setFirstName(firstName);
+                    data.setLastName(lastName);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
         });
         return list;
     }
@@ -128,6 +144,22 @@ public class ContractCompService {
         contract.setAssignDateAtStr(DateUtil.convertLocalDateTimeToString(contract.getAssignedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         contract.setDocStatus(String.valueOf(ContractProcessEnum.getProcessStatus(contract.getDocStatus())));
         contract.setProcessStatus(String.valueOf(ContractProcessEnum.getProcessStatus(contract.getProcessStatus())));
+
+       // FirstName, LastName 구분
+       contract.setFirstName(contract.getName());
+       contract.setLastName("");
+       int index = contract.getName().indexOf(" ");
+       if (index != -1) {
+           try {
+               String lastName = StringUtil.getSubstring(contract.getName(), 0, index);
+               String firstName = StringUtil.getSubstring(contract.getName(), index);
+               contract.setFirstName(firstName);
+               contract.setLastName(lastName);
+           } catch (Exception exception) {
+               exception.printStackTrace();
+           }
+       }
+
         return contract;
    }
 

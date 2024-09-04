@@ -18,7 +18,7 @@ public enum ResultCodeMsgEnum {
     , EXIST_CODE(10, "이미 존재하는 코드 입니다.")
 
     // 계정
-    , INVALID_EMP_NO(1000, "유효하지 않은 임직원 계정 입니다.")
+    , INVALID_EMP_NO(1000, "A person who is not registered in this system. Please registering the Employee's account.")
 
     // 계약서 템플릿
     , NO_TEMPLATE_CODE(2000, "없는 템플릿 코드 입니다.");

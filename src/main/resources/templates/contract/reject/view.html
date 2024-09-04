@@ -49,7 +49,7 @@
           </div>
           <div class="btn-area-right">
             <button class="btn btn-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract</button>
-            <button class="btn btn-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">View Contract</button>
+            <button class="btn btn-outline-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">View Contract</button>
           </div>
         </div>
 
@@ -75,7 +75,7 @@
                     </tr>
                     <tr>
                       <th>Party to a contract</th>
-                      <td th:text="${info.name} + '/' + ${info.empNo}">Hong Gildong / 08015741</td>
+                      <td th:text="${info.firstName} + ' ' + ${info.lastName} + '/' + ${info.empNo}">Hong Gildong / 08015741</td>
                       <th>Contract Status</th>
                       <td th:text="${info.processStatus}">Unseen</td>
                     </tr>

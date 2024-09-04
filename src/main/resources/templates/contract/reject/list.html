@@ -67,7 +67,7 @@
                                             <td th:text="${item.contractNo}"></td>
                                             <td th:utext="${item.templateTitle}"></td>
                                             <td th:utext="${item.contractTitleEn}"></td>
-                                            <td th:text="${item.name}"></td>
+                                            <td th:text="${item.firstName} + ' ' + ${item.lastName}"></td>
                                             <td th:text="${item.empNo}"></td>
                                             <td th:text="${item.createdAt}"></td>
                                             <td th:text="${item.updatedAt}"></td>
