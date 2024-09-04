@@ -91,13 +91,16 @@ public class ValidationUtil {
         validator = validatorFactory.getValidator();
 
         for (ContractExcelVO obj : bulkList) {
-            String templateType = ContractTemplateEnum.getTemplateCode(obj.getTemplateType());
+//            String templateType = ContractTemplateEnum.getTemplateCode(obj.getTemplateType());
+            String templateCode = ContractTemplateEnum.getTemplateCode(obj.getTemplateCode());
             // 연봉 관련 template type 일 때
-            if(templateType.equals(ContractTemplateEnum.getTemplateCode(ContractTemplateEnum.SALARY)) || templateType.equals(ContractTemplateEnum.getTemplateCode(ContractTemplateEnum.PRIVACY_AGREEMENT))){
+//            if(templateType.equals(ContractTemplateEnum.getTemplateCode(ContractTemplateEnum.SALARY)) || templateType.equals(ContractTemplateEnum.getTemplateCode(ContractTemplateEnum.PRIVACY_AGREEMENT))){
+            log.info("templateCode tttt = " + templateCode);
+            if(templateCode.equals("1") || templateCode.equals("2")){
                 BulkExcelVO target = BulkExcelVO.builder()
                         .empNo(obj.getEmpNo())
                         .contractDate(obj.getContractDate())
-                        .templateCode(obj.getTemplateType())
+//                        .templateCode(obj.getTemplateType())
                         .templateSeq(obj.getTemplateCode())
                         .salaryHu(obj.getSalaryHu())
                         .salaryEn(obj.getSalaryEn())
@@ -118,7 +121,7 @@ public class ValidationUtil {
                 BulkExcelBasicVO target = BulkExcelBasicVO.builder()
                         .empNo(obj.getEmpNo())
                         .contractDate(obj.getContractDate())
-                        .templateCode(obj.getTemplateType())
+//                        .templateCode(obj.getTemplateType())
                         .templateSeq(obj.getTemplateCode())
                         .build();
 

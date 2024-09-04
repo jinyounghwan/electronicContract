@@ -15,8 +15,8 @@ public class BulkExcelBasicVO {
     @NotNull(message = "ContractDate invalid.")
     String contractDate;
 
-    @NotNull(message = "TemplateType invalid.")
-    String templateCode;
+//    @NotNull(message = "TemplateType invalid.")
+//    String templateCode;
 
     @NotNull(message = "TemplateCode invalid.")
     String templateSeq;
