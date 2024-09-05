@@ -27,27 +27,20 @@
                                     <tr>
                                         <th class="col-2">Template no.</th>
                                         <td th:text="${info.getTemplateSeq()}">00000019</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Template Title</th>
-                                        <td th:text="${info.getTemplateTitle()}">생산파트 무기계약직 계약서</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Template Type</th>
-                                        <td th:text="${info.getTemplateType()}">무기계약직 계약서</td>
-                                    </tr>
-                                    <tr>
                                         <th>Memo</th>
                                         <td th:text="${info.getMemo()}">2023년 생산 무기계약직 전용 계약서_수정(23.09.11)</td>
                                     </tr>
                                     <tr>
+                                        <th>Template Title</th>
+                                        <td th:text="${info.getTemplateTitle()}">생산파트 무기계약직 계약서</td>
                                         <th>Created</th>
                                         <td th:text="${info.getCreatedAt()} +' , '+${info.getCreatedBy()}">2023-09-10  08:14:59 , admin12</td>
                                     </tr>
                                     <tr>
+                                        <th>Template Type</th>
+                                        <td th:text="${info.getTemplateType()}">무기계약직 계약서</td>
                                         <th>Modified</th>
                                         <td th:text="${info.getUpdatedAt()} ? ${info.getUpdatedAt()} +' , '+${info.getUpdatedBy()} : '-'">2023-09-11  16:03:01 , admin34</td>
-
                                     </tr>
                                     </tbody>
                                 </table>
