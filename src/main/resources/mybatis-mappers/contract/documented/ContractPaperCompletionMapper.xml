@@ -32,6 +32,7 @@
     <select id="getPaperCompInfo" parameterType="long" resultType="ContractCompVO">
         SELECT C.EMP_NO AS EMP_NO,
                 C.NAME AS NAME,
+                C.ASSIGNED_AT as ASSIGN_DATE,
                 C.SIGN_DATE AS SIGN_DATE,
                 CTD.CONTRACT_TITLE_EN AS CONTRACT_TITLE_EN,
                 C.CONTRACT_NO AS CONTRACT_NO ,

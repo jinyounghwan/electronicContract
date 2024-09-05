@@ -6,7 +6,7 @@
 
 </head>
 <th:block layout:fragment="css">
-    <title>내정보 확인</title>
+    <title>Edit My Information</title>
 </th:block>
 <th:block layout:fragment="content">
     <!-- Content Wrapper -->
@@ -15,7 +15,7 @@
             <div th:replace="~{common/alertNRedirection::alertNRedirection(accountType=${account.accountType}) }"></div>
             <!--content-->
             <div class="container-fluid">
-                <h1 class="page-title">내정보 확인</h1>
+                <h1 class="page-title">Edit My Information</h1>
                 <!--search box-->
 
                 <!--search box-->
@@ -27,16 +27,20 @@
                             <table class="table-list">
                                 <tbody>
                                 <tr>
-                                    <th class="col-2">Last Name</th>
-                                    <td th:text="${account.getLastName()}"></td>
+                                    <th class="col-2">First Name</th>
+                                    <td th:text="${account.getFirstName()}"></td>
                                 </tr>
                                 <tr>
-                                    <th>First Name</th>
-                                    <td th:text="${account.getFirstName()}"></td>
+                                    <th>Last Name</th>
+                                    <td th:text="${account.getLastName()}"></td>
                                 </tr>
                                 <tr>
                                     <th>Employee ID</th>
                                     <td th:text="${account.getEmpNo()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>E - mail</th>
+                                    <td><input name="email" type="text" class="form-control form-control-user" th:value="${account.getEmail()}"/></td>
                                 </tr>
                                 <tr>
                                     <th>Password</th>
@@ -65,6 +69,7 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
             function save(){
+                let email = $('input[name=email]').val();
                 let password = $('input[name=password]').val();
                 let confirmPassword = $('input[name=confirmPassword]').val();
 
@@ -75,7 +80,8 @@
                 }
 
                 const data = {
-                    password: password
+                    password: password,
+                    email : email
                 };
 
                 $.ajax({

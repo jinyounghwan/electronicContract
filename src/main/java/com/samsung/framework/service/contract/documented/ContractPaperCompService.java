@@ -2,6 +2,7 @@ package com.samsung.framework.service.contract.documented;
 
 import com.samsung.framework.common.enums.ContractProcessEnum;
 import com.samsung.framework.common.utils.DateUtil;
+import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.mapper.contract.documented.ContractPaperCompletionMapper;
 import com.samsung.framework.vo.account.AccountVO;
@@ -41,6 +42,21 @@ public class ContractPaperCompService {
         list.forEach(data->{
             data.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(data.getCreatedAt(),DateUtil.DATETIME_YMDHM_PATTERN));
             data.setSignDateAtStr(DateUtil.convertLocalDateTimeToString(data.getSignDate(), DateUtil.DATETIME_YMDHM_PATTERN));
+
+            data.setFirstName(data.getName());
+            data.setLastName("");
+            int index = data.getName().indexOf(" ");
+            if (index != -1) {
+                try {
+                    String lastName = StringUtil.getSubstring(data.getName(), 0, index);
+                    String firstName = StringUtil.getSubstring(data.getName(), index);
+
+                    data.setFirstName(firstName);
+                    data.setLastName(lastName);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
         });
         return list;
     }
@@ -50,6 +66,21 @@ public class ContractPaperCompService {
 
         target.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(target.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         target.setSignDateAtStr(DateUtil.convertLocalDateTimeToString(target.getSignDate(), DateUtil.DATETIME_YMDHM_PATTERN));
+
+        target.setFirstName(target.getName());
+        target.setLastName("");
+        int index = target.getName().indexOf(" ");
+        if (index != -1) {
+            try {
+                String lastName = StringUtil.getSubstring(target.getName(), 0, index);
+                String firstName = StringUtil.getSubstring(target.getName(), index);
+
+                target.setFirstName(firstName);
+                target.setLastName(lastName);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
         return target;
     }
 

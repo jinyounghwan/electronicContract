@@ -289,6 +289,7 @@ public class AccountService {
         if(validationUtil.parameterValidator(pwdChangeRequest, PwdChangeRequest.class)){
             AccountVO account = AccountVO.builder()
                     .userPw(encryptionUtil.encrypt(pwdChangeRequest.getPassword()))
+                    .email(pwdChangeRequest.getEmail())
                     .userId(accountVO.getUserId())
                     .empNo(accountVO.getEmpNo())
                     .build();

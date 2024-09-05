@@ -39,7 +39,21 @@
             </div>
             <!--content-->
             <div class="container-fluid">
-                <h1 class="page-title">Contract inquiry</h1>
+                <h1 class="page-title">Contract Detail</h1>
+
+                <div class="btn-area-box">
+                    <div class="btn-area-left">
+                        <div class="contractNo" th:text="no. + ${info.contractNo}">00000019</div>
+                        <h4 class="m-0 font-weight-bold text-primary" th:utext="${info.contractTitleEn}"></h4>
+                    </div>
+                    <div class="btn-area-right">
+                        <button class="btn btn-outline-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract</button>
+                        <button class="btn btn-outline-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">View Contract</button>
+                    </div>
+                </div>
+
+                <hr>
+
                 <div class="card mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Contract Info.</h6>
@@ -50,19 +64,19 @@
                                 <input type="hidden" id="contractNo" th:value="${info.contractNo}">
                                 <tbody>
                                 <tr>
-                                    <th class="col-2">Contract Title</th>
-                                    <td th:utext="${info.getContractTitleEn()}"></td>
-                                </tr>
-                                <tr>
-                                    <th>Sending Company</th>
+                                    <th>Sender</th>
                                     <td>SAMSUNG SDI Hungary</td>
                                 </tr>
                                 <tr>
-                                    <th>Contracting Party</th>
-                                    <td th:text="${info.name}+ ' / ' + ${info.empNo}"></td>
+                                    <th>Assigned date</th>
+                                    <td th:text="${info.assignDateAtStr}?${info.assignDateAtStr}:'-'"></td>
                                 </tr>
                                 <tr>
-                                    <th>Assigned</th>
+                                    <th>Party to a contract</th>
+                                    <td th:text="${info.firstName} + ' ' + ${info.lastName} + ' / ' + ${info.empNo}"></td>
+                                </tr>
+                                <tr>
+                                    <th>Signed date</th>
                                     <td th:text="${info.signDateAtStr}?${info.signDateAtStr}:'-'"></td>
                                 </tr>
                                 </tbody>
@@ -72,13 +86,11 @@
                 </div>
                 <div class="btn-area-box">
                     <div class="btn-area-left">
-                        <button class="btn btn-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract2</button>
-                        <button class="btn btn-outline-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">View Contract</button>
                         <!--<button class="btn btn-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" type="button" th:onclick="'viewContract('+${info.getContractNo()}+')'">View Contract2</button>-->
-                        <button class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
+                        <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/contract/sign/paper/comp}'|">List</button>
                     </div>
                     <div class="btn-area-right">
-                        <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/contract/sign/paper/comp}'|">List</button>
+                        <button id="btnViewHistory" class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
                     </div>
                 </div>
             </div>

@@ -34,7 +34,7 @@
             <div id="content">
                 <!--content-->
                 <div class="container-fluid">
-                    <h1 class="page-title">Contract detail</h1>
+                    <h1 class="page-title">Signed Contract Detail</h1>
 
                     <input type = "hidden" id="InfoValue" th:value="${info.contractNo}">
 
@@ -49,7 +49,7 @@
                             <h4 class="m-0 font-weight-bold text-primary" th:utext="${info.contractTitleEn}"></h4>
                         </div>
                         <div class="btn-area-right">
-                            <button class="btn btn-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract</button>
+                            <button class="btn btn-outline-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract</button>
                             <button class="btn btn-outline-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">View Contract</button>
                         </div>
                     </div>

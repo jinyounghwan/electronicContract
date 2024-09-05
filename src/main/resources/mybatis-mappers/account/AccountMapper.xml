@@ -194,7 +194,7 @@
 
     <update id="updPwd" parameterType="AccountVO">
         UPDATE USERS U
-        SET USER_PW = #{userPw}, UPDATED_AT = sysdate(), UPDATED_BY = #{userId}
+        SET USER_PW = #{userPw}, UPDATED_AT = sysdate(), UPDATED_BY = #{userId}, EMAIL = #{email}
         WHERE U.EMP_NO = #{empNo}
     </update>
     
