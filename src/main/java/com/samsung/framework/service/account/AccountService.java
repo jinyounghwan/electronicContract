@@ -77,6 +77,21 @@ public class AccountService {
             data.setUpdatedAtStr(DateUtil.convertLocalDateTimeToString(data.getUpdatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
             data.setLastLoginStr(DateUtil.convertLocalDateTimeToString(data.getLastLogin(), DateUtil.DATETIME_YMDHM_PATTERN));
             data.setPasswordAtStr(DateUtil.convertLocalDateTimeToString(data.getPasswordAt(), DateUtil.DATETIME_YMDHM_PATTERN));
+
+            data.setFirstName(data.getName());
+            data.setLastName("");
+            int index = data.getName().indexOf(" ");
+            if (index != -1) {
+                try {
+                    String lastName = StringUtil.getSubstring(data.getName(), 0, index);
+                    String firstName = StringUtil.getSubstring(data.getName(), index);
+
+                    data.setFirstName(firstName);
+                    data.setLastName(lastName);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
         });
 
         return list;
@@ -215,6 +230,7 @@ public class AccountService {
         if(validationUtil.parameterValidator(account, AccountVO.class)){
             AccountVO target = AccountVO.builder()
                     .empNo(account.getUserId())
+                    .email(account.getEmail())
                     .userPw(encryptionUtil.encrypt(account.getPassword()))
                     .build();
 
@@ -301,6 +317,15 @@ public class AccountService {
             }else {
                 result.put(MapKeyStringEnum.CODE.getKeyString(), 200);
                 result.put(MapKeyStringEnum.MESSAGE.getKeyString(), "수정 되었습니다.");
+
+                HttpSession session = request.getSession();
+                AccountVO loginInfo = (AccountVO) session.getAttribute("loginInfo");
+
+                if (loginInfo != null) {
+                    loginInfo.setEmail(account.getEmail()); // 이메일 속성만 수정
+                    session.setAttribute("loginInfo", loginInfo); // 수정된 객체를 세션에 다시 저장
+                }
+
 
                 //로그 저장
                 var logSaveRequest = LogSaveRequest.builder()

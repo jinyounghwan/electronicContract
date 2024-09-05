@@ -6,7 +6,7 @@
 
 </head>
 <th:block layout:fragment="css">
-        <title>Employee account</title>
+        <title>Employee Account</title>
 </th:block>
 <th:block layout:fragment="content">
     <!-- Content Wrapper -->
@@ -14,7 +14,7 @@
         <div id="content">
             <!--content-->
             <div class="container-fluid">
-                <h1 class="page-title">Employee account</h1>
+                <h1 class="page-title">Employee Account</h1>
                 <!--search box-->
                <div th:replace="~{common/defaultSearch}"></div>
                 <div class="card shadow mb-4">
@@ -37,7 +37,9 @@
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
-                                    <th>Full Name</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>E - mail</th>
                                     <th>Employee ID</th>
                                     <th>Last Log In</th>
                                     <th>PW Changed</th>
@@ -49,7 +51,9 @@
                                 <tbody id="employeeList">
                                 <input type="hidden" name="totalCount" id="totalCount" th:value="${totalCount}">
                                 <tr th:if="${not #lists.isEmpty(list)}" th:each="row, stat : ${list}">
-                                    <td th:text="${row.getName()}"></td>
+                                    <td th:text="${row.getFirstName()}"></td>
+                                    <td th:text="${row.getLastName()}"></td>
+                                    <td th:text="${row.getEmail()}"></td>
                                     <td th:text="${row.getEmpNo()}"></td>
                                     <td th:if="${row.getLastLoginStr()} !=''" th:text="${row.getLastLoginStr()}"></td>
                                     <td th:if="${row.getLastLoginStr()}==''">-</td>

@@ -6,7 +6,7 @@
 
 </head>
 <th:block layout:fragment="css">
-    <title>Employee account</title>
+    <title>Edit Employee Account</title>
 </th:block>
 <th:block layout:fragment="content">
     <!-- Content Wrapper -->
@@ -15,30 +15,34 @@
             <div th:replace="~{common/alert2}"></div>
             <!--content-->
             <div class="container-fluid">
-                <h1 class="page-title">Employee account</h1>
+                <h1 class="page-title">Edit Employee Account</h1>
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table-list">
                                 <tbody>
                                 <tr>
-                                    <th class="col-2">Last Name</th>
-                                    <td th:text="${account.getLastName()}"></td>
+                                    <th class="col-2">First Name</th>
+                                    <td th:text="${account.getFirstName()}"></td>
                                 </tr>
                                 <tr>
-                                    <th>First Name</th>
-                                    <td th:text="${account.getFirstName()}"></td>
+                                    <th>Last Name</th>
+                                    <td th:text="${account.getLastName()}"></td>
                                 </tr>
                                 <tr>
                                     <th>Employee ID</th>
                                     <td th:text="${account.getEmpNo()}"></td>
                                 </tr>
                                 <tr>
-                                    <th>password</th>
+                                    <th>E - mail</th>
+                                    <td><input id="email" type="text" class="form-control form-control-user" th:value="${account.getEmail()}"/></td>
+                                </tr>
+                                <tr>
+                                    <th>New Password</th>
                                     <td><input type="password" id="password" class="form-control form-control-user" placeholder=""></td>
                                 </tr>
                                 <tr>
-                                    <th>Confirm Password</th>
+                                    <th>Confirm New Password</th>
                                     <td><input type="password" id="confirmPassword" class="form-control form-control-user" placeholder=""></td>
                                 </tr>
                                 </tbody>
@@ -47,8 +51,8 @@
                     </div>
                 </div>
                 <div class="btn-area">
-                    <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/account/employee}'|">List</button>
-                    <button class="btn btn-primary" type="button" th:onclick="edit([[${account.empNo}]])">Edit</button>
+                    <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/account/employee}'|">Cancel</button>
+                    <button class="btn btn-primary" type="button" th:onclick="edit([[${account.empNo}]])">Save</button>
                 </div>
 
             </div>
@@ -62,7 +66,8 @@
             const data = {
                 password: $('#password').val(),
                 confirmPassword: $('#confirmPassword').val(),
-                userId: adminId
+                userId: adminId,
+                email: $('#email').val()
             };
             if(data.password !== data.confirmPassword){
                 openAlert("패스워드가 일치하지 않습니다.");
@@ -85,8 +90,8 @@
                 if(json.code===400){
                     openAlert(json.message);
                 } else if(json.code===200){
-                    openAlert(json.message);
-                    location.href = "/account/employee"
+                    alert(json.message);
+                    location.href = "/account/employee/detail/" + adminId
                 }
             })
             .fail(function(jqXHR) {

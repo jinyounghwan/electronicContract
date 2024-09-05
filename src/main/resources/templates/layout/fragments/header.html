@@ -10,7 +10,8 @@
                 <a th:if= "${session.loginInfo == null}" class="nav-link" href="/account/login"><span class="nav-text">LOG-IN</span></a>
                 <a th:if= "${session.loginInfo != null}" class="nav-link " th:href="@{/account/myInfo}">
 <!--                    <span class="nav-text" th:text="${session.loginInfo.name}"><i class="fas fa-user-circle nav-icon"></i></span>-->
-                    <span class="nav-text" th:text="${session.loginInfo.firstName} + ' ' + ${session.loginInfo.lastName}"><i class="fas fa-user-circle nav-icon"></i></span>
+                    <span class="nav-text" th:if="${session.loginInfo.firstName == null}" th:text="${session.loginInfo.name}"><i class="fas fa-user-circle nav-icon"></i></span>
+                    <span class="nav-text" th:if="${session.loginInfo.firstName != null}" th:text="${session.loginInfo.firstName} + ' ' + ${session.loginInfo.lastName}"><i class="fas fa-user-circle nav-icon"></i></span>
                 </a>
             </li>
             <div th:if= "${session.loginInfo != null}" class="topbar-divider d-none d-sm-block"></div>

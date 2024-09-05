@@ -214,7 +214,7 @@
     
     <update id="updEmployeeAcct" parameterType="AccountVO">
         UPDATE USERS U
-        SET U.USER_PW = #{userPw}, U.UPDATED_AT = sysdate() , U.UPDATED_BY = #{empNo}
+        SET U.USER_PW = #{userPw}, U.UPDATED_AT = sysdate() , U.UPDATED_BY = #{empNo}, U.EMAIL = #{email}
         WHERE U.EMP_NO = #{empNo}
     </update>
 
