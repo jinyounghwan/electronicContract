@@ -50,7 +50,7 @@ public class AccountService {
 
     /**
      * Admin 사번 회원 상세 정보 조회
-     * @param userId
+     * @param
      * @return
      */
     public AccountVO getAccountDetail(AccountVO vo) throws UnsupportedEncodingException {
@@ -348,6 +348,8 @@ public class AccountService {
         account.setResignedAtStr(DateUtil.convertLocalDateTimeToString(account.getResignedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
     }
     public void getFirstNameLastName(AccountVO account) throws UnsupportedEncodingException {
+        account.setFirstName(account.getName());
+        account.setLastName("");
         int index =account.getName().indexOf(" ");
         if(index > 0){
             String lastName = StringUtil.getSubstring(account.getName(),0,index);

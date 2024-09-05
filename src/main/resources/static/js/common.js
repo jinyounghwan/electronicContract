@@ -232,8 +232,9 @@ let viewHistory = (seq) =>{
     }).fail(function(jqXHR) {
         console.log(jqXHR);
     });
-
 }
+
+
 
 let viewPdfButton = (seq) =>{
     let templateSeq = seq;

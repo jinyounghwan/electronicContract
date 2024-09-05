@@ -62,18 +62,89 @@
                         <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/account/admin}'|">List</button>
                     </div>
                     <div class="btn-area-right">
-                        <button id="btnViewHistory" class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
+                        <button class="btn btn-primary" type="button" id="btnViewHistory" onclick="viewAdministratorHistory()">View History</button>
                         <button class="btn btn-primary" type="button" th:onclick="|location.href='@{/account/admin/edit/{userId}(userId=${account.getEmpNo()})}'|">Edit</button>
                     </div>
                 </div>
             </div>
+            <!-- content -->
+            <div th:replace="~{common/administratorAccountHistory}"></div>
+<!--            <div th:replace="~{common/contractProgressHistory}"></div>-->
         </div>
     </div>
 </th:block>
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+    let viewAdministratorHistory = () =>{
+         // 팝업창 열기
+         $('[data-target="history"]').removeAttr('style');
+         var $tr  = $('<tr>');
+         var $td1 = $('<td>Create contract</td>');
+         var $td2= $('<td>2023-09-10 10:12:31</td>');
+         var $td3 = $('<td>61.73.27.55</td>');
+         $tr.append($td1);
+         $tr.append($td2);
+         $tr.append($td3);
+         $('[data-target="historyBody"]').append($tr);
 
+         var $tr  = $('<tr>');
+         var $td1 = $('<td>Assign</td>');
+         var $td2= $('<td>2023-09-12 17:15:51</td>');
+         var $td3 = $('<td>61.73.27.121</td>');
+         $tr.append($td1);
+         $tr.append($td2);
+         $tr.append($td3);
+         $('[data-target="historyBody"]').append($tr);
+
+         var $tr  = $('<tr>');
+         var $td1 = $('<td>login</td>');
+         var $td2= $('<td>2023-09-15 11:22:21</td>');
+         var $td3 = $('<td>61.73.27.121</td>');
+         $tr.append($td1);
+         $tr.append($td2);
+         $tr.append($td3);
+         $('[data-target="historyBody"]').append($tr);
+
+         var $tr  = $('<tr>');
+         var $td1 = $('<td>Log out</td>');
+         var $td2= $('<td>2023-09-22 05:23:15</td>');
+         var $td3 = $('<td>61.73.12.129</td>');
+         $tr.append($td1);
+         $tr.append($td2);
+         $tr.append($td3);
+         $('[data-target="historyBody"]').append($tr);
+
+         var $tr  = $('<tr>');
+         var $td1 = $('<td>PW Changed</td>');
+         var $td2= $('<td>2023-09-15 17:21:22</td>');
+         var $td3 = $('<td>61.73.27.55</td>');
+         $tr.append($td1);
+         $tr.append($td2);
+         $tr.append($td3);
+         $('[data-target="historyBody"]').append($tr);
+
+         var $tr  = $('<tr>');
+         var $td1 = $('<td>Paper Contract Upload</td>');
+         var $td2= $('<td>2023-09-12 11:12:31</td>');
+         var $td3 = $('<td>61.73.27.99</td>');
+         $tr.append($td1);
+         $tr.append($td2);
+         $tr.append($td3);
+         $('[data-target="historyBody"]').append($tr);
+
+         var $tr  = $('<tr>');
+         var $td1 = $('<td>Recall</td>');
+         var $td2= $('<td>2023-09-30 12:12:31</td>');
+         var $td3 = $('<td>61.73.27.123</td>');
+         $tr.append($td1);
+         $tr.append($td2);
+         $tr.append($td3);
+         $('[data-target="historyBody"]').append($tr);
+
+         $('[data-target="history"]').attr('style' , 'display:block');
+         $('[data-target="historyBackground"]').attr('class' , 'modal-backdrop');
+    }
     </script>
 </th:block>
 </html>
