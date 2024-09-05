@@ -3,6 +3,7 @@ package com.samsung.framework.service.contract.documented;
 import com.samsung.framework.common.enums.ContractProcessEnum;
 import com.samsung.framework.common.enums.LogTypeEnum;
 import com.samsung.framework.common.enums.ResultCodeMsgEnum;
+import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.contract.ProgressRequest;
@@ -41,7 +42,26 @@ public class EmployeeSignService {
         HttpSession session = request.getSession();
         AccountVO account = (AccountVO) session.getAttribute("loginInfo");
         searchVO.setEmpNo(account.getEmpNo());
-        return signWaitMapper.getContractWaitsList(searchVO);
+        List<ContractVO> list = signWaitMapper.getContractWaitsList(searchVO);
+
+        list.forEach(data->{
+            data.setFirstName(data.getName());
+            data.setLastName("");
+            int index = data.getName().indexOf(" ");
+            if (index != -1) {
+                try {
+                    String lastName = StringUtil.getSubstring(data.getName(), 0, index);
+                    String firstName = StringUtil.getSubstring(data.getName(), index);
+
+                    data.setFirstName(firstName);
+                    data.setLastName(lastName);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        });
+
+        return list;
     }
 
     public ContractVO getContractWaitInfo(String seq , HttpServletRequest request) {
@@ -59,7 +79,24 @@ public class EmployeeSignService {
             Map<String, LogSaveResponse> logs = logUtil.saveLog(saveRequest);
             int result = contractProgressMapper.updateProgressStatus(seq);
         }
-        return signWaitMapper.getContractWaitInfo(vo);
+        ContractVO contract = signWaitMapper.getContractWaitInfo(vo);
+
+        // FirstName, LastName 구분
+        contract.setFirstName(contract.getName());
+        contract.setLastName("");
+        int index = contract.getName().indexOf(" ");
+        if (index != -1) {
+            try {
+                String lastName = StringUtil.getSubstring(contract.getName(), 0, index);
+                String firstName = StringUtil.getSubstring(contract.getName(), index);
+                contract.setFirstName(firstName);
+                contract.setLastName(lastName);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        return contract;
     }
 
     public ResultStatusVO updateProcessStatus(ContractVO contractVO, HttpServletRequest request) {

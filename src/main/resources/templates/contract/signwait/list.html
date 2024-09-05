@@ -43,8 +43,8 @@
                                 </thead>
                                 <tbody>
                                     <tr th:if="${not #lists.isEmpty(list)}" th:each="item, stat : ${list}">
-                                        <td th:utext="${item.contractTitleEn}"></td>
-                                        <td th:text="${item.name}"></td>
+                                        <td><a th:href="@{/contract/sign/wait/info/{seq}(seq=${item.contractNo})}" th:utext="${item.contractTitleEn}"></a></td>
+                                        <td th:text="${item.firstName} + ' ' + ${item.lastName}"></td>
                                         <td th:text="${item.empNo}"></td>
                                         <td th:text="${item.assignedAt}"></td>
                                         <td><a th:href="@{/contract/sign/wait/info/{seq}(seq=${item.contractNo})}" >View</a></td>

@@ -15,6 +15,19 @@
           z-index: 1000; /* 팝업창이 다른 요소 위에 표시되도록 설정 */
           display: none; /* 기본적으로 숨겨진 상태 */
         }
+        .canvas-container {
+          position: relative;
+        }
+
+        .placeholder {
+            position: absolute; /* 캔버스 위에 텍스트를 오버레이 */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* 텍스트를 중앙에 위치시키기 */
+            color: #888; /* 텍스트 색상 */
+            font-size: 18px; /* 텍스트 크기 */
+            pointer-events: none; /* 텍스트 클릭 방지 */
+        }
     </style>
 
     <div id="content-wrapper" class="d-flex flex-column">
@@ -23,7 +36,16 @@
             <div class="container-fluid">
                 <h1 class="page-title">Contract detail</h1>
 
-                <h4 class="m-0 font-weight-bold text-primary" th:utext="${info.contractTitleEn}"></h4>
+                <div class="btn-area-box">
+                    <div class="btn-area-left">
+                        <div class="contractNo" th:text="no. + ${info.contractNo}">00000019</div>
+                        <h4 class="m-0 font-weight-bold text-primary" th:utext="${info.contractTitleEn}"></h4>
+                    </div>
+                    <div class="btn-area-right">
+                        <button class="btn btn-outline-primary" id='test' type="button" th:onclick="'viewContract('+${info.contractNo}+')'" style="display: none;">View Contract</button>
+                        <button class="btn btn-outline-primary" type="button" id="viewPdfButton">View Contract</button>
+                    </div>
+                </div>
 
                 <hr>
 
@@ -34,10 +56,27 @@
                                 <input type="hidden" id="contractNo" th:value="${info.contractNo}">
 
                                 <div id="popup" style="display : none;">
+                                    <div class="btn-area-box" style="margin-bottom: 15px;">
+                                        <div class="btn-area-left">
+                                            <h4 class="m-0 font-weight-bold text-primary" th:utext="${info.contractTitleEn}"></h4>
+                                        </div>
+                                        <div class="btn-area-right">
+                                            <button class="btn-close" id='closePopup' type="button"></button>
+                                        </div>
+                                    </div>
                                     <iframe id="pdfTest2" width="1400" height="700px"></iframe>
-                                    <canvas id="signatureCanvas" width="500" height="200" style="border: 1px solid black;"></canvas>
-                                    <button id="saveSignature" class="btn btn-primary">Sign</button>
-                                    <span id="closeButton" class="btn btn-secondary">Close</span>
+                                    <div>
+                                        <button style="position: absolute;bottom: 0;margin-bottom: 20px;" type="button" class="btn btn-primary" data-target="statusBtn" onClick="rejectConfirm()">Reject</button>
+                                        <button style="position: absolute;bottom: 0;margin-bottom: 20px;margin-right: 25px;right: 0;" id="saveSignature" class="btn btn-primary">Sign</button>
+                                        <div style="float: right; margin-right: 100px;">
+                                            <div id="resetSign" style="text-align: right;cursor: pointer;">Reset</div>
+                                            <div class="canvas-container">
+                                                <canvas id="signatureCanvas" width="500" height="200" style="border: 1px solid black;"></canvas>
+                                                <div class="placeholder">sign here</div>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
 
                                 <tbody>
@@ -51,7 +90,7 @@
                                 </tr>
                                 <tr>
                                     <th>Party to a contract</th>
-                                    <td th:text="${info.name} + ' / ' + ${info.empNo}">Hong Gildong / 08015741</td>
+                                    <td th:text="${info.firstName} + ' ' + ${info.lastName} + ' / ' + ${info.empNo}">Hong Gildong / 08015741</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -67,8 +106,6 @@
                     </div>
                     <div class="btn-area-right">
                         <button id="btnViewHistory" class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
-                        <button class="btn btn-outline-primary" id='test' type="button" th:onclick="'viewContract('+${info.contractNo}+')'" style="display: none;">View Contract</button>
-                        <button class="btn btn-outline-primary" type="button" id="viewPdfButton">View Contract</button>
                     </div>
                 </div>
             </div>
@@ -90,7 +127,7 @@
         let signatureImage;
         let contNo = $('#contractNo').val();
 
-        canvas.width = 200; // PDF의 크기에 맞게 설정
+        canvas.width = 300; // PDF의 크기에 맞게 설정
         canvas.height = 150; // PDF의 크기에 맞게 설정
 
         // 마우스 클릭하여 드로잉 시작
@@ -126,6 +163,10 @@
             signatureImage = canvas.toDataURL('image/png');  // 서명 이미지를 Base64 형식으로 변환
             saveSignatureToPdf(signatureImage);
         });
+
+        $("#resetSign").click(function() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
     });
 
         $("#viewPdfButton").click(function() {
@@ -137,7 +178,6 @@
                   url: "/contract/sign/wait/pdf/" + templateSeq,
                   method: "GET",
                   success: function(base64EncodedPdf) {
-                    console.log("view TEST Success Data >>" + base64EncodedPdf);
                       var pdfUrl = "data:application/pdf;base64," + base64EncodedPdf;
                       $("#pdfTest2").attr("src", pdfUrl);
                          $("#popup").show();
@@ -151,6 +191,10 @@
 
          // 닫기 버튼 클릭 이벤트
     $("#closeButton").click(function() {
+      $("#popup").hide();
+    });
+
+    $("#closePopup").click(function() {
       $("#popup").hide();
     });
 
