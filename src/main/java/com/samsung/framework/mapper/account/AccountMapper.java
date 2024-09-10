@@ -2,7 +2,9 @@ package com.samsung.framework.mapper.account;
 
 import com.samsung.framework.domain.account.Account;
 import com.samsung.framework.domain.account.LoginRequest;
+import com.samsung.framework.domain.contract.ProgressRequest;
 import com.samsung.framework.vo.account.AccountVO;
+import com.samsung.framework.vo.contract.view.HistoryVO;
 import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.user.UserVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -34,4 +36,6 @@ public interface AccountMapper {
 
     int countDelete(String userId);
     AccountVO getAuthInfo(String userId);
+
+    List<HistoryVO> getAdminHistory(AccountVO accountVO);
 }

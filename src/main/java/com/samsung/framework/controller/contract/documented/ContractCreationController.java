@@ -20,11 +20,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -157,4 +162,55 @@ public class ContractCreationController {
         log.info("i >> " + employChk);
         return ResponseEntity.ok(employChk);
     }
+
+    /* ECS API 테스트 single init */
+    @PostMapping("/sendSignatureRequest")
+    public ResponseEntity<String> sendSignatureRequest(
+            @RequestParam("userId") String userId,
+            @RequestParam("signatureType") String signatureType,
+            @RequestParam("signatureTypeLevel") String signatureTypeLevel) {
+
+        String url = "https://demo.sign.netlock.hu/rest/signature/singleInitSignature";
+
+        // 파일 경로를 지정
+        File file = new File("C:/path/to/asd.pdf");
+        FileSystemResource fileResource = new FileSystemResource(file);
+
+        // 파라미터 구성
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("mimeType", "application/pdf");
+        params.add("userId", userId);
+        params.add("fileName", "asd.pdf");
+        params.add("signatureType", signatureType);
+        params.add("signatureTypeLevel", signatureTypeLevel);
+
+        // Basic Auth 설정
+        String username = "ecs.sdihu@partner.samsung.com";
+        String password = "Testsdihu24!";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBasicAuth(username, password);
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        // Body에 파일 추가
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("file", fileResource);
+
+        // HTTP Entity 생성
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+        // RestTemplate 사용하여 POST 요청
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.exchange(
+                url + "?mimeType=application/pdf&userId=" + userId +
+                        "&fileName=asd.pdf&signatureType=" + signatureType +
+                        "&signatureTypeLevel=" + signatureTypeLevel,
+                HttpMethod.POST,
+                requestEntity,
+                String.class
+        );
+
+        // 응답 반환
+        return response;
+    }
+
 }

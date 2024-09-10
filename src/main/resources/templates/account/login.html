@@ -51,7 +51,7 @@
                                         <button id="myButton" style="display: none;" onclick="reAuth()">resend</button>
                                     </div>
 
-                                    <a class="btn btn-primary btn-user btn-block mt-4" onclick="loginFinal()">Check</a>
+                                    <a class="btn btn-primary btn-user btn-block mt-4" onclick="loginFinal()">verify</a>
                                 </div>
                             </div>
                         </div>
@@ -85,8 +85,6 @@
         })
         // 로그인 function
         function login() {
-            //가입 시 이메일로 인증번호가 전송되었습니다.
-            alert('A verification number was sent to your email upon signing up.');
             userId = document.getElementById("userId").value;
             password = document.getElementById("password").value;
 
@@ -96,9 +94,11 @@
 
             // 아이디 비밀번호 유효성 검사
             if(!userId || !password){
-                openAlert("사용자 아이디 또는 비밀번호를 입력해주세요.");
+                openAlert("Invalid credentials. Please check your ID and Password and try again.");
                 return;
             }
+              //가입 시 이메일로 인증번호가 전송되었습니다.
+            alert('A verification number was send to your email upon signing up');
 
             let member = {
                 userId: userId,

@@ -12,6 +12,7 @@
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
+            <input type = "hidden" id="InfoValue" th:value="${account.getEmpNo()}">
             <!--content-->
             <div class="container-fluid">
                 <h1 class="page-title">Administrator Account Detail</h1>
@@ -62,7 +63,8 @@
                         <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/account/admin}'|">List</button>
                     </div>
                     <div class="btn-area-right">
-                        <button class="btn btn-primary" type="button" id="btnViewHistory" onclick="viewAdministratorHistory()">View History</button>
+                        <!--<button id="btnViewHistory" class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>-->
+                        <button class="btn btn-primary" type="button" id="btnViewHistory" th:onclick="viewHistoryAdmin()">View History</button>
                         <button class="btn btn-primary" type="button" th:onclick="|location.href='@{/account/admin/edit/{userId}(userId=${account.getEmpNo()})}'|">Edit</button>
                     </div>
                 </div>
@@ -76,6 +78,13 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        let today = new Date();
+        let oneWeekAgo = new Date();
+
+        let startDt = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+        oneWeekAgo.setDate(today.getDate() - 7);
+        let endDt =  oneWeekAgo.getFullYear() + '-' + ('0' + (oneWeekAgo.getMonth() + 1)).slice(-2) + '-' + ('0' + oneWeekAgo.getDate()).slice(-2);
+
     let viewAdministratorHistory = () =>{
          // 팝업창 열기
          $('[data-target="history"]').removeAttr('style');
@@ -88,62 +97,58 @@
          $tr.append($td3);
          $('[data-target="historyBody"]').append($tr);
 
-         var $tr  = $('<tr>');
-         var $td1 = $('<td>Assign</td>');
-         var $td2= $('<td>2023-09-12 17:15:51</td>');
-         var $td3 = $('<td>61.73.27.121</td>');
-         $tr.append($td1);
-         $tr.append($td2);
-         $tr.append($td3);
-         $('[data-target="historyBody"]').append($tr);
-
-         var $tr  = $('<tr>');
-         var $td1 = $('<td>login</td>');
-         var $td2= $('<td>2023-09-15 11:22:21</td>');
-         var $td3 = $('<td>61.73.27.121</td>');
-         $tr.append($td1);
-         $tr.append($td2);
-         $tr.append($td3);
-         $('[data-target="historyBody"]').append($tr);
-
-         var $tr  = $('<tr>');
-         var $td1 = $('<td>Log out</td>');
-         var $td2= $('<td>2023-09-22 05:23:15</td>');
-         var $td3 = $('<td>61.73.12.129</td>');
-         $tr.append($td1);
-         $tr.append($td2);
-         $tr.append($td3);
-         $('[data-target="historyBody"]').append($tr);
-
-         var $tr  = $('<tr>');
-         var $td1 = $('<td>PW Changed</td>');
-         var $td2= $('<td>2023-09-15 17:21:22</td>');
-         var $td3 = $('<td>61.73.27.55</td>');
-         $tr.append($td1);
-         $tr.append($td2);
-         $tr.append($td3);
-         $('[data-target="historyBody"]').append($tr);
-
-         var $tr  = $('<tr>');
-         var $td1 = $('<td>Paper Contract Upload</td>');
-         var $td2= $('<td>2023-09-12 11:12:31</td>');
-         var $td3 = $('<td>61.73.27.99</td>');
-         $tr.append($td1);
-         $tr.append($td2);
-         $tr.append($td3);
-         $('[data-target="historyBody"]').append($tr);
-
-         var $tr  = $('<tr>');
-         var $td1 = $('<td>Recall</td>');
-         var $td2= $('<td>2023-09-30 12:12:31</td>');
-         var $td3 = $('<td>61.73.27.123</td>');
-         $tr.append($td1);
-         $tr.append($td2);
-         $tr.append($td3);
-         $('[data-target="historyBody"]').append($tr);
-
          $('[data-target="history"]').attr('style' , 'display:block');
          $('[data-target="historyBackground"]').attr('class' , 'modal-backdrop');
+    }
+
+    let viewHistoryAdmin = () =>{
+            console.log('viewHistoryAdmin st1>' + startDt);
+            console.log('viewHistoryAdmin en2>' + endDt);
+
+   <!-- $('[data-target="history"]').removeAttr('style');-->
+    let templateSeq = document.getElementById("InfoValue").value;
+        let data = {'empNo' : templateSeq , 'startDt' : startDt , 'endDt' : endDt}
+        console.log('detail data > '  + data);
+               $.ajax({
+                    url: '/account/history',
+                    type: 'post',
+                    dataType:'json',
+                    data:JSON.stringify(data),
+                    contentType: 'application/json; charset=UTF-8',
+               }).done(function(data) {
+                   $('[data-target="historyBody"]').empty();
+                    if(data.length > 0){
+                        data.forEach((value)=> {
+                            var $tr  = $('<tr>');
+                            var $td1 = $('<td>' +value.logType+ '</td>');
+                            var $td2= $('<td>' +value.createdAt+ '</td>');
+                            var $td3 = $('<td>' +value.ipAddress+ '</td>');
+
+                            $tr.append($td1);
+                            $tr.append($td2);
+                            $tr.append($td3);
+
+                            $('[data-target="historyBody"]').append($tr);
+
+                        });
+                    }else{
+                         var $tr  = $('<tr>');
+                         var $td = $('<td colspan="4">데이터 가 없습니다. </td>');
+                         $tr.append($td);
+                         $('[data-target="historyBody"]').append($tr);
+                    }
+                    $('[data-target="history"]').attr('style' , 'display:block');
+                    $('[data-target="historyBackground"]').attr('class' , 'modal-backdrop');
+               }).fail(function(jqXHR) {
+                    console.log(jqXHR);
+                });
+    }
+
+    let search = () =>{
+        startDt = document.getElementById("startDt").value;
+        endDt = document.getElementById("endDt").value;
+
+            viewHistoryAdmin();
     }
     </script>
 </th:block>

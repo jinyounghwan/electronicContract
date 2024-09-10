@@ -10,10 +10,13 @@ import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.domain.account.LoginRequest;
 import com.samsung.framework.domain.account.PwdChangeRequest;
 import com.samsung.framework.domain.common.Paging;
+import com.samsung.framework.domain.contract.ProgressRequest;
 import com.samsung.framework.domain.log.LogSaveRequest;
 import com.samsung.framework.mapper.log.LogMapper;
 import com.samsung.framework.service.account.AccountService;
+import com.samsung.framework.service.contract.documented.ContractsViewService;
 import com.samsung.framework.vo.account.AccountVO;
+import com.samsung.framework.vo.contract.view.HistoryVO;
 import com.samsung.framework.vo.log.LogSaveResponse;
 import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.account.AccountSearchVO;
@@ -22,6 +25,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,6 +48,7 @@ public class AccountController {
     private final AccountService accountService;
     private final LogUtil logUtil;
     private final LogMapper logMapper;
+    private final ContractsViewService contractsViewService;
     // [검색옵션] 날짜
     @ModelAttribute("dateRangeSelect")
     public List<SearchVO> searchDateRangeOptionList() {
@@ -463,6 +468,14 @@ public class AccountController {
         mv.setViewName("account/myInfoEdit");
         mv.addObject("account", accountService.getSessionAccount(request));
         return mv;
+    }
+
+    @PostMapping("/history")
+    @ResponseBody
+    public ResponseEntity Adminhist(HttpServletRequest request , @RequestBody AccountVO account){
+        log.info("admin dt> " + account);
+        List<HistoryVO> list=  accountService.getAdminHistory(request , account);
+        return new ResponseEntity(list , HttpStatus.OK);
     }
 
 }

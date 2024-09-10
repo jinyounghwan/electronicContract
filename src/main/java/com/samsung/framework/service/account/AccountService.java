@@ -8,6 +8,7 @@ import com.samsung.framework.domain.account.LoginRequest;
 import com.samsung.framework.domain.account.PwdChangeRequest;
 import com.samsung.framework.domain.common.Paging;
 import com.samsung.framework.domain.common.SearchObject;
+import com.samsung.framework.domain.contract.ProgressRequest;
 import com.samsung.framework.domain.log.LogSaveRequest;
 import com.samsung.framework.mapper.account.AccountMapper;
 import com.samsung.framework.mapper.account.ghr.GhrAccountMapper;
@@ -16,6 +17,7 @@ import com.samsung.framework.service.menu.MenuService;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.account.ghr.GhtAccountVO;
 import com.samsung.framework.vo.common.CollectionPagingVO;
+import com.samsung.framework.vo.contract.view.HistoryVO;
 import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.search.account.AccountSearchVO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -380,5 +382,11 @@ public class AccountService {
     // 타이머 종료시 인증암호 삭제로직
     public void countDelete(LoginRequest loginRequest){
         accountMapper.countDelete(loginRequest.getUserId());
+    }
+
+    // administrator History
+    public List<HistoryVO> getAdminHistory(HttpServletRequest request, AccountVO account) {
+        List<HistoryVO> list =  accountMapper.getAdminHistory(account);
+        return  list;
     }
 }

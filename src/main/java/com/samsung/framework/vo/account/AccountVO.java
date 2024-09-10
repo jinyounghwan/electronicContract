@@ -46,4 +46,6 @@ public class AccountVO {
     private String hireDateEn;
     private String hireDateHu;
     private int authority;
+    private String startDt;
+    private String endDt;
 }

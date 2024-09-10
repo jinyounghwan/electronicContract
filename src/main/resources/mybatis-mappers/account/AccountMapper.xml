@@ -266,4 +266,16 @@
              on gai.emp_no = u.emp_no
           where gai.emp_no = #{empNo}
     </select>
+
+    <select id="getAdminHistory" parameterType="AccountVO" resultType="HistoryVO">
+        select  log_type as logType,
+                created_at as createdAt,
+                ip_address as ipAddress
+        from process_log
+         where
+            created_by =#{empNo}
+        and created_at &gt;= STR_TO_DATE(#{startDt}, '%Y-%m-%d %H:%i:%s')
+        and created_at &lt;= STR_TO_DATE(#{endDt}, '%Y-%m-%d %H:%i:%s')
+        order by created_at desc
+    </select>
 </mapper>

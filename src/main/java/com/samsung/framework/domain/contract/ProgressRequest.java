@@ -11,8 +11,11 @@ import lombok.*;
 public class ProgressRequest {
     @NotNull(message = "contract number 는(은) 필수 값 입니다.")
     private int contractNo;
+    private String empNo;
     private String docStatus;
     private String updatedBy;
+    private String startDt;
+    private String endDt;
 
 
 }
