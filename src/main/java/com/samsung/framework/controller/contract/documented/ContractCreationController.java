@@ -165,10 +165,9 @@ public class ContractCreationController {
 
     /* ECS API 테스트 single init */
     @PostMapping("/sendSignatureRequest")
-    public ResponseEntity<String> sendSignatureRequest(
-            @RequestParam("userId") String userId,
-            @RequestParam("signatureType") String signatureType,
-            @RequestParam("signatureTypeLevel") String signatureTypeLevel) {
+    public ResponseEntity<String> sendSignatureRequest() {
+
+        log.info("ECS TEST !! ");
 
         String url = "https://demo.sign.netlock.hu/rest/signature/singleInitSignature";
 
@@ -179,10 +178,10 @@ public class ContractCreationController {
         // 파라미터 구성
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("mimeType", "application/pdf");
-        params.add("userId", userId);
+        params.add("userId", "1881");
         params.add("fileName", "asd.pdf");
-        params.add("signatureType", signatureType);
-        params.add("signatureTypeLevel", signatureTypeLevel);
+        params.add("signatureType", "PADES");
+        params.add("signatureTypeLevel", "BASELINE_LT");
 
         // Basic Auth 설정
         String username = "ecs.sdihu@partner.samsung.com";
@@ -201,9 +200,9 @@ public class ContractCreationController {
         // RestTemplate 사용하여 POST 요청
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(
-                url + "?mimeType=application/pdf&userId=" + userId +
-                        "&fileName=asd.pdf&signatureType=" + signatureType +
-                        "&signatureTypeLevel=" + signatureTypeLevel,
+                url + "?mimeType=application/pdf&userId=" + params.get("userId") +
+                        "&fileName=asd.pdf&signatureType=" + params.get("signatureType") +
+                        "&signatureTypeLevel=" + params.get("signatureTypeLevel"),
                 HttpMethod.POST,
                 requestEntity,
                 String.class
