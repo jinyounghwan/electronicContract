@@ -85,7 +85,8 @@ public class SearchVO {
         var list = new ArrayList<SearchVO>();
         list.add(new SearchVO("ALL","ALL"));
         list.add(new SearchVO("CREATED_AT","CREATED DATE"));
-        list.add(new SearchVO("UPDATED_AT", "UPDATE DATE"));
+        list.add(new SearchVO("ASSIGNED","Assigned"));
+        /*list.add(new SearchVO("UPDATED_AT", "UPDATE DATE"));*/
         return list;
     }
 
@@ -96,9 +97,10 @@ public class SearchVO {
     public List<SearchVO> getSearchKeywordTypeOptionList() {
         var list = new ArrayList<SearchVO>();
         list.add(new SearchVO("ALL", "ALL"));
-        list.add(new SearchVO("TITLE", "TITLE"));
-        list.add(new SearchVO("EMPLOYEE_ID","EMPLOYEE ID"));
-        list.add(new SearchVO( "NAME","NAME"));
+        list.add(new SearchVO("CONTRACT_TITLE", "Contract Title(EN)"));
+        list.add(new SearchVO("TITLE", "Template TITLE"));
+        list.add(new SearchVO("EMPLOYEE_ID","Empl.ID"));
+        list.add(new SearchVO( "NAME","Name"));
         return list;
     }
     /**

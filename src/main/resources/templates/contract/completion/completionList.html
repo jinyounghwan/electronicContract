@@ -7,7 +7,7 @@
         <div id="content">
             <!--content-->
             <div class="container-fluid">
-                <h1 class="page-title">Signed Contract</h1>
+                <h1 class="page-title">Empl. Signed Contract</h1>
                 <div th:replace="~{common/contractSignCompletedSearch ::searchBox(${dateRangeSelect} ,${keywordTypeSelect} , ${contractDocSearchStateTypeSelect} ) }" ></div>
                 <div class="card shadow mb-4">
                     <!--<div class="card-header py-3">
@@ -27,6 +27,7 @@
                         <div class="left"><p th:text="${totalCount}+ 'items'"></p></div>
                         <div class="right data-btn-area">
                             <button class="btn btn-outline-primary" type="button" th:onclick="|location.href='@{/contract/sign/comp/paper}'|" >Paper Contract Upload</button>
+                            <button class="btn btn-outline-primary" type="button" th:onclick="|location.href='@{/contract/sign/comp/paper}'|" >Corp.signature on checked items</button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -41,9 +42,9 @@
                                     <th>Name</th>
                                     <th>employee ID</th>
                                     <th>Created</th>
-                                    <th>Signed</th>
-                                    <th>Doc. Status</th>
-                                    <th>Contract Status</th>
+                                    <th>Empl.Signed</th>
+                                    <!--<th>Doc. Status</th>
+                                    <th>Contract Status</th>-->
                                     <th>Action</th>
 
                                 </tr>
@@ -60,8 +61,8 @@
                                     <td th:text="${row.empNo}"></td>
                                     <td th:text="${row.createdAtStr}?${row.createdAtStr}:'-'"></td>
                                     <td th:text="${row.signDateAtStr}?${row.signDateAtStr}:'-'"></td>
-                                    <td th:text="${row.docStatus}"></td>
-                                    <td th:text="${row.processStatus}"></td>
+                                    <!--<td th:text="${row.docStatus}"></td>
+                                    <td th:text="${row.processStatus}"></td>-->
                                     <td><a th:href="@{/contract/sign/comp/detail/{contractNo}(contractNo=${row.getContractNo()})}" >View</a></td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(list)}">

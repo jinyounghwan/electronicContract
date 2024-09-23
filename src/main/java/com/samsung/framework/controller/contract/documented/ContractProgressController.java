@@ -87,9 +87,9 @@ public class ContractProgressController{
     public List<SearchVO>  searchContractDocSearchStateTypeSelect() {
 //        list.add(new SearchVO( "PRCS1001","CREATED"));
 //        list.add(new SearchVO("PRCS1002","ASSIGNED"));
-        return new SearchVO().getContractDocSearchStateTypeList().stream()
-                .filter(state -> state.getCode().equals(ContractProcessEnum.processCode(ContractProcessEnum.CREATED)) ||
-                        state.getCode().equals(ContractProcessEnum.processCode(ContractProcessEnum.ASSIGNED)) ||
+        return new SearchVO().getContractSearchStateTypeList().stream()
+                .filter(state -> state.getCode().equals(ContractProcessEnum.processCode(ContractProcessEnum.UNSEEN)) ||
+                        state.getCode().equals(ContractProcessEnum.processCode(ContractProcessEnum.VIEWED)) ||
                         state.getCode().equals("ALL")
                 )
                 .collect(Collectors.toList());
@@ -103,9 +103,10 @@ public class ContractProgressController{
     public List<SearchVO>  searchContractSearchStateTypeList() {
 //        list.add(new SearchVO("PRCS2001","UNSEEN"));
 //        list.add(new SearchVO( "PRCS2002","VIEWED"));
-        return new SearchVO().getContractSearchStateTypeList().stream()
-                .filter(state -> state.getCode().equals(ContractProcessEnum.processCode(ContractProcessEnum.UNSEEN)) ||
-                        state.getCode().equals(ContractProcessEnum.processCode(ContractProcessEnum.VIEWED)) ||
+        return new SearchVO().getContractDocSearchStateTypeList().stream()
+                .filter(state -> state.getCode().equals(ContractProcessEnum.processCode(ContractProcessEnum.CREATED)) ||
+                        state.getCode().equals(ContractProcessEnum.processCode(ContractProcessEnum.ASSIGNED)) ||
+                        state.getCode().equals(ContractProcessEnum.processCode(ContractProcessEnum.RECALLED)) ||
                         state.getCode().equals("ALL")
                 )
                 .collect(Collectors.toList());

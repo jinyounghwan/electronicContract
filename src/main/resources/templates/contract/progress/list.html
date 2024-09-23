@@ -28,9 +28,9 @@
                             </div>
                             <div class="left"><p th:text="${totalCount} + ' items'" ></p></div>
                             <div class="right data-btn-area">
-                                <button class="btn btn-outline-secondary" type="button" onclick="recall()">Checked item as Recall</button>
-                                <button class="btn btn-outline-primary" type="button" onclick="assign()">Checked item as Assign</button>
-                                <button class="btn btn-outline-primary" type="button" th:onclick="|location.href='@{/contract/create}'|">Contract Create</button>
+                                <button class="btn btn-outline-secondary" type="button" onclick="recall()">Recall checked items</button>
+                                <button class="btn btn-outline-primary" type="button" onclick="assign()">Assign checked items</button>
+                                <!--<button class="btn btn-outline-primary" type="button" th:onclick="|location.href='@{/contract/create}'|">Contract Create</button>-->
                             </div>
                         </div>
                         <div class="card-body">
@@ -46,7 +46,7 @@
                                         <th>employee ID</th>
                                         <th>Created</th>
                                         <th>Assigned</th>
-                                        <th>Doc. Status</th>
+                                        <th>Empl. Status</th>
                                         <th>Contract Status</th>
                                         <th>Action</th>
 
@@ -76,8 +76,8 @@
                                             <td th:text="${item.empNo}"></td>
                                             <td th:text="${item.createdAt}"></td>
                                             <td th:text="${item.assignedAt} ?${item.assignedAt} :'-' "></td>
-                                            <td  data-target="docStatus" th:text="${item.docStatus}"></td>
                                             <td th:text="${item.processStatus}"></td>
+                                            <td  data-target="docStatus" th:text="${item.docStatus}"></td>
                                             <td><a th:href="@{/contract/progress/info/{seq}(seq=${item.contractNo})}" >View</a></td>
                                         </tr>
                                         <tr th:if="${#lists.isEmpty(list)}">

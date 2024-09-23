@@ -53,14 +53,14 @@
                                         <div class="modal-signtxt"><p data-select="employeeInfoEn">Yi Hyun Chang<br>Elnök/President<br>Munkáltató/Employer<br>Samsung SDI Magyarország Zrt.</p></div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>`
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="btn-download" type="button" class="btn btn-primary" data-target="statusBtn"  th:onclick="createPdfDownload()">Create</button>
-                <button type="button" class="btn btn-secondary" th:onclick="closeContractView()">Close</button>
+                <button id="btn-download" type="button" class="btn btn-primary" data-target="statusBtn"  th:onclick="createPdfDownload()">Create Contract</button>
+                <!--<button type="button" class="btn btn-secondary" th:onclick="closeContractView()">Close</button>-->
                 <!--${session.loginInfo == null}-->
                 <button type="button" class="btn btn-primary" data-target="statusBtn" th:if="${session.loginInfo.accountType == 'ACCT001'}" th:onclick="rejectConfirm()">Reject</button>
                 <button type="button" class="btn btn-primary" data-target="statusBtn" th:if="${session.loginInfo.accountType == 'ACCT001'}" th:onclick="openAgreementAlert()" >Agreement</button>

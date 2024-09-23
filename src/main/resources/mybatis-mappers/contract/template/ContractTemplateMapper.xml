@@ -182,7 +182,8 @@
 
 
     <select id="getExcelSelect" parameterType="list" resultType="ContractTemplateVO">
-        SELECT
+        <foreach collection="list" item="item" separator=" UNION ALL ">
+            SELECT
             template_details_seq,
             template_seq,
             contract_title_en,
@@ -199,11 +200,9 @@
             created_at,
             updated_by,
             updated_at
-        FROM contract_template_details
-            WHERE template_details_seq IN
-                <foreach item="list" collection="list" index="index" separator="," open="(" close=")">
-                    #{list}
-                </foreach>
+            FROM contract_template_details
+            WHERE template_seq = #{item}
+        </foreach>
     </select>
 
     <select id="getCreateContractView" resultType="ContractView">

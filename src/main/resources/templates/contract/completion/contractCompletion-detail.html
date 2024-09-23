@@ -34,7 +34,7 @@
             <div id="content">
                 <!--content-->
                 <div class="container-fluid">
-                    <h1 class="page-title">Signed Contract Detail</h1>
+                    <h1 class="page-title">Empl. Signed Contract Detail</h1>
 
                     <input type = "hidden" id="InfoValue" th:value="${info.contractNo}">
 
@@ -53,8 +53,6 @@
                             <button class="btn btn-outline-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">View Contract</button>
                         </div>
                     </div>
-
-                    <hr>
 
                     <div class="card mb-4">
                         <div class="card-body">
@@ -101,7 +99,7 @@
                             <button id="btnViewHistory" class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
                         </div>
                     </div>
-
+                </div>
                 <!--contents-->
                 <div th:replace="~{common/paperViewContract}"></div>
                 <div th:replace="~{common/contractView}"></div>
@@ -109,7 +107,6 @@
             </div>
         </div>
 </th:block>
-
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         // 닫기 버튼 클릭 이벤트

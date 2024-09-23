@@ -79,11 +79,11 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         let today = new Date();
-        let oneWeekAgo = new Date();
+        let weekAgo = new Date();
+        weekAgo.setDate(today.getDate() - 7);
 
-        let startDt = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
-        oneWeekAgo.setDate(today.getDate() - 7);
-        let endDt =  oneWeekAgo.getFullYear() + '-' + ('0' + (oneWeekAgo.getMonth() + 1)).slice(-2) + '-' + ('0' + oneWeekAgo.getDate()).slice(-2);
+        let endDt = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0');
+        let startDt = weekAgo.getFullYear() + '-' + (weekAgo.getMonth() + 1).toString().padStart(2, '0') + '-' + weekAgo.getDate().toString().padStart(2, '0');
 
     let viewAdministratorHistory = () =>{
          // 팝업창 열기

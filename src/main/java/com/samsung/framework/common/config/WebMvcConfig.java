@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +37,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
             , "/contract/sign/wait/**", "/contract/sign/paper/comp/**"
             , "/account/pwdChange", "/contract/view"
             , "/file/download/**", "/contract/view/history"
-            , "/pdf/download");
+            , "/pdf/download" , "/contract/create/**");
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3030") // 클라이언트 URL 허용
+                .allowedMethods("GET", "POST", "PUT", "DELETE") // 허용할 HTTP 메서드
+                .allowedHeaders("*") // 모든 헤더 허용
+                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials") // 추가된 헤더 노출
+                .allowCredentials(true); // 자격 증명 허용
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

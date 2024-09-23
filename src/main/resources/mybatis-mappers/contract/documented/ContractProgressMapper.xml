@@ -14,6 +14,9 @@
                 <when test="searchDateType == 'UPDATED_AT'">
                     AND c.updated_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
                 </when>
+                <when test="searchDateType == 'ASSIGNED'">
+                    AND c.assigned_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
+                </when>
                 <when test="searchDateType == 'ALL'">
                     AND c.created_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
                     or c.updated_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
@@ -31,6 +34,9 @@
                 <when test="searchKeywordType == 'NAME'">
                     and c.name like concat('%',#{searchKeyword},'%')
                 </when>
+                <when test="searchKeywordType == 'CONTRACT_TITLE'">
+                    and ctd.contract_title_en like concat('%',#{searchKeyword},'%')
+                </when>
                 <when test="searchKeywordType == 'ALL'">
                     and c.emp_no like concat('%',#{searchKeyword},'%')
                     or ct.template_title like concat('%',#{searchKeyword},'%')
@@ -39,10 +45,10 @@
             </choose>
         </if>
         <if test="contractDocStatusType != 'ALL' and @com.samsung.framework.common.utils.StringUtil@isNotEmpty(contractDocStatusType)">
-            and LOWER(c.doc_status) LIKE LOWER(CONCAT('%',#{contractDocStatusType} , '%'))
+            and LOWER(c.process_status) LIKE LOWER(CONCAT('%',#{contractDocStatusType} , '%'))
         </if>
         <if test="contractStatusType != 'ALL' and @com.samsung.framework.common.utils.StringUtil@isNotEmpty(contractStatusType)">
-            and LOWER(c.process_status) LIKE LOWER(CONCAT('%',#{contractStatusType} , '%'))
+            and LOWER(c.doc_status) LIKE LOWER(CONCAT('%',#{contractStatusType} , '%'))
         </if>
     </sql>
     <select id="getContractProgressList" parameterType="SearchVO" resultType="ContractVO">
