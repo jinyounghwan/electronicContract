@@ -59,7 +59,7 @@
                 <div class="btn-area">
                     <!--createViewContract()-->
                     <button class="btn btn-primary"  type="button" th:onclick="employCheck()">Preview Contract</button>
-                    <!--<button class="btn btn-primary" type="button" th:onclick="create()">Create</button>-->
+<!--                    <button class="btn btn-primary" type="button" th:onclick="createViewContract()">Preview Contract 기존꺼</button>-->
                 </div>
             </div>
             <!--contents-->
@@ -106,7 +106,7 @@
             });
         });
 
-<!--
+
        let create = () =>{
            if(valid($('#contractForm'))){
                $.ajax({
@@ -127,7 +127,7 @@
                   sendToErrorPage(jqXHR);
                });
            }
--->
+
 
 
        }

@@ -331,7 +331,7 @@ if(valid($('#contractForm'))){
 
 /* 계약서 생성 - contract View*/
 let createViewContract = () =>{
-if(valid($('#contractForm'))){
+    if(valid($('#contractForm'))){
         //$('[data-target="view"]').removeAttr('style');
         $('[data-target="view"]').attr('style' , 'display:block');
         //$('[data-target="viewBackground"]').attr('class' , 'modal-backdrop');
@@ -439,19 +439,42 @@ let viewPaperContract = (fileDataNo) =>{
                      dataType:'json',
                      data:$('#contractForm').serialize() + '&templateCode=' + $('[data-select="templateCode"] option:selected').val() + '&paramPath=' + param
                    }).done(function(data) {
-                       console.log(data);
-                                              if(data.code == 200){
-                                                  closeContractView();
-                                                  alert('Save is complete.');
-                                                  location.href='/contract/progress';
-                                              }else{
-                                                  alert(data.message);
-                                                  location.href='/contract/create';
-                                              }
+                      console.log(data);
+                      if(data.code == 200){
+                          closeContractView();
+                          alert('Save is complete.');
+                          location.href='/contract/progress';
+                      }else{
+                          alert(data.message);
+                          location.href='/contract/create';
+                      }
                    }).fail(function(jqXHR) {
                       sendToErrorPage(jqXHR);
                    })
                }
+}
+
+let createContract = () => {
+    if(valid($('#contractForm'))){
+       $.ajax({
+         url: '/contract/create/save',
+         type: 'post',
+         dataType:'json',
+         data:$('#contractForm').serialize() + '&templateCode=' + $('[data-select="templateCode"] option:selected').val()
+       }).done(function(data) {
+          console.log(data);
+          if(data.code == 200){
+              closeContractView();
+              alert('Save is complete.');
+              location.href='/contract/progress';
+          }else{
+              alert(data.message);
+              location.href='/contract/create';
+          }
+       }).fail(function(jqXHR) {
+          sendToErrorPage(jqXHR);
+       })
+   }
 }
 
 let closePaperContract = () => {

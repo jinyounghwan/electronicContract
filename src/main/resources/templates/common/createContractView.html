@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="btn-download" type="button" class="btn btn-primary" data-target="statusBtn"  th:onclick="createPdfDownload()">Create Contract</button>
+                <button id="btn-download" type="button" class="btn btn-primary" data-target="statusBtn"  th:onclick="createContract()">Create Contract</button>
                 <!--<button type="button" class="btn btn-secondary" th:onclick="closeContractView()">Close</button>-->
                 <!--${session.loginInfo == null}-->
                 <button type="button" class="btn btn-primary" data-target="statusBtn" th:if="${session.loginInfo.accountType == 'ACCT001'}" th:onclick="rejectConfirm()">Reject</button>

@@ -147,41 +147,42 @@ public class ContractCreationService {
         saveContract = contractCreationMapper.saveContractDetail(contractVO);
         log.info("Create 2");
 
+        // 파일 저장필요없음.
         // File Path
 
-        FilePublicVO fileVO = new FilePublicVO();
-        String createFileName = FileUtil.createPdfFileName();                                               //파일 이름 생성
-        String nowDay = DateUtil.getUtcNowDateFormat("yyMM");                                        //현재 날짜
-        String storagePath = FileUtil.getOsRootDir() + getRootDir + getRealDir + PDF_STORAGE_PATH + nowDay; // 파일 저장 위치 설정
-        String paths = storagePath + File.separator + target.getParamPath();                                // 최종 파일 위치
-        long fileSeq = Long.parseLong(String.valueOf(contractVO.getContractNo()));
-        String Size = "1";
-
-        log.info("contractVO.getContractNo() >> " + contractVO.getContractNo());
-        log.info("fileSeq >> " + fileSeq);
-
-        log.info("paths >> " + paths);
-        log.info("storagePath >> " + storagePath);
-        log.info("File.separator >> " + File.separator);
-        log.info("createFileName>> " + createFileName);
-
-
-        //파일경로 추가 param Setting
-        fileVO.setFileSeq(fileSeq); // file Seq
-        fileVO.setOriginalName(target.getParamPath()); // 원본 파일명
-        fileVO.setName(target.getParamPath());      // 파일 명
-        fileVO.setFileNo(contractVO.getContractNo()); //파일번호
-        fileVO.setExtension("pdf"); // 확장자
-        fileVO.setStoragePath(paths);              // 파일경로
-        fileVO.setDelYn("N"); // 삭제여부
-        fileVO.setCreatedBy(user.getName());
-
-        log.info("fileVO >> " + fileVO);
-
-        // file db 저장
-        contractCreationMapper.saveFilePath(fileVO);
-
-        log.info("Create 3");
+//        FilePublicVO fileVO = new FilePublicVO();
+//        String createFileName = FileUtil.createPdfFileName();                                               //파일 이름 생성
+//        String nowDay = DateUtil.getUtcNowDateFormat("yyMM");                                        //현재 날짜
+//        String storagePath = FileUtil.getOsRootDir() + getRootDir + getRealDir + PDF_STORAGE_PATH + nowDay; // 파일 저장 위치 설정
+//        String paths = storagePath + File.separator + target.getParamPath();                                // 최종 파일 위치
+//        long fileSeq = Long.parseLong(String.valueOf(contractVO.getContractNo()));
+//        String Size = "1";
+//
+//        log.info("contractVO.getContractNo() >> " + contractVO.getContractNo());
+//        log.info("fileSeq >> " + fileSeq);
+//
+//        log.info("paths >> " + paths);
+//        log.info("storagePath >> " + storagePath);
+//        log.info("File.separator >> " + File.separator);
+//        log.info("createFileName>> " + createFileName);
+//
+//
+//        //파일경로 추가 param Setting
+//        fileVO.setFileSeq(fileSeq); // file Seq
+//        fileVO.setOriginalName(target.getParamPath()); // 원본 파일명
+//        fileVO.setName(target.getParamPath());      // 파일 명
+//        fileVO.setFileNo(contractVO.getContractNo()); //파일번호
+//        fileVO.setExtension("pdf"); // 확장자
+//        fileVO.setStoragePath(paths);              // 파일경로
+//        fileVO.setDelYn("N"); // 삭제여부
+//        fileVO.setCreatedBy(user.getName());
+//
+//        log.info("fileVO >> " + fileVO);
+//
+//        // file db 저장
+//        contractCreationMapper.saveFilePath(fileVO);
+//
+//        log.info("Create 3");
         if(saveContract == 0){
             return new ResultStatusVO(ResultCodeMsgEnum.CREATE_DATA_FAIL.getCode(),ResultCodeMsgEnum.CREATE_DATA_FAIL.name());
         }
