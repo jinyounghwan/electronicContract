@@ -121,9 +121,11 @@
                C.PROCESS_STATUS AS PROCESS_STATUS, C.DOC_STATUS AS DOC_STATUS,
                C.NAME AS NAME , C.CREATED_AT AS CREATED_AT,
                C.SIGN_DATE AS SIGN_DATE , CTD.CONTRACT_TITLE_EN AS CONTRACT_TITLE_EN
+               , PDF.STORAGE_PATH AS FILE_PATH
         FROM CONTRACTS C
         INNER JOIN  CONTRACT_TEMPLATE CT ON C.TEMPLATE_SEQ = CT.TEMPLATE_SEQ
         INNER JOIN CONTRACT_TEMPLATE_DETAILS CTD ON C.TEMPLATE_SEQ = CTD.TEMPLATE_SEQ
+        LEFT JOIN FILE_PDF PDF ON C.CONTRACT_NO = PDF.FILE_SEQ
         WHERE
         <if test="contractDocStatusType != null and contractDocStatusType != ''">
             <choose>
@@ -174,5 +176,18 @@
         SELECT storage_path
         FROM file_pdf
         WHERE file_seq =#{seq}
+    </select>
+
+    <select id="getContractsFileList">
+        SELECT C.CONTRACT_NO AS CONTRACT_NO
+            , PDF.STORAGE_PATH AS FILE_PATH
+        FROM CONTRACTS C
+            LEFT JOIN FILE_PDF PDF ON C.CONTRACT_NO = PDF.FILE_SEQ
+        WHERE
+            PDF.FILE_SEQ IN
+            <foreach item="item" collection="contractNoList" open="(" separator="," close=")">
+                #{item.contractNo}
+            </foreach>
+            ORDER BY C.CREATED_AT DESC
     </select>
 </mapper>

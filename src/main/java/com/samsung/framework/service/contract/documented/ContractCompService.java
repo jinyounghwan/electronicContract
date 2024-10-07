@@ -173,4 +173,9 @@ public class ContractCompService {
         log.info("filePublicVo >> " + filePublicVO);
         return filePublicVO;
     }
+
+    public List<ContractCompVO> getContractFileList(List<ContractCompVO> contractNoList) {
+        log.info(">> contractNoList = " + contractNoList);
+        return contractCompletionMapper.getContractsFileList(contractNoList);
+    }
 }

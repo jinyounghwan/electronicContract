@@ -7,7 +7,7 @@
         <div id="content">
             <!--content-->
             <div class="container-fluid">
-                <h1 class="page-title">Signed contract</h1>
+                <h1 class="page-title">Completed Contract</h1>
                 <!--search box-->
 
                 <!--search box-->
@@ -37,7 +37,9 @@
                                     <th>Contract Title (EN)</th>
                                     <th>Name</th>
                                     <th>employee ID</th>
-                                    <th>Assigned</th>
+                                    <th>Contract date</th>
+                                    <th>Empl. Signed</th>
+                                    <th>Corp. Signed</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -47,6 +49,8 @@
                                     <td th:utext="${item.contractTitleEn}"></td>
                                     <td th:text="${item.firstName} + ' ' + ${item.lastName}"></td>
                                     <td th:text="${item.empNo}"></td>
+                                    <td th:text="${item.signDateAtStr}?${item.signDateAtStr}:'-'"></td>
+                                    <td th:text="${item.signDateAtStr}?${item.signDateAtStr}:'-'"></td>
                                     <td th:text="${item.signDateAtStr}?${item.signDateAtStr}:'-'"></td>
                                     <td><a th:href="@{/contract/sign/paper/comp/info/{contractNo}(contractNo=${item.contractNo})}" >View</a></td>
                                 </tr>

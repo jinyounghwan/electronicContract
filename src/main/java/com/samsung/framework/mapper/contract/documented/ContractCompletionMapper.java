@@ -16,4 +16,5 @@ public interface ContractCompletionMapper {
     ContractCompVO getContractCompDetail(long contractCompVO);
     int getContractTemplateSeq(String templateType);
     FilePublicVO getFileSeq(String seq);
+    List<ContractCompVO> getContractsFileList(List<ContractCompVO> contractNoList);
 }

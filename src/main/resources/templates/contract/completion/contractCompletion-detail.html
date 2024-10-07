@@ -11,10 +11,15 @@
           left: 50%;
           transform: translate(-50%, -50%);
           background-color: white;
-          padding: 20px;
+          padding: 0 20px 0 20px;
           border: 1px solid #ccc;
           z-index: 1000; /* 팝업창이 다른 요소 위에 표시되도록 설정 */
           display: none; /* 기본적으로 숨겨진 상태 */
+        }
+
+        #popup_title {
+            padding-top: 20px;
+            padding-bottom: 20px;
         }
 
         #iframeContainer {
@@ -23,10 +28,9 @@
         }
 
         #closeButton {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          cursor: pointer;
+            padding-top: 20px;
+            border: 0px;
+            background-color: #FFFFFF;
         }
     </style>
         <!-- Content Wrapper -->
@@ -39,8 +43,18 @@
                     <input type = "hidden" id="InfoValue" th:value="${info.contractNo}">
 
                     <div id="popup" style="display : none;">
+                        <div class="btn-area-box">
+                            <div class="btn-area-left">
+                                <div id="popup_title" th:text="${info.getTemplateTitle()}"></div>
+                            </div>
+                            <div class="btn-area-right">
+                                <button id="closeButton">X</button>
+                            </div>
+                        </div>
                         <iframe id="pdfTest2" width="1200" height="600px"></iframe>
-                        <span id="closeButton">닫기</span>
+                        <div class="btn-area-box" style="text-align: center;display: block;margin-bottom: 10px;">
+                            <button class="btn btn-primary" id="sss">Corp. signature</button>
+                        </div>
                     </div>
 
                     <div class="btn-area-box">
@@ -50,7 +64,6 @@
                         </div>
                         <div class="btn-area-right">
                             <button class="btn btn-outline-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract & Corp. Signature</button>
-                            <button class="btn btn-outline-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">View Contract & Corp. Signature</button>
                         </div>
                     </div>
 
@@ -97,6 +110,7 @@
                         </div>
                         <div class="btn-area-right">
                             <button id="btnViewHistory" class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
+                            <button class="btn btn-outline-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">View Contract & Corp. Signature</button>
                         </div>
                     </div>
                 </div>

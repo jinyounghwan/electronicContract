@@ -6,11 +6,14 @@ import com.samsung.framework.common.utils.StringUtil;
 import com.samsung.framework.common.utils.VariableHandlingUtil;
 import com.samsung.framework.domain.common.Variables;
 import com.samsung.framework.domain.contract.CreateViewContract;
+import com.samsung.framework.domain.contract.ProgressRequest;
 import com.samsung.framework.domain.contract.SaveContractRequest;
 import com.samsung.framework.mapper.account.AccountMapper;
 import com.samsung.framework.mapper.contract.template.ContractTemplateMapper;
+import com.samsung.framework.service.contract.documented.ContractCompService;
 import com.samsung.framework.service.contract.documented.ContractCreationService;
 import com.samsung.framework.vo.common.ResultStatusVO;
+import com.samsung.framework.vo.contract.completion.ContractCompVO;
 import com.samsung.framework.vo.contract.template.ContractTemplateVO;
 import com.samsung.framework.vo.contract.template.Template;
 import com.samsung.framework.vo.contract.view.ContractView;
@@ -54,13 +57,15 @@ public class ContractCreationController {
 
     private final ContractTemplateMapper contractTemplateMapper;
 
+    private final ContractCompService contractCompService;
+
     private final VariableHandlingUtil variableHandlingUtil;
 
     private static final String BASE_URL = "https://demo.sign.netlock.hu";
     private static final String RETURN_URL = "https://www.netlock.hu";
     private static final String FILE_PATH = "C://files//electronicContract//upload//Contract//PDF//2409/24090501cf6df55e864e55bfbe75e0a5f5bd41.pdf";
-    private static final String USERNAME = "ecs.sdihu@partner.samsung.com";
-    private static final String PASSWORD = "Testsdihu24!";
+    private static final String USERNAME = "dudghksdl45@gmail.com";
+    private static final String PASSWORD = "!Jkj14789";
 
     // 파일 경로
     private static final String FILE_PATH_1 = "C://files//electronicContract//upload//Contract//PDF//2409/240905c88245ebb5274bbeafe8d7d8b714bf18.pdf";
@@ -238,7 +243,14 @@ public class ContractCreationController {
 
     /* ECS api 테스트 mutiple */
     @PostMapping("/init-signature")
-    public ResponseEntity<?> initSignature() {
+    public ResponseEntity<?> initSignature(HttpServletRequest request, @RequestBody List<ContractCompVO> list) { //
+        log.info("++ initSignature()");
+        log.info(">> request = " + request);
+        log.info(">> list = " + list);
+//
+        List<ContractCompVO> compList = contractCompService.getContractFileList(list);
+        log.info(">> compList = " + compList);
+
         try {
             // 파일 해시 생성
             List<Map<String, String>> fileData = new ArrayList<>();
@@ -259,7 +271,7 @@ public class ContractCreationController {
 
             // URL에 파라미터 설정
             String url = BASE_URL + "/rest/signature/multipleInitSignature?mimeType=application/pdf"
-                    + "&userId=1881"
+                    + "&userId=1920"
                     + "&signatureType=PADES"
                     + "&signatureTypeLevel=BASELINE_LT"
                     + "&fileHashType=SHA-256";

@@ -55,9 +55,6 @@
                 <hr>
 
                 <div class="card mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Contract Info.</h6>
-                    </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table-list">
@@ -68,7 +65,11 @@
                                     <td>SAMSUNG SDI Hungary</td>
                                 </tr>
                                 <tr>
-                                    <th>Assigned date</th>
+                                    <th>Empl. Signed</th>
+                                    <td th:text="${info.assignDateAtStr}?${info.assignDateAtStr}:'-'"></td>
+                                </tr>
+                                <tr>
+                                    <th>Corp. Signed</th>
                                     <td th:text="${info.assignDateAtStr}?${info.assignDateAtStr}:'-'"></td>
                                 </tr>
                                 <tr>
@@ -76,7 +77,7 @@
                                     <td th:text="${info.firstName} + ' ' + ${info.lastName} + ' / ' + ${info.empNo}"></td>
                                 </tr>
                                 <tr>
-                                    <th>Signed date</th>
+                                    <th>Contract date</th>
                                     <td th:text="${info.signDateAtStr}?${info.signDateAtStr}:'-'"></td>
                                 </tr>
                                 </tbody>

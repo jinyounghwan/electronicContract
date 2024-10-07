@@ -47,4 +47,5 @@ public class ContractCompVO {
     private String contractDate;
     private String firstName;
     private String lastName;
+    private String storagePath;
 }
