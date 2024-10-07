@@ -38,6 +38,7 @@
                                     <th>Name</th>
                                     <th>employee ID</th>
                                     <th>Assigned</th>
+                                    <th>Contract date</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -47,6 +48,7 @@
                                         <td th:text="${item.firstName} + ' ' + ${item.lastName}"></td>
                                         <td th:text="${item.empNo}"></td>
                                         <td th:text="${item.assignedAt}"></td>
+                                        <td th:text="${item.createdAt}"></td>
                                         <td><a th:href="@{/contract/sign/wait/info/{seq}(seq=${item.contractNo})}" >View</a></td>
                                     </tr>
                                     <tr th:if="${#lists.isEmpty(list)}">
