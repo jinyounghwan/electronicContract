@@ -33,7 +33,7 @@
     <div id="content">
       <!--content-->
       <div class="container-fluid">
-        <h1 class="page-title">Recalled Contract Detail</h1>
+        <h1 class="page-title">Completed Contract Detail</h1>
 
         <input type = "hidden" id="InfoValue" th:value="${info.contractNo}">
 
@@ -70,19 +70,19 @@
                     <tr>
                       <th>Sender</th>
                       <td>SAMSUNG SDI Hungary</td>
-                      <th>Doc. Status</th>
-                      <td th:text="${info.docStatus}">Assigned</td>
+                      <th>Emple.Signed</th>
+                      <td th:text="${info.createdAt}">2023-09-10  08:14:59</td>
                     </tr>
                     <tr>
                       <th>Party to a contract</th>
                       <td th:text="${info.firstName} + ' ' + ${info.lastName} + '/' + ${info.empNo}">Hong Gildong / 08015741</td>
-                      <th>Contract Status</th>
-                      <td th:text="${info.processStatus}">Unseen</td>
+                      <th>Corp.Signed</th>
+                      <td th:text="${info.createdAt}">2023-09-10  08:14:59</td>
                     </tr>
                     <tr>
                       <th>Assigned date</th>
                       <td th:text="${info.assignedAt} ? ${info.assignedAt}: '-' ">2023-09-10  08:14:59</td>
-                      <th>Recalled date</th>
+                      <th>Contract date</th>
                       <td th:text="${info.updatedAt}">2023-09-10  08:14:59</td>
                     </tr>
                 </tbody>
