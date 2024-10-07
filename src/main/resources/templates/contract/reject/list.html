@@ -41,7 +41,7 @@
                                         <th>employee ID</th>
                                         <th>Created</th>
                                         <th>Rejected</th>
-                                        <th>Doc. Status</th>
+                                        <th>Empl.Status</th>
                                         <th>Contract Status</th>
                                         <th>Action</th>
 
@@ -71,8 +71,8 @@
                                             <td th:text="${item.empNo}"></td>
                                             <td th:text="${item.createdAt}"></td>
                                             <td th:text="${item.updatedAt}"></td>
-                                            <td th:text="${item.docStatus}"></td>
                                             <td th:text="${item.processStatus}"></td>
+                                            <td th:text="${item.docStatus}"></td>
                                             <td><a th:href="@{/contract/sign/reject/info/{seq}(seq=${item.contractNo})}" >View</a></td>
                                         </tr>
                                         <tr th:if="${#lists.isEmpty(list)}">

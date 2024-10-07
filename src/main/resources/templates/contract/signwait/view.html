@@ -42,8 +42,9 @@
                         <h4 class="m-0 font-weight-bold text-primary" th:utext="${info.contractTitleEn}"></h4>
                     </div>
                     <div class="btn-area-right">
-                        <button class="btn btn-outline-primary" id='test' type="button" th:onclick="'viewContract('+${info.contractNo}+')'" style="display: none;">View Contract</button>
-                        <button class="btn btn-outline-primary" type="button" id="viewPdfButton">View Contract</button>
+                        <button class="btn btn-outline-primary" id='test' type="button" th:onclick="'viewContract('+${info.contractNo}+')'" style="display: none;">View Contract1</button>
+                        <!--<button class="btn btn-outline-primary" type="button" id="viewPdfButton">View Contract2</button>-->
+                        <button class="btn btn-primary" type="button" th:onclick="'viewContract('+${info.contractNo}+')'">View Contract</button>
                     </div>
                 </div>
 

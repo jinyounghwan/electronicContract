@@ -22,7 +22,7 @@
             <div class="data-select datatable-dropdown">
                 <label>
                     <select class="datatable-selector"  data-select="keywordTypeSelect">
-                        <option th:each="e: ${keywordTypeSelect}" th:value="${e.getCode()}" th:text="|${e.getDisplayName()}|" th:selected="${e.getCode()} == ${search.searchKeywordType}"s>전체</option>
+                        <option th:each="e: ${keywordTypeSelect}" th:value="${e.getCode()}" th:text="|${e.getDisplayName()}|" th:selected="${e.getCode()} == ${search.searchKeywordType}">전체</option>
                     </select>
                 </label>
             </div>
@@ -30,7 +30,7 @@
                 <input type="" class="form-control form-control-user" placeholder="" name="searchKeyword" id="searchKeyword" th:value="${search.getSearchKeyword()}">
             </div>
         </div>
-        <div class="data-line-50">
+       <!-- <div class="data-line-50">
             <div class="data-title">Doc. Status</div>
             <div class="data-select datatable-dropdown" style="width: 48%;">
                 <label>
@@ -39,7 +39,7 @@
                     </select>
                 </label>
             </div>
-        </div>
+        </div>-->
     </div>
     <div class="data-btn"><button class="btn btn-primary" type="button" th:onclick="'searchList(1 , 0 , '+ ${totalCount} +')'">Search
         <i class="fas fa-search fa-sm"></i>

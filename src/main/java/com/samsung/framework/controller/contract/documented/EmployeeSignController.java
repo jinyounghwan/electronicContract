@@ -139,16 +139,17 @@ public class EmployeeSignController {
         return ResponseEntity.ok(resultStatusVO);
     }
 
-    @PostMapping("/wait/info/contract/sign/save-signature")
+    @PostMapping("/wait/info/contract/sign/wait/info/contract/sign/save-signature")
     public ResponseEntity<String> saveSignature(@RequestParam("imgBase64") String imgBase64 , ContractVO contractVO) {
 
+        log.info("VO!! >> " + contractVO);
         // Remove the "data:image/png;base64," part
         String base64Image = imgBase64.split(",")[1];
         byte[] imageBytes = Base64Utils.decodeFromString(base64Image);
 
         // Generate a unique filename
         String fileName = UUID.randomUUID().toString() + ".png";
-        File file = new File("D:\\signTest\\" + fileName);
+        File file = new File("D:\\SignDirectory\\" + fileName);
 
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(imageBytes);

@@ -1,6 +1,27 @@
 <html lang="kr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <script src="https://cdn.jsdelivr.net/npm/signature-pad@3.2.3/dist/signature-pad.min.js"></script>
+    <style>
+        .modal-signimg {
+            width: 300px;
+            height: 100px;
+            border: 1px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .signature-pad {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <!--poppup-->
 <div class="modal" style="display:none;" data-target="view">
@@ -8,10 +29,10 @@
     <div class="modal-dialog modal-l modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Contract View</h5>
+                <h5 class="modal-title">Contract View3</h5>
                 <button type="button" class="btn-close" th:onclick="closeContractView()"></button>
             </div>
-            <div class="modal-body document-box">
+            <div id="target-pdf" class="modal-body document-box">
                 <div class="document">
                     <div class="document-cont">
                         <div class="modal-img"><img th:src="@{/static/img/SDIHUCI.jpg}"></div>
@@ -52,7 +73,9 @@
                                 </div>
                                 <div class="modal-sigbox">
                                     <div class="modal-sig">
-                                        <div class="modal-signimg">SIGN HERE</div>
+                                        <div class="modal-signimg" id="signature-pad-container" onclick="openSignaturePad()">
+                                            SIGN HERE
+                                        </div>
                                         <div class="modal-signtxt"><p data-select="employeeInfoEn">Yi Hyun Chang<br>Elnök/President<br>Munkáltató/Employer<br>Samsung SDI Magyarország Zrt.</p></div>
                                     </div>
                                 </div>
@@ -61,11 +84,13 @@
                     </div>
                 </div>
             </div>
+
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" th:onclick="closeContractView()">Close</button>
                 <!--${session.loginInfo == null}-->
                 <button type="button" class="btn btn-primary" data-target="statusBtn" th:if="${session.loginInfo.accountType == 'ACCT001'}" th:onclick="rejectConfirm()">Reject</button>
-                <button type="button" class="btn btn-primary" data-target="statusBtn" th:if="${session.loginInfo.accountType == 'ACCT001'}" th:onclick="openAgreementAlert()" >Agreement</button>
+                <button type="button" class="btn btn-primary" data-target="statusBtn" th:if="${session.loginInfo.accountType == 'ACCT001'}" th:onclick="openAgreementAlert()" >Done</button>
 <!--                <button type="button" class="btn btn-primary" data-target="statusBtn" th:onclick="rejectConfirm()" >Reject</button>-->
 <!--                <button type="button" class="btn btn-primary" data-target="statusBtn"  th:onclick="contractComplete()" >Agreement</button>-->
             </div>
@@ -75,8 +100,58 @@
 <!--<div class="modal-backdrop"></div>-->
 <div data-target="background"></div>
 <!--poppup end-->
+<!-- 사인 패드를 위한 추가 코드 -->
+<div id="signature-pad-wrapper" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border: 1px solid black; z-index: 9999;">
+    <canvas id="signature-pad" width="400" height="200" style="border: 1px solid black;"></canvas>
+    <button onclick="clearSignature()">Clear</button>
+    <button onclick="saveSignature()">signature</button>
+</div>
+<script>
+    let signaturePad;
 
-    <script th:inline="javascript">
-    </script>
+    function openSignaturePad() {
+        document.getElementById('signature-pad-wrapper').style.display = 'block';
+        let canvas = document.getElementById('signature-pad');
+        signaturePad = new SignaturePad(canvas);
+    }
+
+    function clearSignature() {
+        signaturePad.clear();
+    }
+
+   function saveSignature() {
+    if (signaturePad.isEmpty()) {
+        alert("Please provide a signature.");
+    } else {
+        // Base64로 인코딩한 서명 이미지를 가져옴
+        let dataURL = signaturePad.toDataURL();
+
+        // 서명 이미지 전송
+        $.ajax({
+            type: "POST",
+            url: "contract/sign/wait/info/contract/sign/save-signature",
+            data: {
+                imgBase64: dataURL,  // Base64로 인코딩한 이미지 데이터
+                contractNo: $("#contractNo").val()  // 계약 번호
+            },
+            success: function (response) {
+                if (response === "success") {
+                    alert("Signature saved successfully.");
+                    let signatureImg = document.getElementById('signature-pad-container');
+                    signatureImg.innerHTML = '<img src="' + dataURL + '" alt="Signature" />';
+
+                    // 서명 패드 닫기
+                    document.getElementById('signature-pad-wrapper').style.display = 'none';
+                } else {
+                    alert("Error saving signature: " + response);
+                }
+            },
+            error: function (error) {
+                alert("An error occurred: " + error.responseText);
+            }
+        });
+    }
+}
+</script>
 
 </html>

@@ -1,9 +1,6 @@
 package com.samsung.framework.service.pdf;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorker;
 import com.itextpdf.tool.xml.XMLWorkerFontProvider;
@@ -21,8 +18,10 @@ import com.itextpdf.tool.xml.pipeline.html.HtmlPipeline;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
 import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.FileUtil;
+import com.samsung.framework.mapper.contract.documented.ContractCreationMapper;
 import com.samsung.framework.vo.file.FilePublicVO;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,12 +31,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.itextpdf.text.Image;
+
 
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class PdfService {
     private final String PDF_STORAGE_PATH= File.separator+ "Contract" + File.separator + "PDF" +File.separator;
+    private final ContractCreationMapper contractCreationMapper;
 
     @Value("${properties.file.rootDir}")
     private String getRootDir;
@@ -50,76 +53,46 @@ public class PdfService {
     @Value("${ip.server-address}")
     private String serverAddress;
 
-    public FilePublicVO createPDF(String html, HttpServletRequest request) throws Exception {
 
-        // HTML \n 문자 -> 빈칸으로 변경
+
+    public FilePublicVO createPDF(String html, HttpServletRequest request , String seq) throws Exception {
+        // HTML에서 \n 문자를 빈칸으로 변경
         html = this.htmlTagConvert(html);
 
         log.info("html >> " + html);
-        String serverIp = this.getPdfAddressImgUrl(request);
-        String convertHtml = FileUtil.imgTagSetting(html, serverIp);
+
         String createFileName = FileUtil.createPdfFileName();
         String nowDay = DateUtil.getUtcNowDateFormat("yyMM");
 
-        // 파일 저장 위치 설정
+        // 파일 저장 경로 설정
         final String storagePath = FileUtil.getOsRootDir() + getRootDir + getRealDir + PDF_STORAGE_PATH + nowDay;
-        // 최초 PDF 저장 시 PDF 폴더가 없다면 생성
         FileUtil.makeDirectories(storagePath);
 
-        log.info("convertHtml :: {} ", convertHtml);
-
-        // 실제 저장위치 및 파일이름
+        // 실제 저장 경로 및 파일 이름
         final String paths = storagePath + File.separator + createFileName;
 
-        log.info("File Paths : {} ", paths);
+        log.info("paths >> " + paths);
 
-        // 최초 문서 사이즈 설정
+        // PDF 문서 설정
         Document document = new Document(PageSize.A4, 30, 30, 30, 30);
         try {
-
-            // PDF 파일 생성
             PdfWriter pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(paths));
-            // PDF 파일에 사용할 폰트 크기 설정
             pdfWriter.setInitialLeading(12.5f);
-            // PDF 파일 열기
             document.open();
 
-            // CSS 설정 변수 세팅
+            // Base64 이미지를 처리한 후, 남은 HTML 파싱
+            String modifiedHtml = processBase64Images(html, document); // HTML 내 Base64 이미지 처리
+
+            // HTML에서 남은 내용 처리
+            StringReader stringReader = new StringReader(modifiedHtml);
+
+            // CSS 및 HTML 처리 파이프라인 설정
             CSSResolver cssResolver = new StyleAttrCSSResolver();
-            CssFile commonCssFile = null;
-            CssFile fontCssFile = null;
-            try {
+            CssAppliers cssAppliers = new CssAppliersImpl(new XMLWorkerFontProvider(XMLWorkerFontProvider.DONTLOOKFORFONTS));
 
-                InputStream cssStream = getClass().getClassLoader().getResourceAsStream("static/css/pdf.css");
-                commonCssFile = XMLWorkerHelper.getCSS(cssStream);
-                cssStream = getClass().getClassLoader().getResourceAsStream("static/css/font.css");
-                fontCssFile = XMLWorkerHelper.getCSS(cssStream);
-            } catch (Exception e) {
-                throw new IllegalArgumentException("PDF CSS 파일을 찾을 수 없습니다.");
-            }
-            if (commonCssFile == null || fontCssFile == null) {
-                throw new IllegalArgumentException("PDF CSS 파일을 찾을 수 없습니다.");
-            }
-            cssResolver.addCss(commonCssFile);
-            cssResolver.addCss(fontCssFile);
-
-            XMLWorkerFontProvider fontProvider = new XMLWorkerFontProvider(XMLWorkerFontProvider.DONTLOOKFORFONTS);
-
-            try {
-                fontProvider.register("static/font/AppleSDGothicNeoR.ttf", "AppleSDGothicNeo");
-            } catch (Exception e) {
-                throw new IllegalArgumentException("PDF 폰트 파일을 찾을 수 없습니다.");
-            }
-            if (fontProvider.getRegisteredFonts() == null) {
-                throw new IllegalArgumentException("PDF 폰트 파일을 찾을 수 없습니다.");
-            }
-
-            // 사용할 폰트를 담아두었던 내용을 CSSAppliersImpl에 담아 적용
-            CssAppliers cssAppliers = new CssAppliersImpl(fontProvider);
-
-            // HTML Pipeline 생성
             HtmlPipelineContext htmlPipelineContext = new HtmlPipelineContext(cssAppliers);
             htmlPipelineContext.setTagFactory(Tags.getHtmlTagProcessorFactory());
+
             PdfWriterPipeline pdfWriterPipeline = new PdfWriterPipeline(document, pdfWriter);
             HtmlPipeline htmlPipeline = new HtmlPipeline(htmlPipelineContext, pdfWriterPipeline);
             CssResolverPipeline cssResolverPipeline = new CssResolverPipeline(cssResolver, htmlPipeline);
@@ -127,60 +100,75 @@ public class PdfService {
             XMLWorker xmlWorker = new XMLWorker(cssResolverPipeline, true);
             XMLParser xmlParser = new XMLParser(true, xmlWorker, StandardCharsets.UTF_8);
 
-            StringReader stringReader = new StringReader(convertHtml);
-
-            // HTML 내용 파싱 및 PDF에 추가
-            xmlParser.parse(stringReader);
-
+            xmlParser.parse(stringReader);  // HTML 파싱
             document.close();
             pdfWriter.close();
-        } catch (DocumentException e1) {
-            throw new IllegalArgumentException("PDF 라이브러리 설정 에러");
-        } catch (FileNotFoundException e2) {
-            throw new IllegalArgumentException("PDF 파일 생성중 에러");
-        } catch (IOException e3) {
-            throw new IllegalArgumentException("PDF 파일 생성중 에러2");
-        } catch (Exception e4) {
-            throw new IllegalArgumentException("PDF 파일 생성중 에러3");
-        } finally {
-            try {
-                document.close();
-            } catch (Exception e) {
-                log.info("PDF 파일 닫기 에러");
-                e.printStackTrace();
-            }
-            String filePath = FileUtil.seperateOs(storagePath);
-            filePath = filePath.substring(0, filePath.lastIndexOf(File.separator));
-            log.info("filePath :: {}", filePath);
 
-            return FilePublicVO.builder()
-                    .fileNo(1)
-                    .storagePath(FileUtil.seperateOs(storagePath))
-                    .name(createFileName)
-                    .extension(FileUtil.getFileExtension(createFileName))
-                    .delYn("N")
-                    .originalName(createFileName)
-                    .size(String.valueOf(FileUtil.getFileSize(paths)))
-                    .build();
+            FilePublicVO file = new FilePublicVO();
+            Long longSeq = Long.parseLong(seq);
+            int intSeq = Integer.parseInt(seq);
+            file.setFileSeq(longSeq);
+            file.setOriginalName(createFileName);
+            file.setName(createFileName);
+            file.setFileNo(intSeq);
+            file.setExtension("pdf");
+            file.setStoragePath(paths);
+            file.setDelYn("N");
+            file.setCreatedBy("admin"); // 사용자 아이디 들어가도록 변경해야함
+
+            contractCreationMapper.saveFilePath(file);
+        } catch (Exception e) {
+            log.error("PDF 생성 중 오류 발생", e);
+            throw new IllegalArgumentException("PDF 파일 생성 중 에러");
         }
+
+        return FilePublicVO.builder()
+                .fileNo(1)
+                .storagePath(FileUtil.seperateOs(storagePath))
+                .name(createFileName)
+                .extension(FileUtil.getFileExtension(createFileName))
+                .delYn("N")
+                .originalName(createFileName)
+                .size(String.valueOf(FileUtil.getFileSize(paths)))
+                .build();
+    }
+
+    // Base64 이미지를 PDF에 추가하는 메서드
+    private String processBase64Images(String html, Document document) throws DocumentException, IOException {
+        Pattern pattern = Pattern.compile("<img src=\"data:image/(png|jpeg);base64,([^\"]+)\"[^>]*>");
+        Matcher matcher = pattern.matcher(html);
+
+        StringBuffer modifiedHtml = new StringBuffer();
+        while (matcher.find()) {
+            String base64Image = matcher.group(2);  // Base64 이미지 데이터 추출
+            byte[] imageBytes = Base64.getDecoder().decode(base64Image);  // Base64를 바이트 배열로 변환
+
+            // iText를 사용하여 이미지 객체 생성
+            Image image = Image.getInstance(imageBytes);
+            image.scaleToFit(200, 100);  // 이미지 크기 조정
+
+            // PDF 문서에 이미지 추가
+            document.add(image);
+
+            // HTML 내 <img> 태그를 빈 문자열로 대체
+            matcher.appendReplacement(modifiedHtml, "");
+        }
+
+        matcher.appendTail(modifiedHtml);
+        return modifiedHtml.toString();  // 이미지가 처리된 HTML 반환
     }
 
     public String htmlTagConvert(String html) {
+        // 모든 <img> 태그가 닫히도록 보장
+        html = html.replaceAll("<img([^>]*)(?<!/)>", "<img$1/>");
+
         html = html.replaceAll("\n", " ");
         html = html.replaceAll("<br>", "<br/>");
+
         return html;
     }
 
-    private String extractBase64Image(String html) {
-        log.info("extractBase64Image >>" + html);
-        String base64Image = null;
-        Pattern pattern = Pattern.compile("src='data:image/png;base64,([^']+)'");
-        Matcher matcher = pattern.matcher(html);
-        if (matcher.find()) {
-            base64Image = matcher.group(1);
-        }
-        return base64Image;
-    }
+
 
 
     /**

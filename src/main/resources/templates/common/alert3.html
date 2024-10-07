@@ -1,6 +1,7 @@
 <html lang="kr" xmlns:th="http://www.thymeleaf.org">
     <div class="modal" style="display: none;" data-target="alert3">
         <div class="modal-dialog modal-dialog-centered">
+            <input type = "hidden" id="InfoValue" th:value="${info.contractNo}">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Electronic Contract Agreement</h5>
@@ -18,11 +19,48 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" th:onclick="completeConfirmClose()" >Close</button>
-                    <button type="button" class="btn btn-primary" th:onclick="contractComplete()">Complete</button>
+                    <button type="button" class="btn btn-primary" th:onclick="contractComplete(); pdfDown()">Complete</button>
                 </div>
             </div>
         </div>
     </div>
 <!--    <div class="modal-backdrop" data-target="background"></div>-->
     <div data-target="background"></div>
+
+    <script>
+        let pdfDown = () => {
+           let templateSeq = document.getElementById("InfoValue").value;
+               console.log("ContractNo !3! > "  + templateSeq);
+
+             console.log("pdfDownload In !!");
+             let formData = new FormData();
+             let html = $('#target-pdf').html();
+
+             let param = {
+                 "html": html ,
+                 "seq" : templateSeq
+             };
+             console.log(html);
+
+             formData.append('param', new Blob([JSON.stringify(param)], { type: 'application/json' }));
+
+             $.ajax({
+                 url: '/pdf/download',
+                 type: 'POST',
+                 cache: false,
+                 data: formData,
+                 contentType:false,
+                 processData:false,
+                 xhrFields: {
+                     responseType: 'blob' // 응답을 Blob 객체로 받음
+                 }
+             }).done(function (blob, status, xhr){
+                 console.log("done");
+                 buttonFileDownload(blob, xhr);
+             }).fail(function(jqXHR){
+                 console.log("fail");
+                 console.log(jqXHR);
+             })
+         }
+    </script>
 </html>

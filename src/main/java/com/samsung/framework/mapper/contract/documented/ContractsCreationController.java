@@ -301,9 +301,10 @@ public class ContractsCreationController {
 
 
         String html = StringUtil.getString(param.get("html"));
+        String seq = "0";
 
         log.info("pdf/ create download html>> " + html);
-        FilePublicVO file = pdfService.createPDF(html, request);
+        FilePublicVO file = pdfService.createPDF(html, request , seq);
 
         fileService.downloadFile(file,request, response);
 

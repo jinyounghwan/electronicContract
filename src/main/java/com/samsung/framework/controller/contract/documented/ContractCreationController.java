@@ -196,7 +196,7 @@ public class ContractCreationController {
         // 파라미터 구성
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
         params.add("mimeType", "application/pdf");
-        params.add("userId", "1881");
+        params.add("userId", "1920");
         params.add("fileName", "24090501cf6df55e864e55bfbe75e0a5f5bd41.pdf");
         params.add("signatureType", "PADES");
         params.add("signatureTypeLevel", "BASELINE_LT");

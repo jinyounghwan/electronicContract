@@ -49,8 +49,8 @@
                             <h4 class="m-0 font-weight-bold text-primary" th:utext="${info.contractTitleEn}"></h4>
                         </div>
                         <div class="btn-area-right">
-                            <button class="btn btn-outline-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract</button>
-                            <button class="btn btn-outline-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">View Contract</button>
+                            <button class="btn btn-outline-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract & Corp. Signature</button>
+                            <button class="btn btn-outline-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">View Contract & Corp. Signature</button>
                         </div>
                     </div>
 
@@ -69,7 +69,7 @@
                                     <tr>
                                         <th>Sender</th>
                                         <td>SAMSUNG SDI Hungary</td>
-                                        <th>Doc. Status</th>
+                                        <th>Empl. Status</th>
                                         <td th:text="${info.getDocStatus()}"></td>
                                     </tr>
                                     <tr>
@@ -81,7 +81,7 @@
                                     <tr>
                                         <th th:if="${info.docStatus} != 'PAPER_CONTRACT'">Assigned date</th>
                                         <td th:if="${info.docStatus} != 'PAPER_CONTRACT'" :text="${info.getAssignDateAtStr()} ? ${info.getAssignDateAtStr()}: '-' ">2023-09-10  08:14:59</td>
-                                        <th>Signed date</th>
+                                        <th>Empl. Signed date</th>
                                         <td th:text="${info.getSignDateAtStr()}"></td>
                                     </tr>
                                     </tbody>

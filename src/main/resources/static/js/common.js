@@ -559,6 +559,9 @@ let contractComplete = () =>{
        $('[data-target="view"]').removeAttr('style');
        $('[data-target="reject"]').removeAttr('style');
        $('[data-target="rejectBackground"]').removeAttr('class');
+
+       pdfDownload();
+
        location.href= '/contract/sign/wait';
     }).fail(function(jqXHR) {
         console.log(jqXHR);
@@ -583,6 +586,7 @@ let openAgreementAlert = () => {
  * Pdf Download
  */
 let pdfDownload = () => {
+    console.log("pdfDownload In !!");
     let formData = new FormData();
     let html = $('#target-pdf').html();
 

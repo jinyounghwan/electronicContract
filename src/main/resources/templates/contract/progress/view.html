@@ -50,8 +50,14 @@
             <h4 class="m-0 font-weight-bold text-primary" th:utext="${info.contractTitleEn}"></h4>
           </div>
           <div class="btn-area-right">
+            <!-- PDF View -->
+            <!--
             <button class="btn btn-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract</button>
-            <button class="btn btn-outline-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">View Contract</button>
+            <button class="btn btn-outline-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" id="viewPdfButton">View Contract</button>-->
+
+            <!--Html View -->
+            <button class="btn btn-primary" th:if="${info.docStatus} == 'PAPER_CONTRACT'" th:data-parameter1= "${info.getSignatureDataNo()}" type="button" th:onclick="viewPaperContract(this.getAttribute('data-parameter1'))">View Contract</button>
+            <button class="btn btn-primary" th:if="${info.docStatus} != 'PAPER_CONTRACT'" type="button" th:onclick="'viewContract('+${info.contractNo}+')'">View Contract</button>
           </div>
         </div>
 

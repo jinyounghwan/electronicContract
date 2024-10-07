@@ -32,8 +32,12 @@ public class PdfController {
     FileService fileService;
     @PostMapping("/download")
     public ResponseEntity download(@RequestPart(value="param") Map<String,Object> param, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        log.info("pdf 다운 !!! " + param.get("seq"));
         String html = StringUtil.getString(param.get("html"));
-        FilePublicVO file = pdfService.createPDF(html, request);
+        String seq = StringUtil.getString(param.get("seq"));
+        log.info("pdf 다운 !!! html >> " + html);
+        FilePublicVO file = pdfService.createPDF(html, request , seq);
 
         return fileService.downloadFile(file,request, response);
     }
@@ -41,7 +45,8 @@ public class PdfController {
     @PostMapping("/create/download")
     public ResponseEntity createDownload(@RequestPart(value="param") Map<String,Object> param, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String html = StringUtil.getString(param.get("html"));
-        FilePublicVO file = pdfService.createPDF(html, request);
+        String seq = "";
+        FilePublicVO file = pdfService.createPDF(html, request , seq);
 
         fileService.downloadFile(file,request, response);
         String fileName = file.getName();
