@@ -56,4 +56,5 @@ public class ContractVO {
     private String signFilePath;
     private String firstName;
     private String lastName;
+    private String qesSignAt;
 }

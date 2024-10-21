@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.samsung.framework.mapper.contract.documented.ContractCompletedMapper">
+    <sql id="whereClause">
+        <if test="(startDt != null and startDt != '') and (endDt != null and endDt != '')">
+            <choose>
+                <when test="searchDateType == 'CREATED_AT'">
+                    AND c.created_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
+                </when>
+                <when test="searchDateType == 'UPDATED_AT'">
+                    AND c.updated_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
+                </when>
+                <when test="searchDateType == 'ASSIGNED'">
+                    AND c.assigned_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
+                </when>
+                <when test="searchDateType == 'ALL'">
+                    AND c.created_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
+                    or c.updated_at BETWEEN DATE(#{startDt}) AND DATE_ADD(DATE(#{endDt}), INTERVAL 1 DAY)
+                </when>
+            </choose>
+        </if>
+        <if test="@com.samsung.framework.common.utils.StringUtil@isNotEmpty(searchKeyword)">
+            <choose>
+                <when test="searchKeywordType == 'TITLE'">
+                    and ct.template_title like concat('%',#{searchKeyword},'%')
+                </when>
+                <when test="searchKeywordType == 'EMPLOYEE_ID'">
+                    and c.emp_no like concat('%',#{searchKeyword},'%')
+                </when>
+                <when test="searchKeywordType == 'NAME'">
+                    and c.name like concat('%',#{searchKeyword},'%')
+                </when>
+                <when test="searchKeywordType == 'CONTRACT_TITLE'">
+                    and ctd.contract_title_en like concat('%',#{searchKeyword},'%')
+                </when>
+                <when test="searchKeywordType == 'ALL'">
+                    and c.emp_no like concat('%',#{searchKeyword},'%')
+                    or ct.template_title like concat('%',#{searchKeyword},'%')
+                    or c.name like concat('%',#{searchKeyword},'%')
+                </when>
+            </choose>
+        </if>
+        <if test="contractStatusType != 'ALL' and @com.samsung.framework.common.utils.StringUtil@isNotEmpty(contractStatusType)">
+            and LOWER(c.doc_status) LIKE LOWER(CONCAT('%',#{contractStatusType} , '%'))
+        </if>
+    </sql>
+
+
+<select id="getContractCompletedCount" resultType="int" parameterType="SearchVO">
+    SELECT COUNT(c.CONTRACT_NO)
+        FROM CONTRACTS C
+            JOIN CONTRACT_TEMPLATE CT
+                ON C.TEMPLATE_SEQ = CT.TEMPLATE_SEQ
+            JOIN USERS U
+                ON C.EMP_NO = U.EMP_NO
+        where C.del_yn = 'N'
+</select>
+
+    <select id="getContractSignCompletedList" parameterType="SearchVO" resultType="ContractVO">
+        select
+            c.contract_no ,
+            ct.template_title ,
+            ctd.contract_title_en ,
+            c.name ,
+            c.emp_no ,
+            c.created_at ,
+            c.sign_date ,
+            c.qes_sign_at ,
+            c.doc_status
+        from contracts c
+            join contract_template ct
+                on c.template_seq = ct.template_seq
+            join contract_template_details ctd
+                on ct.template_seq = ctd.template_seq
+            where 1=1
+                and c.doc_status in ('PRCS1004' , 'PRCS1005')
+                and c.process_status = 'PRCS2003'
+                and c.qes_yn ='Y'
+        <include refid="whereClause"/>
+            order by c.created_at
+        LIMIT #{paging.displayRow} OFFSET #{paging.offset}
+    </select>
+
+    <select id="getContractSignCompletedInfo" parameterType="String" resultType="ContractVO">
+        SELECT c.contract_no
+            , c.emp_no
+            , c.template_seq
+            , c.doc_status
+            , c.process_status
+            , c.signature_data_no
+            , c.validation
+            , c.agree_yn
+            , c.del_yn
+            , c.created_by
+            , c.created_at
+            , c.updated_by
+            , c.updated_at
+            , ct.template_title
+            , c.name
+            , c.sign_date
+            , ctd.contract_title_en
+            , c.dept_code
+            , c.assigned_at
+            , c.qes_sign_at
+        from contracts c
+            join contract_template ct
+                on c.template_seq = ct.template_seq
+            join contract_template_details ctd
+             on ct.template_seq = ctd.template_seq
+            where c.contract_no = #{seq}
+    </select>
+
+</mapper>

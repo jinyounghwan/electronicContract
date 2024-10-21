@@ -168,4 +168,17 @@ public class SearchVO {
         return list;
     }
 
+
+    /**
+     * Doc.Status Dropdown리스트
+     * @return
+     */
+    public List<SearchVO> getContractStatus(){
+        var list = new ArrayList<SearchVO>();
+        list.add(new SearchVO("ALL", "ALL"));
+        list.add(new SearchVO("PRCS1004", "COMPLETED"));
+        list.add(new SearchVO("PRCS1005","PAPERCONTRACT"));
+        return list;
+    }
+
 }
