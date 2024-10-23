@@ -37,7 +37,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
             , "/contract/sign/wait/**", "/contract/sign/paper/comp/**"
             , "/account/pwdChange", "/contract/view"
             , "/file/download/**", "/contract/view/history"
-            , "/pdf/download" , "/contract/create/**");
+            , "/pdf/download" , "/contract/create/**"
+            , "/contract/sign/completed/**");
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

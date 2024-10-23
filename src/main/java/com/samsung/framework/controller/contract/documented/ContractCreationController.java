@@ -36,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -71,6 +72,10 @@ public class ContractCreationController {
     private static final String FILE_PATH_1 = "C://files//electronicContract//upload//Contract//PDF//2409/240905c88245ebb5274bbeafe8d7d8b714bf18.pdf";
     private static final String FILE_PATH_2 = "C://files//electronicContract//upload//Contract//PDF//2409/240905da84bf784e9946d2b30acc76dc1787ec.pdf";
     private static final String FILE_PATH_3 = "C://files//electronicContract//upload//Contract//PDF//2409/240905db9d85ef0cc647689edc94e5e42399c9.pdf";
+
+    // Api 세션 토큰
+    String signatureSessionToken ="";
+
 
     @ModelAttribute("templateCodeList")
     public List<Template> templatesOptionList() {
@@ -192,9 +197,9 @@ public class ContractCreationController {
 
         log.info("ECS TEST !! ");
 
-        String url = "http://demo.sign.netlock.hu/rest/signature/singleInitSignature";
 
         // 파일 경로를 지정
+        // 이부분 나중에 바꿔줘야함 지금은 있는 파일로 테스트
         File file = new File("C://files//electronicContract//upload//Contract//PDF//2409/24090501cf6df55e864e55bfbe75e0a5f5bd41.pdf");
         FileSystemResource fileResource = new FileSystemResource(file);
 
@@ -221,24 +226,42 @@ public class ContractCreationController {
         // HTTP Entity 생성
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
+        // URL에 파라미터 설정
+        String url = BASE_URL + "/rest/signature/singleInitSignature?mimeType=application/pdf"
+                + "&userId=1920"
+                + "&signatureType=PADES"
+                + "&signatureTypeLevel=BASELINE_LT"
+                + "&fileName=24090501cf6df55e864e55bfbe75e0a5f5bd41.pdf";
+
+
         // RestTemplate 사용하여 POST 요청
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> responseEntity = restTemplate.exchange(
-                url + "?mimeType=application/pdf&userId=" + params.get("userId") +
-                        "&fileName=24090501cf6df55e864e55bfbe75e0a5f5bd41.pdf&signatureType=" + params.get("signatureType") +
-                        "&signatureTypeLevel=" + params.get("signatureTypeLevel"),
-                HttpMethod.POST,
-                requestEntity,
-                String.class
-        );
+
+        // POST 요청 보내기
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 
         // CORS 헤더 추가
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:3030");
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
         log.info("response !! >> "  + response);
-        // 응답 반환
-        return responseEntity;
+        log.info("responseEntity !! >> "  + responseEntity);
+
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            // responseBody에서 signatureSessionToken 추출
+            signatureSessionToken = extractSessionToken(responseEntity.getBody());
+
+            // 서명 URL 생성
+            String signingUrl = BASE_URL + "/signature/" + signatureSessionToken + "?returnUrl=http://localhost:3030/contract/sign/completed";
+
+            log.info("signingUrl >> " + signingUrl);
+
+            // 결과 반환
+            return ResponseEntity.ok(signingUrl);
+        } else {
+            return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+        }
+
     }
 
     /* ECS api 테스트 mutiple */
@@ -316,8 +339,65 @@ public class ContractCreationController {
         return fileData;
     }
 
+
+    /* ECS API 3번 테스트 */
+    @GetMapping("/downloadPdf")
+    @ResponseBody
+    public String downloadPdf() {
+        // 랜덤 숫자 채번
+        Random random = new Random();
+        StringBuilder randomNumber = new StringBuilder();
+
+        for (int i = 0; i < 12; i++) {
+            int digit = random.nextInt(10);  // 0부터 9까지의 숫자를 생성
+            randomNumber.append(digit);
+        }
+
+        // 파라미터
+        String url = "https://demo.sign.netlock.hu/rest/signature/"+signatureSessionToken+"/singleSignedDoc";
+        String username = "dudghksdl45@gmail.com";
+        String password = "!Jkj14789";
+
+        // Authorization 헤더 생성
+        String auth = username + ":" + password;
+        String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Basic " + encodedAuth);
+
+        // GET 요청을 위한 RestTemplate 설정
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        // PDF 파일을 받을 수 있는 ByteArrayResource로 응답 처리
+        ResponseEntity<byte[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            try {
+                // 파일 저장 경로 설정 ->> 추후 바꿔야함 경로
+                Path path = Paths.get("C:\\files\\electronicContract\\upload\\"+randomNumber+".pdf");
+
+                // 폴더가 존재하지 않으면 생성
+                File directory = new File(path.getParent().toString());
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+
+                // PDF 파일 저장
+                Files.write(path, response.getBody());
+
+                return "PDF 파일이 성공적으로 다운로드되었습니다: ";
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "파일 저장 중 오류가 발생했습니다.";
+            }
+        } else {
+            return "PDF 파일 다운로드에 실패했습니다. 상태 코드: ";
+        }
+    }
+
+
     private String extractSessionToken(String responseBody) {
-        return "b5fb9b76307caeb1b3a302f17d974af5"; // 예시 토큰, 실제 응답에 따라 수정해야 함
+        return responseBody; // 예시 토큰, 실제 응답에 따라 수정해야 함
     }
 
 }

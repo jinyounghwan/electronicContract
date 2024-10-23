@@ -71,7 +71,7 @@ public class ContractsCreationService {
         // 엑셀 조회
         List<List<ContractExcelVO>> list  = excelService.readExcelFile(fileList);
 
-        log.info("333333");
+
         // 어떤 사번에서 빈값이 들어갔는지
         BulkExcelVO bulkExcelVO = validationUtil.excelBulkDataValidator(list.get(0));
         if(!"00000000".equals(bulkExcelVO.getEmpNo())){
@@ -160,7 +160,7 @@ public class ContractsCreationService {
                 Map<String, LogSaveResponse> logs = logUtil.saveLog(saveRequest);
             });
         }
-        log.info("4444444");
+
         reusltMap.put("code", ResultCodeMsgEnum.REQUEST_SUCCESS.getCode());
         reusltMap.put("msg", ResultCodeMsgEnum.REQUEST_SUCCESS.getMsg());
         dataMap.put("totalCount" ,list.get(0).size());
