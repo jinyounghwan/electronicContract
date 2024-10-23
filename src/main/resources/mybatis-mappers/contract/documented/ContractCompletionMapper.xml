@@ -180,7 +180,8 @@
 
     <select id="getContractsFileList">
         SELECT C.CONTRACT_NO AS CONTRACT_NO
-            , PDF.STORAGE_PATH AS FILE_PATH
+            , PDF.STORAGE_PATH AS STORAGE_PATH
+            , PDF.name AS FILE_NAME
         FROM CONTRACTS C
             LEFT JOIN FILE_PDF PDF ON C.CONTRACT_NO = PDF.FILE_SEQ
         WHERE

@@ -25,6 +25,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
 import org.springframework.stereotype.Controller;
@@ -36,6 +37,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -200,23 +203,21 @@ public class ContractCreationController {
 
         // 파일 경로를 지정
         // 이부분 나중에 바꿔줘야함 지금은 있는 파일로 테스트
-        File file = new File("C://files//electronicContract//upload//Contract//PDF//2409/24090501cf6df55e864e55bfbe75e0a5f5bd41.pdf");
+        File file = new File("/Users/juntaek/Documents/pdf/upload/Contract/PDF/2410/24102264ad49bbab054756b764a67414184d01.pdf");
         FileSystemResource fileResource = new FileSystemResource(file);
 
         // 파라미터 구성
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
         params.add("mimeType", "application/pdf");
         params.add("userId", "1920");
-        params.add("fileName", "24090501cf6df55e864e55bfbe75e0a5f5bd41.pdf");
+        params.add("fileName", "24102264ad49bbab054756b764a67414184d01.pdf");
         params.add("signatureType", "PADES");
         params.add("signatureTypeLevel", "BASELINE_LT");
         params.add("file", fileResource); // 파일을 Body에 추가
 
         // Basic Auth 설정
-        String username = "ecs.sdihu@partner.samsung.com";
-        String password = "Testsdihu24!";
         HttpHeaders headers = new HttpHeaders();
-        headers.setBasicAuth(username, password);
+        headers.setBasicAuth(USERNAME, PASSWORD);
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
         // Body에 파일 추가
@@ -264,22 +265,23 @@ public class ContractCreationController {
 
     }
 
+    private String multiSignatureSessionToken;
+    private List<ContractCompVO> toUpdateList;
+
     /* ECS api 테스트 mutiple */
     @PostMapping("/init-signature")
-    public ResponseEntity<?> initSignature(HttpServletRequest request, @RequestBody List<ContractCompVO> list) { //
-        log.info("++ initSignature()");
-        log.info(">> request = " + request);
-        log.info(">> list = " + list);
-//
+    public ResponseEntity<?> initSignature(HttpServletRequest request, @RequestBody List<ContractCompVO> list) {
+
         List<ContractCompVO> compList = contractCompService.getContractFileList(list);
-        log.info(">> compList = " + compList);
+        toUpdateList = compList;
 
         try {
             // 파일 해시 생성
             List<Map<String, String>> fileData = new ArrayList<>();
-            fileData.add(createFileHash(FILE_PATH_1, "document1.pdf"));
-            fileData.add(createFileHash(FILE_PATH_2, "document2.pdf"));
-            fileData.add(createFileHash(FILE_PATH_3, "document3.pdf"));
+
+            for (ContractCompVO item : compList) {
+                fileData.add(createFileHash(item.getStoragePath(), item.getFileName()));
+            }
 
             // REST API 요청을 위한 RestTemplate 설정
             RestTemplate restTemplate = new RestTemplate();
@@ -304,12 +306,10 @@ public class ContractCreationController {
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 // responseBody에서 signatureSessionToken 추출
-                String signatureSessionToken = extractSessionToken(response.getBody());
+                multiSignatureSessionToken = extractSessionToken(response.getBody());
 
                 // 서명 URL 생성
-                String signingUrl = BASE_URL + "/signature/" + signatureSessionToken + "?returnUrl=";
-
-                log.info("signingUrl >> " + signingUrl);
+                String signingUrl = BASE_URL + "/signature/" + multiSignatureSessionToken + "?returnUrl=http://localhost:3030/contract/sign/recall";
 
                 // 결과 반환
                 return ResponseEntity.ok(signingUrl);
@@ -320,6 +320,102 @@ public class ContractCreationController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
         }
+    }
+
+    @PostMapping("/multipleSigned")
+    public String multipleSigned() {
+
+        List<ContractCompVO> compList; // = contractCompService.getContractFileList(list);
+        compList = toUpdateList;
+
+        int successCnt = 0;
+        int failCnt = 0;
+
+        log.info(">> compList = " + compList.toString());
+
+        for (ContractCompVO item : compList) {
+            // multiple signed URL 만들기
+            String url = BASE_URL + "/rest/signature/" + multiSignatureSessionToken + "/multipleSignedDocs?"
+                    + "fileName=" + item.getFileName()
+                    + "&mimeType=application/pdf"
+                    + "&signatureType=PADES"
+                    + "&signatureTypeLevel=BASELINE_LT";
+
+            // 헤더 설정
+            HttpHeaders headers = new HttpHeaders();
+            headers.setBasicAuth(USERNAME, PASSWORD);
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+            // Body에 파일 추가
+            File file = new File("/Users/juntaek/Documents/pdf/upload/Contract/PDF/2410/24102264ad49bbab054756b764a67414184d01.pdf");
+            FileSystemResource fileResource = new FileSystemResource(file);
+
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("file", fileResource);
+            try {
+                createFileHash(item.getStoragePath(), item.getFileName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            // RequestEntity 사용하여 파일 전송
+            HttpEntity<InputStreamResource> requestEntity = null;
+            try {
+                requestEntity = createRequestEntity(item);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            log.info(">> body === " + body.toString());
+            log.info(">> requestEntity === " + requestEntity.toString());
+
+            // POST 요청 보내기
+            // REST API 요청을 위한 RestTemplate 설정
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<byte[]> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, byte[].class);
+
+            if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                try {
+                    // 파일 저장 경로 설정
+                    // 랜덤추출로 변경
+                    Path path = Paths.get("/Users/juntaek/Documents/pdf/upload/Contract/PDF/signed/Contract.pdf");
+
+                    // 폴더가 존재하지 않으면 생성
+                    File directory = new File(path.getParent().toString());
+                    if (!directory.exists()) {
+                        directory.mkdirs();
+                    }
+
+                    // PDF 파일 저장
+                    Files.write(path, responseEntity.getBody());
+
+                    // TODO : DB 업데이트 처리 필요
+                    successCnt++;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    failCnt++;
+                }
+            } else {
+                failCnt++;
+            }
+        }
+
+        if (failCnt > 0) {
+            return "PDF 파일 다운로드에 실패했습니다. 상태 코드: ";
+        } else {
+            return "PDF 파일이 성공적으로 저장 되었습니다: ";
+        }
+    }
+
+
+    private HttpEntity<InputStreamResource> createRequestEntity(ContractCompVO item) throws FileNotFoundException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBasicAuth(USERNAME, PASSWORD);
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM); // 바이너리 파일로 설정
+
+        // 파일을 InputStreamResource로 래핑
+        File file = new File(item.getStoragePath());
+        InputStreamResource inputStreamResource = new InputStreamResource(new FileInputStream(file));
+
+        return new HttpEntity<>(inputStreamResource, headers);
     }
 
     private Map<String, String> createFileHash(String filePath, String fileName) throws Exception {

@@ -146,14 +146,8 @@
                 contentType: 'application/json; charset=UTF-8',
                 data: JSON.stringify(checked)
             }).done(function(data){
-                // 파일전송 완료되면 나오는 값으로 화면 이
-                popup = window.open('https://demo.sign.netlock.hu/signature/aa7b10d4ba7e1f94b2a6acd9e2375c4f?returnUrl=', '팝업', 'width=1200,height=800');
-                const timer = setInterval(function() {
-                    if (popup.closed) {
-                        clearInterval(timer);
-                        alert('팝업이 닫혔습니다.');
-                    }
-                }, 1000); // 1초마다 팝업 상태 체크
+                // 파일전송 완료되면 나오는 값으로 화면 이동
+                window.location.href = data;
             }).fail(function(jqXHR){
                 sendToErrorPage(jqXHR);
             });

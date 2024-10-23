@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor @AllArgsConstructor
 @Setter @Getter
 @Builder
+@ToString
 public class ContractCompVO {
     private long contractNo;
     private int empNo;
@@ -48,4 +49,5 @@ public class ContractCompVO {
     private String firstName;
     private String lastName;
     private String storagePath;
+    private String fileName;
 }

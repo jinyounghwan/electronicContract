@@ -5,12 +5,16 @@ import com.samsung.framework.service.contract.documented.ContractSignRecallServi
 import com.samsung.framework.vo.contract.creation.ContractVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.search.SearchVO;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -54,8 +58,31 @@ public class ContractSignRecallController {
         return "contract/recall/list";
     }
 
+    @Autowired
+    private ContractCreationController contractCreationController;
+
     @PostMapping(value = "/list")
-    public String getContractSignRecallList (Model model , @RequestBody SearchVO searchVO){
+    public String getContractSignRecallList (HttpServletRequest request, Model model , @RequestBody SearchVO searchVO){
+
+        String status ="";
+        String referer = request.getHeader("Referer");
+
+        if(referer.contains("status=")) {
+            String[] params = referer.split("\\?")[1].split("&");
+            // 각 파라미터를 순회하여 status 값을 찾음
+            for (String param : params) {
+                if (param.startsWith("status=")) {
+                    status = param.split("=")[1];  // status 값을 추출하여 반환
+                }
+            }
+            log.info("status >> " + status);
+        }
+        if(status.equals("success")){
+
+            String returnString = contractCreationController.multipleSigned();
+            log.info(">> returnString = " + returnString);
+        }
+
 
         // total
         int totalCount = contractSignRecallService.getContractSignRecallCount(searchVO);
