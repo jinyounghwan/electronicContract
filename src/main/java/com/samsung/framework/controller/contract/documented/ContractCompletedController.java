@@ -40,6 +40,12 @@ public class ContractCompletedController {
     @Autowired
     private ContractCompletionController contractCompletionController;
 
+    private boolean isSingle = true;
+
+    public void setIsSingle(boolean isSingle) {
+        this.isSingle = isSingle;
+    }
+
     /**
      * Search keyword type option list .
      * [검색옵션] 키워드
@@ -126,7 +132,12 @@ public class ContractCompletedController {
                 String url = "http://localhost:3030/contract/create/downloadPdf";
                 ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
             */
-            String returnString = contractCompletionController.downloadPdf();
+            String returnString;
+            if (isSingle) {
+                returnString = contractCompletionController.downloadPdf();
+            } else {
+                returnString = contractCompletionController.multipleSigned();
+            }
             log.info("returnString >> " + returnString);
         }
 

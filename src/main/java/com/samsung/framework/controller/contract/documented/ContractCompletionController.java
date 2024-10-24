@@ -21,6 +21,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
@@ -62,11 +64,9 @@ public class ContractCompletionController {
     private static final String FILE_PATH = "C://files//electronicContract//upload//Contract//PDF//2409/24090501cf6df55e864e55bfbe75e0a5f5bd41.pdf";
     private static final String USERNAME = "dudghksdl45@gmail.com";
     private static final String PASSWORD = "!Jkj14789";
-
-    // 파일 경로
-    private static final String FILE_PATH_1 = "C://files//electronicContract//upload//Contract//PDF//2409/240905c88245ebb5274bbeafe8d7d8b714bf18.pdf";
-    private static final String FILE_PATH_2 = "C://files//electronicContract//upload//Contract//PDF//2409/240905da84bf784e9946d2b30acc76dc1787ec.pdf";
-    private static final String FILE_PATH_3 = "C://files//electronicContract//upload//Contract//PDF//2409/240905db9d85ef0cc647689edc94e5e42399c9.pdf";
+    @Autowired
+    @Lazy
+    private ContractCompletedController contractCompletedController;
 
     // Api 세션 토큰
     String signatureSessionToken ="";
@@ -267,7 +267,7 @@ public class ContractCompletionController {
 
             // 서명 URL 생성
             String signingUrl = BASE_URL + "/signature/" + signatureSessionToken + "?returnUrl=http://localhost:3030/contract/sign/completed";
-
+            contractCompletedController.setIsSingle(true);
             log.info("signingUrl >> " + signingUrl);
 
             // 결과 반환
@@ -322,8 +322,9 @@ public class ContractCompletionController {
                 multiSignatureSessionToken = extractSessionToken(response.getBody());
 
                 // 서명 URL 생성
-                String signingUrl = BASE_URL + "/signature/" + multiSignatureSessionToken + "?returnUrl=http://localhost:3030/contract/sign/recall";
+                String signingUrl = BASE_URL + "/signature/" + multiSignatureSessionToken + "?returnUrl=http://localhost:3030/contract/sign/completed";
 
+                contractCompletedController.setIsSingle(false);
                 // 결과 반환
                 return ResponseEntity.ok(signingUrl);
             } else {
@@ -359,12 +360,6 @@ public class ContractCompletionController {
             headers.setBasicAuth(USERNAME, PASSWORD);
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 
-            // Body에 파일 추가
-            File file = new File("/Users/juntaek/Documents/pdf/upload/Contract/PDF/2410/24102264ad49bbab054756b764a67414184d01.pdf");
-            FileSystemResource fileResource = new FileSystemResource(file);
-
-            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-            body.add("file", fileResource);
             try {
                 createFileHash(item.getStoragePath(), item.getFileName());
             } catch (Exception e) {
@@ -377,8 +372,6 @@ public class ContractCompletionController {
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
-            log.info(">> body === " + body.toString());
-            log.info(">> requestEntity === " + requestEntity.toString());
 
             // POST 요청 보내기
             // REST API 요청을 위한 RestTemplate 설정
@@ -387,20 +380,31 @@ public class ContractCompletionController {
 
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 try {
+                    // 랜덤 숫자 채번
+                    Random random = new Random();
+                    StringBuilder randomNumber = new StringBuilder();
+
+                    for (int i = 0; i < 12; i++) {
+                        int digit = random.nextInt(10);  // 0부터 9까지의 숫자를 생성
+                        randomNumber.append(digit);
+                    }
                     // 파일 저장 경로 설정
-                    // 랜덤추출로 변경
-                    Path path = Paths.get("/Users/juntaek/Documents/pdf/upload/Contract/PDF/signed/Contract.pdf");
+                    Path path = Paths.get("/Users/juntaek/Documents/pdf/upload/Contract/PDF/signed/" + randomNumber + ".pdf");
 
                     // 폴더가 존재하지 않으면 생성
                     File directory = new File(path.getParent().toString());
                     if (!directory.exists()) {
                         directory.mkdirs();
                     }
-
                     // PDF 파일 저장
                     Files.write(path, responseEntity.getBody());
 
-                    // TODO : DB 업데이트 처리 필요
+                    ContractCompVO contractCompVO = new ContractCompVO();
+                    contractCompVO.setContractNo(item.getContractNo());
+
+                    // DB 업데이트 (QES  서명완료)
+                    contractCompService.qesUpdateYn(contractCompVO);
+
                     successCnt++;
                 } catch (IOException e) {
                     e.printStackTrace();

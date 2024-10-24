@@ -62,27 +62,7 @@ public class ContractSignRecallController {
     private ContractCompletionController contractCompletionController;
 
     @PostMapping(value = "/list")
-    public String getContractSignRecallList (HttpServletRequest request, Model model , @RequestBody SearchVO searchVO){
-
-        String status ="";
-        String referer = request.getHeader("Referer");
-
-        if(referer.contains("status=")) {
-            String[] params = referer.split("\\?")[1].split("&");
-            // 각 파라미터를 순회하여 status 값을 찾음
-            for (String param : params) {
-                if (param.startsWith("status=")) {
-                    status = param.split("=")[1];  // status 값을 추출하여 반환
-                }
-            }
-            log.info("status >> " + status);
-        }
-        if(status.equals("success")){
-
-          //  String returnString = contractCreationController.multipleSigned();
-
-        }
-
+    public String getContractSignRecallList (Model model , @RequestBody SearchVO searchVO){
 
         // total
         int totalCount = contractSignRecallService.getContractSignRecallCount(searchVO);
