@@ -1,6 +1,7 @@
 package com.samsung.framework.mapper.contract.documented;
 
 import com.samsung.framework.domain.contract.paper.ContractComp;
+import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.contract.completion.ContractCompVO;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.search.SearchVO;
@@ -17,4 +18,5 @@ public interface ContractCompletionMapper {
     int getContractTemplateSeq(String templateType);
     FilePublicVO getFileSeq(String seq);
     List<ContractCompVO> getContractsFileList(List<ContractCompVO> contractNoList);
+    int updateqes(ContractCompVO contractCompVO);
 }

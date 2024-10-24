@@ -191,4 +191,11 @@
             </foreach>
             ORDER BY C.CREATED_AT DESC
     </select>
+
+    <update id="updateqes" parameterType="ContractCompVO">
+        update contracts
+        set qes_yn ='Y' , qes_sign_at = sysdate()
+        where contract_no= #{contractNo}
+    </update>
+
 </mapper>

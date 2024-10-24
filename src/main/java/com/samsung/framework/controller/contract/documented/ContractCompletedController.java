@@ -37,6 +37,9 @@ public class ContractCompletedController {
 
     private static final String BASE_URL = "https://demo.sign.netlock.hu";
 
+    @Autowired
+    private ContractCompletionController contractCompletionController;
+
     /**
      * Search keyword type option list .
      * [검색옵션] 키워드
@@ -118,9 +121,13 @@ public class ContractCompletedController {
             log.info("status >> " + status);
         }
         if(status.equals("success")){
-            RestTemplate restTemplate = new RestTemplate();
-            String url = "http://localhost:3030/contract/create/downloadPdf";
-            ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+            /* API 호출인데 로그인 인터셉트에서 걸림
+                RestTemplate restTemplate = new RestTemplate();
+                String url = "http://localhost:3030/contract/create/downloadPdf";
+                ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+            */
+            String returnString = contractCompletionController.downloadPdf();
+            log.info("returnString >> " + returnString);
         }
 
         // total

@@ -178,4 +178,13 @@ public class ContractCompService {
         log.info(">> contractNoList = " + contractNoList);
         return contractCompletionMapper.getContractsFileList(contractNoList);
     }
+
+    public int qesUpdateYn(ContractCompVO contractCompVO){
+        log.info("contractCompVO >> " + contractCompVO);
+        int result = 0;
+
+        result = contractCompletionMapper.updateqes(contractCompVO);
+
+        return result;
+    }
 }

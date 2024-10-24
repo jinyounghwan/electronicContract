@@ -59,7 +59,7 @@ public class ContractSignRecallController {
     }
 
     @Autowired
-    private ContractCreationController contractCreationController;
+    private ContractCompletionController contractCompletionController;
 
     @PostMapping(value = "/list")
     public String getContractSignRecallList (HttpServletRequest request, Model model , @RequestBody SearchVO searchVO){
@@ -79,8 +79,8 @@ public class ContractSignRecallController {
         }
         if(status.equals("success")){
 
-            String returnString = contractCreationController.multipleSigned();
-            log.info(">> returnString = " + returnString);
+          //  String returnString = contractCreationController.multipleSigned();
+
         }
 
 
