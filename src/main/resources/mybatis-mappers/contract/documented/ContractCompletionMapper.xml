@@ -194,7 +194,7 @@
 
     <update id="updateqes" parameterType="ContractCompVO">
         update contracts
-        set qes_yn ='Y' , qes_sign_at = sysdate()
+        set qes_yn ='Y' , qes_sign_at = sysdate() , qes_pdf_path = #{qesPdfPath}
         where contract_no= #{contractNo}
     </update>
 

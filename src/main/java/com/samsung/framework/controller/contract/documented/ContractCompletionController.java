@@ -500,6 +500,7 @@ public class ContractCompletionController {
                 Files.write(path, response.getBody());
 
                 contractCompVO.setContractNo(contractNoQes);
+                contractCompVO.setQesPdfPath(path.toString());
 
                 // Contract_No쓰고 다시 초기화
                 contractNoQes= 0L;
