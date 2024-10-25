@@ -82,7 +82,13 @@
         let weekAgo = new Date();
         weekAgo.setDate(today.getDate() - 7);
 
-        let endDt = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0');
+<!--        let endDt = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0');-->
+<!--        let startDt = weekAgo.getFullYear() + '-' + (weekAgo.getMonth() + 1).toString().padStart(2, '0') + '-' + weekAgo.getDate().toString().padStart(2, '0');-->
+
+        let endDt = new Date(today);
+        endDt.setDate(today.getDate() + 1); // 하루 더하기
+        endDt = endDt.getFullYear() + '-' + (endDt.getMonth() + 1).toString().padStart(2, '0') + '-' + endDt.getDate().toString().padStart(2, '0');
+
         let startDt = weekAgo.getFullYear() + '-' + (weekAgo.getMonth() + 1).toString().padStart(2, '0') + '-' + weekAgo.getDate().toString().padStart(2, '0');
 
     let viewAdministratorHistory = () =>{
@@ -148,7 +154,12 @@
         startDt = document.getElementById("startDt").value;
         endDt = document.getElementById("endDt").value;
 
-            viewHistoryAdmin();
+        // endDt를 하루 더하기
+        let endDate = new Date(endDt);
+        endDate.setDate(endDate.getDate() + 1);
+        endDt = endDate.getFullYear() + '-' + (endDate.getMonth() + 1).toString().padStart(2, '0') + '-' + endDate.getDate().toString().padStart(2, '0');
+
+        viewHistoryAdmin();
     }
     </script>
 </th:block>
