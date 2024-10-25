@@ -53,4 +53,5 @@ public class ContractCompVO {
     private String storagePath;
     private String fileName;
     private String qesPdfPath;
+    private String qesYn;
 }

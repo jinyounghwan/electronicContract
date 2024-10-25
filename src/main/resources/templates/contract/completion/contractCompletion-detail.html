@@ -95,7 +95,7 @@
                                     </tr>
                                     <tr>
                                         <th th:if="${info.docStatus} != 'PAPER_CONTRACT'">Assigned date</th>
-                                        <td th:if="${info.docStatus} != 'PAPER_CONTRACT'" :text="${info.getAssignDateAtStr()} ? ${info.getAssignDateAtStr()}: '-' ">2023-09-10  08:14:59</td>
+                                        <td th:if="${info.docStatus} != 'PAPER_CONTRACT'" th:text="${info.getAssignDateAtStr()} ? ${info.getAssignDateAtStr()}: '-' "></td>
                                         <th>Empl. Signed date</th>
                                         <td th:text="${info.getSignDateAtStr()}"></td>
                                     </tr>

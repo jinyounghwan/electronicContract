@@ -142,8 +142,24 @@ public class ContractCompService {
         contract.setUpdatedAtStr(DateUtil.convertLocalDateTimeToString(contract.getUpdatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         contract.setSignDateAtStr(DateUtil.convertLocalDateTimeToString(contract.getSignDate(), DateUtil.DATETIME_YMDHM_PATTERN));
         contract.setAssignDateAtStr(DateUtil.convertLocalDateTimeToString(contract.getAssignedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
-        contract.setDocStatus(String.valueOf(ContractProcessEnum.getProcessStatus(contract.getDocStatus())));
-        contract.setProcessStatus(String.valueOf(ContractProcessEnum.getProcessStatus(contract.getProcessStatus())));
+        // 상태코드 추가하려면 조회쿼리쪽 전부 수정필요.
+        // DOC PRCS1004 면서 QES_YN = 'N' 이면 Empl. Signed
+        if (contract.getDocStatus().equals("PRCS1004") && contract.getQesYn().equals("N")) {
+            contract.setDocStatus("Empl. Signed");
+        } else {
+            contract.setDocStatus(String.valueOf(ContractProcessEnum.getProcessStatus(contract.getDocStatus())));
+        }
+       // PROCESS PRCS2003 면서 QES_YN = 'N' 이면 Assigned
+       if (contract.getProcessStatus().equals("PRCS2003") && contract.getQesYn().equals("N")) {
+           contract.setProcessStatus("Assigned");
+       } else {
+           contract.setProcessStatus(String.valueOf(ContractProcessEnum.getProcessStatus(contract.getProcessStatus())));
+       }
+
+
+       log.info(">> contract.getAssignedAt() = " + contract.getAssignedAt());
+       log.info(">> contract.getAssignDateAtStr() = " + contract.getAssignDateAtStr());
+        log.info(">> contract = " + contract);
 
        // FirstName, LastName 구분
        contract.setFirstName(contract.getName());
