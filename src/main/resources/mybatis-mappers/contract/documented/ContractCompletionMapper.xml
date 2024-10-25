@@ -179,18 +179,18 @@
         WHERE file_seq =#{seq}
     </select>
 
-    <select id="getContractsFileList">
-        SELECT C.CONTRACT_NO AS CONTRACT_NO
+    <select id="getContractsFileList" parameterType="java.util.List" resultType="ContractCompVO">
+            SELECT C.CONTRACT_NO AS CONTRACT_NO
             , PDF.STORAGE_PATH AS STORAGE_PATH
             , PDF.name AS FILE_NAME
-        FROM CONTRACTS C
+            FROM CONTRACTS C
             LEFT JOIN FILE_PDF PDF ON C.CONTRACT_NO = PDF.FILE_SEQ
-        WHERE
+            WHERE
             PDF.FILE_SEQ IN
-            <foreach item="item" collection="contractNoList" open="(" separator="," close=")">
-                #{item.contractNo}
-            </foreach>
-            ORDER BY C.CREATED_AT DESC
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item.contractNo}
+        </foreach>
+        ORDER BY C.CREATED_AT DESC
     </select>
 
     <update id="updateqes" parameterType="ContractCompVO">
