@@ -124,8 +124,6 @@
                 });
         }
 
-        let popup;
-
         function openPopup() {
             // 1. 체크한 리스트 가져와서 파일들 불러와야함
             let checked = checkedArr();
@@ -140,7 +138,7 @@
             }
 
             $.ajax({
-                url: '/contract/create/init-signature',
+                url: '/contract/sign/comp/init-signature',
                 type: 'post',
                 dataType:'text',
                 contentType: 'application/json; charset=UTF-8',
