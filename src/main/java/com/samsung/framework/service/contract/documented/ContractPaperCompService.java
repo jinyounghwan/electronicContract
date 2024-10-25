@@ -42,6 +42,8 @@ public class ContractPaperCompService {
         list.forEach(data->{
             data.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(data.getCreatedAt(),DateUtil.DATETIME_YMDHM_PATTERN));
             data.setSignDateAtStr(DateUtil.convertLocalDateTimeToString(data.getSignDate(), DateUtil.DATETIME_YMDHM_PATTERN));
+            data.setQesSignAtStr(DateUtil.convertLocalDateTimeToString(data.getQesSignAt(), DateUtil.DATETIME_YMDHM_PATTERN));
+            data.setContractDate(data.getContractDate().replaceAll("\\.", "-"));
 
             data.setFirstName(data.getName());
             data.setLastName("");
@@ -66,6 +68,8 @@ public class ContractPaperCompService {
 
         target.setCreatedAtStr(DateUtil.convertLocalDateTimeToString(target.getCreatedAt(), DateUtil.DATETIME_YMDHM_PATTERN));
         target.setSignDateAtStr(DateUtil.convertLocalDateTimeToString(target.getSignDate(), DateUtil.DATETIME_YMDHM_PATTERN));
+        target.setQesSignAtStr(DateUtil.convertLocalDateTimeToString(target.getQesSignAt(), DateUtil.DATETIME_YMDHM_PATTERN));
+        target.setContractDate(target.getContractDate().replaceAll("\\.", "-"));
 
         target.setFirstName(target.getName());
         target.setLastName("");

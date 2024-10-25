@@ -37,6 +37,7 @@ public class ContractCompVO {
     private String updatedBy;
     private LocalDateTime updatedAt;
     private LocalDateTime assignedAt;
+    private LocalDateTime qesSignAt;
     private String templateType;
     private String templateTitle;
     private String contractTitleEn;
@@ -44,6 +45,7 @@ public class ContractCompVO {
     private String updatedAtStr;
     private String signDateAtStr;
     private String assignDateAtStr;
+    private String qesSignAtStr;
     private String userName;
     private String contractDate;
     private String firstName;

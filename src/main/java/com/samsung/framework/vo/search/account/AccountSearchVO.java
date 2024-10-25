@@ -29,6 +29,7 @@ public class AccountSearchVO extends SearchVO {
     private LocalDateTime createdAt;
     private String updatedBy;
     private LocalDateTime updatedAt;
+    private LocalDateTime qesSignAt;
 
     public void setSearchVO(SearchVO searchVO){
        this.setSearchKeyword(searchVO.getSearchKeyword());
