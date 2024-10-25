@@ -154,6 +154,10 @@
 
         // 닫기 버튼 클릭 이벤트
         $("#qesApiSingle").click(function() {
+            // Show progress bar
+            $('#progressBar').show();
+            $('#overlay').show();
+
             $.ajax({
                     url: '/contract/sign/comp/sendSignatureRequest',
                     type: 'post',
@@ -164,6 +168,10 @@
                     window.location.href = data;
                 }).fail(function(jqXHR){
                     sendToErrorPage(jqXHR);
+                }).always(function() {
+                    // Hide progress bar
+                    $('#progressBar').hide();
+                    $('#overlay').hide();
                 });
         });
     </script>

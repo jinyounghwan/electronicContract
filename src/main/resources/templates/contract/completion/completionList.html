@@ -131,17 +131,25 @@
 
             // TODO : 체크 항목 체크하기 (문구 수정 필요)
             if(checked.length > 0){
+                // Show progress bar
+                $('#progressBar').show();
+                $('#overlay').show();
+
                 $.ajax({
-                url: '/contract/sign/comp/init-signature',
-                type: 'post',
-                dataType:'text',
-                contentType: 'application/json; charset=UTF-8',
-                data: JSON.stringify(checked)
+                    url: '/contract/sign/comp/init-signature',
+                    type: 'post',
+                    dataType:'text',
+                    contentType: 'application/json; charset=UTF-8',
+                    data: JSON.stringify(checked)
                 }).done(function(data){
                     // 파일전송 완료되면 나오는 값으로 화면 이동
                     window.location.href = data;
                 }).fail(function(jqXHR){
                     sendToErrorPage(jqXHR);
+                }).always(function() {
+                    // Hide progress bar
+                    $('#progressBar').hide();
+                    $('#overlay').hide();
                 });
             }else{
                 //recall 대상을 선택해주세요
