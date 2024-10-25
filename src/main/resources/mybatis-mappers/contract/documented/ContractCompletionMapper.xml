@@ -173,7 +173,7 @@
     </select>
 
     <select id="getFileSeq" resultType="FilePublicVO" parameterType="FilePublicVO">
-        SELECT storage_path
+        SELECT storage_path , name
         FROM file_pdf
         WHERE file_seq =#{seq}
     </select>

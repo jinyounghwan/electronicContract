@@ -208,7 +208,12 @@ public class ContractCompletionController {
     public ResponseEntity<String> sendSignatureRequest(HttpServletResponse response) {
 
         log.info("ECS TEST !! ");
+        String seq = contractNoQes.toString();
+        FilePublicVO filePathSel = contractCompletionService.getFileSeq(seq);
 
+
+        Path path = Paths.get(filePathSel.getStoragePath());
+        log.info("path >> "+ path);
 
         // 파일 경로를 지정
         // 이부분 나중에 바꿔줘야함 지금은 있는 파일로 테스트
@@ -216,17 +221,21 @@ public class ContractCompletionController {
         // File file = new File("/Users/juntaek/Documents/pdf/upload/Contract/PDF/2410/24102264ad49bbab054756b764a67414184d01.pdf");
 
         // 영환책임
-        File file = new File("C://files//electronicContract//upload//Contract//PDF//2409/24090501cf6df55e864e55bfbe75e0a5f5bd41.pdf");
+        File file = new File(String.valueOf(path));
         FileSystemResource fileResource = new FileSystemResource(file);
 
+        log.info("filePathSel.getName() >> " + filePathSel.getName());
+
         // 파라미터 구성
-        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-        params.add("mimeType", "application/pdf");
-        params.add("userId", "1920");
-        params.add("fileName", "24090501cf6df55e864e55bfbe75e0a5f5bd41.pdf");
-        params.add("signatureType", "PADES");
-        params.add("signatureTypeLevel", "BASELINE_LT");
-        params.add("file", fileResource); // 파일을 Body에 추가
+        /*
+            MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+            params.add("mimeType", "application/pdf");
+            params.add("userId", "1920");
+            params.add("fileName", filePathSel.getName());
+            params.add("signatureType", "PADES");
+            params.add("signatureTypeLevel", "BASELINE_LT");
+            params.add("file", fileResource); // 파일을 Body에 추가
+        */
 
         // Basic Auth 설정
         HttpHeaders headers = new HttpHeaders();
@@ -245,7 +254,7 @@ public class ContractCompletionController {
                 + "&userId=1920"
                 + "&signatureType=PADES"
                 + "&signatureTypeLevel=BASELINE_LT"
-                + "&fileName=24090501cf6df55e864e55bfbe75e0a5f5bd41.pdf";
+                + "&fileName="+filePathSel.getName();
 
 
         // RestTemplate 사용하여 POST 요청
@@ -487,6 +496,7 @@ public class ContractCompletionController {
 
         if (response.getStatusCode() == HttpStatus.OK) {
             try {
+
                 // 파일 저장 경로 설정 ->> 추후 바꿔야함 경로
                 Path path = Paths.get("C:\\files\\electronicContract\\upload\\"+randomNumber+".pdf");
 
