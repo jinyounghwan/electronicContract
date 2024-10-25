@@ -25,6 +25,7 @@ public class ContractCompletedService {
     public List<ContractVO> getContractSignCompletedList(SearchVO searchVO) {
         List<ContractVO> list = contractCompletedMapper.getContractSignCompletedList(searchVO);
         list.forEach(data->{
+            data.setDocStatus(ContractProcessEnum.getProcessStatus(data.getDocStatus()));
             data.setFirstName(data.getName());
             data.setLastName("");
             int index = data.getName().indexOf(" ");

@@ -63,7 +63,7 @@
                                     <td th:text="${item.createdAt}"></td>
                                     <td th:text="${item.signDate}"></td>
                                     <td th:text="${item.qesSignAt}"></td>
-                                    <td th:text="${item.docStatus}"></td>
+                                    <td data-target="docStatus" th:text="${item.docStatus}"></td>
                                     <td><a th:href="@{/contract/sign/completed/info/{seq}(seq=${item.contractNo})}" >View</a></td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(list)}">
