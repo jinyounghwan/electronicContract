@@ -24,13 +24,11 @@
                                             <div class="data-group datatable-dropdown">
                                                 <label style="width: 100%;">
                                                     <select class="datatable-selector" th:field="*{templateCodeList}" data-select="templateCode" id="tempSeq">
-                                                        <option th:each="e , i : ${templateCodeList}" th:value="${e.templateSeq}" th:text="|${e.contractTitleEn}|" th:attr = "data-value=${e.templateType}" >전체</option>
+                                                        <option th:each="e , i : ${templateCodeList}" th:value="${e.templateSeq}" th:text="|${e.templateTitle}|" th:attr = "data-value=${e.templateType}" th:id="${e.getContractTitleEn}">전체</option>
                                                     </select>
                                                 </label>
                                             </div>
                                         </td>
-                                        <!--                                            <th>Template Code</th>-->
-                                        <!--                                            <td><input type="text" class="form-control form-control-user" name="templateSeq" placeholder="" data-required="true" data-alert="template code 를 입력 해 주세요" ></td>-->
                                     </tr>
                                     <tr>
                                         <th>Contract Title (EN)</th>
@@ -72,11 +70,11 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         $(document).ready(function() {
-        let initialSelectedText = $('#tempSeq').find('option:selected').text();
+        let initialSelectedText = $('#tempSeq').find('option:selected').attr('id');
          $('#ContractTitleEn').val(initialSelectedText);
 
              $('#tempSeq').on('change', function() {
-                let selectedText = $(this).find('option:selected').text();
+                let selectedText = $(this).find('option:selected').attr('id');
                 $('#ContractTitleEn').val(selectedText);
                 console.log('tempSeq >> ' +selectedText);
              });
