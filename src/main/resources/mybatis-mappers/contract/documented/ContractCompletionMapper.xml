@@ -144,6 +144,7 @@
             DOC_STATUS IN('PRCS1004', 'PRCS1005')
         </if>
             AND C.PROCESS_STATUS  IN('PRCS2003')
+            AND C.QES_YN = 'N'
             <include refid="search"/>
         ORDER BY C.CREATED_AT DESC
         LIMIT #{paging.displayRow} OFFSET #{paging.offset}
