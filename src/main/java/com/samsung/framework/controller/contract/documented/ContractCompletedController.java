@@ -134,9 +134,9 @@ public class ContractCompletedController {
             */
             String returnString;
             if (isSingle) {
-                returnString = contractCompletionController.downloadPdf();
+                returnString = contractCompletionController.downloadPdf(request);
             } else {
-                returnString = contractCompletionController.multipleSigned();
+                returnString = contractCompletionController.multipleSigned(request);
             }
             log.info("returnString >> " + returnString);
         }

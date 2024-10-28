@@ -3,10 +3,6 @@ package com.samsung.framework.common.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @AllArgsConstructor
 @Getter
 public enum ContractProcessEnum {
@@ -26,11 +22,12 @@ public enum ContractProcessEnum {
     , LOG_CREATE("PRCS", "30", "01")
     , LOG_ASSIGN("PRCS", "30", "02")
     , LOG_RECALL("PRCS", "30", "03")
-    , LOG_SIGN_N_COMPLETE("PRCS", "30", "04")
+    , LOG_SIGN("PRCS", "30", "04")
     , LOG_REJECT("PRCS", "30", "05")
     , LOG_DOWNLOAD("PRCS", "30", "06")
     , LOG_PAPER_SIGN("PRCS", "30", "07")
     , LOG_VIEW("PRCS", "30", "08")
+    , LOG_COMPLETED("PRCS", "30", "09")
     ;
 
     private String prefix;

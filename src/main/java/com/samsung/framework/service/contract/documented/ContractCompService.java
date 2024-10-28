@@ -25,10 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -84,7 +82,7 @@ public class ContractCompService {
             }
 
             var logSaveRequest = LogSaveRequest.builder()
-                    .logType(ContractProcessEnum.getProcessStatus(ContractProcessEnum.processCode(ContractProcessEnum.LOG_SIGN_N_COMPLETE)))
+                    .logType(ContractProcessEnum.getProcessStatus(ContractProcessEnum.processCode(ContractProcessEnum.LOG_SIGN)))
                     .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
                     .createdBy(String.valueOf(account.getEmpNo()))
                     .contractNo(String.valueOf(target.getContractNo()))

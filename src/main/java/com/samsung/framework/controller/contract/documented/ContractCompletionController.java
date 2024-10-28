@@ -58,6 +58,7 @@ public class ContractCompletionController {
     private final ContractCompService contractCompletionService;
     private final GhrAccountService ghrAccountService;
     private final ContractCompService contractCompService;
+    private final LogUtil logUtil;
 
     private static final String BASE_URL = "https://demo.sign.netlock.hu";
     private static final String RETURN_URL = "https://www.netlock.hu";
@@ -346,7 +347,10 @@ public class ContractCompletionController {
     }
 
     @PostMapping("/multipleSigned")
-    public String multipleSigned() {
+    public String multipleSigned(HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        AccountVO account = (AccountVO) session.getAttribute("loginInfo");
 
         List<ContractCompVO> compList; // = contractCompService.getContractFileList(list);
         compList = toUpdateList;
@@ -410,9 +414,22 @@ public class ContractCompletionController {
 
                     ContractCompVO contractCompVO = new ContractCompVO();
                     contractCompVO.setContractNo(item.getContractNo());
+                    contractCompVO.setQesPdfPath(path.toString());
 
                     // DB 업데이트 (QES  서명완료)
                     contractCompService.qesUpdateYn(contractCompVO);
+
+
+                    var logSaveRequest = LogSaveRequest.builder()
+                            .logType(ContractProcessEnum.getProcessStatus(ContractProcessEnum.processCode(ContractProcessEnum.LOG_COMPLETED)))
+                            .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
+                            .createdBy(String.valueOf(account.getEmpNo()))
+                            .contractNo(String.valueOf(item.getContractNo()))
+                            .processStep(ContractProcessEnum.processCode(ContractProcessEnum.LOG_COMPLETED))
+                            .build();
+
+                    logUtil.saveLog(logSaveRequest);
+
 
                     successCnt++;
                 } catch (IOException e) {
@@ -465,7 +482,10 @@ public class ContractCompletionController {
     /* ECS API 3번 테스트 */
     @GetMapping("/downloadPdf")
     @ResponseBody
-    public String downloadPdf() {
+    public String downloadPdf(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        AccountVO account = (AccountVO) session.getAttribute("loginInfo");
+
         ContractCompVO contractCompVO = new ContractCompVO();
         // 랜덤 숫자 채번
         Random random = new Random();
@@ -517,6 +537,16 @@ public class ContractCompletionController {
 
                 // DB 업데이트 (QES  서명완료)
                 contractCompService.qesUpdateYn(contractCompVO);
+
+                var logSaveRequest = LogSaveRequest.builder()
+                        .logType(ContractProcessEnum.getProcessStatus(ContractProcessEnum.processCode(ContractProcessEnum.LOG_COMPLETED)))
+                        .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
+                        .createdBy(String.valueOf(account.getEmpNo()))
+                        .contractNo(String.valueOf(contractCompVO.getContractNo()))
+                        .processStep(ContractProcessEnum.processCode(ContractProcessEnum.LOG_COMPLETED))
+                        .build();
+
+                logUtil.saveLog(logSaveRequest);
 
                 return "PDF 파일이 성공적으로 다운로드되었습니다: ";
             } catch (IOException e) {

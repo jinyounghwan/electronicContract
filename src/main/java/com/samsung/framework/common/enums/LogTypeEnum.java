@@ -13,12 +13,13 @@ public enum LogTypeEnum {
     , LOG_CREATE("PRCS3001","Create")
     , LOG_ASSIGN("PRCS3002" ,"Assign")
     , LOG_RECALL("PRCS3003" , "Recall")
-    , LOG_SIGN_N_COMPLETE("PRCS3004","Sign & Complete")
+    , LOG_SIGN("PRCS3004","Empl. Signed")
     , LOG_REJECT("PRCS3005" ,"Reject")
     , LOG_DOWNLOAD("PRCS3006","Download")
     , LOG_PAPER_SIGN("PRCS3007","Paper Sign")
     , LOG_VIEW("PRCS3008" , "View")
-    ,PASSWORD_CHANGE("패스워드 변경" , "Password Change");
+    , LOG_COMPLETED("PRCS3009", "Completed")
+    , PASSWORD_CHANGE("패스워드 변경" , "Password Change");
 
 
     private String description;
@@ -28,7 +29,7 @@ public enum LogTypeEnum {
         if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.REJECTED))){
             return LogTypeEnum.LOG_REJECT;
         }else if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.SIGNED))){
-            return LogTypeEnum.LOG_SIGN_N_COMPLETE;
+            return LogTypeEnum.LOG_SIGN;
         }
         return null;
     }
@@ -36,7 +37,7 @@ public enum LogTypeEnum {
         if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.REJECTED))){
             return LogTypeEnum.LOG_REJECT.getDescription();
         }else if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.SIGNED))){
-            return LogTypeEnum.LOG_SIGN_N_COMPLETE.getDescription();
+            return LogTypeEnum.LOG_SIGN.getDescription();
         }
         return null;
     }
