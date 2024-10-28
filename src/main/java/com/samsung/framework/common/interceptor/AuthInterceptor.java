@@ -25,7 +25,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("[preHandle]: {}", request.getRequestURI());
         HttpSession session = null;
-        ModelAndView mv = getModelAndView("common/messageRedirect", "로그인 후 사용해 주세요.", "/account/login");
+        ModelAndView mv = getModelAndView("common/messageRedirect", "You need a system login.", "/account/login");
 
         try{
             session = request.getSession();

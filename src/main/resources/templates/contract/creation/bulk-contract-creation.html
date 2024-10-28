@@ -94,8 +94,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer" style="justify-content: space-between;">
-                            <div style="display: flex;justify-content: center;flex-grow: 1;align-items: center;">
+                        <div class="modal-footer">
+                            <div style="flex: 1; display: flex; justify-content: center; align-items: center;">
                                 <button id="prevButton" type="button" class="btn btn-primary"><</button>
                                 <span id="pageCnt"></span>
                                 <button id="nextButton" type="button" class="btn btn-primary">></button>
@@ -189,8 +189,7 @@
             dataLo = data.data;
 
             showData(currentPage);
-            console.log('dataLo.length = ' + dataLo.length);
-             $('#pageCnt').text('1 / ' + dataLo.length);
+             $('#pageCnt').text((currentPage + 1) + ' / ' + dataLo.length);
          }).fail(function(jqXHR) {
             alert('엑셀 데이터가 올바르지 않습니다.');
             sendToErrorPage(jqXHR);

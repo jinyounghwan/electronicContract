@@ -69,7 +69,9 @@ public class ExcelPublicServiceImpl implements ExcelService {
         Iterator<FilePublicVO> iter = fileList.iterator();
         List<List<ContractExcelVO>> list = new ArrayList<>();
         iter.forEachRemaining(value->{
-            String filePath = "C:/" + value.getStoragePath() + File.separator + value.getName();
+            // 준택책임 필요
+//            String filePath = "C:/" + value.getStoragePath() + File.separator + value.getName();
+            String filePath = value.getStoragePath() + File.separator + value.getName();
             log.info("file Path >> " + filePath);
             try {
                  list.add(ExcelUtil.readExcel(filePath,value.getName(), ContractExcelVO.class));

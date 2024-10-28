@@ -80,10 +80,10 @@
                                     <td th:text="${info.qesSignAt}">2023-09-10  08:14:59</td>
                                 </tr>
                                 <tr>
-                                    <th>Assigned date</th>
-                                    <td th:text="${info.assignedAt} ? ${info.assignedAt}: '-' ">2023-09-10  08:14:59</td>
-                                    <th>Contract date</th>
-                                    <td th:text="${info.updatedAt}">2023-09-10  08:14:59</td>
+                                    <th th:if="${info.docStatus} != 'PAPER_CONTRACT'">Assigned date</th>
+                                    <td th:if="${info.docStatus} != 'PAPER_CONTRACT'" th:text="${info.assignedAt} ? ${info.assignedAt}: '-' "></td>
+                                    <th>Contract Status</th>
+                                    <td th:text="${info.docStatus}"></td>
                                 </tr>
                                 </tbody>
                             </table>
