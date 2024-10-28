@@ -79,7 +79,7 @@
                 and c.process_status = 'PRCS2003'
                 and c.qes_yn ='Y'
         <include refid="whereClause"/>
-            order by c.created_at
+            order by c.qes_sign_at desc
         LIMIT #{paging.displayRow} OFFSET #{paging.offset}
     </select>
 

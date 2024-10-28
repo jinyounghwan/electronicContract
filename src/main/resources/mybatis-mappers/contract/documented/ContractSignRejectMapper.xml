@@ -64,7 +64,7 @@
               on ct.template_seq = ctd.template_seq
         where c.del_yn = 'N'
         <include refid="whereClause"/>
-        order by c.created_at desc
+        order by c.updated_at desc
         LIMIT #{paging.displayRow} OFFSET #{paging.offset}
     </select>
 
