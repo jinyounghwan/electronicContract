@@ -19,7 +19,6 @@ import com.samsung.framework.vo.contract.creation.ContractVO;
 import com.samsung.framework.vo.contract.template.ContractTemplateVO;
 import com.samsung.framework.vo.contract.template.Template;
 import com.samsung.framework.vo.contract.view.ContractView;
-import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.log.LogSaveResponse;
 import com.samsung.framework.vo.user.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -187,8 +186,8 @@ public class ContractCreationService {
             return new ResultStatusVO(ResultCodeMsgEnum.CREATE_DATA_FAIL.getCode(),ResultCodeMsgEnum.CREATE_DATA_FAIL.name());
         }
         // 저장이 성공 되었을 때
-        LogSaveRequest saveRequest = LogSaveRequest.builder().logType(LogTypeEnum.LOG_CREATE)
-                .processStep(LogTypeEnum.LOG_CREATE.getDescription())
+        LogSaveRequest saveRequest = LogSaveRequest.builder().logType(LogTypeEnum.CREATE)
+                .processStep(LogTypeEnum.CREATE.getDescription())
                 .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
                 .createdBy(account.getAdminId())
                 .contractNo(StringUtil.getString(contractVO.getContractNo()))

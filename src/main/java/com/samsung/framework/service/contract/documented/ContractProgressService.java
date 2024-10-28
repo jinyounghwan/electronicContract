@@ -65,7 +65,7 @@ public class ContractProgressService {
             int result = contractProgressMapper.updateContractDocStatusInfo(el);
             if(result > 0){
                 // 저장이 성공 되었을 때
-                this.saveLogs(request,LogTypeEnum.LOG_RECALL , el);
+                this.saveLogs(request,LogTypeEnum.RECALL, el);
             }
         });
 
@@ -80,7 +80,7 @@ public class ContractProgressService {
             el.setUpdatedBy(account.getAdminId());
             int result = contractProgressMapper.updateContractDocStatusInfo(el);
             if(result > 0){
-                this.saveLogs(request,LogTypeEnum.LOG_ASSIGN , el);
+                this.saveLogs(request,LogTypeEnum.ASSIGN, el);
             }
         });
 
@@ -116,7 +116,7 @@ public class ContractProgressService {
         if(result == 0 ){
             return new ResultStatusVO(ResultCodeMsgEnum.UPDATE_DATA_FAIL.getCode(), ResultCodeMsgEnum.UPDATE_DATA_FAIL.getMsg());
         }
-        this.saveLogs(request,LogTypeEnum.LOG_RECALL , progressRequest);
+        this.saveLogs(request,LogTypeEnum.RECALL, progressRequest);
         return new ResultStatusVO();
     }
 
@@ -126,7 +126,7 @@ public class ContractProgressService {
         if(result == 0 ){
             return new ResultStatusVO(ResultCodeMsgEnum.UPDATE_DATA_FAIL.getCode(), ResultCodeMsgEnum.UPDATE_DATA_FAIL.getMsg());
         }
-        this.saveLogs(request,LogTypeEnum.LOG_ASSIGN , progressRequest);
+        this.saveLogs(request,LogTypeEnum.ASSIGN, progressRequest);
         return new ResultStatusVO();
     }
 

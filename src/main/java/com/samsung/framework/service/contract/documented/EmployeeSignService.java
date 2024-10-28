@@ -3,10 +3,8 @@ package com.samsung.framework.service.contract.documented;
 import com.samsung.framework.common.enums.ContractProcessEnum;
 import com.samsung.framework.common.enums.LogTypeEnum;
 import com.samsung.framework.common.enums.ResultCodeMsgEnum;
-import com.samsung.framework.common.utils.DateUtil;
 import com.samsung.framework.common.utils.LogUtil;
 import com.samsung.framework.common.utils.StringUtil;
-import com.samsung.framework.domain.contract.ProgressRequest;
 import com.samsung.framework.domain.log.LogSaveRequest;
 import com.samsung.framework.mapper.contract.documented.ContractProgressMapper;
 import com.samsung.framework.mapper.contract.documented.EmployeeSignMapper;
@@ -19,10 +17,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -68,10 +64,10 @@ public class EmployeeSignService {
         HttpSession session = request.getSession();
         AccountVO account = (AccountVO) session.getAttribute("loginInfo");
         ContractVO vo = ContractVO.builder().empNo(account.getEmpNo()).contractNo(StringUtil.getInt(seq)).build();
-        boolean viewed = logUtil.getLogType(seq , LogTypeEnum.LOG_VIEW.toString());
+        boolean viewed = logUtil.getLogType(seq , LogTypeEnum.VIEW.toString());
         if(!viewed){
-            LogSaveRequest saveRequest = LogSaveRequest.builder().logType(LogTypeEnum.LOG_VIEW)
-                                                                 .processStep(LogTypeEnum.LOG_VIEW.getDescription())
+            LogSaveRequest saveRequest = LogSaveRequest.builder().logType(LogTypeEnum.VIEW)
+                                                                 .processStep(LogTypeEnum.VIEW.getDescription())
                                                                  .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
                                                                  .createdBy(account.getUserId())
                                                                  .contractNo(StringUtil.getString(seq))

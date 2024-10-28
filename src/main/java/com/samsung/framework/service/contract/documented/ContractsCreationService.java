@@ -1,7 +1,6 @@
 package com.samsung.framework.service.contract.documented;
 
 import com.samsung.framework.common.enums.ContractProcessEnum;
-import com.samsung.framework.common.enums.ContractTemplateEnum;
 import com.samsung.framework.common.enums.LogTypeEnum;
 import com.samsung.framework.common.enums.ResultCodeMsgEnum;
 import com.samsung.framework.common.utils.*;
@@ -15,15 +14,11 @@ import com.samsung.framework.service.excel.ExcelPublicServiceImpl;
 import com.samsung.framework.service.file.FileService;
 import com.samsung.framework.vo.account.AccountVO;
 import com.samsung.framework.vo.common.BulkExcelVO;
-import com.samsung.framework.vo.common.ResultStatusVO;
 import com.samsung.framework.vo.contract.ContractExcelVO;
-import com.samsung.framework.vo.contract.completion.ContractCompVO;
 import com.samsung.framework.vo.contract.creation.ContractVO;
 import com.samsung.framework.vo.contract.template.ContractTemplateVO;
-import com.samsung.framework.vo.contract.view.ContractView;
 import com.samsung.framework.vo.file.FilePublicVO;
 import com.samsung.framework.vo.log.LogSaveResponse;
-import com.samsung.framework.vo.search.SearchVO;
 import com.samsung.framework.vo.user.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -151,8 +146,8 @@ public class ContractsCreationService {
                 int saveContract = contractCreationMapper.saveContract(contractVO);
                 saveContract = contractCreationMapper.saveContractDetail(contractVO);
                 // 저장이 성공 되었을 때
-                LogSaveRequest saveRequest = LogSaveRequest.builder().logType(LogTypeEnum.LOG_CREATE)
-                        .processStep(LogTypeEnum.LOG_CREATE.getDescription())
+                LogSaveRequest saveRequest = LogSaveRequest.builder().logType(LogTypeEnum.CREATE)
+                        .processStep(LogTypeEnum.CREATE.getDescription())
                         .ipAddress(request.getRemoteAddr() + ":" + request.getRemotePort())
                         .createdBy(account.getAdminId())
                         .contractNo(StringUtil.getString(contractVO.getContractNo()))

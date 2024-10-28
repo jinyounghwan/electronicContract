@@ -10,15 +10,15 @@ public enum LogTypeEnum {
 
     LOGIN("로그인" , "LOGIN")
     , CONTRACT_PROCESS("계약서 진행상황" , "Contract Progress")
-    , LOG_CREATE("PRCS3001","Create")
-    , LOG_ASSIGN("PRCS3002" ,"Assign")
-    , LOG_RECALL("PRCS3003" , "Recall")
-    , LOG_SIGN("PRCS3004","Empl. Signed")
-    , LOG_REJECT("PRCS3005" ,"Reject")
-    , LOG_DOWNLOAD("PRCS3006","Download")
-    , LOG_PAPER_SIGN("PRCS3007","Paper Sign")
-    , LOG_VIEW("PRCS3008" , "View")
-    , LOG_COMPLETED("PRCS3009", "Completed")
+    , CREATE("PRCS3001","Create")
+    , ASSIGN("PRCS3002" ,"Assign")
+    , RECALL("PRCS3003" , "Recall")
+    , SIGN("PRCS3004","Empl. Signed")
+    , REJECT("PRCS3005" ,"Reject")
+    , DOWNLOAD("PRCS3006","Download")
+    , PAPER_SIGN("PRCS3007","Paper Sign")
+    , VIEW("PRCS3008" , "View")
+    , COMPLETED("PRCS3009", "Completed")
     , PASSWORD_CHANGE("패스워드 변경" , "Password Change");
 
 
@@ -27,17 +27,17 @@ public enum LogTypeEnum {
 
     public static LogTypeEnum getLogTypeEnum (String target){
         if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.REJECTED))){
-            return LogTypeEnum.LOG_REJECT;
+            return LogTypeEnum.REJECT;
         }else if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.SIGNED))){
-            return LogTypeEnum.LOG_SIGN;
+            return LogTypeEnum.SIGN;
         }
         return null;
     }
     public static String getLogDescription (String target){
         if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.REJECTED))){
-            return LogTypeEnum.LOG_REJECT.getDescription();
+            return LogTypeEnum.REJECT.getDescription();
         }else if(target.equals(ContractProcessEnum.processCode(ContractProcessEnum.SIGNED))){
-            return LogTypeEnum.LOG_SIGN.getDescription();
+            return LogTypeEnum.SIGN.getDescription();
         }
         return null;
     }
