@@ -53,13 +53,13 @@
                                     </tr>
                                     <tr>
                                         <th>Empl.Signed</th>
-                                        <td><div class="data-group"><input type="date" name="date" class="form-control form-control-user mr-2" id="date" placeholder="YYYY.MM.DD">
-                                            <input type="time" name="time" class="form-control form-control-user" id="time" placeholder="YYYY.MM.DD"></div></td>
+                                        <td><div class="data-group"><input type="date" name="emplSignedDate" class="form-control form-control-user mr-2" placeholder="YYYY.MM.DD">
+                                            <input type="time" name="emplSignedTime" class="form-control form-control-user" placeholder="YYYY.MM.DD"></div></td>
                                     </tr>
                                     <tr>
                                         <th>Corp.Signed</th>
-                                        <td><div class="data-group"><input type="date" name="date" class="form-control form-control-user mr-2" id="date" placeholder="YYYY.MM.DD">
-                                            <input type="time" name="time" class="form-control form-control-user" id="time" placeholder="YYYY.MM.DD"></div></td>
+                                        <td><div class="data-group"><input type="date" name="corpSignedDate" class="form-control form-control-user mr-2" placeholder="YYYY.MM.DD">
+                                            <input type="time" name="corpSignedTime" class="form-control form-control-user" placeholder="YYYY.MM.DD"></div></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -110,11 +110,21 @@
                 return;
             }
 
+            const signDateValue = $('input[name=emplSignedDate]').val();
+            const signTimeValue = $('input[name=emplSignedTime]').val();
+            const qesDateValue = $('input[name=corpSignedDate]').val();
+            const qesTimeValue = $('input[name=corpSignedTime]').val();
+
+            const signDateTimeString = `${signDateValue}T${signTimeValue}`;
+            const qesDateTimeString = `${qesDateValue}T${qesTimeValue}`;
+
             const data = {
                 empNo : $('input[name=employeeId]').val(),
                 templateSeq : $('#templateType option:selected').val(),
                 name : $('input[name=subject]').val(),
-                contractDate : $('input[name=date]').val()
+                contractDate : $('input[name=emplSignedDate]').val(),
+                signDate : signDateTimeString,
+                qesSignAt : qesDateTimeString
             }
 
             let form = $('#form')[0];
@@ -131,7 +141,7 @@
             .done(function(data) {
                 console.log(data)
                 if(data.code == 200) {
-                    location.href="/contract/sign/comp"
+                    location.href="/contract/sign/completed"
                 }else{
                     alert(data.message);
                 }

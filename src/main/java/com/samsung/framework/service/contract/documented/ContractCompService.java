@@ -51,6 +51,8 @@ public class ContractCompService {
             List<FilePublicVO> targetList =fileService.saveFile(list, String.valueOf(account.getEmpNo()));
             FilePublicVO filePublicVO = targetList.get(0);
 
+
+
             //contractCompletionMapper.getTemplateSeq(contract); (임시 주석 처리 templateSeq 가져오는 부분)
             ContractComp target = ContractComp.builder()
                     .updatedBy(String.valueOf(account.getEmpNo()))
@@ -69,6 +71,10 @@ public class ContractCompService {
                     .delYn("N")
                     .templateSeq(contract.getTemplateSeq())
                     .empNo(ghrAccount.getEmpNo())
+                    .qesYn("Y")
+                    .signDate(contract.getSignDate())
+                    .qesSignAt(contract.getQesSignAt())
+                    .qesPdfPath(filePublicVO.getStoragePath())
                     .build();
             result.put("code", 200);
 

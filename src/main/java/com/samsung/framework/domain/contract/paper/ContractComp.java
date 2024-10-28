@@ -37,4 +37,7 @@ public class ContractComp {
     private LocalDateTime createdAt;
     private String updatedBy;
     private LocalDateTime updatedAt;
+    private String qesYn;
+    private LocalDateTime qesSignAt;
+    private String qesPdfPath;
 }

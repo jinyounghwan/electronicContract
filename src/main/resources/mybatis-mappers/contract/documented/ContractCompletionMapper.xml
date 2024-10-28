@@ -59,7 +59,8 @@
                                UPDATED_AT,SIGN_DATE,
                                NAME , HIRE_DATE_HU,
                                HIRE_DATE_EN, CONTRACT_DATE_HU,
-                               CONTRACT_DATE_EN
+                               CONTRACT_DATE_EN, QES_YN,
+                               QES_SIGN_AT, QES_PDF_PATH
                                )
         VALUES (#{empNo}, #{templateSeq},
                 #{deptCode}, #{processStatus},
@@ -67,10 +68,11 @@
                 #{validation},#{agreeYn},
                 #{delYn},#{createdBy},
                 sysdate(),#{updatedBy},
-                sysdate(),sysdate(),
+                sysdate(),#{signDate},
                 #{name}, #{hireDateHu},
                 #{hireDateEn}, #{contractDateHu},
-                #{contractDateEn}
+                #{contractDateEn}, #{qesYn},
+                #{qesSignAt}, #{qesPdfPath}
                 )
         <selectKey resultType="long" keyProperty="contractNo" order="AFTER">
             SELECT LAST_INSERT_ID()

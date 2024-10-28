@@ -50,7 +50,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Contract View</h5>
-                            <button type="button" class="btn-close"></button>
+                            <button type="button" class="btn-close" onclick="closeBtn()"></button>
                         </div>
                         <div id="target-pdf" class="modal-body document-box">
                             <div class="document">
@@ -94,14 +94,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button id="prevButton" type="button" class="btn btn-primary">before</button>
-                            <button id="nextButton" type="button" class="btn btn-primary">next</button>
-
-<!--                            <button id="pdfSave" type="button" class="btn btn-secondary" onclick="createPdfDownloadBulk()">save</button>-->
-                            <button id="pdfSave" type="button" class="btn btn-secondary" onclick="create()">save</button>
-                            <button type="button" class="btn btn-secondary" onclick="closeBtn()">Close</button>
-                            <!--${session.loginInfo == null}-->
+                        <div class="modal-footer" style="justify-content: space-between;">
+                            <div style="display: flex;justify-content: center;flex-grow: 1;align-items: center;">
+                                <button id="prevButton" type="button" class="btn btn-primary"><</button>
+                                <span id="pageCnt"></span>
+                                <button id="nextButton" type="button" class="btn btn-primary">></button>
+                            </div>
+                            <div style="margin-left: auto;">
+                                <button id="pdfSave" type="button" class="btn btn-secondary" onclick="create()">Create Contract</button>
+                            </div>
                         </div>
                     </div>
                     <div id="popupContent"></div>
@@ -158,11 +159,11 @@
 
 
     let createTest = () =>{
-    console.log('dataLo >> ' + dataLo);
-    let html = $('#target-pdf').html();
+        console.log('dataLo >> ' + dataLo);
+        let html = $('#target-pdf').html();
 
-         let form = $('#form')[0];
-         let formData = new FormData(form);
+        let form = $('#form')[0];
+        let formData = new FormData(form);
 
         let uploadedFile = formData.get('file');
 
@@ -185,12 +186,14 @@
              contentType: false,
              cache: false
          }).done(function(data) {
-         dataLo = data.data;
+            dataLo = data.data;
 
-         showData(currentPage);
+            showData(currentPage);
+            console.log('dataLo.length = ' + dataLo.length);
+             $('#pageCnt').text('1 / ' + dataLo.length);
          }).fail(function(jqXHR) {
             alert('엑셀 데이터가 올바르지 않습니다.');
-             sendToErrorPage(jqXHR);
+            sendToErrorPage(jqXHR);
          });
      }
 
@@ -213,6 +216,7 @@
             if (currentPage > 0) {
                 currentPage--;
                 showData(currentPage);
+                $('#pageCnt').text((currentPage + 1) + ' / ' + dataLo.length);
             }
         });
 
@@ -220,6 +224,7 @@
             if (currentPage < dataLo.length - 1) {
                 currentPage++;
                 showData(currentPage);
+                $('#pageCnt').text((currentPage + 1) + ' / ' + dataLo.length);
             }
         });
 
