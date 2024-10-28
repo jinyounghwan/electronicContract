@@ -24,10 +24,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         log.info("[request]: {}", request);
 
         HttpSession session = null;
+        session = request.getSession();
         try{
             log.info("interceptor one ");
             session = request.getSession();
-
             if(session != null && session.getAttribute("loginInfo") != null){
                 log.info("interceptor two ");
                 return true;
@@ -37,14 +37,14 @@ public class LoginInterceptor implements HandlerInterceptor {
 
                 ModelAndView modelAndView = new ModelAndView();
                 modelAndView.setViewName("common/messageRedirect");
-                modelAndView.addObject("msgCode", "로그인 후 사용해 주세요.");
+                modelAndView.addObject("msgCode", "You need a system login.");
                 modelAndView.addObject("redirectUrl", "/account/login");
                 throw new ModelAndViewDefiningException(modelAndView);
             }
         } catch (Exception e) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("common/messageRedirect");
-            modelAndView.addObject("msgCode", "로그인 후 사용해 주세요.");
+            modelAndView.addObject("msgCode", "You need a system login.");
             modelAndView.addObject("redirectUrl", "/account/login");
             throw new ModelAndViewDefiningException(modelAndView);
         }
