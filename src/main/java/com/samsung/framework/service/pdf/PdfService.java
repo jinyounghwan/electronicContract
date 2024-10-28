@@ -74,14 +74,18 @@ public class PdfService {
         log.info("paths >> " + paths);
 
         // PDF 문서 설정
-        Document document = new Document(PageSize.A4, 30, 30, 30, 30);
+        Document document = new Document(PageSize.A4, 30, 30, 120, 30); // 상단 여백을 조금 더 크게 설정하여 이미지와 겹치지 않도록
         try {
             PdfWriter pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(paths));
             pdfWriter.setInitialLeading(12.5f);
             document.open();
 
+            // 기본 폰트 크기와 자동 줄바꿈을 위한 CSS 설정 추가
+            String htmlWithStyles = "<style>body { font-size: 10pt; word-wrap: break-word; max-width: 100%; }" +
+                    "table { width: 100%; } td, th { word-wrap: break-word; max-width: 100%; }</style>" + html;
+
             // Base64 이미지를 처리한 후, 남은 HTML 파싱
-            String modifiedHtml = processBase64Images(html, document); // HTML 내 Base64 이미지 처리
+            String modifiedHtml = processBase64Images(htmlWithStyles, document);
 
             // HTML에서 남은 내용 처리
             StringReader stringReader = new StringReader(modifiedHtml);
@@ -114,7 +118,7 @@ public class PdfService {
             file.setExtension("pdf");
             file.setStoragePath(paths);
             file.setDelYn("N");
-            file.setCreatedBy("admin"); // 사용자 아이디 들어가도록 변경해야함
+            file.setCreatedBy("admin");
 
             contractCreationMapper.saveFilePath(file);
         } catch (Exception e) {
@@ -146,6 +150,10 @@ public class PdfService {
             // iText를 사용하여 이미지 객체 생성
             Image image = Image.getInstance(imageBytes);
             image.scaleToFit(200, 100);  // 이미지 크기 조정
+
+            // 오른쪽 상단 위치 조정
+            image.setAbsolutePosition(document.getPageSize().getWidth() - image.getScaledWidth() - 30,
+                    document.getPageSize().getHeight() - image.getScaledHeight() - 30);
 
             // PDF 문서에 이미지 추가
             document.add(image);

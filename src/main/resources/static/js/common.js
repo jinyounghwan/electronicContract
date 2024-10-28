@@ -281,11 +281,52 @@ let viewContract = (seq) =>{
 
 }
 
+/*view contract User*/
+let viewContractUser = (seq) =>{
+    console.log('viewContractUser!!! ')
+     // 팝업창 열기
+     $('[data-target="viewUser"]').removeAttr('style');
+     let data = {'contractNo' : seq }
+     console.log('data seq >> ' + data);
+     $.ajax({
+        url: '/contract/view',
+        type: 'post',
+        dataType:'json',
+        data:JSON.stringify(data),
+        contentType: 'application/json; charset=UTF-8',
+    }).done(function(data) {
+        if(!isEmpty(data)){
+            $('[data-select]').each(function(index, item){
+                var $this = $(item);
+                var key = $this.data('select');
+                $this.html(data[key]);
+            });
+            $('[data-target="viewUser"]').attr('style' , 'display:block');
+            $('[data-target="viewBackground"]').attr('class' , 'modal-backdrop');
+            if((data.docStatus != 'PRCS1002' && data.docStatus != 'PRCS1001' ) && (data.processStatus != 'PRCS2003' && data.processStatus != 'PRCS2004')){
+                console.log('bbb');
+                $('[data-target="statusBtn"]').hide();
+            }
+        }
+
+    }).fail(function(jqXHR) {
+        console.log(jqXHR);
+    });
+
+}
+
 /*
     contract viewer close
 */
 let closeContractView = () =>{
     $('[data-target="view"]').attr('style' , 'display:none');
+    $('[data-target="viewBackground"]').removeAttr('class');
+}
+/*
+    contract viewer close User
+*/
+let closeContractViewUser = () =>{
+    $('[data-target="viewUser"]').attr('style' , 'display:none');
     $('[data-target="viewBackground"]').removeAttr('class');
 }
 
@@ -579,7 +620,10 @@ let sendToErrorPage = (jqXHR) => {
 }
 
 let openAgreementAlert = () => {
-    $('[data-target="alert3"]').attr('style' , 'display:block');
+    console('openAgreementAlert !alert3!');
+    // 팝업창 감추기
+    $('[data-target="viewUser"]').attr('style',  'display:none;');
+    $('[data-target="alert3"]').attr('style' , 'display:block; z-index:9999;');
 }
 
 /**

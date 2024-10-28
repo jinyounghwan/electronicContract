@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="ko">
+<th:block layout:fragment="content">
+    <div th:replace="~{common/alert}"></div>
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!--content-->
+            <div class="container-fluid">
+                <h1 class="page-title">Completed Contract</h1>
+                <div th:replace="~{common/completedSerch :: searchBox(${dateRangeSelect} ,${keywordTypeSelect} , ${ContractStatusSelect}) }" ></div>
+                <div class="card shadow mb-4">
+                    <!--<div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Template Info.</h6>
+                    </div>-->
+                    <div class="datatable-top">
+                        <div class="left datatable-dropdown">
+                            <label>
+                                <select class="datatable-selector" th:onchange="viewCountSelect(this)">
+                                    <option th:selected="${paging.getDisplayRow()} == '5'" value="5">5</option>
+                                    <option th:selected="${paging.getDisplayRow()} == '10'" value="10" selected>10</option>
+                                    <option th:selected="${paging.getDisplayRow()} == '15'" value="15">15</option>
+                                    <option th:selected="${paging.getDisplayRow()} == '20'" value="20">20</option>
+                                    <option th:selected="${paging.getDisplayRow()} == '25'" value="25">25</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="left"><p th:text="${totalCount} + ' items'" ></p></div>
+                        <div class="right data-btn-area">
+                            <!--<button class="btn btn-outline-primary" type="button" th:onclick="|location.href='@{/contract/sign/comp/paper}'|" >Paper Contract Upload</button>-->
+                            <button class="btn btn-outline-primary" type="button" th:onclick="|location.href='@{/contract/sign/comp/paper}'|" >Paper Contract Upload</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <!--                                        <th class="data-check"><input class="form-check-input" type="checkbox" onclick="allCheckBox(this)"></th>-->
+                                    <th>No.</th>
+                                    <th>Template Title</th>
+                                    <th>Contract Title (EN)</th>
+                                    <th>Name</th>
+                                    <th>employee ID</th>
+                                    <th>Created</th>
+                                    <th>Empl.Signed</th>
+                                    <th>Corp.Signed</th>
+                                    <th>Contract Status</th>
+                                    <th>Action</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <input type="hidden" name="totalCount" id="totalCount" th:value="${totalCount}">
+                                <tr th:if="${not #lists.isEmpty(list)}" th:each="item, stat : ${list}">
+                                    <!--                                            <td class="data-check"><input class="form-check-input" type="checkbox" th:value="${item.contractNo}" data-select="check"></td>-->
+                                    <td th:text="${item.contractNo}"></td>
+                                    <td th:utext="${item.templateTitle}"></td>
+                                    <td th:utext="${item.contractTitleEn}"></td>
+                                    <td th:text="${item.firstName} + ' ' + ${item.lastName}"></td>
+                                    <td th:text="${item.empNo}"></td>
+                                    <td th:text="${item.createdAt}"></td>
+                                    <td th:text="${item.signDate}"></td>
+                                    <td th:text="${item.qesSignAt}"></td>
+                                    <td th:text="${item.docStatus}"></td>
+                                    <td><a th:href="@{/contract/sign/completed/info/{seq}(seq=${item.contractNo})}" >View</a></td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(list)}">
+                                    <td colspan="11" th:text="|데이터가 없습니다.|"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--pagination-->
+                        <div th:replace="~{common/pagination}"></div>
+                    </div>
+                </div>
+            </div>
+            <!--contents-->
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(function(){
+            /*리스트 조회 호출 */
+            getList();
+        });
+        function getList(param){
+            let search;
+            if(typeof param =='undefined' ){
+                // 첫 호출 일 때
+                search = setData();
+            }else{
+                search = param;
+            }
+            $.ajax({
+                url: '/contract/sign/completed/list',
+                type: 'post',
+                dataType: 'text',
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(search)
+            }).done(function(data) {
+               $('#content').replaceWith(data);
+            }).fail(function(jqXHR) {
+                sendToErrorPage(jqXHR);
+            });
+        }
+
+    </script>
+</th:block>
+</html>

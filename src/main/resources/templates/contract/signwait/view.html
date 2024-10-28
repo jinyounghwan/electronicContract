@@ -108,9 +108,9 @@
                     <div class="btn-area-right">
                         <button id="btnViewHistory" class="btn btn-primary" type="button" th:onclick="'viewHistory('+${info.contractNo}+')'">View History</button>
 
-                            <button class="btn btn-outline-primary" id='test' type="button" th:onclick="'viewContract('+${info.contractNo}+')'" style="display: none;">View Contract1</button>
+                            <button class="btn btn-outline-primary" id='test' type="button" th:onclick="'viewContractUser('+${info.contractNo}+')'" style="display: none;">View Contract1</button>
                             <!--<button class="btn btn-outline-primary" type="button" id="viewPdfButton">View Contract2</button>-->
-                            <button class="btn btn-primary" type="button" th:onclick="'viewContract('+${info.contractNo}+')'">View Contract & Signature</button>
+                            <button class="btn btn-primary" type="button" th:onclick="'viewContractUser('+${info.contractNo}+')'">View Contract & Signature</button>
 
                     </div>
                 </div>
@@ -120,6 +120,7 @@
             <div th:replace="~{common/contractProgressHistory}"></div>
             <div th:replace="~{common/rejectPopup}"></div>
             <div th:replace="~{common/alert3}"></div>
+            <div th:replace="~{common/contractViewUser}"></div>
         </div>
     </div>
 </th:block>
