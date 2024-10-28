@@ -105,6 +105,11 @@
 
 
         let registrationPaperContarct = () => {
+            if(filesArr.length == 0 || $('input[name=employeeId]').val() == '' || $('input[name=date]').val() == '') {
+                alert('Please fill in all fields.');
+                return;
+            }
+
             const data = {
                 empNo : $('input[name=employeeId]').val(),
                 templateSeq : $('#templateType option:selected').val(),
