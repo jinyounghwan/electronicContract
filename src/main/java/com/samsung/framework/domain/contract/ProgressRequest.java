@@ -14,6 +14,7 @@ public class ProgressRequest {
     private String empNo;
     private String docStatus;
     private String updatedBy;
+    private String assignedAt;
     private String startDt;
     private String endDt;
 

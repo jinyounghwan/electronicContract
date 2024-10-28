@@ -111,7 +111,7 @@
                set doc_status = #{docStatus}
                  , updated_by = #{updatedBy}
                  , updated_at = now()
-                 , assigned_at = now()
+                 , assigned_at = #{assignedAt}
                  , assigned_by = #{updatedBy}
              where contract_no = #{contractNo}
         </if>

@@ -142,23 +142,45 @@
           });
     }
 
-  function assign(){
-        let data = {'contractNo' : $('#contractNo').val()}
-         $.ajax({
-            url: '/contract/progress/assignInfo',
-            type: 'post',
-            dataType:'json',
-            data:JSON.stringify(data),
-            contentType: 'application/json; charset=UTF-8',
-          }).done(function(data) {
-              if(data.code == 200){
-                  //성공 할 때
-                  location.href= '/contract/progress';
-              }
-          }).fail(function(jqXHR) {
-              sendToErrorPage(jqXHR);
-          });
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
+
+    // 현재 시간을 포맷하여 assigned_at에 저장
+    let assignedAt = formatDate(new Date());
+    console.log(assignedAt); // 포맷된 날짜 출력 확인
+
+  function assign(){
+    let assignedAt = formatDate(new Date());
+    console.log(assignedAt); // 포맷된 날짜 출력 확인
+
+    let data = {
+      'contractNo': $('#contractNo').val(),
+      'assignedAt': assignedAt
+    };
+
+    $.ajax({
+      url: '/contract/progress/assignInfo',
+      type: 'post',
+      dataType:'json',
+      data:JSON.stringify(data),
+      contentType: 'application/json; charset=UTF-8',
+    }).done(function(data) {
+        if(data.code == 200){
+            //성공 할 때
+            location.href= '/contract/progress';
+        }
+    }).fail(function(jqXHR) {
+        sendToErrorPage(jqXHR);
+    });
+  }
 
        $("#viewPdfButton").click(function() {
         let templateSeq = document.getElementById("InfoValue").value;
