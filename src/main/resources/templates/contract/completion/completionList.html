@@ -68,7 +68,7 @@
                                     <td><a th:href="@{/contract/sign/comp/detail/{contractNo}(contractNo=${row.getContractNo()})}" >View</a></td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(list)}">
-                                    <td colspan="11">데이터가 없습니다.</td>
+                                    <td colspan="11">There is no data.</td>
                                 </tr>
                                 </tbody>
                             </table>
